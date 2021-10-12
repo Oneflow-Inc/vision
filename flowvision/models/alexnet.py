@@ -1,5 +1,6 @@
 import oneflow as flow
 import oneflow.nn as nn
+from .utils import load_state_dict_from_url
 
 from typing import Any
 
@@ -8,7 +9,7 @@ __all__ = ["AlexNet", "alexnet"]
 
 
 model_urls = {
-    'alexnet': 'https://download.pytorch.org/models/alexnet-owt-7be5be79.pth',
+    'alexnet': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/cv/classification/alexnet/alexnet_oneflow_model.tar.gz",
 }
 
 
@@ -49,7 +50,7 @@ class AlexNet(nn.Module):
         return x
 
 
-def alexnet(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> AlexNet:
+def alexnet(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any) -> AlexNet:
     r"""AlexNet model architecture from the
     `"One weird trick..." <https://arxiv.org/abs/1404.5997>`_ paper.
     The required minimum input size of the model is 63x63.
@@ -58,4 +59,9 @@ def alexnet(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> A
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     model = AlexNet(**kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(model_urls['alexnet'],
+                                              model_dir=model_dir,
+                                              progress=progress)
+        model.load_state_dict(state_dict)
     return model

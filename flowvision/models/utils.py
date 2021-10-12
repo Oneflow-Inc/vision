@@ -6,6 +6,7 @@ import shutil
 import sys
 import tempfile
 import zipfile
+import tarfile
 import warnings
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
@@ -16,22 +17,24 @@ import oneflow as flow
 HASH_REGEX = re.compile(r'-([a-f0-9]*)\.')
 
 
+def _is_legacy_tar_format(filename):
+    return tarfile.is_tarfile(filename)
+
+def _legacy_tar_load(filename, model_dir, map_location):
+    with tarfile.open(filename) as f:
+        members = f.getnames()
+        f.extractall(model_dir)
+        extracted_name = members[0]
+        extracted_file = os.path.join(model_dir, extracted_name)
+    return flow.load(extracted_file)
+
+
 def _is_legacy_zip_format(filename):
-    print(filename)
-    if zipfile.is_zipfile(filename):
-        return True
-        # infolist = zipfile.ZipFile(filename).infolist()
-        # return len(infolist) == 1 and not infolist[0].is_dir()
-    else:
-        return False
+    return zipfile.is_zipfile(filename)
 
 def _legacy_zip_load(filename, model_dir, map_location):
-    warnings.warn('Falling back to the old format < 1.6. This support will be '
-                  'deprecated in favor of default zipfile format introduced in 1.6. '
-                  'Please redo torch.save() to save it in the new zipfile format.')
     # Note: extractall() defaults to overwrite file if exists. No need to clean up beforehand.
     #       We deliberately don't handle tarfile here since our legacy serialization format was in tar.
-    #       E.g. resnet18-5c106cde.pth which is widely used.
     with zipfile.ZipFile(filename) as f:
         members = f.infolist()
         # if len(members) != 1:
@@ -44,7 +47,7 @@ def _legacy_zip_load(filename, model_dir, map_location):
     return flow.load(extracted_file)
 
 def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, progress=True, check_hash=False, file_name=None):
-    r"""Loads the Torch serialized object at the given URL.
+    r"""Loads the OneFlow serialized object at the given URL.
 
     If downloaded file is a zip file, it will be automatically
     decompressed.
@@ -55,7 +58,7 @@ def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, 
     Args:
         url (string): URL of the object to download
         model_dir (string, optional): directory in which to save the object
-        map_location (optional): a function or a dict specifying how to remap storage locations (see torch.load)
+        map_location (optional): a function or a dict specifying how to remap storage locations (see flow.load)
         progress (bool, optional): whether or not to display a progress bar to stderr.
             Default: True
         check_hash(bool, optional): If True, the filename part of the URL should follow the naming convention
@@ -64,9 +67,6 @@ def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, 
             ensure unique names and to verify the contents of the file.
             Default: False
         file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set.
-
-    Example:
-        >>> state_dict = load_state_dict_from_url('https://s3.amazonaws.com/pytorch/models/resnet18-5c106cde.pth')
 
     """
 
@@ -99,6 +99,8 @@ def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, 
 
     if _is_legacy_zip_format(cached_file):
         return _legacy_zip_load(cached_file, model_dir, map_location)
+    elif _is_legacy_tar_format(cached_file):
+        return _legacy_tar_load(cached_file, model_dir, map_location)
     else:
         state_dict = flow.load(cached_file)
         return state_dict
