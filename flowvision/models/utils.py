@@ -14,11 +14,12 @@ from tqdm import tqdm
 
 import oneflow as flow
 
-HASH_REGEX = re.compile(r'-([a-f0-9]*)\.')
+HASH_REGEX = re.compile(r'([a-f0-9]*)_')
 
 
 def _is_legacy_tar_format(filename):
     return tarfile.is_tarfile(filename)
+
 
 def _legacy_tar_load(filename, model_dir, map_location):
     with tarfile.open(filename) as f:
@@ -31,6 +32,7 @@ def _legacy_tar_load(filename, model_dir, map_location):
 
 def _is_legacy_zip_format(filename):
     return zipfile.is_zipfile(filename)
+
 
 def _legacy_zip_load(filename, model_dir, map_location):
     # Note: extractall() defaults to overwrite file if exists. No need to clean up beforehand.
@@ -46,7 +48,9 @@ def _legacy_zip_load(filename, model_dir, map_location):
     # return flow.load(extracted_file, map_location=map_location)
     return flow.load(extracted_file)
 
-def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, progress=True, check_hash=False, file_name=None):
+
+def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, progress=True, check_hash=False,
+                             file_name=None):
     r"""Loads the OneFlow serialized object at the given URL.
 
     If downloaded file is a zip file, it will be automatically
@@ -116,7 +120,6 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
             Default: None
         progress (bool, optional): whether or not to display a progress bar to stderr
             Default: True
-
     """
     file_size = None
     # We use a different API for python2 since urllib(2) doesn't recognize the CA
