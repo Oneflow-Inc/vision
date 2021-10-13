@@ -64,6 +64,6 @@ def alexnet(pretrained: bool = False, progress: bool = True, model_dir: str = ".
                                               model_dir=model_dir,
                                               progress=progress,
                                               check_hash=True,
-                                              file_name="8be212c88c03d3b0354ab4e3d13c3a33c47ae2bef79977734f58e85d2f61f37e_alexnet_oneflow_model.tar.gz")
+                                              file_name="alexnet")
         model.load_state_dict(state_dict)
     return model

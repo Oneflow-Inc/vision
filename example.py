@@ -1,3 +1,5 @@
-from flowvision.models import alexnet
+from flowvision.models import vit_b_16_384
+from one_utils import 
 
-model = alexnet(pretrained=True)
+model = vit_b_16_384(pretrained=True)
+
