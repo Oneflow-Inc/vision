@@ -1,6 +1,7 @@
 import oneflow as flow
 import oneflow.nn as nn
 from .utils import load_state_dict_from_url
+from .registry import register_model
 
 from typing import Any
 
@@ -49,7 +50,7 @@ class AlexNet(nn.Module):
         x = self.classifier(x)
         return x
 
-
+@register_model
 def alexnet(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any) -> AlexNet:
     r"""AlexNet model architecture from the
     `"One weird trick..." <https://arxiv.org/abs/1404.5997>`_ paper.
@@ -62,8 +63,6 @@ def alexnet(pretrained: bool = False, progress: bool = True, model_dir: str = ".
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls['alexnet'],
                                               model_dir=model_dir,
-                                              progress=progress,
-                                              check_hash=True,
-                                              file_name="8be212c88c03d3b0354ab4e3d13c3a33c47ae2bef79977734f58e85d2f61f37e_alexnet_oneflow_model.tar.gz")
+                                              progress=progress)
         model.load_state_dict(state_dict)
     return model
