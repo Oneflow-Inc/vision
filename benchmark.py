@@ -3,9 +3,14 @@ import oneflow as flow
 import oneflow.nn as nn
 from oneflow.utils.data import DataLoader
 from oneflow.utils.vision import transforms
+from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
 from tqdm import tqdm
 import numpy as np
+from functools import partial
+
+IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
+IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
 
 class ImageNetDataLoader(DataLoader):
     def __init__(self, data_dir, split='train', image_size=224, batch_size=16, num_workers=8):
@@ -15,14 +20,14 @@ class ImageNetDataLoader(DataLoader):
                 transforms.Resize((image_size, image_size)),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD)
             ])
         else:
             transform = transforms.Compose([
                 transforms.Resize(256, interpolation=2) if image_size == 224 else transforms.Resize(image_size, interpolation=2),
                 transforms.CenterCrop(image_size),
                 transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+                transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD)
             ])
         
         self.dataset = ImageFolder(root=os.path.join(data_dir, split), transform=transform)
@@ -49,7 +54,7 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 
-def eval_flow_acc(model, data_dir, pretrained_path=None, batch_size=32, img_size=224, num_workers=8):
+def test(model, data_dir, pretrained_path=None, batch_size=32, img_size=224, num_workers=8):
 
     if pretrained_path:
         state_dict = flow.load(pretrained_path)
