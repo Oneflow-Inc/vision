@@ -3,7 +3,7 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 import numpy as np
 from .utils import load_state_dict_from_url
-from .registry import register_model
+from .registry import ModelCreator
 
 from typing import Any
 
@@ -271,7 +271,7 @@ class VisionTransformer(nn.Module):
         return logits
 
 
-@register_model
+@ModelCreator.register_model
 def vit_b_16_224(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
     model =  VisionTransformer(
         image_size=(224, 224),
@@ -293,7 +293,7 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, model_dir: str
     return model
 
 
-@register_model
+@ModelCreator.register_model
 def vit_b_16_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
@@ -315,7 +315,7 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, model_dir: str
     return model
 
 
-@register_model
+@ModelCreator.register_model
 def vit_b_32_224(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
     model =  VisionTransformer(
         image_size=(224, 224),
@@ -337,7 +337,7 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, model_dir: str
     return model
 
 
-@register_model
+@ModelCreator.register_model
 def vit_b_32_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
@@ -359,7 +359,7 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, model_dir: str
     return model
 
 
-@register_model
+@ModelCreator.register_model
 def vit_l_16_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
@@ -381,7 +381,7 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, model_dir: str
     return model
 
 
-@register_model
+@ModelCreator.register_model
 def vit_l_32_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),

@@ -1,7 +1,7 @@
 import oneflow as flow
 import oneflow.nn as nn
 from .utils import load_state_dict_from_url
-from .registry import register_model
+from .registry import ModelCreator
 
 from typing import Any
 
@@ -50,7 +50,7 @@ class AlexNet(nn.Module):
         x = self.classifier(x)
         return x
 
-@register_model
+@ModelCreator.register_model
 def alexnet(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any) -> AlexNet:
     r"""AlexNet model architecture from the
     `"One weird trick..." <https://arxiv.org/abs/1404.5997>`_ paper.
