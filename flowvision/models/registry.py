@@ -6,12 +6,6 @@ from collections import defaultdict
 from copy import deepcopy
 import oneflow as flow
 
-"""
-1. 判断模型是否存在
-2. 判断模型是否有pretrained weight
-3. 返回模型
-4. 模糊匹配，并且生成对应模糊匹配的模型是否有权重的一个table
-"""
 
 class ModelCreator(object):
     _model_list = defaultdict(set)  # only contain model, and if it has pretrained or not, e.g. {'alexnet': True}
