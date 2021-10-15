@@ -6,12 +6,6 @@ from collections import defaultdict
 from copy import deepcopy
 import oneflow as flow
 
-"""
-1. 判断模型是否存在
-2. 判断模型是否有pretrained weight
-3. 返回模型
-4. 模糊匹配，并且生成对应模糊匹配的模型是否有权重的一个table
-"""
 
 class ModelCreator(object):
     _model_list = defaultdict(set)  # only contain model, and if it has pretrained or not, e.g. {'alexnet': True}
@@ -39,12 +33,12 @@ class ModelCreator(object):
         return fn
     
     @staticmethod
-    def create_model(model_name: str, pretrained: bool = False, model_dir: str = "./checkpoints", checkpoint: bool = None):
+    def create_model(model_name: str, pretrained: bool = False, checkpoint: bool = None):
         if model_name in ModelCreator._model_entrypoints:
             create_fn = ModelCreator._model_entrypoints[model_name]
         else:
             raise RuntimeError('Unknown model (%s)' % model_name)
-        model = create_fn(pretrained=pretrained, model_dir=model_dir)
+        model = create_fn(pretrained=pretrained)
 
         if checkpoint:
             state_dict = flow.load(checkpoint)

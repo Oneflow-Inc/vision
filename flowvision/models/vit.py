@@ -272,7 +272,7 @@ class VisionTransformer(nn.Module):
 
 
 @ModelCreator.register_model
-def vit_b_16_224(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
+def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     model =  VisionTransformer(
         image_size=(224, 224),
         patch_size=(16, 16),
@@ -289,12 +289,12 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, model_dir: str
         _load_pretrained("vit_b_16_224", 
                          model = model, 
                          progress = progress, 
-                         model_dir = model_dir)
+                         model_dir = "./checkpoints")
     return model
 
 
 @ModelCreator.register_model
-def vit_b_16_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
+def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
         patch_size=(16, 16),
@@ -311,12 +311,12 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, model_dir: str
         _load_pretrained("vit_b_16_384", 
                          model = model, 
                          progress = progress, 
-                         model_dir = model_dir)
+                         model_dir = "./checkpoints")
     return model
 
 
 @ModelCreator.register_model
-def vit_b_32_224(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
+def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     model =  VisionTransformer(
         image_size=(224, 224),
         patch_size=(32, 32),
@@ -333,12 +333,12 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, model_dir: str
         _load_pretrained("vit_b_32_224", 
                          model = model, 
                          progress = progress, 
-                         model_dir = model_dir)
+                         model_dir = "./checkpoints")
     return model
 
 
 @ModelCreator.register_model
-def vit_b_32_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
+def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
         patch_size=(32, 32),
@@ -355,12 +355,12 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, model_dir: str
         _load_pretrained("vit_b_32_384", 
                          model = model, 
                          progress = progress, 
-                         model_dir = model_dir)
+                         model_dir = "./checkpoints")
     return model
 
 
 @ModelCreator.register_model
-def vit_l_16_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
+def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
         patch_size=(16, 16),
@@ -377,12 +377,12 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, model_dir: str
         _load_pretrained("vit_l_16_384", 
                          model = model, 
                          progress = progress, 
-                         model_dir = model_dir)
+                         model_dir = "./checkpoints")
     return model
 
 
 @ModelCreator.register_model
-def vit_l_32_384(pretrained: bool = False, progress: bool = True, model_dir: str = "./checkpoints", **kwargs: Any):
+def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     model =  VisionTransformer(
         image_size=(384, 384),
         patch_size=(32, 32),
@@ -399,5 +399,5 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, model_dir: str
         _load_pretrained("vit_l_32_384", 
                          model = model, 
                          progress = progress, 
-                         model_dir = model_dir)
+                         model_dir = "./checkpoints")
     return model

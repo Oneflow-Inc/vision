@@ -4,7 +4,9 @@ Datasets, Transforms and Models specific to Computer Vision
 
 
 ## Usage
-### ModelCreator
+<details>
+<summary> <b> ModelCreator </b> </summary>
+
 - Create model in a simple way
 ```python
 from flowvision.models import ModelCreator
@@ -84,3 +86,8 @@ ModelCreator.model_table('vit*', pretrained=True)
 │ vit_l_32_384 │ true       │
 └──────────────┴────────────┘
 ```
+
+</details>
+
+## Model Zoo
+We did all our tests under the same setting, please check the model page [here](MODEL_ZOO.md) for more details.
