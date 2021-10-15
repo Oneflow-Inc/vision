@@ -33,12 +33,12 @@ class ModelCreator(object):
         return fn
     
     @staticmethod
-    def create_model(model_name: str, pretrained: bool = False, model_dir: str = "./checkpoints", checkpoint: bool = None):
+    def create_model(model_name: str, pretrained: bool = False, checkpoint: bool = None):
         if model_name in ModelCreator._model_entrypoints:
             create_fn = ModelCreator._model_entrypoints[model_name]
         else:
             raise RuntimeError('Unknown model (%s)' % model_name)
-        model = create_fn(pretrained=pretrained, model_dir=model_dir)
+        model = create_fn(pretrained=pretrained)
 
         if checkpoint:
             state_dict = flow.load(checkpoint)

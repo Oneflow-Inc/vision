@@ -18,19 +18,6 @@ model_urls = {
 }
 
 
-def _load_pretrained(model_name: str, 
-                     model: nn.Module, 
-                     progress: bool,
-                     model_dir: str = "./checkpoints",
-                     check_hash: bool = False,) -> None:
-    if model_name not in model_urls or model_urls[model_name] is None:
-        raise ValueError(
-            "No checkpoint is available for model type {}".format(model_name))
-    checkpoint_url = model_urls[model_name]
-    model.load_state_dict(
-        load_state_dict_from_url(checkpoint_url, model_dir, progress=progress, check_hash=check_hash))
-
-
 class _DenseLayer(nn.Module):
     def __init__(
         self, num_input_features: int, growth_rate: int, bn_size: int, drop_rate: float,
@@ -243,19 +230,36 @@ class DenseNet(nn.Module):
         out = self.classifier(out)
         return out
 
+def _load_pretrained(model_name: str, 
+                     model: nn.Module, 
+                     progress: bool,
+                     model_dir: str = "./checkpoints",
+                     check_hash: bool = False,) -> None:
+    if model_name not in model_urls or model_urls[model_name] is None:
+        raise ValueError(
+            "No checkpoint is available for model type {}".format(model_name))
+    checkpoint_url = model_urls[model_name]
+    model.load_state_dict(
+        load_state_dict_from_url(checkpoint_url, model_dir, progress=progress, check_hash=check_hash))
+
+
 
 def _densenet(
     arch: str,
     growth_rate: int,
     block_config: Tuple[int, int, int, int],
     num_init_features: int,
+    pretrained: bool,
+    progress: bool,
     **kwargs: Any
 ) -> DenseNet:
     model = DenseNet(growth_rate, block_config, num_init_features, **kwargs)
+    if pretrained:
+        _load_pretrained(arch, model, progress)
     return model
 
-
-def densenet121(**kwargs: Any) -> DenseNet:
+@ModelCreator.register_model
+def densenet121(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-121 model from
     `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
     The required minimum input size of the model is 29x29.
@@ -263,10 +267,12 @@ def densenet121(**kwargs: Any) -> DenseNet:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _densenet("densenet121", 32, (6, 12, 24, 16), 64, **kwargs)
+    return _densenet("densenet121", 32, (6, 12, 24, 16), 64, pretrained, progress, 
+                     **kwargs)
 
 
-def densenet161(**kwargs: Any) -> DenseNet:
+@ModelCreator.register_model
+def densenet161(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-161 model from
     `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
     The required minimum input size of the model is 29x29.
@@ -274,18 +280,22 @@ def densenet161(**kwargs: Any) -> DenseNet:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _densenet("densenet161", 48, (6, 12, 36, 24), 96, **kwargs)
+    return _densenet("densenet161", 48, (6, 12, 36, 24), 96, pretrained, progress, 
+                     **kwargs)
 
 
-def densenet169(**kwargs: Any) -> DenseNet:
+@ModelCreator.register_model
+def densenet169(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-169 model from
     `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
     The required minimum input size of the model is 29x29.
     """
-    return _densenet("densenet169", 32, (6, 12, 32, 32), 64, **kwargs)
+    return _densenet("densenet169", 32, (6, 12, 32, 32), 64, pretrained, progress, 
+                     **kwargs)
 
 
-def densenet201(**kwargs: Any) -> DenseNet:
+@ModelCreator.register_model
+def densenet201(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-201 model from
     `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
     The required minimum input size of the model is 29x29.
@@ -293,4 +303,5 @@ def densenet201(**kwargs: Any) -> DenseNet:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _densenet("densenet201", 32, (6, 12, 48, 32), 64, **kwargs)
+    return _densenet("densenet201", 32, (6, 12, 48, 32), 64, pretrained, progress, 
+                     **kwargs)
