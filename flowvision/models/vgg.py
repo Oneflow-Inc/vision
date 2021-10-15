@@ -16,10 +16,10 @@ model_urls = {
     'vgg13': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13.zip',
     'vgg16': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16.zip',
     'vgg19': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19.zip',
-    'vgg11_bn': 'https://download.pytorch.org/models/vgg11_bn-6002323d.pth',
-    'vgg13_bn': 'https://download.pytorch.org/models/vgg13_bn-abd245e5.pth',
-    'vgg16_bn': 'https://download.pytorch.org/models/vgg16_bn-6c64b313.pth',
-    'vgg19_bn': 'https://download.pytorch.org/models/vgg19_bn-c79401a0.pth',
+    'vgg11_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11_bn.zip',
+    'vgg13_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13_bn.zip',
+    'vgg16_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16_bn.zip',
+    'vgg19_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19_bn.zip',
 }
 
 
