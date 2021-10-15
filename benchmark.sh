@@ -1,8 +1,8 @@
 set -aux
 
-MODEL="densenet161"
+MODEL="model to test"
 BATCH_SIZE=64
-DATA_PATH="/DATA/disk1/ImageNet/extract"
+DATA_PATH="/path/to/imagenet dataset"
 IMG_SIZE=224
 NUM_WORKERS=8
 
