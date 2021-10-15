@@ -57,7 +57,6 @@ def accuracy(output, target, topk=(1,)):
 
 
 def main(args):
-
     model = ModelCreator.create_model(args.model, pretrained=True)
     data_dir = args.data_path
     img_size = args.img_size
@@ -103,10 +102,10 @@ def _parse_args():
         "--model",
         type=str,
         required=True,
-        help="model for test",
+        help="model arch for test",
     )
     parser.add_argument(
-        "--data_path", type=int, default=64, help="path to imagenet2012"
+        "--data_path", type=str, default="./", help="path to imagenet2012"
     )
     parser.add_argument(
         "--batch_size", type=int, default=64, help="test batch size"
@@ -117,7 +116,10 @@ def _parse_args():
     parser.add_argument(
         "--num_workers", type=int, default=8, help="num workers in dataloader"
     )
+    return parser.parse_args()
 
 if __name__ == "__main__":
+    import multiprocessing as mp
+    mp.set_start_method("spawn")
     args = _parse_args()
     main(args)
