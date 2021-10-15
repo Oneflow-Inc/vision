@@ -10,5 +10,5 @@ from one_utils import eval_flow_acc
 from flowvision.models import ModelCreator
 # model = ModelCreator.create_model('vit_b_16_384', pretrained=True, model_dir="./test")
 # print(model)
-ModelCreator.model_table('vit*', pretrained=True)
+ModelCreator.model_table('alexnet', pretrained=True)
 

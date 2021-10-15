@@ -8,6 +8,8 @@ from oneflow.utils.vision.datasets import ImageFolder
 from tqdm import tqdm
 import numpy as np
 from functools import partial
+from flowvision.models import ModelCreator
+import argparse
 
 IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
@@ -54,13 +56,14 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 
-def test(model, data_dir, pretrained_path=None, batch_size=32, img_size=224, num_workers=8):
+def main(args):
 
-    if pretrained_path:
-        state_dict = flow.load(pretrained_path)
-        model.load_state_dict(state_dict)
-        print("Load pretrained weights from {}".format(pretrained_path))
-    
+    model = ModelCreator.create_model(args.model, pretrained=True)
+    data_dir = args.data_path
+    img_size = args.img_size
+    batch_size = args.batch_size
+    num_workers = args.num_workers
+
     model.cuda()
     
     data_loader = ImageNetDataLoader(
@@ -93,3 +96,28 @@ def test(model, data_dir, pretrained_path=None, batch_size=32, img_size=224, num
             pbar.set_postfix(acc1=acc1.item(), acc5=acc5.item())
         
     print("Evaluation on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}".format("ImageNet", np.mean(acc1s), np.mean(acc5s)))
+
+def _parse_args():
+    parser = argparse.ArgumentParser("flags for benchmark test")
+    parser.add_argument(
+        "--model",
+        type=str,
+        required=True,
+        help="model for test",
+    )
+    parser.add_argument(
+        "--data_path", type=int, default=64, help="path to imagenet2012"
+    )
+    parser.add_argument(
+        "--batch_size", type=int, default=64, help="test batch size"
+    )
+    parser.add_argument(
+        "--img_size", type=int, default=224, help="test batch size"
+    )
+    parser.add_argument(
+        "--num_workers", type=int, default=8, help="num workers in dataloader"
+    )
+
+if __name__ == "__main__":
+    args = _parse_args()
+    main(args)
