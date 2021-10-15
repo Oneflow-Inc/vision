@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="alexnet"
+MODEL="densenet121"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
