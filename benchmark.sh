@@ -1,8 +1,8 @@
 set -aux
 
-MODEL="model to test"
+MODEL="vgg19_bn"
 BATCH_SIZE=64
-DATA_PATH="/path/to/imagenet dataset"
+DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
 NUM_WORKERS=8
 
