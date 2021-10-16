@@ -3,7 +3,7 @@ from collections import namedtuple
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-from torch import Tensor
+from oneflow import Tensor
 from .utils import load_state_dict_from_url
 from typing import Optional, Tuple, List, Callable, Any
 from .registry import ModelCreator
