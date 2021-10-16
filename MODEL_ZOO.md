@@ -25,6 +25,8 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | densenet169            | 75.5635 | 92.7949 |     64      |   224      |
 | densenet201            | 76.8702 | 93.3584 |     64      |   224      |
 | densenet169            | 77.1120 | 93.5422 |     64      |   224      |
+| squeezenet 1.0         | 58.0543 | 80.3848 |     64      |   224      |
+| squeezenet 1.1         | 58.1342 | 80.5826 |     64      |   224      |
 | shufflenet_v2_x0_5     | 60.5059 | 81.7096 |     64      |   224      |
 | shufflenet_v2_x1_0     | 69.3195 | 88.2912 |     64      |   224      |
 | mobilenet_v2           | 71.8450 | 90.2653 |     64      |   224      |

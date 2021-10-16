@@ -9,5 +9,5 @@ from torchvision.models import resnet
 from flowvision.models import ModelCreator
 # model = ModelCreator.create_model('vit_b_16_384', pretrained=True, model_dir="./test")
 # print(model)
-ModelCreator.model_table("*mobile*")
+ModelCreator.model_table("*squeeze*")
 
