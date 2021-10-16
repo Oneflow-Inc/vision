@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="inception_v3"
+MODEL="googlenet"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=299

@@ -5,6 +5,7 @@ from oneflow.utils.data import DataLoader
 from oneflow.utils.vision import transforms
 from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
+from torch.nn.functional import interpolate
 from tqdm import tqdm
 import numpy as np
 from functools import partial
@@ -88,8 +89,10 @@ def main(args):
 
             data = data.to("cuda")
             target = target.to("cuda")
-            if args.model in ["inception_v3"]:
+            if args.model == "inception_v3":
                 pred_logits, aux = model(data)
+            elif args.model == "googlenet":
+                pred_logits, aux1, aux2 = model(data)
             else:
                 pred_logits = model(data)
             acc1, acc5 = accuracy(pred_logits, target, topk=(1, 5))

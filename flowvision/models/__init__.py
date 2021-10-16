@@ -5,6 +5,7 @@ from .vgg import *
 from .mnasnet import *
 from .resnet import *
 from .inception_v3 import *
+from .googlenet import *
 from .shufflenet_v2 import *
 from .mobilenet_v2 import *
 from .mobilenet_v3 import *
