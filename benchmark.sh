@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="resnext101_32x8d"
+MODEL="shufflenet_v2_x0_5"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
