@@ -31,5 +31,5 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | mnasnet 1.0            | 73.4215 | 91.4942 |     64      |   224      |
 | vit-b-16-384           | 84.1672 | 97.1527 |     64      |   224      |
 | vit-b-32-384           | 81.7116 | 96.1217 |     64      |   224      |
-| vit-l-16-384           | - | - |     64      |   224      |
+| vit-l-16-384           | 85.0444 | 97.3605 |     64      |   224      |
 | vit-l-32-384           | 81.5217 | 96.0518 |     64      |   224      |
