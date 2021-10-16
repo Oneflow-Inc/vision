@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="mobilenet_v2"
+MODEL="mobilenet_v3_large"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
