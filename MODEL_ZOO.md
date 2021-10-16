@@ -16,3 +16,5 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | densenet169            | 75.5635 | 92.7949 |     64      |   224      |
 | densenet201            | 76.8702 | 93.3584 |     64      |   224      |
 | densenet169            | 77.1120 | 93.5422 |     64      |   224      |
+| mnasnet 0.5            | 69.6930 | 87.4480 |     64      |   224      |
+| mnasnet 1.0            | 73.4215 | 91.4942 |     64      |   224      |
