@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="vgg19_bn"
+MODEL="resnext101_32x8d"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
