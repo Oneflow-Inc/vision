@@ -88,8 +88,10 @@ def main(args):
 
             data = data.to("cuda")
             target = target.to("cuda")
-
-            pred_logits = model(data)
+            if args.model in ["inception_v3"]:
+                pred_logits, aux = model(data)
+            else:
+                pred_logits = model(data)
             acc1, acc5 = accuracy(pred_logits, target, topk=(1, 5))
 
             acc1s.append(acc1.item())
