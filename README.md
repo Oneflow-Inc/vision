@@ -2,8 +2,44 @@
 Datasets, Transforms and Models specific to Computer Vision
 
 
+## Installation
+- install `oneflow0.5.0+cu102` and other requirements
+```bash
+python3 -m pip install -f https://release.oneflow.info oneflow==0.5.0+cu102
+pip install rich
+```
+- install latest version of `flowvision`
+```bash
+pip install flowvision==0.0.2
+```
+
 
 ## Usage
+<details>
+<summary> <b> Quick Start </b> </summary>
+
+- list supported model
+```python
+from flowvision import ModelCreator
+ModelCreator.model_table()
+```
+
+- search supported model by wildcard
+```python
+from flowvision import ModelCreator
+ModelCreator.model_table("*vit*", pretrained=True)
+ModelCreator.model_table("*vit*", pretrained=False)
+ModelCreator.model_table('alexnet')
+```
+
+- create model use `ModelCreator`
+```python
+from flowvision import ModelCreator
+model = ModelCreator.create_model('alexnet', pretrained=True)
+```
+
+</details>
+
 <details>
 <summary> <b> ModelCreator </b> </summary>
 
