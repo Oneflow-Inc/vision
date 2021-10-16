@@ -1,9 +1,9 @@
 set -aux
 
-MODEL="squeezenet1_1"
+MODEL="googlenet"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
-IMG_SIZE=224
+IMG_SIZE=299
 NUM_WORKERS=8
 
 python benchmark.py --model $MODEL \
