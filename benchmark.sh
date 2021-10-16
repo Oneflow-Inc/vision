@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="shufflenet_v2_x0_5"
+MODEL="squeezenet1_1"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
