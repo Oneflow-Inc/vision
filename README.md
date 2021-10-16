@@ -16,6 +16,31 @@ pip install flowvision==0.0.2
 
 ## Usage
 <details>
+<summary> <b> Quick Start </b> </summary>
+
+- list supported model
+```python
+from flowvision import ModelCreator
+ModelCreator.model_table()
+```
+
+- search supported model by wildcard
+```python
+from flowvision import ModelCreator
+ModelCreator.model_table("*vit*", pretrained=True)
+ModelCreator.model_table("*vit*", pretrained=False)
+ModelCreator.model_table('alexnet')
+```
+
+- create model use `ModelCreator`
+```python
+from flowvision import ModelCreator
+model = ModelCreator.create_model('alexnet', pretrained=True)
+```
+
+</details>
+
+<details>
 <summary> <b> ModelCreator </b> </summary>
 
 - Create model in a simple way
