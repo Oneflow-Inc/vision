@@ -7,16 +7,16 @@ from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
 
-__all__ = ['Inception3', 'inception_v3', 'InceptionOutputs', '_InceptionOutputs']
+__all__ = ["Inception3", "inception_v3", "InceptionOutputs", "_InceptionOutputs"]
 
 
 model_urls = {
     # Inception v3 ported from TensorFlow
-    'inception_v3': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/Inception/inception_v3.zip',
+    "inception_v3": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/Inception/inception_v3.zip",
 }
 
-InceptionOutputs = namedtuple('InceptionOutputs', ['logits', 'aux_logits'])
-InceptionOutputs.__annotations__ = {'logits': Tensor, 'aux_logits': Optional[Tensor]}
+InceptionOutputs = namedtuple("InceptionOutputs", ["logits", "aux_logits"])
+InceptionOutputs.__annotations__ = {"logits": Tensor, "aux_logits": Optional[Tensor]}
 
 # Script annotations failed with _GoogleNetOutputs = namedtuple ...
 # _InceptionOutputs set here for backwards compat
@@ -49,8 +49,9 @@ def inception_v3(pretrained: bool = False, progress: bool = True, **kwargs: Any)
             original_aux_logits = True
         kwargs["init_weights"] = False  # we are loading weights from a pretrained model
         model = Inception3(**kwargs)
-        state_dict = load_state_dict_from_url(model_urls['inception_v3'],
-                                              progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["inception_v3"], progress=progress
+        )
         model.load_state_dict(state_dict)
         if not original_aux_logits:
             model.aux_logits = False

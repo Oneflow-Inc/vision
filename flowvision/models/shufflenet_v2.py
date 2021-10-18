@@ -7,15 +7,18 @@ from .registry import ModelCreator
 
 
 __all__ = [
-    'ShuffleNetV2', 'shufflenet_v2_x0_5', 'shufflenet_v2_x1_0',
-    'shufflenet_v2_x1_5', 'shufflenet_v2_x2_0'
+    "ShuffleNetV2",
+    "shufflenet_v2_x0_5",
+    "shufflenet_v2_x1_0",
+    "shufflenet_v2_x1_5",
+    "shufflenet_v2_x2_0",
 ]
 
 model_urls = {
-    'shufflenet_v2_x0_5': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ShuffleNetV2/shufflenet_v2_x0_5.zip',
-    'shufflenet_v2_x1_0': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ShuffleNetV2/shufflenet_v2_x1_0.zip',
-    'shufflenet_v2_x1_5': None,
-    'shufflenet_v2_x2_0': None,
+    "shufflenet_v2_x0_5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ShuffleNetV2/shufflenet_v2_x0_5.zip",
+    "shufflenet_v2_x1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ShuffleNetV2/shufflenet_v2_x1_0.zip",
+    "shufflenet_v2_x1_5": None,
+    "shufflenet_v2_x2_0": None,
 }
 
 
@@ -181,13 +184,17 @@ class ShuffleNetV2(nn.Module):
         return self._forward_impl(x)
 
 
-def _shufflenetv2(arch: str, pretrained: bool, progress: bool, *args: Any, **kwargs: Any) -> ShuffleNetV2:
+def _shufflenetv2(
+    arch: str, pretrained: bool, progress: bool, *args: Any, **kwargs: Any
+) -> ShuffleNetV2:
     model = ShuffleNetV2(*args, **kwargs)
 
     if pretrained:
         model_url = model_urls[arch]
         if model_url is None:
-            raise NotImplementedError('pretrained {} is not supported as of now'.format(arch))
+            raise NotImplementedError(
+                "pretrained {} is not supported as of now".format(arch)
+            )
         else:
             state_dict = load_state_dict_from_url(model_url, progress=progress)
             model.load_state_dict(state_dict)
@@ -196,7 +203,9 @@ def _shufflenetv2(arch: str, pretrained: bool, progress: bool, *args: Any, **kwa
 
 
 @ModelCreator.register_model
-def shufflenet_v2_x0_5(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ShuffleNetV2:
+def shufflenet_v2_x0_5(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ShuffleNetV2:
     """
     Constructs a ShuffleNetV2 with 0.5x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
@@ -206,12 +215,20 @@ def shufflenet_v2_x0_5(pretrained: bool = False, progress: bool = True, **kwargs
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _shufflenetv2('shufflenet_v2_x0_5', pretrained, progress,
-                         [4, 8, 4], [24, 48, 96, 192, 1024], **kwargs)
+    return _shufflenetv2(
+        "shufflenet_v2_x0_5",
+        pretrained,
+        progress,
+        [4, 8, 4],
+        [24, 48, 96, 192, 1024],
+        **kwargs
+    )
 
 
 @ModelCreator.register_model
-def shufflenet_v2_x1_0(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ShuffleNetV2:
+def shufflenet_v2_x1_0(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ShuffleNetV2:
     """
     Constructs a ShuffleNetV2 with 1.0x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
@@ -221,12 +238,20 @@ def shufflenet_v2_x1_0(pretrained: bool = False, progress: bool = True, **kwargs
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _shufflenetv2('shufflenet_v2_x1_0', pretrained, progress,
-                         [4, 8, 4], [24, 116, 232, 464, 1024], **kwargs)
+    return _shufflenetv2(
+        "shufflenet_v2_x1_0",
+        pretrained,
+        progress,
+        [4, 8, 4],
+        [24, 116, 232, 464, 1024],
+        **kwargs
+    )
 
 
 @ModelCreator.register_model
-def shufflenet_v2_x1_5(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ShuffleNetV2:
+def shufflenet_v2_x1_5(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ShuffleNetV2:
     """
     Constructs a ShuffleNetV2 with 1.5x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
@@ -236,12 +261,20 @@ def shufflenet_v2_x1_5(pretrained: bool = False, progress: bool = True, **kwargs
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _shufflenetv2('shufflenet_v2_x1_5', pretrained, progress,
-                         [4, 8, 4], [24, 176, 352, 704, 1024], **kwargs)
+    return _shufflenetv2(
+        "shufflenet_v2_x1_5",
+        pretrained,
+        progress,
+        [4, 8, 4],
+        [24, 176, 352, 704, 1024],
+        **kwargs
+    )
 
 
 @ModelCreator.register_model
-def shufflenet_v2_x2_0(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ShuffleNetV2:
+def shufflenet_v2_x2_0(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ShuffleNetV2:
     """
     Constructs a ShuffleNetV2 with 2.0x output channels, as described in
     `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
@@ -251,5 +284,11 @@ def shufflenet_v2_x2_0(pretrained: bool = False, progress: bool = True, **kwargs
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _shufflenetv2('shufflenet_v2_x2_0', pretrained, progress,
-                         [4, 8, 4], [24, 244, 488, 976, 2048], **kwargs)
+    return _shufflenetv2(
+        "shufflenet_v2_x2_0",
+        pretrained,
+        progress,
+        [4, 8, 4],
+        [24, 244, 488, 976, 2048],
+        **kwargs
+    )

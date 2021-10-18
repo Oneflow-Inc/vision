@@ -7,30 +7,44 @@ from .registry import ModelCreator
 
 from typing import Any
 
-__all__ = ["VisionTransformer", "vit_b_16_224", "vit_b_16_384", "vit_b_32_224", "vit_b_32_384", "vit_l_16_384", "vit_l_32_384"]
+__all__ = [
+    "VisionTransformer",
+    "vit_b_16_224",
+    "vit_b_16_384",
+    "vit_b_32_224",
+    "vit_b_32_384",
+    "vit_l_16_384",
+    "vit_l_32_384",
+]
 
 
 model_urls = {
-    'vit_b_16_224': None,
-    'vit_b_16_384': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_b_16_384.zip",
-    'vit_b_32_224': None,
-    'vit_b_32_384': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_b_32_384.zip",
-    'vit_l_16_384': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_l_16_384.zip",
-    'vit_l_32_384': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_l_32_384.zip",
+    "vit_b_16_224": None,
+    "vit_b_16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_b_16_384.zip",
+    "vit_b_32_224": None,
+    "vit_b_32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_b_32_384.zip",
+    "vit_l_16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_l_16_384.zip",
+    "vit_l_32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ViT-OneFlow/vit_l_32_384.zip",
 }
 
 
-def _load_pretrained(model_name: str, 
-                     model: nn.Module, 
-                     progress: bool,
-                     model_dir: str = "./checkpoints",
-                     check_hash: bool = False,) -> None:
+def _load_pretrained(
+    model_name: str,
+    model: nn.Module,
+    progress: bool,
+    model_dir: str = "./checkpoints",
+    check_hash: bool = False,
+) -> None:
     if model_name not in model_urls or model_urls[model_name] is None:
         raise ValueError(
-            "No checkpoint is available for model type {}".format(model_name))
+            "No checkpoint is available for model type {}".format(model_name)
+        )
     checkpoint_url = model_urls[model_name]
     model.load_state_dict(
-        load_state_dict_from_url(checkpoint_url, model_dir, progress=progress, check_hash=check_hash))
+        load_state_dict_from_url(
+            checkpoint_url, model_dir, progress=progress, check_hash=check_hash
+        )
+    )
 
 
 class LayerNorm(nn.Module):
@@ -273,7 +287,7 @@ class VisionTransformer(nn.Module):
 
 @ModelCreator.register_model
 def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model =  VisionTransformer(
+    model = VisionTransformer(
         image_size=(224, 224),
         patch_size=(16, 16),
         emb_dim=768,
@@ -286,16 +300,15 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     if pretrained:
-        _load_pretrained("vit_b_16_224", 
-                         model = model, 
-                         progress = progress, 
-                         model_dir = "./checkpoints")
+        _load_pretrained(
+            "vit_b_16_224", model=model, progress=progress, model_dir="./checkpoints"
+        )
     return model
 
 
 @ModelCreator.register_model
 def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model =  VisionTransformer(
+    model = VisionTransformer(
         image_size=(384, 384),
         patch_size=(16, 16),
         emb_dim=768,
@@ -308,16 +321,15 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     if pretrained:
-        _load_pretrained("vit_b_16_384", 
-                         model = model, 
-                         progress = progress, 
-                         model_dir = "./checkpoints")
+        _load_pretrained(
+            "vit_b_16_384", model=model, progress=progress, model_dir="./checkpoints"
+        )
     return model
 
 
 @ModelCreator.register_model
 def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model =  VisionTransformer(
+    model = VisionTransformer(
         image_size=(224, 224),
         patch_size=(32, 32),
         emb_dim=768,
@@ -330,16 +342,15 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     if pretrained:
-        _load_pretrained("vit_b_32_224", 
-                         model = model, 
-                         progress = progress, 
-                         model_dir = "./checkpoints")
+        _load_pretrained(
+            "vit_b_32_224", model=model, progress=progress, model_dir="./checkpoints"
+        )
     return model
 
 
 @ModelCreator.register_model
 def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model =  VisionTransformer(
+    model = VisionTransformer(
         image_size=(384, 384),
         patch_size=(32, 32),
         emb_dim=768,
@@ -352,16 +363,15 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     if pretrained:
-        _load_pretrained("vit_b_32_384", 
-                         model = model, 
-                         progress = progress, 
-                         model_dir = "./checkpoints")
+        _load_pretrained(
+            "vit_b_32_384", model=model, progress=progress, model_dir="./checkpoints"
+        )
     return model
 
 
 @ModelCreator.register_model
 def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model =  VisionTransformer(
+    model = VisionTransformer(
         image_size=(384, 384),
         patch_size=(16, 16),
         emb_dim=1024,
@@ -374,16 +384,15 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     if pretrained:
-        _load_pretrained("vit_l_16_384", 
-                         model = model, 
-                         progress = progress, 
-                         model_dir = "./checkpoints")
+        _load_pretrained(
+            "vit_l_16_384", model=model, progress=progress, model_dir="./checkpoints"
+        )
     return model
 
 
 @ModelCreator.register_model
 def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model =  VisionTransformer(
+    model = VisionTransformer(
         image_size=(384, 384),
         patch_size=(32, 32),
         emb_dim=1024,
@@ -396,8 +405,7 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     if pretrained:
-        _load_pretrained("vit_l_32_384", 
-                         model = model, 
-                         progress = progress, 
-                         model_dir = "./checkpoints")
+        _load_pretrained(
+            "vit_l_32_384", model=model, progress=progress, model_dir="./checkpoints"
+        )
     return model
