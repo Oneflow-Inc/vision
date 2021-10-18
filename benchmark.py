@@ -18,34 +18,46 @@ IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
 VIT_DEFAULT_MEAN = [0.5, 0.5, 0.5]
 VIT_DEFAULT_STD = [0.5, 0.5, 0.5]
 
-class ImageNetDataLoader(DataLoader):
-    def __init__(self, data_dir, split='train', image_size=224, batch_size=16, num_workers=8):
 
-        if split == 'train':
-            transform = transforms.Compose([
-                transforms.Resize((image_size, image_size)),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD)
-            ])
+class ImageNetDataLoader(DataLoader):
+    def __init__(
+        self, data_dir, split="train", image_size=224, batch_size=16, num_workers=8
+    ):
+
+        if split == "train":
+            transform = transforms.Compose(
+                [
+                    transforms.Resize((image_size, image_size)),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
+                ]
+            )
         else:
-            transform = transforms.Compose([
-                transforms.Resize(256, interpolation=2) if image_size == 224 else transforms.Resize(image_size, interpolation=2),
-                transforms.CenterCrop(image_size),
-                transforms.ToTensor(),
-                transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD)
-            ])
-        
-        self.dataset = ImageFolder(root=os.path.join(data_dir, split), transform=transform)
+            transform = transforms.Compose(
+                [
+                    transforms.Resize(256, interpolation=2)
+                    if image_size == 224
+                    else transforms.Resize(image_size, interpolation=2),
+                    transforms.CenterCrop(image_size),
+                    transforms.ToTensor(),
+                    transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
+                ]
+            )
+
+        self.dataset = ImageFolder(
+            root=os.path.join(data_dir, split), transform=transform
+        )
         super(ImageNetDataLoader, self).__init__(
             dataset=self.dataset,
             batch_size=batch_size,
-            shuffle=True if split == 'train' else False,
-            num_workers=num_workers)
+            shuffle=True if split == "train" else False,
+            num_workers=num_workers,
+        )
 
 
 def accuracy(output, target, topk=(1,)):
-    """Computes the precision@k for the specified values of k"""""
+    """Computes the precision@k for the specified values of k""" ""
     maxk = max(topk)
     batch_size = target.size(0)
 
@@ -68,13 +80,13 @@ def main(args):
     num_workers = args.num_workers
 
     model.cuda()
-    
+
     data_loader = ImageNetDataLoader(
-        data_dir = data_dir,
-        image_size = img_size,
-        batch_size = batch_size,
-        num_workers = num_workers,
-        split='val'
+        data_dir=data_dir,
+        image_size=img_size,
+        batch_size=batch_size,
+        num_workers=num_workers,
+        split="val",
     )
     total_batch = len(data_loader)
 
@@ -101,33 +113,33 @@ def main(args):
             acc5s.append(acc5.item())
 
             pbar.set_postfix(acc1=acc1.item(), acc5=acc5.item())
-        
-    print("Evaluation on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}".format("ImageNet", np.mean(acc1s), np.mean(acc5s)))
+
+    print(
+        "Evaluation on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}".format(
+            "ImageNet", np.mean(acc1s), np.mean(acc5s)
+        )
+    )
+
 
 def _parse_args():
     parser = argparse.ArgumentParser("flags for benchmark test")
     parser.add_argument(
-        "--model",
-        type=str,
-        required=True,
-        help="model arch for test",
+        "--model", type=str, required=True, help="model arch for test",
     )
     parser.add_argument(
         "--data_path", type=str, default="./", help="path to imagenet2012"
     )
-    parser.add_argument(
-        "--batch_size", type=int, default=64, help="test batch size"
-    )
-    parser.add_argument(
-        "--img_size", type=int, default=224, help="test batch size"
-    )
+    parser.add_argument("--batch_size", type=int, default=64, help="test batch size")
+    parser.add_argument("--img_size", type=int, default=224, help="test batch size")
     parser.add_argument(
         "--num_workers", type=int, default=8, help="num workers in dataloader"
     )
     return parser.parse_args()
 
+
 if __name__ == "__main__":
     import multiprocessing as mp
+
     mp.set_start_method("spawn")
     args = _parse_args()
     main(args)

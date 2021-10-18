@@ -6,20 +6,27 @@ from .registry import ModelCreator
 
 
 __all__ = [
-    'VGG', 'vgg11', 'vgg11_bn', 'vgg13', 'vgg13_bn', 'vgg16', 'vgg16_bn',
-    'vgg19_bn', 'vgg19',
+    "VGG",
+    "vgg11",
+    "vgg11_bn",
+    "vgg13",
+    "vgg13_bn",
+    "vgg16",
+    "vgg16_bn",
+    "vgg19_bn",
+    "vgg19",
 ]
 
 
 model_urls = {
-    'vgg11': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11.zip',
-    'vgg13': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13.zip',
-    'vgg16': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16.zip',
-    'vgg19': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19.zip',
-    'vgg11_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11_bn.zip',
-    'vgg13_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13_bn.zip',
-    'vgg16_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16_bn.zip',
-    'vgg19_bn': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19_bn.zip',
+    "vgg11": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11.zip",
+    "vgg13": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13.zip",
+    "vgg16": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16.zip",
+    "vgg19": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19.zip",
+    "vgg11_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11_bn.zip",
+    "vgg13_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13_bn.zip",
+    "vgg16_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16_bn.zip",
+    "vgg19_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19_bn.zip",
 }
 
 
@@ -81,22 +88,70 @@ def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequ
 
 
 cfgs: Dict[str, List[Union[str, int]]] = {
-    'A': [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
-    'B': [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M'],
-    'D': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
-    'E': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M'],
+    "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
+    "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
+    "D": [
+        64,
+        64,
+        "M",
+        128,
+        128,
+        "M",
+        256,
+        256,
+        256,
+        "M",
+        512,
+        512,
+        512,
+        "M",
+        512,
+        512,
+        512,
+        "M",
+    ],
+    "E": [
+        64,
+        64,
+        "M",
+        128,
+        128,
+        "M",
+        256,
+        256,
+        256,
+        256,
+        "M",
+        512,
+        512,
+        512,
+        512,
+        "M",
+        512,
+        512,
+        512,
+        512,
+        "M",
+    ],
 }
 
 
-def _vgg(arch: str, cfg: str, batch_norm: bool, pretrained: bool, progress: bool, **kwargs: Any) -> VGG:
+def _vgg(
+    arch: str,
+    cfg: str,
+    batch_norm: bool,
+    pretrained: bool,
+    progress: bool,
+    **kwargs: Any
+) -> VGG:
     if pretrained:
-        kwargs['init_weights'] = False
+        kwargs["init_weights"] = False
     model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch],
-                                              progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
+
 
 @ModelCreator.register_model
 def vgg11(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
@@ -107,7 +162,7 @@ def vgg11(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg11', 'A', False, pretrained, progress, **kwargs)
+    return _vgg("vgg11", "A", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -119,7 +174,7 @@ def vgg11_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg11_bn', 'A', True, pretrained, progress, **kwargs)
+    return _vgg("vgg11_bn", "A", True, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -131,7 +186,7 @@ def vgg13(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg13', 'B', False, pretrained, progress, **kwargs)
+    return _vgg("vgg13", "B", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -143,7 +198,7 @@ def vgg13_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg13_bn', 'B', True, pretrained, progress, **kwargs)
+    return _vgg("vgg13_bn", "B", True, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -155,7 +210,7 @@ def vgg16(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg16', 'D', False, pretrained, progress, **kwargs)
+    return _vgg("vgg16", "D", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -167,7 +222,7 @@ def vgg16_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg16_bn', 'D', True, pretrained, progress, **kwargs)
+    return _vgg("vgg16_bn", "D", True, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -179,7 +234,7 @@ def vgg19(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg19', 'E', False, pretrained, progress, **kwargs)
+    return _vgg("vgg19", "E", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -191,4 +246,4 @@ def vgg19_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg19_bn', 'E', True, pretrained, progress, **kwargs)
+    return _vgg("vgg19_bn", "E", True, pretrained, progress, **kwargs)

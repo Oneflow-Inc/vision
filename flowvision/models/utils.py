@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 import oneflow as flow
 
-HASH_REGEX = re.compile(r'([a-f0-9]*)_')
+HASH_REGEX = re.compile(r"([a-f0-9]*)_")
 
 
 def _is_legacy_tar_format(filename):
@@ -49,8 +49,14 @@ def _legacy_zip_load(filename, model_dir, map_location):
     return flow.load(extracted_file)
 
 
-def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, progress=True, check_hash=False,
-                             file_name=None):
+def load_state_dict_from_url(
+    url,
+    model_dir="./checkpoints",
+    map_location=None,
+    progress=True,
+    check_hash=False,
+    file_name=None,
+):
     r"""Loads the OneFlow serialized object at the given URL.
 
     If downloaded file is a zip file, it will be automatically
@@ -75,7 +81,7 @@ def load_state_dict_from_url(url, model_dir="./checkpoints", map_location=None, 
     """
 
     if map_location is not None:
-        warnings.warn('Map location is not supported yet.')
+        warnings.warn("Map location is not supported yet.")
 
     try:
         os.makedirs(model_dir)
@@ -128,7 +134,7 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
     req = Request(url)
     u = urlopen(req)
     meta = u.info()
-    if hasattr(meta, 'getheaders'):
+    if hasattr(meta, "getheaders"):
         content_length = meta.getheaders("Content-Length")
     else:
         content_length = meta.get_all("Content-Length")
@@ -145,8 +151,13 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
     try:
         if hash_prefix is not None:
             sha256 = hashlib.sha256()
-        with tqdm(total=file_size, disable=not progress,
-                  unit='B', unit_scale=True, unit_divisor=1024) as pbar:
+        with tqdm(
+            total=file_size,
+            disable=not progress,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as pbar:
             while True:
                 buffer = u.read(8192)
                 if len(buffer) == 0:
@@ -159,9 +170,12 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
         f.close()
         if hash_prefix is not None:
             digest = sha256.hexdigest()
-            if digest[:len(hash_prefix)] != hash_prefix:
-                raise RuntimeError('invalid hash value (expected "{}", got "{}")'
-                                   .format(hash_prefix, digest))
+            if digest[: len(hash_prefix)] != hash_prefix:
+                raise RuntimeError(
+                    'invalid hash value (expected "{}", got "{}")'.format(
+                        hash_prefix, digest
+                    )
+                )
         shutil.move(f.name, dst)
     finally:
         f.close()

@@ -6,12 +6,13 @@ import oneflow as flow
 from oneflow import nn, Tensor
 
 
-__all__ = ['MobileNetV2', 'mobilenet_v2']
+__all__ = ["MobileNetV2", "mobilenet_v2"]
 
 
 model_urls = {
-    'mobilenet_v2': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/MobileNet/mobilenet_v2.zip',
+    "mobilenet_v2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/MobileNet/mobilenet_v2.zip",
 }
+
 
 def _make_divisible(v: float, divisor: int, min_value: Optional[int] = None) -> int:
     """
@@ -237,7 +238,9 @@ class MobileNetV2(nn.Module):
 
 
 @ModelCreator.register_model
-def mobilenet_v2(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV2:
+def mobilenet_v2(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> MobileNetV2:
     """
     Constructs a MobileNetV2 architecture from
     `"MobileNetV2: Inverted Residuals and Linear Bottlenecks" <https://arxiv.org/abs/1801.04381>`_.
@@ -248,7 +251,8 @@ def mobilenet_v2(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     """
     model = MobileNetV2(**kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls['mobilenet_v2'],
-                                              progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["mobilenet_v2"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model

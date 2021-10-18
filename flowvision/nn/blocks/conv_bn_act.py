@@ -2,6 +2,7 @@ import oneflow as flow
 import oneflow.nn as nn
 from functools import partial
 
+
 class ConvBnAct(nn.Sequential):
     def __init__(
         self,
@@ -19,6 +20,7 @@ class ConvBnAct(nn.Sequential):
             self.add_module("bn", normalization(out_features))
         if activation:
             self.add_module("act", activation())
+
 
 ConvBn = partial(ConvBnAct, activation=None)
 ConvAct = partial(ConvBnAct, normalization=None, bias=True)

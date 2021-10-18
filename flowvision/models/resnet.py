@@ -5,22 +5,32 @@ from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 from typing import Type, Any, Callable, Union, List, Optional
 
-__all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
-           'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
-           'wide_resnet50_2', 'wide_resnet101_2']
+__all__ = [
+    "ResNet",
+    "resnet18",
+    "resnet34",
+    "resnet50",
+    "resnet101",
+    "resnet152",
+    "resnext50_32x4d",
+    "resnext101_32x8d",
+    "wide_resnet50_2",
+    "wide_resnet101_2",
+]
 
 
 model_urls = {
-    'resnet18': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet18.zip',
-    'resnet34': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet34.zip',
-    'resnet50': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet50.zip',
-    'resnet101': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet101.zip',
-    'resnet152': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet152.zip',
-    'resnext50_32x4d': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnext50_32x4d.zip',
-    'resnext101_32x8d': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnext101_32x8d.zip',
-    'wide_resnet50_2': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/wide_resnet50_2.zip',
-    'wide_resnet101_2': 'https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/wide_resnet101_2.zip',
+    "resnet18": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet18.zip",
+    "resnet34": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet34.zip",
+    "resnet50": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet50.zip",
+    "resnet101": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet101.zip",
+    "resnet152": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnet152.zip",
+    "resnext50_32x4d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnext50_32x4d.zip",
+    "resnext101_32x8d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/resnext101_32x8d.zip",
+    "wide_resnet50_2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/wide_resnet50_2.zip",
+    "wide_resnet101_2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/ResNet/wide_resnet101_2.zip",
 }
+
 
 def conv3x3(
     in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1
@@ -289,8 +299,7 @@ def _resnet(
 ) -> ResNet:
     model = ResNet(block, layers, **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch],
-                                              progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
@@ -304,8 +313,7 @@ def resnet18(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], pretrained, progress,
-                   **kwargs)
+    return _resnet("resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -317,8 +325,7 @@ def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], pretrained, progress,
-                   **kwargs)
+    return _resnet("resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -330,8 +337,7 @@ def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet50', Bottleneck, [3, 4, 6, 3], pretrained, progress,
-                   **kwargs)
+    return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
@@ -343,8 +349,9 @@ def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet101', Bottleneck, [3, 4, 23, 3], pretrained, progress,
-                   **kwargs)
+    return _resnet(
+        "resnet101", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
@@ -356,12 +363,15 @@ def resnet152(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet('resnet152', Bottleneck, [3, 8, 36, 3], pretrained, progress,
-                   **kwargs)
+    return _resnet(
+        "resnet152", Bottleneck, [3, 8, 36, 3], pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def resnext50_32x4d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
+def resnext50_32x4d(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ResNet:
     r"""ResNeXt-50 32x4d model from
     `"Aggregated Residual Transformation for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_.
 
@@ -369,14 +379,17 @@ def resnext50_32x4d(pretrained: bool = False, progress: bool = True, **kwargs: A
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    kwargs['groups'] = 32
-    kwargs['width_per_group'] = 4
-    return _resnet('resnext50_32x4d', Bottleneck, [3, 4, 6, 3],
-                   pretrained, progress, **kwargs)
+    kwargs["groups"] = 32
+    kwargs["width_per_group"] = 4
+    return _resnet(
+        "resnext50_32x4d", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def resnext101_32x8d(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
+def resnext101_32x8d(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ResNet:
     r"""ResNeXt-101 32x8d model from
     `"Aggregated Residual Transformation for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_.
 
@@ -384,14 +397,17 @@ def resnext101_32x8d(pretrained: bool = False, progress: bool = True, **kwargs: 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    kwargs['groups'] = 32
-    kwargs['width_per_group'] = 8
-    return _resnet('resnext101_32x8d', Bottleneck, [3, 4, 23, 3],
-                   pretrained, progress, **kwargs)
+    kwargs["groups"] = 32
+    kwargs["width_per_group"] = 8
+    return _resnet(
+        "resnext101_32x8d", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def wide_resnet50_2(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
+def wide_resnet50_2(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ResNet:
     r"""Wide ResNet-50-2 model from
     `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
 
@@ -404,13 +420,16 @@ def wide_resnet50_2(pretrained: bool = False, progress: bool = True, **kwargs: A
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    kwargs['width_per_group'] = 64 * 2
-    return _resnet('wide_resnet50_2', Bottleneck, [3, 4, 6, 3],
-                   pretrained, progress, **kwargs)
+    kwargs["width_per_group"] = 64 * 2
+    return _resnet(
+        "wide_resnet50_2", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def wide_resnet101_2(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
+def wide_resnet101_2(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ResNet:
     r"""Wide ResNet-101-2 model from
     `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
 
@@ -423,6 +442,7 @@ def wide_resnet101_2(pretrained: bool = False, progress: bool = True, **kwargs: 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    kwargs['width_per_group'] = 64 * 2
-    return _resnet('wide_resnet101_2', Bottleneck, [3, 4, 23, 3],
-                   pretrained, progress, **kwargs)
+    kwargs["width_per_group"] = 64 * 2
+    return _resnet(
+        "wide_resnet101_2", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
+    )
