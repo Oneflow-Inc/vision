@@ -11,8 +11,7 @@ from .registry import ModelCreator
 __all__ = ["GoogLeNet", "googlenet", "GoogLeNetOutputs", "_GoogLeNetOutputs"]
 
 model_urls = {
-    # GoogLeNet ported from TensorFlow
-    "googlenet": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/Inception/googlenet.zip",
+    "googlenet": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/Inception/googlenet.zip",
 }
 
 GoogLeNetOutputs = namedtuple(

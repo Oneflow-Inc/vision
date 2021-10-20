@@ -8,8 +8,8 @@ from typing import Any
 __all__ = ["SqueezeNet", "squeezenet1_0", "squeezenet1_1"]
 
 model_urls = {
-    "squeezenet1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/SqueezeNet/squeezenet1_0.zip",
-    "squeezenet1_1": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/SqueezeNet/squeezenet1_1.zip",
+    "squeezenet1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/SqueezeNet/squeezenet1_0.zip",
+    "squeezenet1_1": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/SqueezeNet/squeezenet1_1.zip",
 }
 
 

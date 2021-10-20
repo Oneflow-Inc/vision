@@ -11,8 +11,7 @@ __all__ = ["Inception3", "inception_v3", "InceptionOutputs", "_InceptionOutputs"
 
 
 model_urls = {
-    # Inception v3 ported from TensorFlow
-    "inception_v3": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/Inception/inception_v3.zip",
+    "inception_v3": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/Inception/inception_v3.zip",
 }
 
 InceptionOutputs = namedtuple("InceptionOutputs", ["logits", "aux_logits"])
