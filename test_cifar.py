@@ -58,9 +58,7 @@ def test(epoch, num_workers, batch_size, print_interval):
     )
 
     train_epoch = epoch
-    batch_size = batch_size
-    num_workers = num_workers
-    data_dir="/home/luyang/datasets/cifar10"
+    data_dir="./"
 
     trainset = vision.datasets.CIFAR10(
         root=data_dir, train=True, download=True, transform=transform,
@@ -98,16 +96,12 @@ def test(epoch, num_workers, batch_size, print_interval):
     print("epoch, num_worker, batch_size, print_interval >>>>>> ", epoch, num_worker, batch_size, print_interval, " final loss: ", final_loss, " cost: ", end-start)
 
 
-
-
 if __name__ == "__main__":
     import multiprocessing as mp
     mp.set_start_method("spawn")
 
     epoch = 1
-    num_workers = (0, 2, 4, 8, 16)
-
-    for num_worker in num_workers:
-        print_interval = 200
-        batch_size = 4
-        test(epoch, num_worker, batch_size, print_interval)
+    num_workers = 4
+    print_interval = 200
+    batch_size = 4
+    test(epoch, num_workers, batch_size, print_interval)
