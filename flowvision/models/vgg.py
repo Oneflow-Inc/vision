@@ -19,14 +19,14 @@ __all__ = [
 
 
 model_urls = {
-    "vgg11": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11.zip",
-    "vgg13": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13.zip",
-    "vgg16": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16.zip",
-    "vgg19": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19.zip",
-    "vgg11_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg11_bn.zip",
-    "vgg13_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg13_bn.zip",
-    "vgg16_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg16_bn.zip",
-    "vgg19_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/VGG/vgg19_bn.zip",
+    "vgg11": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg11.zip",
+    "vgg13": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg13.zip",
+    "vgg16": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg16.zip",
+    "vgg19": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg19.zip",
+    "vgg11_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg11_bn.zip",
+    "vgg13_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg13_bn.zip",
+    "vgg16_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg16_bn.zip",
+    "vgg19_bn": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/VGG/vgg19_bn.zip",
 }
 
 

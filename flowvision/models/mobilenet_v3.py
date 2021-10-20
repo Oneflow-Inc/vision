@@ -9,8 +9,8 @@ __all__ = ["MobileNetV3", "mobilenet_v3_large", "mobilenet_v3_small"]
 
 
 model_urls = {
-    "mobilenet_v3_large": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/MobileNet/mobilenet_v3_large.zip",
-    "mobilenet_v3_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/MobileNet/mobilenet_v3_small.zip",
+    "mobilenet_v3_large": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/MobileNet/mobilenet_v3_large.zip",
+    "mobilenet_v3_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/MobileNet/mobilenet_v3_small.zip",
 }
 
 
