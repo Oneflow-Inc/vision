@@ -27,4 +27,3 @@ def get_image_backend():
     Gets the name of the package used to load images
     """
     return _image_backend
-
