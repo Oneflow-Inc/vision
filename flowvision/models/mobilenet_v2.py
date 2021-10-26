@@ -10,7 +10,7 @@ __all__ = ["MobileNetV2", "mobilenet_v2"]
 
 
 model_urls = {
-    "mobilenet_v2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/MobileNet/mobilenet_v2.zip",
+    "mobilenet_v2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileNet/mobilenet_v2.zip",
 }
 
 

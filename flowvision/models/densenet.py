@@ -11,10 +11,10 @@ __all__ = ["DenseNet", "densenet121", "densenet169", "densenet201", "densenet161
 
 
 model_urls = {
-    "densenet121": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/DenseNet/densenet_121.zip",
-    "densenet169": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/DenseNet/densenet_169.zip",
-    "densenet201": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/DenseNet/densenet_201.zip",
-    "densenet161": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/DenseNet/densenet_161.zip",
+    "densenet121": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DenseNet/densenet_121.zip",
+    "densenet169": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DenseNet/densenet_169.zip",
+    "densenet201": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DenseNet/densenet_201.zip",
+    "densenet161": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DenseNet/densenet_161.zip",
 }
 
 

@@ -20,11 +20,11 @@ __all__ = [
 
 model_urls = {
     "vit_b_16_224": None,
-    "vit_b_16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ViT/vit_b_16_384.zip",
+    "vit_b_16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ViT/vit_b_16_384.zip",
     "vit_b_32_224": None,
-    "vit_b_32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ViT/vit_b_32_384.zip",
-    "vit_l_16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ViT/vit_l_16_384.zip",
-    "vit_l_32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ViT/vit_l_32_384.zip",
+    "vit_b_32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ViT/vit_b_32_384.zip",
+    "vit_l_16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ViT/vit_l_16_384.zip",
+    "vit_l_32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ViT/vit_l_32_384.zip",
 }
 
 

@@ -10,7 +10,7 @@ __all__ = ["AlexNet", "alexnet"]
 
 
 model_urls = {
-    "alexnet": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/AlexNet/alexnet_oneflow_model.tar.gz",
+    "alexnet": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/AlexNet/alexnet_oneflow_model.tar.gz",
 }
 
 
