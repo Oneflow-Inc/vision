@@ -1,5 +1,5 @@
 ## Model Zoo
-Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64
+Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64 under the same data transformation.
 
 |                        |    top1 |    top5 |  batch_size | image size |
 |:-----------------------|--------:|--------:|------------:|-----------:|
@@ -40,3 +40,6 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | vit-b-32-384           | 81.7116 | 96.1217 |     64      |   384      |
 | vit-l-16-384           | 85.0444 | 97.3605 |     64      |   384      |
 | vit-l-32-384           | 81.5217 | 96.0518 |     64      |   384      |
+| convmixer_768_32_relu  | 80.0764 | 94.9896 |     64      |   224      |
+| convmixer_1024_20      | 76.9994 | 93.3781 |     64      |   224      |
+| convmixer_1536_20      | 81.0461 | 95.6194 |     64      |   224      |
