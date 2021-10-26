@@ -17,7 +17,7 @@ setup(
     description="oneflow vision codebase",
     license="MIT",
     packages=find_packages(),  # 需要安装的代码包，也可以用find_packages函数
-    install_requires=[ "rich",],
+    install_requires=["rich",],
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
