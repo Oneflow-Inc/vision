@@ -20,15 +20,15 @@ __all__ = [
 
 
 model_urls = {
-    "resnet18": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnet18.zip",
-    "resnet34": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnet34.zip",
-    "resnet50": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnet50.zip",
-    "resnet101": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnet101.zip",
-    "resnet152": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnet152.zip",
-    "resnext50_32x4d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnext50_32x4d.zip",
-    "resnext101_32x8d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/resnext101_32x8d.zip",
-    "wide_resnet50_2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/wide_resnet50_2.zip",
-    "wide_resnet101_2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/ResNet/wide_resnet101_2.zip",
+    "resnet18": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnet18.zip",
+    "resnet34": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnet34.zip",
+    "resnet50": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnet50.zip",
+    "resnet101": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnet101.zip",
+    "resnet152": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnet152.zip",
+    "resnext50_32x4d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnext50_32x4d.zip",
+    "resnext101_32x8d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/resnext101_32x8d.zip",
+    "wide_resnet50_2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/wide_resnet50_2.zip",
+    "wide_resnet101_2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNet/wide_resnet101_2.zip",
 }
 
 
