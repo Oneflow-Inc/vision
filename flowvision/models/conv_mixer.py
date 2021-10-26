@@ -26,7 +26,7 @@ def ConvMixer(dim, depth, kernel_size=9, patch_size=7, n_classes=1000, activatio
         nn.BatchNorm2d(dim),
         *[nn.Sequential(
                 ResidualAdd(nn.Sequential(
-                    nn.Conv2d(dim, dim, kernel_size, groups=dim, padding="same"),
+                    nn.Conv2d(dim, dim, kernel_size, groups=dim, padding=kernel_size // 2),
                     activation(),
                     nn.BatchNorm2d(dim)
                 )),
