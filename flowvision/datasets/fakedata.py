@@ -63,12 +63,12 @@ class FakeData(VisionDataset):
         if index >= len(self):
             raise IndexError("{} index out of range".format(self.__class__.__name__))
         # rng_state = flow.get_rng_state()
-        rng_state = flow.Generator(device="auto").get_state()
+        rng_state = flow.default_generator().get_state()
         flow.manual_seed(index + self.random_offset)
         img = flow.randn(*self.image_size)
         target = flow.randint(0, self.num_classes, size=(1,), dtype=flow.long)[0]
         # flow.set_rng_state(rng_state)
-        flow.default_generator(device="auto").set_state(rng_state)
+        flow.default_generator().set_state(rng_state)
 
         # convert to PIL Image
         img = transforms.ToPILImage()(img)
