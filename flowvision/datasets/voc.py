@@ -32,7 +32,6 @@ from .vision import VisionDataset
 from .utils import download_url, check_integrity
 
 
-
 DATASET_YEAR_DICT = {
     "2012": {
         "url": "http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar",

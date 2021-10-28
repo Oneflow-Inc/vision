@@ -29,13 +29,25 @@ from .vision import VisionDataset
 
 class LSUNClass(VisionDataset):
     def __init__(
-        self, root: str, transform: Optional[Callable] = None, target_transform: Optional[Callable] = None
+        self,
+        root: str,
+        transform: Optional[Callable] = None,
+        target_transform: Optional[Callable] = None,
     ) -> None:
         import lmdb
 
-        super(LSUNClass, self).__init__(root, transform=transform, target_transform=target_transform)
+        super(LSUNClass, self).__init__(
+            root, transform=transform, target_transform=target_transform
+        )
 
-        self.env = lmdb.open(root, max_readers=1, readonly=True, lock=False, readahead=False, meminit=False)
+        self.env = lmdb.open(
+            root,
+            max_readers=1,
+            readonly=True,
+            lock=False,
+            readahead=False,
+            meminit=False,
+        )
         with self.env.begin(write=False) as txn:
             self.length = txn.stat()["entries"]
         cache_file = "_cache_" + "".join(c for c in root if c in string.ascii_letters)
@@ -43,7 +55,9 @@ class LSUNClass(VisionDataset):
             self.keys = pickle.load(open(cache_file, "rb"))
         else:
             with self.env.begin(write=False) as txn:
-                self.keys = [key for key in txn.cursor().iternext(keys=True, values=False)]
+                self.keys = [
+                    key for key in txn.cursor().iternext(keys=True, values=False)
+                ]
             pickle.dump(self.keys, open(cache_file, "wb"))
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
@@ -90,13 +104,17 @@ class LSUN(VisionDataset):
         transform: Optional[Callable] = None,
         target_transform: Optional[Callable] = None,
     ) -> None:
-        super(LSUN, self).__init__(root, transform=transform, target_transform=target_transform)
+        super(LSUN, self).__init__(
+            root, transform=transform, target_transform=target_transform
+        )
         self.classes = self._verify_classes(classes)
 
         # for each class, create an LSUNClassDataset
         self.dbs = []
         for c in self.classes:
-            self.dbs.append(LSUNClass(root=os.path.join(root, f"{c}_lmdb"), transform=transform))
+            self.dbs.append(
+                LSUNClass(root=os.path.join(root, f"{c}_lmdb"), transform=transform)
+            )
 
         self.indices = []
         count = 0
@@ -130,18 +148,26 @@ class LSUN(VisionDataset):
                 classes = [c + "_" + classes for c in categories]
         except ValueError:
             if not isinstance(classes, Iterable):
-                msg = "Expected type str or Iterable for argument classes, " "but got type {}."
+                msg = (
+                    "Expected type str or Iterable for argument classes, "
+                    "but got type {}."
+                )
                 raise ValueError(msg.format(type(classes)))
 
             classes = list(classes)
-            msg_fmtstr_type = "Expected type str for elements in argument classes, " "but got type {}."
+            msg_fmtstr_type = (
+                "Expected type str for elements in argument classes, "
+                "but got type {}."
+            )
             for c in classes:
                 verify_str_arg(c, custom_msg=msg_fmtstr_type.format(type(c)))
                 c_short = c.split("_")
                 category, dset_opt = "_".join(c_short[:-1]), c_short[-1]
 
                 msg_fmtstr = "Unknown value '{}' for {}. Valid values are {{{}}}."
-                msg = msg_fmtstr.format(category, "LSUN class", iterable_to_str(categories))
+                msg = msg_fmtstr.format(
+                    category, "LSUN class", iterable_to_str(categories)
+                )
                 verify_str_arg(category, valid_values=categories, custom_msg=msg)
 
                 msg = msg_fmtstr.format(dset_opt, "postfix", iterable_to_str(dset_opts))
