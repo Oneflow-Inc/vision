@@ -55,7 +55,10 @@ class STL10(VisionDataset):
         ["unlabeled_X.bin", "5242ba1fed5e4be9e1e742405eb56ca4"],
     ]
 
-    test_list = [["test_X.bin", "7f263ba9f9e0b06b93213547f721ac82"], ["test_y.bin", "36f9794fa4beb8a2c72628de14fa638e"]]
+    test_list = [
+        ["test_X.bin", "7f263ba9f9e0b06b93213547f721ac82"],
+        ["test_y.bin", "36f9794fa4beb8a2c72628de14fa638e"],
+    ]
     splits = ("train", "train+unlabeled", "unlabeled", "test")
 
     def __init__(
@@ -67,33 +70,46 @@ class STL10(VisionDataset):
         target_transform: Optional[Callable] = None,
         download: bool = False,
     ) -> None:
-        super(STL10, self).__init__(root, transform=transform, target_transform=target_transform)
+        super(STL10, self).__init__(
+            root, transform=transform, target_transform=target_transform
+        )
         self.split = verify_str_arg(split, "split", self.splits)
         self.folds = self._verify_folds(folds)
 
         if download:
             self.download()
         elif not self._check_integrity():
-            raise RuntimeError("Dataset not found or corrupted. " "You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found or corrupted. "
+                "You can use download=True to download it"
+            )
 
         # now load the picked numpy arrays
         self.labels: Optional[np.ndarray]
         if self.split == "train":
-            self.data, self.labels = self.__loadfile(self.train_list[0][0], self.train_list[1][0])
+            self.data, self.labels = self.__loadfile(
+                self.train_list[0][0], self.train_list[1][0]
+            )
             self.__load_folds(folds)
 
         elif self.split == "train+unlabeled":
-            self.data, self.labels = self.__loadfile(self.train_list[0][0], self.train_list[1][0])
+            self.data, self.labels = self.__loadfile(
+                self.train_list[0][0], self.train_list[1][0]
+            )
             self.__load_folds(folds)
             unlabeled_data, _ = self.__loadfile(self.train_list[2][0])
             self.data = np.concatenate((self.data, unlabeled_data))
-            self.labels = np.concatenate((self.labels, np.asarray([-1] * unlabeled_data.shape[0])))
+            self.labels = np.concatenate(
+                (self.labels, np.asarray([-1] * unlabeled_data.shape[0]))
+            )
 
         elif self.split == "unlabeled":
             self.data, _ = self.__loadfile(self.train_list[2][0])
             self.labels = np.asarray([-1] * self.data.shape[0])
         else:  # self.split == 'test':
-            self.data, self.labels = self.__loadfile(self.test_list[0][0], self.test_list[1][0])
+            self.data, self.labels = self.__loadfile(
+                self.test_list[0][0], self.test_list[1][0]
+            )
 
         class_file = os.path.join(self.root, self.base_folder, self.class_names_file)
         if os.path.isfile(class_file):
@@ -106,7 +122,10 @@ class STL10(VisionDataset):
         elif isinstance(folds, int):
             if folds in range(10):
                 return folds
-            msg = "Value for argument folds should be in the range [0, 10), " "but got {}."
+            msg = (
+                "Value for argument folds should be in the range [0, 10), "
+                "but got {}."
+            )
             raise ValueError(msg.format(folds))
         else:
             msg = "Expected type None or int for argument folds, but got type {}."
@@ -140,7 +159,9 @@ class STL10(VisionDataset):
     def __len__(self) -> int:
         return self.data.shape[0]
 
-    def __loadfile(self, data_file: str, labels_file: Optional[str] = None) -> Tuple[np.ndarray, Optional[np.ndarray]]:
+    def __loadfile(
+        self, data_file: str, labels_file: Optional[str] = None
+    ) -> Tuple[np.ndarray, Optional[np.ndarray]]:
         labels = None
         if labels_file:
             path_to_labels = os.path.join(self.root, self.base_folder, labels_file)
@@ -169,7 +190,9 @@ class STL10(VisionDataset):
         if self._check_integrity():
             print("Files already downloaded and verified")
             return
-        download_and_extract_archive(self.url, self.root, filename=self.filename, md5=self.tgz_md5)
+        download_and_extract_archive(
+            self.url, self.root, filename=self.filename, md5=self.tgz_md5
+        )
         self._check_integrity()
 
     def extra_repr(self) -> str:

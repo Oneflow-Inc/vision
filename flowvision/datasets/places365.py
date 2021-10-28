@@ -51,24 +51,48 @@ class Places365(VisionDataset):
     _BASE_URL = "http://data.csail.mit.edu/places/places365/"
     # {variant: (archive, md5)}
     _DEVKIT_META = {
-        "standard": ("filelist_places365-standard.tar", "35a0585fee1fa656440f3ab298f8479c"),
-        "challenge": ("filelist_places365-challenge.tar", "70a8307e459c3de41690a7c76c931734"),
+        "standard": (
+            "filelist_places365-standard.tar",
+            "35a0585fee1fa656440f3ab298f8479c",
+        ),
+        "challenge": (
+            "filelist_places365-challenge.tar",
+            "70a8307e459c3de41690a7c76c931734",
+        ),
     }
     # (file, md5)
     _CATEGORIES_META = ("categories_places365.txt", "06c963b85866bd0649f97cb43dd16673")
     # {split: (file, md5)}
     _FILE_LIST_META = {
-        "train-standard": ("places365_train_standard.txt", "30f37515461640559006b8329efbed1a"),
-        "train-challenge": ("places365_train_challenge.txt", "b2931dc997b8c33c27e7329c073a6b57"),
+        "train-standard": (
+            "places365_train_standard.txt",
+            "30f37515461640559006b8329efbed1a",
+        ),
+        "train-challenge": (
+            "places365_train_challenge.txt",
+            "b2931dc997b8c33c27e7329c073a6b57",
+        ),
         "val": ("places365_val.txt", "e9f2fd57bfd9d07630173f4e8708e4b1"),
     }
     # {(split, small): (file, md5)}
     _IMAGES_META = {
-        ("train-standard", False): ("train_large_places365standard.tar", "67e186b496a84c929568076ed01a8aa1"),
-        ("train-challenge", False): ("train_large_places365challenge.tar", "605f18e68e510c82b958664ea134545f"),
+        ("train-standard", False): (
+            "train_large_places365standard.tar",
+            "67e186b496a84c929568076ed01a8aa1",
+        ),
+        ("train-challenge", False): (
+            "train_large_places365challenge.tar",
+            "605f18e68e510c82b958664ea134545f",
+        ),
         ("val", False): ("val_large.tar", "9b71c4993ad89d2d8bcbdc4aef38042f"),
-        ("train-standard", True): ("train_256_places365standard.tar", "53ca1c756c3d1e7809517cc47c5561c5"),
-        ("train-challenge", True): ("train_256_places365challenge.tar", "741915038a5e3471ec7332404dfb64ef"),
+        ("train-standard", True): (
+            "train_256_places365standard.tar",
+            "53ca1c756c3d1e7809517cc47c5561c5",
+        ),
+        ("train-challenge", True): (
+            "train_256_places365challenge.tar",
+            "741915038a5e3471ec7332404dfb64ef",
+        ),
         ("val", True): ("val_256.tar", "e27b17d8d44f4af9a78502beb927f808"),
     }
 
@@ -119,7 +143,9 @@ class Places365(VisionDataset):
             dir = f"{self.split}_{size}"
         return path.join(self.root, dir)
 
-    def load_categories(self, download: bool = True) -> Tuple[List[str], Dict[str, int]]:
+    def load_categories(
+        self, download: bool = True
+    ) -> Tuple[List[str], Dict[str, int]]:
         def process(line: str) -> Tuple[str, int]:
             cls, idx = line.split()
             return cls, int(idx)
@@ -134,10 +160,15 @@ class Places365(VisionDataset):
 
         return sorted(class_to_idx.keys()), class_to_idx
 
-    def load_file_list(self, download: bool = True) -> Tuple[List[Tuple[str, int]], List[int]]:
+    def load_file_list(
+        self, download: bool = True
+    ) -> Tuple[List[Tuple[str, int]], List[int]]:
         def process(line: str, sep="/") -> Tuple[str, int]:
             image, idx = line.split()
-            return path.join(self.images_dir, image.lstrip(sep).replace(sep, os.sep)), int(idx)
+            return (
+                path.join(self.images_dir, image.lstrip(sep).replace(sep, os.sep)),
+                int(idx),
+            )
 
         file, md5 = self._FILE_LIST_META[self.split]
         file = path.join(self.root, file)

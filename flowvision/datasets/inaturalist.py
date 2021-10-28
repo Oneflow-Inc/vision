@@ -85,7 +85,9 @@ class INaturalist(VisionDataset):
         self.version = verify_str_arg(version, "version", DATASET_URLS.keys())
 
         super(INaturalist, self).__init__(
-            os.path.join(root, version), transform=transform, target_transform=target_transform
+            os.path.join(root, version),
+            transform=transform,
+            target_transform=target_transform,
         )
 
         os.makedirs(root, exist_ok=True)
@@ -93,7 +95,10 @@ class INaturalist(VisionDataset):
             self.download()
 
         if not self._check_integrity():
-            raise RuntimeError("Dataset not found or corrupted." + " You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found or corrupted."
+                + " You can use download=True to download it"
+            )
 
         self.all_categories: List[str] = []
 
@@ -106,10 +111,15 @@ class INaturalist(VisionDataset):
         if not isinstance(target_type, list):
             target_type = [target_type]
         if self.version[:4] == "2021":
-            self.target_type = [verify_str_arg(t, "target_type", ("full", *CATEGORIES_2021)) for t in target_type]
+            self.target_type = [
+                verify_str_arg(t, "target_type", ("full", *CATEGORIES_2021))
+                for t in target_type
+            ]
             self._init_2021()
         else:
-            self.target_type = [verify_str_arg(t, "target_type", ("full", "super")) for t in target_type]
+            self.target_type = [
+                verify_str_arg(t, "target_type", ("full", "super")) for t in target_type
+            ]
             self._init_pre2021()
 
         # index of all files: (full category id, filename)
@@ -131,9 +141,13 @@ class INaturalist(VisionDataset):
         for dir_index, dir_name in enumerate(self.all_categories):
             pieces = dir_name.split("_")
             if len(pieces) != 8:
-                raise RuntimeError(f"Unexpected category name {dir_name}, wrong number of pieces")
+                raise RuntimeError(
+                    f"Unexpected category name {dir_name}, wrong number of pieces"
+                )
             if pieces[0] != f"{dir_index:05d}":
-                raise RuntimeError(f"Unexpected category id {pieces[0]}, expecting {dir_index:05d}")
+                raise RuntimeError(
+                    f"Unexpected category id {pieces[0]}, expecting {dir_index:05d}"
+                )
             cat_map = {}
             for cat, name in zip(CATEGORIES_2021, pieces[1:7]):
                 if name in self.categories_index[cat]:
@@ -226,7 +240,9 @@ class INaturalist(VisionDataset):
                 for name, id in self.categories_index[category_type].items():
                     if id == category_id:
                         return name
-                raise ValueError(f"Invalid category id {category_id} for {category_type}")
+                raise ValueError(
+                    f"Invalid category id {category_id} for {category_type}"
+                )
 
     def _check_integrity(self) -> bool:
         return os.path.exists(self.root) and len(os.listdir(self.root)) > 0
@@ -241,11 +257,18 @@ class INaturalist(VisionDataset):
         base_root = os.path.dirname(self.root)
 
         download_and_extract_archive(
-            DATASET_URLS[self.version], base_root, filename=f"{self.version}.tgz", md5=DATASET_MD5[self.version]
+            DATASET_URLS[self.version],
+            base_root,
+            filename=f"{self.version}.tgz",
+            md5=DATASET_MD5[self.version],
         )
 
-        orig_dir_name = os.path.join(base_root, os.path.basename(DATASET_URLS[self.version]).rstrip(".tar.gz"))
+        orig_dir_name = os.path.join(
+            base_root, os.path.basename(DATASET_URLS[self.version]).rstrip(".tar.gz")
+        )
         if not os.path.exists(orig_dir_name):
             raise RuntimeError(f"Unable to find downloaded files at {orig_dir_name}")
         os.rename(orig_dir_name, self.root)
-        print(f"Dataset version '{self.version}' has been downloaded and prepared for use")
+        print(
+            f"Dataset version '{self.version}' has been downloaded and prepared for use"
+        )

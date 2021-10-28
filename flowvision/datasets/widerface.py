@@ -55,9 +55,21 @@ class WIDERFace(VisionDataset):
     BASE_FOLDER = "widerface"
     FILE_LIST = [
         # File ID                             MD5 Hash                            Filename
-        ("15hGDLhsx8bLgLcIRD5DhYt5iBxnjNF1M", "3fedf70df600953d25982bcd13d91ba2", "WIDER_train.zip"),
-        ("1GUCogbp16PMGa39thoMMeWxp7Rp5oM8Q", "dfa7d7e790efa35df3788964cf0bbaea", "WIDER_val.zip"),
-        ("1HIfDbVEWKmsYKJZm4lchTBDLW5N7dY5T", "e5d8f4248ed24c334bbd12f49c29dd40", "WIDER_test.zip"),
+        (
+            "15hGDLhsx8bLgLcIRD5DhYt5iBxnjNF1M",
+            "3fedf70df600953d25982bcd13d91ba2",
+            "WIDER_train.zip",
+        ),
+        (
+            "1GUCogbp16PMGa39thoMMeWxp7Rp5oM8Q",
+            "dfa7d7e790efa35df3788964cf0bbaea",
+            "WIDER_val.zip",
+        ),
+        (
+            "1HIfDbVEWKmsYKJZm4lchTBDLW5N7dY5T",
+            "e5d8f4248ed24c334bbd12f49c29dd40",
+            "WIDER_test.zip",
+        ),
     ]
     ANNOTATIONS_FILE = (
         "http://shuoyang1213.me/WIDERFACE/support/bbx_annotation/wider_face_split.zip",
@@ -74,7 +86,9 @@ class WIDERFace(VisionDataset):
         download: bool = False,
     ) -> None:
         super(WIDERFace, self).__init__(
-            root=os.path.join(root, self.BASE_FOLDER), transform=transform, target_transform=target_transform
+            root=os.path.join(root, self.BASE_FOLDER),
+            transform=transform,
+            target_transform=target_transform,
         )
         # check arguments
         self.split = verify_str_arg(split, "split", ("train", "val", "test"))
@@ -84,7 +98,8 @@ class WIDERFace(VisionDataset):
 
         if not self._check_integrity():
             raise RuntimeError(
-                "Dataset not found or corrupted. " + "You can use download=True to download and prepare it"
+                "Dataset not found or corrupted. "
+                + "You can use download=True to download and prepare it"
             )
 
         self.img_info: List[Dict[str, Union[str, Dict[str, flow.Tensor]]]] = []
@@ -122,7 +137,11 @@ class WIDERFace(VisionDataset):
         return "\n".join(lines).format(**self.__dict__)
 
     def parse_train_val_annotations_file(self) -> None:
-        filename = "wider_face_train_bbx_gt.txt" if self.split == "train" else "wider_face_val_bbx_gt.txt"
+        filename = (
+            "wider_face_train_bbx_gt.txt"
+            if self.split == "train"
+            else "wider_face_val_bbx_gt.txt"
+        )
         filepath = os.path.join(self.root, "wider_face_split", filename)
 
         with open(filepath, "r") as f:
@@ -133,7 +152,9 @@ class WIDERFace(VisionDataset):
             for line in lines:
                 line = line.rstrip()
                 if file_name_line:
-                    img_path = os.path.join(self.root, "WIDER_" + self.split, "images", line)
+                    img_path = os.path.join(
+                        self.root, "WIDER_" + self.split, "images", line
+                    )
                     img_path = abspath(expanduser(img_path))
                     file_name_line = False
                     num_boxes_line = True
@@ -154,7 +175,9 @@ class WIDERFace(VisionDataset):
                             {
                                 "img_path": img_path,
                                 "annotations": {
-                                    "bbox": labels_tensor[:, 0:4],  # x, y, width, height
+                                    "bbox": labels_tensor[
+                                        :, 0:4
+                                    ],  # x, y, width, height
                                     "blur": labels_tensor[:, 4],
                                     "expression": labels_tensor[:, 5],
                                     "illumination": labels_tensor[:, 6],
@@ -167,10 +190,14 @@ class WIDERFace(VisionDataset):
                         box_counter = 0
                         labels.clear()
                 else:
-                    raise RuntimeError("Error parsing annotation file {}".format(filepath))
+                    raise RuntimeError(
+                        "Error parsing annotation file {}".format(filepath)
+                    )
 
     def parse_test_annotations_file(self) -> None:
-        filepath = os.path.join(self.root, "wider_face_split", "wider_face_test_filelist.txt")
+        filepath = os.path.join(
+            self.root, "wider_face_split", "wider_face_test_filelist.txt"
+        )
         filepath = abspath(expanduser(filepath))
         with open(filepath, "r") as f:
             lines = f.readlines()
@@ -204,5 +231,7 @@ class WIDERFace(VisionDataset):
 
         # download and extract annotation files
         download_and_extract_archive(
-            url=self.ANNOTATIONS_FILE[0], download_root=self.root, md5=self.ANNOTATIONS_FILE[1]
+            url=self.ANNOTATIONS_FILE[0],
+            download_root=self.root,
+            md5=self.ANNOTATIONS_FILE[1],
         )

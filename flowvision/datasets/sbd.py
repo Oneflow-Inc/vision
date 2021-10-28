@@ -49,29 +49,35 @@ class SBDataset(VisionDataset):
     voc_split_filename = "train_noval.txt"
     voc_split_md5 = "79bff800c5f0b1ec6b21080a3c066722"
 
-    def __init__(self,
-                 root,
-                 image_set='train',
-                 mode='boundaries',
-                 download=False,
-                 transforms=None):
+    def __init__(
+        self,
+        root,
+        image_set="train",
+        mode="boundaries",
+        download=False,
+        transforms=None,
+    ):
 
         try:
             from scipy.io import loadmat
+
             self._loadmat = loadmat
         except ImportError:
-            raise RuntimeError("Scipy is not found. This dataset needs to have scipy installed: "
-                               "pip install scipy")
+            raise RuntimeError(
+                "Scipy is not found. This dataset needs to have scipy installed: "
+                "pip install scipy"
+            )
 
         super(SBDataset, self).__init__(root, transforms)
-        self.image_set = verify_str_arg(image_set, "image_set",
-                                        ("train", "val", "train_noval"))
+        self.image_set = verify_str_arg(
+            image_set, "image_set", ("train", "val", "train_noval")
+        )
         self.mode = verify_str_arg(mode, "mode", ("segmentation", "boundaries"))
         self.num_classes = 20
 
         sbd_root = self.root
-        image_dir = os.path.join(sbd_root, 'img')
-        mask_dir = os.path.join(sbd_root, 'cls')
+        image_dir = os.path.join(sbd_root, "img")
+        mask_dir = os.path.join(sbd_root, "cls")
 
         if download:
             download_extract(self.url, self.root, self.filename, self.md5)
@@ -79,36 +85,50 @@ class SBDataset(VisionDataset):
             for f in ["cls", "img", "inst", "train.txt", "val.txt"]:
                 old_path = os.path.join(extracted_ds_root, f)
                 shutil.move(old_path, sbd_root)
-            download_url(self.voc_train_url, sbd_root, self.voc_split_filename,
-                         self.voc_split_md5)
+            download_url(
+                self.voc_train_url,
+                sbd_root,
+                self.voc_split_filename,
+                self.voc_split_md5,
+            )
 
         if not os.path.isdir(sbd_root):
-            raise RuntimeError('Dataset not found or corrupted.' +
-                               ' You can use download=True to download it')
+            raise RuntimeError(
+                "Dataset not found or corrupted."
+                + " You can use download=True to download it"
+            )
 
-        split_f = os.path.join(sbd_root, image_set.rstrip('\n') + '.txt')
+        split_f = os.path.join(sbd_root, image_set.rstrip("\n") + ".txt")
 
         with open(os.path.join(split_f), "r") as f:
             file_names = [x.strip() for x in f.readlines()]
 
         self.images = [os.path.join(image_dir, x + ".jpg") for x in file_names]
         self.masks = [os.path.join(mask_dir, x + ".mat") for x in file_names]
-        assert (len(self.images) == len(self.masks))
+        assert len(self.images) == len(self.masks)
 
-        self._get_target = self._get_segmentation_target \
-            if self.mode == "segmentation" else self._get_boundaries_target
+        self._get_target = (
+            self._get_segmentation_target
+            if self.mode == "segmentation"
+            else self._get_boundaries_target
+        )
 
     def _get_segmentation_target(self, filepath):
         mat = self._loadmat(filepath)
-        return Image.fromarray(mat['GTcls'][0]['Segmentation'][0])
+        return Image.fromarray(mat["GTcls"][0]["Segmentation"][0])
 
     def _get_boundaries_target(self, filepath):
         mat = self._loadmat(filepath)
-        return np.concatenate([np.expand_dims(mat['GTcls'][0]['Boundaries'][0][i][0].toarray(), axis=0)
-                               for i in range(self.num_classes)], axis=0)
+        return np.concatenate(
+            [
+                np.expand_dims(mat["GTcls"][0]["Boundaries"][0][i][0].toarray(), axis=0)
+                for i in range(self.num_classes)
+            ],
+            axis=0,
+        )
 
     def __getitem__(self, index):
-        img = Image.open(self.images[index]).convert('RGB')
+        img = Image.open(self.images[index]).convert("RGB")
         target = self._get_target(self.masks[index])
 
         if self.transforms is not None:
@@ -121,4 +141,4 @@ class SBDataset(VisionDataset):
 
     def extra_repr(self):
         lines = ["Image set: {image_set}", "Mode: {mode}"]
-        return '\n'.join(lines).format(**self.__dict__)
+        return "\n".join(lines).format(**self.__dict__)

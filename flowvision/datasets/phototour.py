@@ -63,8 +63,16 @@ class PhotoTour(VisionDataset):
             "notredame.zip",
             "509eda8535847b8c0a90bbb210c83484",
         ],
-        "yosemite": ["http://icvl.ee.ic.ac.uk/vbalnt/yosemite.zip", "yosemite.zip", "533b2e8eb7ede31be40abc317b2fd4f0"],
-        "liberty": ["http://icvl.ee.ic.ac.uk/vbalnt/liberty.zip", "liberty.zip", "fdd9152f138ea5ef2091746689176414"],
+        "yosemite": [
+            "http://icvl.ee.ic.ac.uk/vbalnt/yosemite.zip",
+            "yosemite.zip",
+            "533b2e8eb7ede31be40abc317b2fd4f0",
+        ],
+        "liberty": [
+            "http://icvl.ee.ic.ac.uk/vbalnt/liberty.zip",
+            "liberty.zip",
+            "fdd9152f138ea5ef2091746689176414",
+        ],
     }
     means = {
         "notredame": 0.4854,
@@ -95,7 +103,12 @@ class PhotoTour(VisionDataset):
     matches_files = "m50_100000_100000_0.txt"
 
     def __init__(
-        self, root: str, name: str, train: bool = True, transform: Optional[Callable] = None, download: bool = False
+        self,
+        root: str,
+        name: str,
+        train: bool = True,
+        transform: Optional[Callable] = None,
+        download: bool = False,
     ) -> None:
         super(PhotoTour, self).__init__(root, transform=transform)
         self.name = name
@@ -116,7 +129,9 @@ class PhotoTour(VisionDataset):
         # load the serialized data
         self.data, self.labels, self.matches = flow.load(self.data_file)
 
-    def __getitem__(self, index: int) -> Union[flow.Tensor, Tuple[Any, Any, flow.Tensor]]:
+    def __getitem__(
+        self, index: int
+    ) -> Union[flow.Tensor, Tuple[Any, Any, flow.Tensor]]:
         """
         Args:
             index (int): Index
@@ -232,6 +247,12 @@ def read_matches_files(data_dir: str, matches_file: str) -> flow.Tensor:
     with open(os.path.join(data_dir, matches_file), "r") as f:
         for line in f:
             line_split = line.split()
-            matches.append([int(line_split[0]), int(line_split[3]), int(line_split[1] == line_split[4])])
+            matches.append(
+                [
+                    int(line_split[0]),
+                    int(line_split[3]),
+                    int(line_split[1] == line_split[4]),
+                ]
+            )
     return flow.Tensor(matches, dtype=flow.int64)
     # return flow.LongTensor(matches) # TODO

@@ -83,15 +83,21 @@ class Kitti(VisionDataset):
         if download:
             self.download()
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You may use download=True to download it.")
+            raise RuntimeError(
+                "Dataset not found. You may use download=True to download it."
+            )
 
         image_dir = os.path.join(self._raw_folder, self._location, self.image_dir_name)
         if self.train:
-            labels_dir = os.path.join(self._raw_folder, self._location, self.labels_dir_name)
+            labels_dir = os.path.join(
+                self._raw_folder, self._location, self.labels_dir_name
+            )
         for img_file in os.listdir(image_dir):
             self.images.append(os.path.join(image_dir, img_file))
             if self.train:
-                self.targets.append(os.path.join(labels_dir, f"{img_file.split('.')[0]}.txt"))
+                self.targets.append(
+                    os.path.join(labels_dir, f"{img_file.split('.')[0]}.txt")
+                )
 
     def __getitem__(self, index: int) -> Tuple[Any, Any]:
         """Get item at a given index.
@@ -146,7 +152,10 @@ class Kitti(VisionDataset):
         folders = [self.image_dir_name]
         if self.train:
             folders.append(self.labels_dir_name)
-        return all(os.path.isdir(os.path.join(self._raw_folder, self._location, fname)) for fname in folders)
+        return all(
+            os.path.isdir(os.path.join(self._raw_folder, self._location, fname))
+            for fname in folders
+        )
 
     def download(self) -> None:
         """Download the KITTI data if it doesn't exist already."""

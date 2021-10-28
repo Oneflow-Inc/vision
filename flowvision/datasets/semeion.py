@@ -37,7 +37,9 @@ class SEMEION(VisionDataset):
             puts it in root directory. If dataset is already downloaded, it is not
             downloaded again.
     """
-    url = "http://archive.ics.uci.edu/ml/machine-learning-databases/semeion/semeion.data"
+    url = (
+        "http://archive.ics.uci.edu/ml/machine-learning-databases/semeion/semeion.data"
+    )
     filename = "semeion.data"
     md5_checksum = "cb545d371d2ce14ec121470795a77432"
 
@@ -48,13 +50,18 @@ class SEMEION(VisionDataset):
         target_transform: Optional[Callable] = None,
         download: bool = True,
     ) -> None:
-        super(SEMEION, self).__init__(root, transform=transform, target_transform=target_transform)
+        super(SEMEION, self).__init__(
+            root, transform=transform, target_transform=target_transform
+        )
 
         if download:
             self.download()
 
         if not self._check_integrity():
-            raise RuntimeError("Dataset not found or corrupted." + " You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found or corrupted."
+                + " You can use download=True to download it"
+            )
 
         fp = os.path.join(self.root, self.filename)
         data = np.loadtxt(fp)
