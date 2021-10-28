@@ -168,7 +168,6 @@ class PhotoTour(VisionDataset):
             os.unlink(fpath)
 
     def cache(self) -> None:
-        # process and save as torch files
         print("# Caching data {}".format(self.data_file))
 
         dataset = (
@@ -210,7 +209,6 @@ def read_image_file(data_dir: str, image_ext: str, n: int) -> flow.Tensor:
                 patch = img.crop((x, y, x + 64, y + 64))
                 patches.append(PIL2array(patch))
     return flow.Tensor(np.array(patches[:n]), dtype=flow.uint8)
-    # return flow.ByteTensor(np.array(patches[:n])) # TODO
 
 
 def read_info_file(data_dir: str, info_file: str) -> flow.Tensor:
@@ -220,7 +218,6 @@ def read_info_file(data_dir: str, info_file: str) -> flow.Tensor:
     with open(os.path.join(data_dir, info_file), "r") as f:
         labels = [int(line.split()[0]) for line in f]
     return flow.Tensor(labels, dtype=flow.int64)
-    # return flow.LongTensor(labels) # TODO
 
 
 def read_matches_files(data_dir: str, matches_file: str) -> flow.Tensor:
@@ -234,4 +231,3 @@ def read_matches_files(data_dir: str, matches_file: str) -> flow.Tensor:
             line_split = line.split()
             matches.append([int(line_split[0]), int(line_split[3]), int(line_split[1] == line_split[4])])
     return flow.Tensor(matches, dtype=flow.int64)
-    # return flow.LongTensor(matches) # TODO
