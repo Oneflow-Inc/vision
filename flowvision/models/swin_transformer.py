@@ -534,28 +534,4 @@ def swin_tiny_patch4_window7_224(pretrained=False, progress=True, **kwargs):
     )
     return _create_swin_transformer("swin_tiny_patch4_window7_224", pretrained=pretrained, progress=progress, **model_kwargs)
 
-# CONFIGS = {
-#     "swin_tiny_patch4_window7_224": {"IMG_SIZE": 224, 
-#                                     "DROP_PATH_RATE": 0.2, 
-#                                     "PATCH_SIZE": 4, 
-#                                      "IN_CHANS": 3, 
-#                                      "EMBED_DIM": 96, 
-#                                      "DEPTHS": [ 2, 2, 6, 2 ], 
-#                                      "NUM_HEADS": [ 3, 6, 12, 24], 
-#                                      "WINDOW_SIZE": 7, 
-#                                      "MLP_RATIO": 4, 
-#                                      "QKV_BIAS": True, 
-#                                      "QK_SCALE": None, 
-#                                      "APE": False, 
-#                                      "PATCH_NORM": True}, 
 
-# }
-
-# def create_swin_transformer(model_name="swin_tiny_patch4_window7_224"):
-#     config = CONFIGS[model_name]
-#     return SwinTransformer(img_size=config["IMG_SIZE"], patch_size=config["PATCH_SIZE"], in_chans=config["IN_CHANS"], 
-#                             embed_dim=config["EMBED_DIM"], depths=config["DEPTHS"], 
-#                            num_heads=config["NUM_HEADS"], window_size=config["WINDOW_SIZE"], 
-#                            mlp_ratio=config["MLP_RATIO"], qkv_bias=config["QKV_BIAS"], qk_scale=config["QK_SCALE"], 
-#                            ape=config["APE"], patch_norm=config["PATCH_NORM"], 
-#                            drop_path_rate=config["DROP_PATH_RATE"])
