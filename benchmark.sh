@@ -1,9 +1,9 @@
 set -aux
 
-MODEL="convmixer_1536_20"
+MODEL="swin_tiny_patch4_window7_224"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
-IMG_SIZE=299
+IMG_SIZE=224
 NUM_WORKERS=8
 
 python benchmark.py --model $MODEL \

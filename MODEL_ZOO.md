@@ -43,3 +43,4 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | convmixer_768_32_relu  | 80.0764 | 94.9896 |     64      |   224      |
 | convmixer_1024_20      | 78.4127 | 94.2895 |     64      |   224      |
 | convmixer_1536_20      | 81.0461 | 95.6194 |     64      |   224      |
+| swin_tiny_patch4_window7_224 | 80.8903 | 95.3944 |  64   |   224      |

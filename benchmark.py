@@ -12,6 +12,11 @@ from functools import partial
 from flowvision.models import ModelCreator
 import argparse
 
+"""Model Specific Test
+Swin-T: using interpolation "bicubic" for testing, which according to interpolation=3 in Resize function
+ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
+"""
+
 IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
 
@@ -38,7 +43,7 @@ class ImageNetDataLoader(DataLoader):
                 [
                     transforms.Resize(256, interpolation=2)
                     if image_size == 224
-                    else transforms.Resize(image_size, interpolation=2),
+                    else transforms.Resize(image_size, interpolation="bicubic"),
                     transforms.CenterCrop(image_size),
                     transforms.ToTensor(),
                     transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
