@@ -8,10 +8,10 @@ from .utils import load_state_dict_from_url
 # Note that model with `in22k` means pretrained weight on imagenet22k dataset
 model_urls = {
     "swin_tiny_patch4_window7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_tiny_patch4_window7_224.zip",
-    "swin_small_patch4_window7_224": None,
-    "swin_base_patch4_window7_224": None,
-    "swin_base_patch4_window12_384": None,
-    "swin_base_patch4_window7_224_in22k": None,
+    "swin_small_patch4_window7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_small_patch4_window7_224.zip",
+    "swin_base_patch4_window7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_base_patch4_window7_224.zip",
+    "swin_base_patch4_window12_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_base_patch4_window12_384.zip",
+    "swin_base_patch4_window7_224_in22k_to_1k": None,
 }
 
 
@@ -565,8 +565,8 @@ def swin_base_patch4_window12_384(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
-def swin_base_patch4_window7_224_in22k(pretrained=False, progress=True, **kwargs):
+def swin_base_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(
         img_size=224, patch_size=4, window_size=7, embed_dim=128, depths=(2, 2, 18, 2), num_heads=(4, 8, 16, 32), drop_path_rate=0.5, **kwargs
     )
-    return _create_swin_transformer("swin_base_patch4_window7_224_in22k", pretrained=pretrained, progress=progress, **model_kwargs)
+    return _create_swin_transformer("swin_base_patch4_window7_224_in22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs)
