@@ -1,7 +1,7 @@
 set -aux
 
-MODEL="swin_base_patch4_window12_384"
-BATCH_SIZE=64
+MODEL="swin_large_patch4_window12_384_in22k_to_1k"
+BATCH_SIZE=32
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=384
 NUM_WORKERS=8

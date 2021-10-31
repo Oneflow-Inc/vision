@@ -11,7 +11,11 @@ model_urls = {
     "swin_small_patch4_window7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_small_patch4_window7_224.zip",
     "swin_base_patch4_window7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_base_patch4_window7_224.zip",
     "swin_base_patch4_window12_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_base_patch4_window12_384.zip",
-    "swin_base_patch4_window7_224_in22k_to_1k": None,
+    "swin_base_patch4_window7_224_in22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_base_patch4_window7_224_in22k_to_1k.zip",
+    "swin_base_patch4_window12_384_in22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_base_patch4_window12_384_in22k_to_1k.zip",
+    "swin_large_patch4_window7_224_in22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_large_patch4_window7_224_in22k_to_1k.zip",
+    "swin_large_patch4_window12_384_in22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Swin_Transformer/swin_large_patch4_window12_384_in22k_to_1k.zip",
+
 }
 
 
@@ -570,3 +574,27 @@ def swin_base_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True, **
         img_size=224, patch_size=4, window_size=7, embed_dim=128, depths=(2, 2, 18, 2), num_heads=(4, 8, 16, 32), drop_path_rate=0.5, **kwargs
     )
     return _create_swin_transformer("swin_base_patch4_window7_224_in22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def swin_base_patch4_window12_384_in22k_to_1k(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        img_size=384, patch_size=4, window_size=12, embed_dim=128, depths=(2, 2, 18, 2), num_heads=(4, 8, 16, 32), drop_path_rate=0.5, **kwargs
+    )
+    return _create_swin_transformer("swin_base_patch4_window12_384_in22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def swin_large_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        img_size=224, patch_size=4, window_size=7, embed_dim=192, depths=(2, 2, 18, 2), num_heads=(6, 12, 24, 48), drop_path_rate=0.5, **kwargs
+    )
+    return _create_swin_transformer("swin_large_patch4_window7_224_in22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def swin_large_patch4_window12_384_in22k_to_1k(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        img_size=384, patch_size=4, window_size=12, embed_dim=192, depths=(2, 2, 18, 2), num_heads=(6, 12, 24, 48), drop_path_rate=0.5, **kwargs
+    )
+    return _create_swin_transformer("swin_large_patch4_window12_384_in22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs)
