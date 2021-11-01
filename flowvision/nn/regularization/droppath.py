@@ -2,6 +2,7 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
+
 def drop_path(x, drop_prob: float = 0.5, training: bool = False):
     """Drop paths (Stochastic Depth) per sample (when applied in main path of residual blocks).
     This is the same as the DropConnect impl I created for EfficientNet, etc networks, however,
@@ -21,9 +22,11 @@ def drop_path(x, drop_prob: float = 0.5, training: bool = False):
     output = x.div(keep_prob) * random_tensor
     return output
 
+
 class DropPath(nn.Module):
     """Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks).
     """
+
     def __init__(self, drop_prob=None):
         super(DropPath, self).__init__()
         self.drop_prob = drop_prob
