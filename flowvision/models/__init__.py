@@ -11,6 +11,7 @@ from .mobilenet_v2 import *
 from .mobilenet_v3 import *
 from .squeezenet import *
 from .conv_mixer import *
+from .swin_transformer import *
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator

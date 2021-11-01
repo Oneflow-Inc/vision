@@ -43,3 +43,11 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | convmixer_768_32_relu  | 80.0764 | 94.9896 |     64      |   224      |
 | convmixer_1024_20      | 78.4127 | 94.2895 |     64      |   224      |
 | convmixer_1536_20      | 81.0461 | 95.6194 |     64      |   224      |
+| swin_tiny_patch4_window7_224  | 81.1641 | 95.5003 |  64   |   224     |
+| swin_small_patch4_window7_224 | 83.1582 | 96.2376 |  64   |   224     |
+| swin_base_patch4_window7_224  | 83.4039 | 96.4434 |  64   |   224     |
+| swin_base_patch4_window12_384 | 84.4569 | 96.8950 |  64   |   384     |
+| swin_base_patch4_window7_224_in22k_to_1k   | 85.1223 | 97.4744 |  64  |  224  |
+| swin_base_patch4_window12_384_in22k_to_1k  | 86.4330 | 98.0619 |  64  |  384  |
+| swin_large_patch4_window7_224_in22k_to_1k  | 86.2492 | 97.8800 |  64  |  224  |
+| swin_large_patch4_window12_384_in22k_to_1k | 87.1241 | 98.2326 |  64  |  224  |
