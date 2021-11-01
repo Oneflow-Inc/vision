@@ -51,4 +51,7 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | swin_base_patch4_window12_384_in22k_to_1k  | 86.4330 | 98.0619 |  64  |  384  |
 | swin_large_patch4_window7_224_in22k_to_1k  | 86.2492 | 97.8800 |  64  |  224  |
 | swin_large_patch4_window12_384_in22k_to_1k | 87.1241 | 98.2326 |  64  |  224  |
-| crossformer_tiny_patch4_group7_224 | 81.1461 | 95.3105 |  64  |  224  |
+| crossformer_tiny_patch4_group7_224  | 81.1461 | 95.3105 |  64  |  224  |
+| crossformer_small_patch4_group7_224 | 82.2410 | 95.9579 |  64  |  224  |  
+| crossformer_base_patch4_group7_224  | 83.2681 | 96.4694 |  64  |  224  |
+| crossformer_large_patch4_group7_224 | 83.7516 | 96.4954 |  64  |  224  |

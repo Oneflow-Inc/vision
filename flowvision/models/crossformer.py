@@ -10,9 +10,9 @@ from .utils import load_state_dict_from_url
 
 model_urls = {
     "crossformer_tiny_patch4_group7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CrossFormer/crossformer_tiny_patch4_group7_224.zip",
-    "crossformer_small_patch4_group7_224": None,
-    "crossformer_base_patch4_group7_224": None,
-    "crossformer_large_patch4_group7_224": None,
+    "crossformer_small_patch4_group7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CrossFormer/crossformer_small_patch4_group7_224.zip",
+    "crossformer_base_patch4_group7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CrossFormer/crossformer_base_patch4_group7_224.zip",
+    "crossformer_large_patch4_group7_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CrossFormer/crossformer_large_patch4_group7_224.zip",
 }
 
 
