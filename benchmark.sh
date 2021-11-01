@@ -1,9 +1,9 @@
 set -aux
 
-MODEL="swin_large_patch4_window12_384_in22k_to_1k"
-BATCH_SIZE=32
+MODEL="crossformer_large_patch4_group7_224"
+BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
-IMG_SIZE=384
+IMG_SIZE=224
 NUM_WORKERS=8
 
 python benchmark.py --model $MODEL \
