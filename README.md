@@ -10,9 +10,25 @@ pip install rich
 ```
 - install latest version of `flowvision`
 ```bash
-pip install flowvision==0.0.2
+pip install flowvision==0.0.3
 ```
 
+## Supported Models
+- AlexNet
+- VGG
+- DenseNet
+- GoogleNet
+- InceptionV3
+- MnasNet
+- MobileNetV2
+- MobileNetV3
+- ResNet
+- ShuffleNetV2
+- SqueezeNet
+- Swin-Transformer
+- CrossFormer
+- ViT
+- ConvMixer
 
 ## Usage
 <details>

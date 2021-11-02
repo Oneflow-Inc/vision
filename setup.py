@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="flowvision",
-    version="0.0.2",  # 版本号
+    version="0.0.3",  # 版本号
     author="flow vision contributors",
     author_email="596106517@qq.com",
     description="oneflow vision codebase",
