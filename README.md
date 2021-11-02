@@ -12,22 +12,9 @@ python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu1
 pip install flowvision==0.0.3
 ```
 
-## Supported Models
-- AlexNet
-- VGG
-- DenseNet
-- GoogleNet
-- InceptionV3
-- MnasNet
-- MobileNetV2
-- MobileNetV3
-- ResNet
-- ShuffleNetV2
-- SqueezeNet
-- Swin-Transformer
-- CrossFormer
-- ViT
-- ConvMixer
+## Supported Model
+All of supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
+
 
 ## Usage
 <details>

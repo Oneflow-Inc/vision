@@ -11,15 +11,15 @@ with open("README.md", "r") as fh:
 
 setup(
     name="flowvision",
-    version="0.0.3",  # version number
+    version="0.0.4",  # version number
     author="flow vision contributors",
     author_email="596106517@qq.com",
     description="oneflow vision codebase",
-    license="MIT",
+    license="BSD",
     packages=find_packages(),
     install_requires=["rich",],
     classifiers=[
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: BSD 3-Clause License",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
