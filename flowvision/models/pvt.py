@@ -14,10 +14,10 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "pvt_tiny": None,
-    "pvt_small": None,
-    "pvt_medium": None,
-    "pvt_large": None,
+    "pvt_tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PVT/pvt_tiny.zip",
+    "pvt_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PVT/pvt_small.zip",
+    "pvt_medium": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PVT/pvt_medium.zip",
+    "pvt_large": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PVT/pvt_large.zip",
     "pvt_huge_v2": None,
 }
 
@@ -64,7 +64,7 @@ class Attention(nn.Module):
     
     def forward(self, x, H, W):
         B, N, C = x.shape
-        q = self.q(x).rehsape(B, N, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+        q = self.q(x).reshape(B, N, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
 
         if self.sr_ratio > 1:
             x_ = x.permute(0, 2, 1).reshape(B, C, H, W)
@@ -264,7 +264,7 @@ def pvt_tiny(pretrained=False, progress=True, **kwargs):
         img_size=224,
         patch_size=4,
         embed_dims=(64, 128, 320, 512),
-        depths=(1, 1, 8, 6),
+        depths=(2, 2, 2, 2),
         num_heads=(1, 2, 5, 8),
         qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
@@ -274,6 +274,72 @@ def pvt_tiny(pretrained=False, progress=True, **kwargs):
     )
     return _create_pvt(
         "pvt_tiny",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
+
+
+@ModelCreator.register_model
+def pvt_small(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=4,
+        embed_dims=(64, 128, 320, 512),
+        depths=(3, 4, 6, 3),
+        num_heads=(1, 2, 5, 8),
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        mlp_ratios=(8, 8, 4, 4),
+        sr_ratios=(8, 4, 2, 1),
+        drop_path_rate=0.1,
+    )
+    return _create_pvt(
+        "pvt_small",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
+
+
+@ModelCreator.register_model
+def pvt_medium(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=4,
+        embed_dims=(64, 128, 320, 512),
+        depths=(3, 4, 18, 3),
+        num_heads=(1, 2, 5, 8),
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        mlp_ratios=(8, 8, 4, 4),
+        sr_ratios=(8, 4, 2, 1),
+        drop_path_rate=0.1,
+    )
+    return _create_pvt(
+        "pvt_medium",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
+
+
+@ModelCreator.register_model
+def pvt_large(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=4,
+        embed_dims=(64, 128, 320, 512),
+        depths=(3, 8, 27, 3),
+        num_heads=(1, 2, 5, 8),
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        mlp_ratios=(8, 8, 4, 4),
+        sr_ratios=(8, 4, 2, 1),
+        drop_path_rate=0.1,
+    )
+    return _create_pvt(
+        "pvt_large",
         pretrained=pretrained,
         progress=progress,
         **model_kwargs,

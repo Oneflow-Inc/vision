@@ -47,6 +47,10 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | swin_small_patch4_window7_224 | 83.1582 | 96.2376 |  64   |   224     |
 | swin_base_patch4_window7_224  | 83.4039 | 96.4434 |  64   |   224     |
 | swin_base_patch4_window12_384 | 84.4569 | 96.8950 |  64   |   384     |
+| pvt_tiny               | - | - |     64      |   224      |
+| pvt_small              | - | - |     64      |   224      |
+| pvt_medium             | - | - |     64      |   224      |
+| pvt_large              | 81.5477 | 95.6482 |     64      |   224      |
 | swin_base_patch4_window7_224_in22k_to_1k   | 85.1223 | 97.4744 |  64  |  224  |
 | swin_base_patch4_window12_384_in22k_to_1k  | 86.4330 | 98.0619 |  64  |  384  |
 | swin_large_patch4_window7_224_in22k_to_1k  | 86.2492 | 97.8800 |  64  |  224  |
