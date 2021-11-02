@@ -4,6 +4,7 @@ import oneflow.nn.functional as F
 
 __all__ = ["SR_Attention"]
 
+
 class SR_Attention(nn.Module):
     """Implemente Spatial Reduction Attention Module proposed in PVT (https://arxiv.org/pdf/2102.12122.pdf)
     Args:
@@ -11,6 +12,7 @@ class SR_Attention(nn.Module):
         num_heads: multi-heads attention
         sr_ratio: Spatial reduction ratio
     """
+
     def __init__(
         self,
         dim,
