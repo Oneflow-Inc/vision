@@ -62,6 +62,12 @@ def _max_value(dtype: flow.dtype) -> float:
     return max_value.item()
 
 
+def _assert_channels(img: Tensor, permitted: List[int]) -> None:
+    c = _get_image_num_channels(img)
+    if c not in permitted:
+        raise TypeError("Input image tensor permitted channel values are {}, but found {}".format(permitted, c))
+
+
 def _cast_squeeze_in(
     img: Tensor, req_dtypes: List[flow.dtype]
 ) -> Tuple[Tensor, bool, bool, flow.dtype]:
@@ -172,6 +178,158 @@ def crop(img: Tensor, top: int, left: int, height: int, width: int) -> Tensor:
             img[..., max(top, 0) : bottom, max(left, 0) : right], padding_ltrb, fill=0
         )
     return img[..., top:bottom, left:right]
+
+
+def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
+    if img.ndim < 3:
+        raise TypeError("Input image tensor should have at least 3 dimensions, but found {}".format(img.ndim))
+    _assert_channels(img, [3])
+
+    if num_output_channels not in (1, 3):
+        raise ValueError('num_output_channels should be either 1 or 3')
+
+    r, g, b = img.unbind(dim=-3)
+    # This implementation closely follows the TF one:
+    # https://github.com/tensorflow/tensorflow/blob/v2.3.0/tensorflow/python/ops/image_ops_impl.py#L2105-L2138
+    l_img = (0.2989 * r + 0.587 * g + 0.114 * b).to(img.dtype)
+    l_img = l_img.unsqueeze(dim=-3)
+
+    if num_output_channels == 3:
+        return l_img.expand(img.shape)
+
+    return l_img
+
+
+def adjust_brightness(img: Tensor, brightness_facotr: float) -> Tensor:
+    if brightness_facotr < 0:
+        raise ValueError('brightness_factor ({}) is not non-negative.'.format(brightness_facotr))
+
+    _assert_image_tensor(img)
+
+    _assert_channels(img, [1, 3])
+
+    return _blend(img, flow.zeros_like(img), brightness_facotr)
+
+
+def adjust_contrast(img: Tensor, contrast_factor: float) -> Tensor:
+    if contrast_factor < 0:
+        raise ValueError('contrast_factor ({}) is not non-negative.'.format(contrast_factor))
+
+    _assert_image_tensor(img)
+
+    _assert_channels(img, [3])
+
+    dtype = img.dtype if flow.is_floating_point(img) else flow.float32
+    mean = flow.mean(rgb_to_grayscale(img).to(dtype), dim=(-3, -2, -1), keepdim=True)
+
+    return _blend(img, mean, contrast_factor)
+
+
+def adjust_hue(img: Tensor, hue_factor: float) -> Tensor:
+    if not (-0.5 <= hue_factor <= 0.5):
+        raise ValueError('hue_factor ({}) is not in [-0.5, 0.5].'.format(hue_factor))
+
+    if not (isinstance(img, flow.Tensor)):
+        raise TypeError('Input img should be Tensor image')
+
+    _assert_image_tensor(img)
+
+    _assert_channels(img, [1, 3])
+    if _get_image_num_channels(img) == 1:  # Match PIL behaviour
+        return img
+
+    orig_dtype = img.dtype
+    if img.dtype == flow.uint8:
+        img = img.to(dtype=flow.float32) / 255.0
+
+    img = _rgb2hsv(img)
+    h, s, v = img.unbind(dim=-3)
+    h = (h + hue_factor) % 1.0
+    img = flow.stack((h, s, v), dim=-3)
+    img_hue_adj = _hsv2rgb(img)
+
+    if orig_dtype == flow.uint8:
+        img_hue_adj = (img_hue_adj * 255.0).to(dtype=orig_dtype)
+
+    return img_hue_adj
+
+
+def adjust_saturation(img: Tensor, saturation_factor: float) -> Tensor:
+    if saturation_factor < 0:
+        raise ValueError('saturation_factor ({}) is not non-negative.'.format(saturation_factor))
+
+    _assert_image_tensor(img)
+
+    _assert_channels(img, [3])
+
+    return _blend(img, rgb_to_grayscale(img), saturation_factor)
+
+
+def _blend(img1: Tensor, img2: Tensor, ratio: float) -> Tensor:
+    ratio = float(ratio)
+    bound = 1.0 if img1.is_floating_point() else 255.0
+    return (ratio * img1 + (1.0 - ratio) * img2).clamp(0, bound).to(img1.dtype)
+
+
+def _rgb2hsv(img: Tensor) -> Tensor:
+    r, g, b = img.unbind(dim=-3)
+
+    # Implementation is based on https://github.com/python-pillow/Pillow/blob/4174d4267616897df3746d315d5a2d0f82c656ee/
+    # src/libImaging/Convert.c#L330
+    maxc = flow.max(img, dim=-3).values
+    minc = flow.min(img, dim=-3).values
+
+    # The algorithm erases S and H channel where `maxc = minc`. This avoids NaN
+    # from happening in the results, because
+    #   + S channel has division by `maxc`, which is zero only if `maxc = minc`
+    #   + H channel has division by `(maxc - minc)`.
+    #
+    # Instead of overwriting NaN afterwards, we just prevent it from occuring so
+    # we don't need to deal with it in case we save the NaN in a buffer in
+    # backprop, if it is ever supported, but it doesn't hurt to do so.
+    eqc = maxc == minc
+
+    cr = maxc - minc
+    # Since `eqc => cr = 0`, replacing denominator with 1 when `eqc` is fine.
+    ones = flow.ones_like(maxc)
+    s = cr / flow.where(eqc, ones, maxc)
+    # Note that `eqc => maxc = minc = r = g = b`. So the following calculation
+    # of `h` would reduce to `bc - gc + 2 + rc - bc + 4 + rc - bc = 6` so it
+    # would not matter what values `rc`, `gc`, and `bc` have here, and thus
+    # replacing denominator with 1 when `eqc` is fine.
+    cr_divisor = flow.where(eqc, ones, cr)
+    rc = (maxc - r) / cr_divisor
+    gc = (maxc - g) / cr_divisor
+    bc = (maxc - b) / cr_divisor
+
+    hr = (maxc == r) * (bc - gc)
+    hg = ((maxc == g) & (maxc != r)) * (2.0 + rc - bc)
+    hb = ((maxc != g) & (maxc != r)) * (4.0 + gc - rc)
+    h = (hr + hg + hb)
+    h = flow.fmod((h / 6.0 + 1.0), 1.0)
+    return flow.stack((h, s, maxc), dim=-3)
+
+
+def _hsv2rgb(img: Tensor) -> Tensor:
+    h, s, v = img.unbind(dim=-3)
+    i = flow.floor(h * 6.0)
+    f = (h * 6.0) - i
+    i = i.to(dtype=flow.int32)
+
+    p = flow.clamp((v * (1.0 - s)), 0.0, 1.0)
+    q = flow.clamp((v * (1.0 - s * f)), 0.0, 1.0)
+    t = flow.clamp((v * (1.0 - s * (1.0 - f))), 0.0, 1.0)
+    i = i % 6
+
+    mask = i.unsqueeze(dim=-3) == flow.arange(6, device=i.device).view(-1, 1, 1)
+
+    a1 = flow.stack((v, q, p, p, t, v), dim=-3)
+    a2 = flow.stack((t, v, v, q, p, p), dim=-3)
+    a3 = flow.stack((p, p, t, v, v, q), dim=-3)
+    a4 = flow.stack((a1, a2, a3), dim=-4)
+
+    return flow.sum(mask.to(dtype=img.dtype).unsqueeze(0) * a4, dim=1)
+
 
 
 def _pad_symmetric(img: Tensor, padding: List[int]) -> Tensor:
