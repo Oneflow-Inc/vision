@@ -4,7 +4,6 @@ import oneflow.nn.functional as F
 import oneflow.nn.init as init
 from functools import partial
 import numpy as np
-from flowvision.models.swin_transformer import drop_path
 
 from flowvision.nn.regularization import DropPath
 from .helpers import to_2tuple
