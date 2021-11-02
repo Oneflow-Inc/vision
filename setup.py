@@ -11,12 +11,12 @@ with open("README.md", "r") as fh:
 
 setup(
     name="flowvision",
-    version="0.0.2",  # 版本号
+    version="0.0.3",  # version number
     author="flow vision contributors",
     author_email="596106517@qq.com",
     description="oneflow vision codebase",
     license="MIT",
-    packages=find_packages(),  # 需要安装的代码包，也可以用find_packages函数
+    packages=find_packages(),
     install_requires=["rich",],
     classifiers=[
         "License :: OSI Approved :: MIT License",
