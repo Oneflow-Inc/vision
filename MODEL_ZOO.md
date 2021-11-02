@@ -1,5 +1,5 @@
 ## Model Zoo
-Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64 under the same data transformation.
+Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64 under the same data transformation. There may be some difference with the accuracy of the official pretrained weight because of the test environments.
 
 |                        |    top1 |    top5 |  batch_size | image size |
 |:-----------------------|--------:|--------:|------------:|-----------:|
@@ -47,6 +47,10 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | swin_small_patch4_window7_224 | 83.1582 | 96.2376 |  64   |   224     |
 | swin_base_patch4_window7_224  | 83.4039 | 96.4434 |  64   |   224     |
 | swin_base_patch4_window12_384 | 84.4569 | 96.8950 |  64   |   384     |
+| pvt_tiny               | 74.7163 | 92.1595 |     64      |   224      |
+| pvt_small              | 79.4697 | 94.7750 |     64      |   224      |
+| pvt_medium             | 80.8564 | 95.5103 |     64      |   224      |
+| pvt_large              | 81.5477 | 95.6482 |     64      |   224      |
 | swin_base_patch4_window7_224_in22k_to_1k   | 85.1223 | 97.4744 |  64  |  224  |
 | swin_base_patch4_window12_384_in22k_to_1k  | 86.4330 | 98.0619 |  64  |  384  |
 | swin_large_patch4_window7_224_in22k_to_1k  | 86.2492 | 97.8800 |  64  |  224  |

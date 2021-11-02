@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="crossformer_large_patch4_group7_224"
+MODEL="pvt_tiny"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
