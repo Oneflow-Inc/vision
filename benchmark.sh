@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="pvt_large"
+MODEL="pvt_tiny"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224

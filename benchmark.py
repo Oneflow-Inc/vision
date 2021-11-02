@@ -5,12 +5,12 @@ from oneflow.utils.data import DataLoader
 from oneflow.utils.vision import transforms
 from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
-from torch.nn.functional import interpolate
 from tqdm import tqdm
 import numpy as np
 from functools import partial
 from flowvision.models import ModelCreator
 import argparse
+
 
 """Model Specific Test
 Swin-T: using interpolation "bicubic" for testing, which corresponds to interpolation=3 in Resize function
@@ -39,9 +39,10 @@ class ImageNetDataLoader(DataLoader):
                 ]
             )
         else:
+            size = int((256 / 224) * image_size)
             transform = transforms.Compose(
                 [
-                    transforms.Resize(256, interpolation=3)  # 3: bibubic
+                    transforms.Resize(size, interpolation=3)  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
