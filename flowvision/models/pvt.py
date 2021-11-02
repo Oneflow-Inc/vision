@@ -5,7 +5,7 @@ import oneflow.nn.init as init
 from functools import partial
 import numpy as np
 
-from flowvision.nn.regularization import DropPath
+from flowvision.layers.regularization import DropPath
 from .helpers import to_2tuple
 
 from .utils import load_state_dict_from_url

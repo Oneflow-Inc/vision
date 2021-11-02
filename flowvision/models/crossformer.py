@@ -2,7 +2,7 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
-from flowvision.nn.regularization.droppath import DropPath, drop_path
+from flowvision.layers.regularization.droppath import DropPath, drop_path
 import numpy as np
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
