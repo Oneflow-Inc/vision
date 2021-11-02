@@ -14,7 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from .mnist import MNIST, FashionMNIST
+from .caltech import Caltech101, Caltech256
+from .celeba import CelebA
 from .cifar import CIFAR10, CIFAR100
+from .cityscapes import Cityscapes
 from .coco import CocoCaptions, CocoDetection
 from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
@@ -42,6 +45,10 @@ __all__ = [
     "FashionMNIST",
     "CIFAR10",
     "CIFAR100",
+    "Caltech101",
+    "Caltech256",
+    "CelebA",
+    "Cityscapes",
     "CocoCaptions",
     "CocoDetection",
     "ImageNet",
