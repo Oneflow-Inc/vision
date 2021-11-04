@@ -11,7 +11,12 @@ from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
 model_urls = {
-    "cswin_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_tiny_224.zip"
+    "cswin_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_tiny_224.zip",
+    "cswin_small_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_small_224.zip",
+    "cswin_base_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_base_224.zip",
+    "cswin_large_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_large_224.zip",
+    "cswin_base_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_base_384.zip",
+    "cswin_large_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_large_384.zip",
 }
 
 
@@ -359,3 +364,33 @@ def _create_cswin_transformer(arch, pretrained=False, progress=True, **model_kwa
 def cswin_tiny_224(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(patch_size=4, embed_dim=64, depth=(1, 2, 21, 1), split_size=(1, 2, 7, 7), num_heads=(2, 4, 8, 16), mlp_ratio=4., **kwargs)
     return _create_cswin_transformer("cswin_tiny_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def cswin_small_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=4, embed_dim=64, depth=(2, 4, 32, 2), split_size=(1, 2, 7, 7), num_heads=(2, 4, 8, 16), mlp_ratio=4., **kwargs)
+    return _create_cswin_transformer("cswin_small_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def cswin_base_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=4, embed_dim=96, depth=(2, 4, 32, 2), split_size=(1, 2, 7, 7), num_heads=(4, 8, 16, 32), mlp_ratio=4., **kwargs)
+    return _create_cswin_transformer("cswin_base_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def cswin_large_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=4, embed_dim=144, depth=(2, 4, 32, 2), split_size=(1, 2, 7, 7), num_heads=(6, 12, 24, 24), mlp_ratio=4., **kwargs)
+    return _create_cswin_transformer("cswin_large_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def cswin_base_384(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(img_size=384, patch_size=4, embed_dim=96, depth=(2, 4, 32, 2), split_size=(1, 2, 12, 12), num_heads=(4, 8, 16, 32), mlp_ratio=4., **kwargs)
+    return _create_cswin_transformer("cswin_base_384", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def cswin_large_384(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(img_size=384, patch_size=4, embed_dim=144, depth=(2, 4, 32, 2), split_size=(1, 2, 12, 12), num_heads=(6, 12, 24, 24), mlp_ratio=4., **kwargs)
+    return _create_cswin_transformer("cswin_large_384", pretrained=pretrained, progress=progress, **model_kwargs)

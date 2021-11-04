@@ -55,7 +55,13 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | swin_base_patch4_window12_384_in22k_to_1k  | 86.4330 | 98.0619 |  64  |  384  |
 | swin_large_patch4_window7_224_in22k_to_1k  | 86.2492 | 97.8800 |  64  |  224  |
 | swin_large_patch4_window12_384_in22k_to_1k | 87.1241 | 98.2326 |  64  |  224  |
-| crossformer_tiny_patch4_group7_224  | 81.1461 | 95.3105 |  64  |  224  |
-| crossformer_small_patch4_group7_224 | 82.2410 | 95.9579 |  64  |  224  |  
-| crossformer_base_patch4_group7_224  | 83.2681 | 96.4694 |  64  |  224  |
-| crossformer_large_patch4_group7_224 | 83.7516 | 96.4954 |  64  |  224  |
+| crossformer_tiny_patch4_group7_224  | 81.1461 | 95.3105 |  64  | 224  |
+| crossformer_small_patch4_group7_224 | 82.2410 | 95.9579 |  64  | 224  |  
+| crossformer_base_patch4_group7_224  | 83.2681 | 96.4694 |  64  | 224  |
+| crossformer_large_patch4_group7_224 | 83.7516 | 96.4954 |  64  | 224  |
+| cswin_tiny_224         | 80.5147 | 95.1746 |    64       |   224      |
+| cswin_small_224        | 81.7355 | 95.6422 |    64       |   224      |
+| cswin_base_224         | 83.5458 | 96.5733 |    64       |   224      |
+| cswin_large_224        | 85.7697 | 97.7362 |    64       |   224      |
+| cswin_base_384         | - | - |    64       |   224      |
+| cswin_large_384        | - | - |    64       |   224      |

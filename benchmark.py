@@ -16,6 +16,7 @@ import math
 """Model Specific Test
 Swin-T: using interpolation "bicubic" for testing, which corresponds to interpolation=3 in Resize function
 ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
+CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
 IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
