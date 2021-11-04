@@ -27,6 +27,7 @@ VIT_DEFAULT_STD = [0.5, 0.5, 0.5]
 
 DEFAULT_CROP_SIZE = 0.9
 
+
 class ImageNetDataLoader(DataLoader):
     def __init__(
         self, data_dir, split="train", image_size=224, batch_size=16, num_workers=8

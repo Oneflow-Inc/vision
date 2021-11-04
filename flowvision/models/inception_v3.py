@@ -80,7 +80,7 @@ class Inception3(nn.Module):
                 InceptionE,
                 InceptionAux,
             ]
-            
+
         if init_weights is None:
             init_weights = True
 

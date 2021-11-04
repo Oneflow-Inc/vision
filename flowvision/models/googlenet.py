@@ -87,7 +87,7 @@ class GoogLeNet(nn.Module):
 
         if init_weights is None:
             init_weights = True
-            
+
         assert len(blocks) == 3
         conv_block = blocks[0]
         inception_block = blocks[1]
