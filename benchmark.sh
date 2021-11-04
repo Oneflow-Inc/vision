@@ -1,9 +1,9 @@
 set -aux
 
-MODEL="pvt_tiny"
+MODEL="cswin_large_384"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
-IMG_SIZE=224
+IMG_SIZE=384
 NUM_WORKERS=8
 
 python benchmark.py --model $MODEL \
