@@ -10,6 +10,7 @@ import numpy as np
 from functools import partial
 from flowvision.models import ModelCreator
 import argparse
+import math
 
 
 """Model Specific Test
@@ -23,6 +24,7 @@ IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
 VIT_DEFAULT_MEAN = [0.5, 0.5, 0.5]
 VIT_DEFAULT_STD = [0.5, 0.5, 0.5]
 
+DEFAULT_CROP_SIZE = 0.9
 
 class ImageNetDataLoader(DataLoader):
     def __init__(
@@ -39,10 +41,10 @@ class ImageNetDataLoader(DataLoader):
                 ]
             )
         else:
-            size = int((256 / 224) * image_size)
+            scale_size = int(math.floor(image_size / DEFAULT_CROP_SIZE))
             transform = transforms.Compose(
                 [
-                    transforms.Resize(size, interpolation=3)  # 3: bibubic
+                    transforms.Resize(scale_size, interpolation=3)  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
