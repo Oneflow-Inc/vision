@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="cswin_base_384"
+MODEL="cswin_large_384"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=384
