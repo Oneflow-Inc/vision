@@ -24,9 +24,11 @@ def _is_legacy_tar_format(filename):
 def _legacy_tar_load(filename, model_dir, map_location):
     with tarfile.open(filename) as f:
         members = f.getnames()
-        f.extractall(model_dir)
         extracted_name = members[0]
         extracted_file = os.path.join(model_dir, extracted_name)
+        if not os.path.exists(model_dir):
+            os.mkdir(model_dir)
+            f.extractall(model_dir)
     return flow.load(extracted_file)
 
 
@@ -39,11 +41,11 @@ def _legacy_zip_load(filename, model_dir, map_location):
     #       We deliberately don't handle tarfile here since our legacy serialization format was in tar.
     with zipfile.ZipFile(filename) as f:
         members = f.infolist()
-        # if len(members) != 1:
-        #     raise RuntimeError('Only one file(not dir) is allowed in the zipfile')
-        f.extractall(model_dir)
         extraced_name = members[0].filename
         extracted_file = os.path.join(model_dir, extraced_name)
+        if not os.path.exists(extracted_file):
+            os.mkdir(extracted_file)
+            f.extractall(model_dir)
     # TODO: flow.load doesn't have map_location
     # return flow.load(extracted_file, map_location=map_location)
     return flow.load(extracted_file)
@@ -98,7 +100,6 @@ def load_state_dict_from_url(
     if file_name is not None:
         filename = file_name
     cached_file = os.path.join(model_dir, filename)
-    # 获得存储文件的名字
     if not os.path.exists(cached_file):
         sys.stderr.write('Downloading: "{}" to {}\n'.format(url, cached_file))
         hash_prefix = None
