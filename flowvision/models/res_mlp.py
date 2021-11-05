@@ -11,8 +11,16 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "resmlp_12": None,
-    "resmlp_12_dist": None
+    "resmlp_12": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12.zip",
+    "resmlp_12_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_dist.zip",
+    "resmlp_24": None,
+    "resmlp_24_dist": None,
+    "resmlp_24_dino": None,
+    "resmlp_36": None,
+    "resmlp_36_dist": None,
+    "resmlpB_24": None,
+    "resmlpB_24_in22k": None,
+    "resmlpB_24_dist": None
 }
 
 
@@ -115,7 +123,7 @@ def _create_resmlp(arch, pretrained=False, progress=True, **model_kwargs):
 @ModelCreator.register_model
 def resmlp_12(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(
-        patch_size=4,
+        patch_size=16,
         embed_dim=384,
         depth=12,
         Patch_layer=PatchEmbed,
@@ -128,7 +136,7 @@ def resmlp_12(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(
-        patch_size=4,
+        patch_size=16,
         embed_dim=384,
         depth=12,
         Patch_layer=PatchEmbed,
@@ -137,3 +145,106 @@ def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
     )
     return _create_resmlp("resmlp_12_dist", pretrained=pretrained, progress=progress, **model_kwargs)
 
+
+@ModelCreator.register_model
+def resmlp_24(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=24,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-5,
+        **kwargs
+    )
+    return _create_resmlp("resmlp_24", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=24,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-5,
+        **kwargs
+    )
+    return _create_resmlp("resmlp_24_dist", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=24,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-5,
+        **kwargs
+    )
+    return _create_resmlp("resmlp_24_dino", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlp_36(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=36,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-6,
+        **kwargs
+    )
+    return _create_resmlp("resmlp_36", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=36,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-6,
+        **kwargs
+    )
+    return _create_resmlp("resmlp_36_dist", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlpB_24(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=8,
+        embed_dim=768,
+        depth=24,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-6,
+        **kwargs
+    )
+    return _create_resmlp("resmlpB_24", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=8,
+        embed_dim=768,
+        depth=24,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-6,
+        **kwargs
+    )
+    return _create_resmlp("resmlpB_24_in22k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(
+        patch_size=8,
+        embed_dim=768,
+        depth=24,
+        Patch_layer=PatchEmbed,
+        init_scale=1e-6,
+        **kwargs
+    )
+    return _create_resmlp("resmlpB_24_dist", pretrained=pretrained, progress=progress, **model_kwargs)
