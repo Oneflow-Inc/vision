@@ -15,6 +15,7 @@ from .swin_transformer import *
 from .crossformer import *
 from .pvt import *
 from .cswin import *
+from .res_mlp import *
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
