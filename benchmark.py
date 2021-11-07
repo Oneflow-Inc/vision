@@ -5,12 +5,12 @@ from oneflow.utils.data import DataLoader
 from oneflow.utils.vision import transforms
 from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
+from torch.nn.functional import interpolate
 from tqdm import tqdm
 import numpy as np
 from functools import partial
 from flowvision.models import ModelCreator
 import argparse
-
 
 """Model Specific Test
 Swin-T: using interpolation "bicubic" for testing, which corresponds to interpolation=3 in Resize function
@@ -39,10 +39,9 @@ class ImageNetDataLoader(DataLoader):
                 ]
             )
         else:
-            size = int((256 / 224) * image_size)
             transform = transforms.Compose(
                 [
-                    transforms.Resize(size, interpolation=3)  # 3: bibubic
+                    transforms.Resize(256, interpolation=3)  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
@@ -62,24 +61,39 @@ class ImageNetDataLoader(DataLoader):
         )
 
 
+class AverageMeter:
+    """Computes and stores the average and current value"""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+
+
 def accuracy(output, target, topk=(1,)):
-    """Computes the precision@k for the specified values of k""" ""
+    """Computes the precision@k for the specified values of k"""
     maxk = max(topk)
     batch_size = target.size(0)
 
     _, pred = output.topk(maxk, 1, True, True)
     pred = pred.transpose(-1, -2)
     correct = pred.eq(target.view(1, -1).expand_as(pred))
-
-    res = []
-    for k in topk:
-        correct_k = correct[:k].contiguous().view(-1).float().sum(0)
-        res.append(correct_k / batch_size * 100.0)
-    return res
+    return [correct[:k].reshape(-1).float().sum(0) * 100. / batch_size for k in topk]
 
 
 def main(args):
-    model = ModelCreator.create_model(args.model, pretrained=True)
+    model = ModelCreator.create_model(args.model, pretrained=False)
+    model.load_state_dict(flow.load('/home/kaijie/Documents/code/of/vision_git/vision/flowvision/models/ghostnet.zip'))
     data_dir = args.data_path
     img_size = args.img_size
     batch_size = args.batch_size
@@ -97,8 +111,8 @@ def main(args):
     total_batch = len(data_loader)
 
     print("Start Evaluation")
-    acc1s = []
-    acc5s = []
+    Top_1_m = AverageMeter()
+    Top_5_m = AverageMeter()
     model.eval()
     with flow.no_grad():
         pbar = tqdm(enumerate(data_loader), total=total_batch)
@@ -115,14 +129,14 @@ def main(args):
                 pred_logits = model(data)
             acc1, acc5 = accuracy(pred_logits, target, topk=(1, 5))
 
-            acc1s.append(acc1.item())
-            acc5s.append(acc5.item())
+            Top_1_m.update(acc1.item(), pred_logits.size(0))
+            Top_5_m.update(acc5.item(), pred_logits.size(0))
 
             pbar.set_postfix(acc1=acc1.item(), acc5=acc5.item())
 
     print(
         "Evaluation on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}".format(
-            "ImageNet", np.mean(acc1s), np.mean(acc5s)
+            "ImageNet", Top_1_m.avg, Top_5_m.avg
         )
     )
 
