@@ -15,9 +15,9 @@ from .registry import ModelCreator
 model_urls = {
     "mlp_mixer_s16_224": None,
     "mlp_mixer_s32_224": None,
-    "mlp_mixer_b16_224": None,
+    "mlp_mixer_b16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_b16_224.zip",
     "mlp_mixer_b32_224": None,
-    "mlp_mixer_b16_224_in21k": None,
+    "mlp_mixer_b16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_b16_224_in21k.zip",
     "mlp_mixer_l16_224": None,
     "mlp_mixer_l32_224": None,
     "mlp_mixer_l16_224_in21k": None,
@@ -197,3 +197,64 @@ def _create_mlp_mixer(arch, pretrained=False, progress=True, **model_kwargs):
 def mlp_mixer_s16_224(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(patch_size=16, num_blocks=8, embed_dim=512, **kwargs)
     return _create_mlp_mixer("mlp_mixer_s16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_s32_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=32, num_blocks=8, embed_dim=512, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_s32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_b16_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_b16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_b32_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=32, num_blocks=12, embed_dim=768, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_b32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_b16_224_in21k(pretrained=False, progress=True, **kwargs):
+    "the pretrained imagenet21k model for fine-tune"
+    model_kwargs = dict(num_classes=21843, patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_b16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_l16_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=16, num_blocks=24, embed_dim=1024, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_l16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_l32_224(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=32, num_blocks=24, embed_dim=1024, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_l32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_l16_224_in21k(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(patch_size=16, num_blocks=24, embed_dim=1024, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_l16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_b16_224_miil(pretrained=False, progress=True, **kwargs):
+    """ Mixer-B/16 224x224. ImageNet-21k pretrained weights.
+    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
+    return _create_mlp_mixer("mixer_b16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def mlp_mixer_b16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
+    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
+    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
+    return _create_mlp_mixer("mlp_mixer_b16_224_miil_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
