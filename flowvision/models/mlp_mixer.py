@@ -18,13 +18,13 @@ model_urls = {
     "mlp_mixer_b16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_b16_224.zip",
     "mlp_mixer_b32_224": None,
     "mlp_mixer_b16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_b16_224_in21k.zip",
-    "mlp_mixer_l16_224": None,
+    "mlp_mixer_l16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_l16_224.zip",
     "mlp_mixer_l32_224": None,
-    "mlp_mixer_l16_224_in21k": None,
-    "mlp_mixer_b16_224_miil_in21k": None,
-    "mlp_mixer_b16_224_miil": None,
+    "mlp_mixer_l16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_l16_224_in21k.zip",
+    "mlp_mixer_b16_224_miil": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_b16_224_miil.zip",
+    "mlp_mixer_b16_224_miil_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/mlp_mixer_b16_224_miil_in21k.zip",
     "gmlp_ti16_224": None,
-    "gmlp_s16_224": None,
+    "gmlp_s16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Mlp-Mixer/gmlp_s16_224.zip",
     "gmlp_b16_224": None,
 }
 
@@ -64,6 +64,81 @@ class Mlp(nn.Module):
         x = self.drop(x)
         x = self.fc2(x)
         x = self.drop(x)
+        return x
+
+
+class GatedMlp(nn.Module):
+    """ MLP as used in gMLP
+    """
+    def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU,
+                 gate_layer=None, drop=0.):
+        super().__init__()
+        out_features = out_features or in_features
+        hidden_features = hidden_features or in_features
+
+        self.fc1 = nn.Linear(in_features, hidden_features)
+        self.act = act_layer()
+        self.drop1 = nn.Dropout(drop)
+        if gate_layer is not None:
+            assert hidden_features % 2 == 0
+            self.gate = gate_layer(hidden_features)
+            hidden_features = hidden_features // 2
+        else:
+            self.gate = nn.Identity()
+        self.fc2 = nn.Linear(hidden_features, out_features)
+        self.drop2 = nn.Dropout(drop)
+    
+    def forward(self, x):
+        x = self.fc1(x)
+        x = self.act(x)
+        x = self.drop1(x)
+        x = self.gate(x)
+        x = self.fc2(x)
+        x = self.drop2(x)
+        return x
+
+
+class SpatialGatingUnit(nn.Module):
+    """ Spatial Gating Unit
+    """
+    def __init__(self, dim, num_patches, norm_layer=nn.LayerNorm):
+        super().__init__()
+        gate_dim = dim // 2
+        self.norm = norm_layer(gate_dim)
+        self.proj = nn.Linear(num_patches, num_patches)
+
+    def init_weights(self):
+        # special init for the projection gate, called as override by base model init
+        nn.init.normal_(self.proj.weight, std=1e-6)
+        nn.init.ones_(self.proj.bias)
+
+    def forward(self, x):
+        # TODO: use fixed chunk op
+        # u, v = x.chunk(2, dim=-1)
+        B, N, C = x.size()
+        split_dim = C // 2
+        u, v = flow.split(x, split_dim, dim=-1)[0], flow.split(x, split_dim, dim=-1)[1]
+        v = self.norm(v)
+        v = self.proj(v.transpose(-1, -2))
+        return u * v.transpose(-1, -2)
+
+
+class SpatialGatingBlock(nn.Module):
+    """ Residual Block w/ Spatial Gating
+    Based on: `Pay Attention to MLPs` - https://arxiv.org/abs/2105.08050
+    """
+    def __init__(
+            self, dim, num_patches, mlp_ratio=4, mlp_layer=GatedMlp,
+            norm_layer=partial(nn.LayerNorm, eps=1e-6), act_layer=nn.GELU, drop=0., drop_path=0.):
+        super().__init__()
+        channel_dim = int(dim * mlp_ratio)
+        self.norm = norm_layer(dim)
+        sgu = partial(SpatialGatingUnit, num_patches=num_patches)
+        self.mlp_channels = mlp_layer(dim, channel_dim, act_layer=act_layer, gate_layer=sgu, drop=drop)
+        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+
+    def forward(self, x):
+        x = x + self.drop_path(self.mlp_channels(self.norm(x)))
         return x
 
 
@@ -219,7 +294,7 @@ def mlp_mixer_b32_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_b16_224_in21k(pretrained=False, progress=True, **kwargs):
-    "the pretrained imagenet21k model for fine-tune"
+    """the pretrained imagenet21k model for fine-tune"""
     model_kwargs = dict(num_classes=21843, patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
     return _create_mlp_mixer("mlp_mixer_b16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
 
@@ -238,7 +313,8 @@ def mlp_mixer_l32_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_l16_224_in21k(pretrained=False, progress=True, **kwargs):
-    model_kwargs = dict(patch_size=16, num_blocks=24, embed_dim=1024, **kwargs)
+    """the pretrained imagenet21k model for fine-tune"""
+    model_kwargs = dict(num_classes=21843, patch_size=16, num_blocks=24, embed_dim=1024, **kwargs)
     return _create_mlp_mixer("mlp_mixer_l16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
 
 
@@ -256,5 +332,32 @@ def mlp_mixer_b16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
     """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
     Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
     """
-    model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
+    model_kwargs = dict(num_classes=11221, patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
     return _create_mlp_mixer("mlp_mixer_b16_224_miil_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def gmlp_ti16_224(pretrained=False, progress=True, **kwargs):
+    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
+    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    model_kwargs = dict(patch_size=16, num_blocks=30, embed_dim=128, mlp_ratio=6, block_layer=SpatialGatingBlock, mlp_layer=GatedMlp, **kwargs)
+    return _create_mlp_mixer("gmlp_ti16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def gmlp_s16_224(pretrained=False, progress=True, **kwargs):
+    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
+    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    model_kwargs = dict(patch_size=16, num_blocks=30, embed_dim=256, mlp_ratio=6, block_layer=SpatialGatingBlock, mlp_layer=GatedMlp, **kwargs)
+    return _create_mlp_mixer("gmlp_s16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def gmlp_b16_224(pretrained=False, progress=True, **kwargs):
+    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
+    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    model_kwargs = dict(patch_size=16, num_blocks=30, embed_dim=512, mlp_ratio=6, block_layer=SpatialGatingBlock, mlp_layer=GatedMlp, **kwargs)
+    return _create_mlp_mixer("gmlp_b16_224", pretrained=pretrained, progress=progress, **model_kwargs)
