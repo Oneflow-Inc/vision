@@ -111,7 +111,7 @@ class RandomIoUCrop(nn.Module):
 
                 # check at least 1 box with jaccard limitations
                 boxes = target["boxes"][is_within_crop_area]
-                ious = flowvision.nn.blocks.box_iou(boxes, flow.tensor([[left, top, right, bottom]],
+                ious = flowvision.layers.blocks.box_iou(boxes, flow.tensor([[left, top, right, bottom]],
                                                                        dtype=boxes.dtype, device=boxes.device))
                 if ious.max() < min_jaccard_overlap:
                     continue

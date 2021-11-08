@@ -13,7 +13,7 @@ from .transform import GeneralizedRCNNTransform
 from .. import vgg
 from ..registry import ModelCreator
 from ..utils import load_state_dict_from_url
-from flowvision.nn.blocks import boxes as box_ops
+from flowvision.layers.blocks import boxes as box_ops
 
 
 model_urls = {

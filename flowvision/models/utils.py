@@ -11,8 +11,10 @@ import warnings
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from tqdm import tqdm
+from typing import Any, Callable, Optional, Tuple
 
 import oneflow as flow
+import oneflow.nn as nn
 
 HASH_REGEX = re.compile(r"([a-f0-9]*)_")
 
@@ -24,9 +26,11 @@ def _is_legacy_tar_format(filename):
 def _legacy_tar_load(filename, model_dir, map_location):
     with tarfile.open(filename) as f:
         members = f.getnames()
-        f.extractall(model_dir)
         extracted_name = members[0]
         extracted_file = os.path.join(model_dir, extracted_name)
+        if not os.path.exists(model_dir):
+            os.mkdir(model_dir)
+            f.extractall(model_dir)
     return flow.load(extracted_file)
 
 
@@ -39,11 +43,11 @@ def _legacy_zip_load(filename, model_dir, map_location):
     #       We deliberately don't handle tarfile here since our legacy serialization format was in tar.
     with zipfile.ZipFile(filename) as f:
         members = f.infolist()
-        # if len(members) != 1:
-        #     raise RuntimeError('Only one file(not dir) is allowed in the zipfile')
-        f.extractall(model_dir)
         extracted_name = members[0].filename
         extracted_file = os.path.join(model_dir, extracted_name)
+        if not os.path.exists(extracted_file):
+            os.mkdir(extracted_file)
+            f.extractall(model_dir)
     # TODO: flow.load doesn't have map_location
     # return flow.load(extracted_file, map_location=map_location)
     return flow.load(extracted_file)
@@ -98,7 +102,6 @@ def load_state_dict_from_url(
     if file_name is not None:
         filename = file_name
     cached_file = os.path.join(model_dir, filename)
-
     if not os.path.exists(cached_file):
         sys.stderr.write('Downloading: "{}" to {}\n'.format(url, cached_file))
         hash_prefix = None
@@ -181,3 +184,37 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
         f.close()
         if os.path.exists(f.name):
             os.remove(f.name)
+
+
+def named_apply(
+    fn: Callable, module: nn.Module, name="", depth_first=True, include_root=False
+) -> nn.Module:
+    if not depth_first and include_root:
+        fn(module=module, name=name)
+    for child_name, child_module in module.named_children():
+        child_name = ".".join((name, child_name)) if name else child_name
+        named_apply(
+            fn=fn,
+            module=child_module,
+            name=child_name,
+            depth_first=depth_first,
+            include_root=True,
+        )
+    if depth_first and include_root:
+        fn(module=module, name=name)
+    return module
+
+
+def named_modules(module: nn.Module, name="", depth_first=True, include_root=False):
+    if not depth_first and include_root:
+        yield name, module
+    for child_name, child_module in module.named_children():
+        child_name = ".".join((name, child_name)) if name else child_name
+        yield from named_modules(
+            module=child_module,
+            name=child_name,
+            depth_first=depth_first,
+            include_root=True,
+        )
+    if depth_first and include_root:
+        yield name, module

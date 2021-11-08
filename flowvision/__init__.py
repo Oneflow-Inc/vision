@@ -1,4 +1,4 @@
-from .nn import *
+from .layers import *
 from .models import *
 from .datasets import *
 from .transforms import *

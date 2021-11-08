@@ -80,14 +80,10 @@ class Inception3(nn.Module):
                 InceptionE,
                 InceptionAux,
             ]
+
         if init_weights is None:
-            warnings.warn(
-                "The default weight initialization of inception_v3 will be changed in future releases of "
-                "torchvision. If you wish to keep the old behavior (which leads to long initialization times"
-                " due to scipy/scipy#11299), please set init_weights=True.",
-                FutureWarning,
-            )
             init_weights = True
+
         assert len(inception_blocks) == 7
         conv_block = inception_blocks[0]
         inception_a = inception_blocks[1]

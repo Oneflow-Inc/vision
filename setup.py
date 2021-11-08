@@ -235,11 +235,11 @@ if __name__ == "__main__":
 
     setup(
         name="flowvision",
-        version="0.0.2",
+        version="0.0.4",  # version number
         author="flow vision contributors",
         author_email="596106517@qq.com",
         description="oneflow vision codebase",
-        license="MIT",
+        license="BSD",
         packages=find_packages(),
         install_requires=["rich",],
         classifiers=[

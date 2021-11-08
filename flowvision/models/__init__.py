@@ -1,3 +1,4 @@
+from . import detection
 from .alexnet import *
 from .densenet import *
 from .vit import *
@@ -12,7 +13,12 @@ from .mobilenet_v3 import *
 from .squeezenet import *
 from .conv_mixer import *
 from .swin_transformer import *
-from . import detection
+from .crossformer import *
+from .pvt import *
+from .cswin import *
+from .res_mlp import *
+from .mlp_mixer import *
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from .helpers import *

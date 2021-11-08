@@ -4,7 +4,7 @@ from collections import OrderedDict
 import numpy as np
 import oneflow as flow
 from test_utils import GenArgList
-from flowvision.nn.blocks import nms
+from flowvision.layers.blocks import nms
 
 
 def box_area(boxes):

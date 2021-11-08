@@ -3,15 +3,17 @@ Datasets, Transforms and Models specific to Computer Vision
 
 
 ## Installation
-- install `oneflow0.5.0+cu102` and other requirements
+- install the nightly version of `oneflow`
 ```bash
-python3 -m pip install -f https://release.oneflow.info oneflow==0.5.0+cu102
-pip install rich
+python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu102
 ```
 - install latest version of `flowvision`
 ```bash
-pip install flowvision==0.0.2
+pip install flowvision==0.0.3
 ```
+
+## Supported Model
+All of supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
 
 
 ## Usage
