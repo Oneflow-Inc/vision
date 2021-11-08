@@ -16,7 +16,7 @@ limitations under the License.
 import warnings
 import numbers
 from collections.abc import Sequence
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 import numpy as np
 import random

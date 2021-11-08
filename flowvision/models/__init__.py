@@ -12,6 +12,7 @@ from .mobilenet_v3 import *
 from .squeezenet import *
 from .conv_mixer import *
 from .swin_transformer import *
+from . import detection
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
