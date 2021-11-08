@@ -5,16 +5,18 @@ from oneflow.utils.data import DataLoader
 from oneflow.utils.vision import transforms
 from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
-from torch.nn.functional import interpolate
 from tqdm import tqdm
 import numpy as np
 from functools import partial
 from flowvision.models import ModelCreator
 import argparse
+import math
+
 
 """Model Specific Test
 Swin-T: using interpolation "bicubic" for testing, which corresponds to interpolation=3 in Resize function
 ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
+CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
 IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
@@ -22,6 +24,8 @@ IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
 
 VIT_DEFAULT_MEAN = [0.5, 0.5, 0.5]
 VIT_DEFAULT_STD = [0.5, 0.5, 0.5]
+
+DEFAULT_CROP_SIZE = 0.9
 
 
 class ImageNetDataLoader(DataLoader):
@@ -39,9 +43,10 @@ class ImageNetDataLoader(DataLoader):
                 ]
             )
         else:
+            scale_size = int(math.floor(image_size / DEFAULT_CROP_SIZE))
             transform = transforms.Compose(
                 [
-                    transforms.Resize(256, interpolation=3)  # 3: bibubic
+                    transforms.Resize(scale_size, interpolation=3)  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
@@ -88,12 +93,12 @@ def accuracy(output, target, topk=(1,)):
     _, pred = output.topk(maxk, 1, True, True)
     pred = pred.transpose(-1, -2)
     correct = pred.eq(target.view(1, -1).expand_as(pred))
+
     return [correct[:k].reshape(-1).float().sum(0) * 100. / batch_size for k in topk]
 
 
 def main(args):
-    model = ModelCreator.create_model(args.model, pretrained=False)
-    model.load_state_dict(flow.load('/home/kaijie/Documents/code/of/vision_git/vision/flowvision/models/ghostnet.zip'))
+    model = ModelCreator.create_model(args.model, pretrained=True)
     data_dir = args.data_path
     img_size = args.img_size
     batch_size = args.batch_size
