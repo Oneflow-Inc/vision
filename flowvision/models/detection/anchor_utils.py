@@ -24,8 +24,15 @@ class DefaultBoxGenerator(nn.Module):
             is applied while the boxes are encoded in format ``(cx, cy, w, h)``.
     """
 
-    def __init__(self, aspect_ratios: List[List[int]], min_ratio: float = 0.15, max_ratio: float = 0.9,
-                 scales: Optional[List[float]] = None, steps: Optional[List[int]] = None, clip: bool = True):
+    def __init__(
+        self,
+        aspect_ratios: List[List[int]],
+        min_ratio: float = 0.15,
+        max_ratio: float = 0.9,
+        scales: Optional[List[float]] = None,
+        steps: Optional[List[int]] = None,
+        clip: bool = True,
+    ):
         super().__init__()
         if steps is not None:
             assert len(aspect_ratios) == len(steps)
@@ -38,7 +45,10 @@ class DefaultBoxGenerator(nn.Module):
         if scales is None:
             if num_outputs > 1:
                 range_ratio = max_ratio - min_ratio
-                self.scales = [min_ratio + range_ratio * k / (num_outputs - 1.0) for k in range(num_outputs)]
+                self.scales = [
+                    min_ratio + range_ratio * k / (num_outputs - 1.0)
+                    for k in range(num_outputs)
+                ]
                 self.scales.append(1.0)
             else:
                 self.scales = [min_ratio, max_ratio]
@@ -47,8 +57,12 @@ class DefaultBoxGenerator(nn.Module):
 
         self._wh_pairs = self._generate_wh_pairs(num_outputs)
 
-    def _generate_wh_pairs(self, num_outputs: int, dtype: flow.dtype = flow.float32,
-                           device: flow.device = flow.device("cpu")) -> List[Tensor]:
+    def _generate_wh_pairs(
+        self,
+        num_outputs: int,
+        dtype: flow.dtype = flow.float32,
+        device: flow.device = flow.device("cpu"),
+    ) -> List[Tensor]:
         _wh_pairs: List[Tensor] = []
         for k in range(num_outputs):
             # Adding the 2 default width-height pairs for aspect ratio 1 and scale s'k
@@ -71,8 +85,12 @@ class DefaultBoxGenerator(nn.Module):
         return [2 + 2 * len(r) for r in self.aspect_ratios]
 
     # Default Boxes calculation based on page 6 of SSD paper
-    def _grid_default_boxes(self, grid_sizes: List[List[int]], image_size: List[int],
-                            dtype: flow.dtype = flow.float32) -> Tensor:
+    def _grid_default_boxes(
+        self,
+        grid_sizes: List[List[int]],
+        image_size: List[int],
+        dtype: flow.dtype = flow.float32,
+    ) -> Tensor:
         default_boxes = []
         for k, f_k in enumerate(grid_sizes):
             # Now add the default boxes for each width-height pair
@@ -88,9 +106,15 @@ class DefaultBoxGenerator(nn.Module):
             shift_y = shift_y.reshape(-1)
 
             # TODO (shijie wang): Use len() method
-            shifts = flow.stack((shift_x, shift_y) * self._wh_pairs[k].shape[0], dim=-1).reshape(-1, 2)
+            shifts = flow.stack(
+                (shift_x, shift_y) * self._wh_pairs[k].shape[0], dim=-1
+            ).reshape(-1, 2)
             # Clipping the default boxes while the boxes are encoded in format (cx, cy, w, h)
-            _wh_pair = self._wh_pairs[k].clamp(min=0, max=1) if self.clip else self._wh_pairs[k]
+            _wh_pair = (
+                self._wh_pairs[k].clamp(min=0, max=1)
+                if self.clip
+                else self._wh_pairs[k]
+            )
             wh_pairs = _wh_pair.repeat((f_k[0] * f_k[1]), 1)
 
             default_box = flow.cat((shifts, wh_pairs), dim=1)
@@ -100,15 +124,17 @@ class DefaultBoxGenerator(nn.Module):
         return flow.cat(default_boxes, dim=0)
 
     def __repr__(self) -> str:
-        s = self.__class__.__name__ + '('
-        s += 'aspect_ratios={aspect_ratios}'
-        s += ', clip={clip}'
-        s += ', scales={scales}'
-        s += ', steps={steps}'
-        s += ')'
+        s = self.__class__.__name__ + "("
+        s += "aspect_ratios={aspect_ratios}"
+        s += ", clip={clip}"
+        s += ", scales={scales}"
+        s += ", steps={steps}"
+        s += ")"
         return s.format(**self.__dict__)
 
-    def forward(self, image_list: ImageList, feature_maps: List[Tensor]) -> List[Tensor]:
+    def forward(
+        self, image_list: ImageList, feature_maps: List[Tensor]
+    ) -> List[Tensor]:
         grid_sizes = [feature_map.shape[-2:] for feature_map in feature_maps]
         image_size = image_list.tensors.shape[-2:]
         dtype, device = feature_maps[0].dtype, feature_maps[0].device
@@ -118,9 +144,13 @@ class DefaultBoxGenerator(nn.Module):
         dboxes = []
         for _ in image_list.image_sizes:
             dboxes_in_image = default_boxes
-            dboxes_in_image = flow.cat([dboxes_in_image[:, :2] - 0.5 * dboxes_in_image[:, 2:],
-                                        dboxes_in_image[:, :2] + 0.5 *
-                                        dboxes_in_image[:, 2:]], -1)
+            dboxes_in_image = flow.cat(
+                [
+                    dboxes_in_image[:, :2] - 0.5 * dboxes_in_image[:, 2:],
+                    dboxes_in_image[:, :2] + 0.5 * dboxes_in_image[:, 2:],
+                ],
+                -1,
+            )
             dboxes_in_image[:, 0::2] *= image_size[1]
             dboxes_in_image[:, 1::2] *= image_size[0]
             dboxes.append(dboxes_in_image)

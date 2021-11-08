@@ -8,10 +8,13 @@ from typing import List, Tuple, Dict, Optional
 from .image_list import ImageList
 
 
-def _resize_image_and_masks(image: Tensor, self_min_size: float, self_max_size: float,
-                            target: Optional[Dict[str, Tensor]] = None,
-                            fixed_size: Optional[Tuple[int, int]] = None,
-                            ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+def _resize_image_and_masks(
+    image: Tensor,
+    self_min_size: float,
+    self_max_size: float,
+    target: Optional[Dict[str, Tensor]] = None,
+    fixed_size: Optional[Tuple[int, int]] = None,
+) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
     im_shape = flow.tensor(image.shape[-2:])
 
     size: Optional[List[int]] = None
@@ -26,24 +29,36 @@ def _resize_image_and_masks(image: Tensor, self_min_size: float, self_max_size: 
         scale_factor = scale.item()
         recompute_scale_factor = True
 
-    image = flow.nn.functional.interpolate(image[None], size=size, scale_factor=scale_factor, mode="bilinear",
-                                           recompute_scale_factor=recompute_scale_factor, align_corners=False)[0]
+    image = flow.nn.functional.interpolate(
+        image[None],
+        size=size,
+        scale_factor=scale_factor,
+        mode="bilinear",
+        recompute_scale_factor=recompute_scale_factor,
+        align_corners=False,
+    )[0]
 
     if target is None:
         return image, target
 
     if "mask" in target:
         mask = target["masks"]
-        mask = flow.nn.functional.interpolate(mask[:, None].float(), size=size, scale_factor=scale_factor,
-                                              recompute_scale_factor=recompute_scale_factor)[:, 0].byte()
+        mask = flow.nn.functional.interpolate(
+            mask[:, None].float(),
+            size=size,
+            scale_factor=scale_factor,
+            recompute_scale_factor=recompute_scale_factor,
+        )[:, 0].byte()
         target["masks"] = mask
     return image, target
 
 
-def _resize_keypoints(keypoints: Tensor, original_size: List[int], new_size: List[int]) -> Tensor:
+def _resize_keypoints(
+    keypoints: Tensor, original_size: List[int], new_size: List[int]
+) -> Tensor:
     ratios = [
-        flow.tensor(s, dtype=flow.float32, device=keypoints.device) /
-        flow.tensor(s_orig, dtype=flow.float32, device=keypoints.device)
+        flow.tensor(s, dtype=flow.float32, device=keypoints.device)
+        / flow.tensor(s_orig, dtype=flow.float32, device=keypoints.device)
         for s, s_orig in zip(new_size, original_size)
     ]
     ratio_h, ratio_w = ratios
@@ -53,10 +68,12 @@ def _resize_keypoints(keypoints: Tensor, original_size: List[int], new_size: Lis
     return resized_data
 
 
-def _resize_boxes(boxes: Tensor, original_size: List[int], new_size: List[int]) -> Tensor:
+def _resize_boxes(
+    boxes: Tensor, original_size: List[int], new_size: List[int]
+) -> Tensor:
     ratios = [
-        flow.tensor(s, dtype=flow.float32, device=boxes.device) /
-        flow.tensor(s_orig, dtype=flow.float32, device=boxes.device)
+        flow.tensor(s, dtype=flow.float32, device=boxes.device)
+        / flow.tensor(s_orig, dtype=flow.float32, device=boxes.device)
         for s, s_orig in zip(new_size, original_size)
     ]
     ratio_height, ratio_width = ratios
@@ -82,8 +99,15 @@ class GeneralizedRCNNTransform(nn.Module):
     It returns a ImageList for the inputs, and a List[Dict[Tensor]] for the targets
     """
 
-    def __init__(self, min_size: int, max_size: int, image_mean: List[float], image_std: List[float],
-                 size_divisible: int = 32, fixed_size: Optional[Tuple[int, int]] = None):
+    def __init__(
+        self,
+        min_size: int,
+        max_size: int,
+        image_mean: List[float],
+        image_std: List[float],
+        size_divisible: int = 32,
+        fixed_size: Optional[Tuple[int, int]] = None,
+    ):
         super(GeneralizedRCNNTransform, self).__init__()
         if not isinstance(min_size, (list, tuple)):
             min_size = (min_size,)
@@ -94,10 +118,9 @@ class GeneralizedRCNNTransform(nn.Module):
         self.size_divisible = size_divisible
         self.fixed_size = fixed_size
 
-    def forward(self,
-                images: List[Tensor],
-                targets: Optional[List[Dict[str, Tensor]]] = None
-                ) -> Tuple[ImageList, Optional[List[Dict[str, Tensor]]]]:
+    def forward(
+        self, images: List[Tensor], targets: Optional[List[Dict[str, Tensor]]] = None
+    ) -> Tuple[ImageList, Optional[List[Dict[str, Tensor]]]]:
         images = [img for img in images]
         if targets is not None:
             targets_copy: List[Dict[str, Tensor]] = []
@@ -112,8 +135,10 @@ class GeneralizedRCNNTransform(nn.Module):
             target_index = targets[i] if targets is not None else None
 
             if image.dim() != 3:
-                raise ValueError("image is expected to be a list of 3d tensors "
-                                 "of shape [C, H, W], got {}".format(image.shape))
+                raise ValueError(
+                    "image is expected to be a list of 3d tensors "
+                    "of shape [C, H, W], got {}".format(image.shape)
+                )
             image = self.normalize(image)
             image, target_index = self.resize(image, target_index)
             images[i] = image
@@ -141,17 +166,18 @@ class GeneralizedRCNNTransform(nn.Module):
         std = flow.as_tensor(self.image_std, dtype=dtype, device=device)
         return (image - mean[:, None, None]) / std[:, None, None]
 
-    def resize(self,
-               image: Tensor,
-               target: Optional[Dict[str, Tensor]] = None,
-               ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+    def resize(
+        self, image: Tensor, target: Optional[Dict[str, Tensor]] = None,
+    ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
         h, w = image.shape[-2:]
         if self.training:
             size = float(random.choice(self.min_size))
         else:
             # assume for now that testing uses the largest scale
             size = float(self.min_size[-1])
-        image, target = _resize_image_and_masks(image, size, float(self.max_size), target, self.fixed_size)
+        image, target = _resize_image_and_masks(
+            image, size, float(self.max_size), target, self.fixed_size
+        )
 
         if target is None:
             return image, target
@@ -182,21 +208,26 @@ class GeneralizedRCNNTransform(nn.Module):
 
         batch_shape = [len(images)] + max_size
         # TODO (shijie wang): use tensor.new_full
-        batched_imgs = flow.full(batch_shape, 0, dtype=images[0].dtype, device=images[0].device)
+        batched_imgs = flow.full(
+            batch_shape, 0, dtype=images[0].dtype, device=images[0].device
+        )
         for i in range(batched_imgs.shape[0]):
             img = images[i]
             batched_imgs[i, : img.shape[0], : img.shape[1], : img.shape[2]] = img
 
         return batched_imgs
 
-    def postprocess(self,
-                    result: List[Dict[str, Tensor]],
-                    image_shapes: List[Tuple[int, int]],
-                    original_image_sizes: List[Tuple[int, int]]
-                    ) -> List[Dict[str, Tensor]]:
+    def postprocess(
+        self,
+        result: List[Dict[str, Tensor]],
+        image_shapes: List[Tuple[int, int]],
+        original_image_sizes: List[Tuple[int, int]],
+    ) -> List[Dict[str, Tensor]]:
         if self.training:
             return result
-        for i, (pred, im_s, o_im_s) in enumerate(zip(result, image_shapes, original_image_sizes)):
+        for i, (pred, im_s, o_im_s) in enumerate(
+            zip(result, image_shapes, original_image_sizes)
+        ):
             boxes = pred["boxes"]
             boxes = _resize_boxes(boxes, im_s, o_im_s)
             result[i]["boxes"] = boxes
@@ -211,10 +242,13 @@ class GeneralizedRCNNTransform(nn.Module):
         return result
 
     def __repr__(self) -> str:
-        format_string = self.__class__.__name__ + '('
-        _indent = '\n    '
-        format_string += "{0}Normalize(mean={1}, std={2})".format(_indent, self.image_mean, self.image_std)
-        format_string += "{0}Resize(min_size={1}, max_size={2}, mode='bilinear')".format(_indent, self.min_size,
-                                                                                         self.max_size)
-        format_string += '\n)'
+        format_string = self.__class__.__name__ + "("
+        _indent = "\n    "
+        format_string += "{0}Normalize(mean={1}, std={2})".format(
+            _indent, self.image_mean, self.image_std
+        )
+        format_string += "{0}Resize(min_size={1}, max_size={2}, mode='bilinear')".format(
+            _indent, self.min_size, self.max_size
+        )
+        format_string += "\n)"
         return format_string

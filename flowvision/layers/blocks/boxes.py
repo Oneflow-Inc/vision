@@ -38,10 +38,7 @@ def nms(boxes: Tensor, scores: Tensor, iou_threshold: float) -> Tensor:
 
 
 def batched_nms(
-    boxes: Tensor,
-    scores: Tensor,
-    idxs: Tensor,
-    iou_threshold: float,
+    boxes: Tensor, scores: Tensor, idxs: Tensor, iou_threshold: float,
 ) -> Tensor:
     """
     Performs non-maximum suppression in a batched fashion.
@@ -65,10 +62,7 @@ def batched_nms(
 
 
 def _batched_nms_coordinate_trick(
-    boxes: Tensor,
-    scores: Tensor,
-    idxs: Tensor,
-    iou_threshold: float,
+    boxes: Tensor, scores: Tensor, idxs: Tensor, iou_threshold: float,
 ) -> Tensor:
     # strategy: in order to perform NMS independently per class,
     # we add an offset to all the boxes. The offset is dependent
@@ -140,7 +134,7 @@ def _box_inter_union(boxes1: Tensor, boxes2: Tensor) -> Tuple[Tensor, Tensor]:
     rb = flow.min(boxes1[:, None, :2], boxes2[:, 2:])  # [N,M,2]
 
     wh = _upcast(rb - lt).clamp(min=0)  # [N,M,2]
-    inter = wh[:, : ,0] * wh[:, :, 1]  # [N,M]
+    inter = wh[:, :, 0] * wh[:, :, 1]  # [N,M]
 
     union = area1[:, None] + area2 - inter
 

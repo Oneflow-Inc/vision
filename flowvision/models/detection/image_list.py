@@ -20,6 +20,6 @@ class ImageList:
         self.tensors = tensors
         self.image_sizes = image_sizes
 
-    def to(self, device: flow.device) -> 'ImageList':
+    def to(self, device: flow.device) -> "ImageList":
         cast_tensor = self.tensors.to(device)
         return ImageList(cast_tensor, self.image_sizes)

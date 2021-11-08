@@ -28,8 +28,9 @@ class Compose:
 
 
 class RandomHorizontalFlip(T.RandomHorizontalFlip):
-    def forward(self, image: Tensor,
-                target: Optional[Dict[str, Tensor]] = None) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+    def forward(
+        self, image: Tensor, target: Optional[Dict[str, Tensor]] = None
+    ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
         if flow.rand(1) < self.p:
             image = F.hflip(image)
             if target is not None:
@@ -45,16 +46,24 @@ class RandomHorizontalFlip(T.RandomHorizontalFlip):
 
 
 class ToTensor(nn.Module):
-    def forward(self, image: Tensor,
-                target: Optional[Dict[str, Tensor]] = None) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+    def forward(
+        self, image: Tensor, target: Optional[Dict[str, Tensor]] = None
+    ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
         image = F.pil_to_tensor(image)
         image = F.convert_image_dtype(image)
         return image, target
 
 
 class RandomIoUCrop(nn.Module):
-    def __init__(self, min_scale: float = 0.3, max_scale: float = 1.0, min_aspect_ratio: float = 0.5,
-                 max_aspect_ratio: float = 2.0, sampler_options: Optional[List[float]] = None, trials: int = 40):
+    def __init__(
+        self,
+        min_scale: float = 0.3,
+        max_scale: float = 1.0,
+        min_aspect_ratio: float = 0.5,
+        max_aspect_ratio: float = 2.0,
+        sampler_options: Optional[List[float]] = None,
+        trials: int = 40,
+    ):
         super().__init__()
         self.min_scale = min_scale
         self.max_scale = max_scale
@@ -65,14 +74,19 @@ class RandomIoUCrop(nn.Module):
         self.options = sampler_options
         self.trials = trials
 
-    def forward(self, image: Tensor,
-                target: Optional[Dict[str, Tensor]] = None) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+    def forward(
+        self, image: Tensor, target: Optional[Dict[str, Tensor]] = None
+    ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
         if target is None:
             raise ValueError("The targets can't be None for this transform.")
 
         if isinstance(image, flow.Tensor):
             if image.ndimension() not in {2, 3}:
-                raise ValueError('image should be 2/3 dimensional. Got {} dimensions.'.format(image.ndimension()))
+                raise ValueError(
+                    "image should be 2/3 dimensional. Got {} dimensions.".format(
+                        image.ndimension()
+                    )
+                )
             elif image.ndimension() == 2:
                 image = image.unsqueeze(0)
 
@@ -81,7 +95,9 @@ class RandomIoUCrop(nn.Module):
         while True:
             # sample on option
             idx = int(flow.randint(low=0, high=len(self.options), size=(1,)))
-            if min_jaccard_overlap >= 1.0:  # a value larger than 1 encodes the leave as-is option
+            if (
+                min_jaccard_overlap >= 1.0
+            ):  # a value larger than 1 encodes the leave as-is option
                 return image, target
 
             for _ in range(self.trials):
@@ -105,14 +121,22 @@ class RandomIoUCrop(nn.Module):
                 # check for any valid boxes with centers within the crop area
                 cx = 0.5 * (target["boxes"][:, 0] + target["boxes"][:, 2])
                 cy = 0.5 * (target["boxes"][:, 1] + target["boxes"][:, 3])
-                is_within_crop_area = (left < cx) & (cx < right) & (top < cy) & (cy < bottom)
+                is_within_crop_area = (
+                    (left < cx) & (cx < right) & (top < cy) & (cy < bottom)
+                )
                 if not is_within_crop_area.any():
                     continue
 
                 # check at least 1 box with jaccard limitations
                 boxes = target["boxes"][is_within_crop_area]
-                ious = flowvision.layers.blocks.box_iou(boxes, flow.tensor([[left, top, right, bottom]],
-                                                                       dtype=boxes.dtype, device=boxes.device))
+                ious = flowvision.layers.blocks.box_iou(
+                    boxes,
+                    flow.tensor(
+                        [[left, top, right, bottom]],
+                        dtype=boxes.dtype,
+                        device=boxes.device,
+                    ),
+                )
                 if ious.max() < min_jaccard_overlap:
                     continue
 
@@ -129,25 +153,37 @@ class RandomIoUCrop(nn.Module):
 
 
 class RandomZoomOut(nn.Module):
-    def __init__(self, fill: Optional[List[float]] = None, side_range: Tuple[float, float] = (1., 4.), p: float = 0.5):
+    def __init__(
+        self,
+        fill: Optional[List[float]] = None,
+        side_range: Tuple[float, float] = (1.0, 4.0),
+        p: float = 0.5,
+    ):
         super().__init__()
         if fill is None:
-            fill = [0., 0., 0.]
+            fill = [0.0, 0.0, 0.0]
         self.fill = fill
         self.side_range = side_range
-        if side_range[0] < 1. or side_range[0] > side_range[1]:
-            raise ValueError("Invalid canvas side range provided {}.".format(side_range))
+        if side_range[0] < 1.0 or side_range[0] > side_range[1]:
+            raise ValueError(
+                "Invalid canvas side range provided {}.".format(side_range)
+            )
         self.p = p
 
     def _get_fill_value(self, is_pil):
         # type: (bool) -> int
         return tuple(int(x) for x in self.fill) if is_pil else 0
 
-    def forward(self, image: Tensor,
-                target: Optional[Dict[str, Tensor]] = None) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+    def forward(
+        self, image: Tensor, target: Optional[Dict[str, Tensor]] = None
+    ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
         if isinstance(image, flow.Tensor):
             if image.ndimension() not in {2, 3}:
-                raise ValueError('image should be 2/3 dimensional. Got {} dimensions.'.format(image.ndimension()))
+                raise ValueError(
+                    "image should be 2/3 dimensional. Got {} dimensions.".format(
+                        image.ndimension()
+                    )
+                )
             elif image.ndimension() == 2:
                 image = image.unsqueeze(0)
 
@@ -156,7 +192,9 @@ class RandomZoomOut(nn.Module):
 
         orig_w, orig_h = F._get_image_size(image)
 
-        r = self.side_range[0] + flow.rand(1) * (self.side_range[1] - self.side_range[0])
+        r = self.side_range[0] + flow.rand(1) * (
+            self.side_range[1] - self.side_range[0]
+        )
         canvas_width = int(orig_w * r)
         canvas_height = int(orig_h * r)
 
@@ -170,9 +208,12 @@ class RandomZoomOut(nn.Module):
 
         image = F.pad(image, [left, top, right, bottom], fill=fill)
         if isinstance(image, flow.Tensor):
-            v = flow.tensor(self.fill, device=image.device, dtype=image.dtype).view(-1, 1, 1)
-            image[..., :top, :] = image[..., :, :left] = image[..., (top + orig_h):, :] = \
-                image[..., :, (left + orig_w):] = v
+            v = flow.tensor(self.fill, device=image.device, dtype=image.dtype).view(
+                -1, 1, 1
+            )
+            image[..., :top, :] = image[..., :, :left] = image[
+                ..., (top + orig_h) :, :
+            ] = image[..., :, (left + orig_w) :] = v
 
         if target is not None:
             target["boxes"][:, 0::2] += left
@@ -182,8 +223,14 @@ class RandomZoomOut(nn.Module):
 
 
 class RandomPhotometricDistort(nn.Module):
-    def __init__(self, contrast: Tuple[float] = (0.5, 1.5), saturation: Tuple[float] = (0.5, 1.5),
-                 hue: Tuple[float] = (-0.05, 0.05), brightness: Tuple[float] = (0.875, 1.125), p: float = 0.5):
+    def __init__(
+        self,
+        contrast: Tuple[float] = (0.5, 1.5),
+        saturation: Tuple[float] = (0.5, 1.5),
+        hue: Tuple[float] = (-0.05, 0.05),
+        brightness: Tuple[float] = (0.875, 1.125),
+        p: float = 0.5,
+    ):
         super().__init__()
         self._brightness = T.ColorJitter(brightness=brightness)
         self._contrast = T.ColorJitter(contrast=contrast)
@@ -191,11 +238,16 @@ class RandomPhotometricDistort(nn.Module):
         self._saturation = T.ColorJitter(saturation=saturation)
         self.p = p
 
-    def forward(self, image: Tensor,
-                target: Optional[Dict[str, Tensor]] = None) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
+    def forward(
+        self, image: Tensor, target: Optional[Dict[str, Tensor]] = None
+    ) -> Tuple[Tensor, Optional[Dict[str, Tensor]]]:
         if isinstance(image, flow.Tensor):
             if image.ndimension() not in (2, 3):
-                raise ValueError('image should be 2/3 dimensional. Got {} dimensions.'.format(image.ndimension()))
+                raise ValueError(
+                    "image should be 2/3 dimensional. Got {} dimensions.".format(
+                        image.ndimension()
+                    )
+                )
             elif image.ndimension() == 2:
                 image = image.unsqueeze(0)
 

@@ -12,7 +12,7 @@ class BoxCoder:
     the representation used for training the regressors.
     """
 
-    def __init__(self, weights, bbox_xform_clip=math.log(1000. / 16)):
+    def __init__(self, weights, bbox_xform_clip=math.log(1000.0 / 16)):
         # type: (Tuple[float, float, float, float], float) -> None
         """
         Args:
@@ -55,14 +55,20 @@ class BoxCoder:
         pred_h = flow.exp(dh) * heights[:, None]
 
         # Distance from center to box's corner.
-        c_to_c_h = flow.tensor(0.5, dtype=pred_ctr_y.dtype, device=pred_h.device) * pred_h
-        c_to_c_w = flow.tensor(0.5, dtype=pred_ctr_x.dtype, device=pred_w.device) * pred_w
+        c_to_c_h = (
+            flow.tensor(0.5, dtype=pred_ctr_y.dtype, device=pred_h.device) * pred_h
+        )
+        c_to_c_w = (
+            flow.tensor(0.5, dtype=pred_ctr_x.dtype, device=pred_w.device) * pred_w
+        )
 
         pred_boxes1 = pred_ctr_x - c_to_c_w
         pred_boxes2 = pred_ctr_y - c_to_c_h
         pred_boxes3 = pred_ctr_x + c_to_c_w
         pred_boxes4 = pred_ctr_y + c_to_c_h
-        pred_boxes = flow.stack((pred_boxes1, pred_boxes2, pred_boxes3, pred_boxes4), dim=2).flatten(1)
+        pred_boxes = flow.stack(
+            (pred_boxes1, pred_boxes2, pred_boxes3, pred_boxes4), dim=2
+        ).flatten(1)
         return pred_boxes
 
 
@@ -85,8 +91,8 @@ class Matcher:
     BETWEEN_THRESHOLDS = -2
 
     __annotations__ = {
-        'BELOW_LOW_THRESHOLD': int,
-        'BETWEEN_THRESHOLDS': int,
+        "BELOW_LOW_THRESHOLD": int,
+        "BETWEEN_THRESHOLDS": int,
     }
 
     def __init__(self, high_threshold, low_threshold, allow_low_quality_matches=False):
@@ -127,11 +133,13 @@ class Matcher:
             if match_quality_matrix.shape[0] == 0:
                 raise ValueError(
                     "No ground-truth boxes available for one of the images "
-                    "during training")
+                    "during training"
+                )
             else:
                 raise ValueError(
                     "No proposal boxes available for one of the images "
-                    "during training")
+                    "during training"
+                )
 
         # match_quality_matrix is M (gt) x N (predicted)
         # Max over gt elements (dim 0) to find best gt candidate for each prediction
@@ -173,7 +181,6 @@ class Matcher:
 
 
 class SSDMatcher(Matcher):
-
     def __init__(self, threshold):
         super().__init__(threshold, threshold, allow_low_quality_matches=False)
 
@@ -182,9 +189,11 @@ class SSDMatcher(Matcher):
 
         # For each gt, find the prediction with which it has the highset quality
         _, highset_quality_pred_foreach_gt = match_quality_matrix.max(dim=1)
-        matches[highset_quality_pred_foreach_gt] = flow.arange(highset_quality_pred_foreach_gt.size(0),
-                                                               dtype=flow.int64,
-                                                               device=highset_quality_pred_foreach_gt.device)
+        matches[highset_quality_pred_foreach_gt] = flow.arange(
+            highset_quality_pred_foreach_gt.size(0),
+            dtype=flow.int64,
+            device=highset_quality_pred_foreach_gt.device,
+        )
 
         return matches
 
@@ -210,7 +219,7 @@ def retrieve_out_channels(model, size):
         tmp_img = flow.zeros((1, 3, size[1], size[0]), device=device)
         features = model(tmp_img)
         if isinstance(features, flow.Tensor):
-            features = OrderedDict([('0', features)])
+            features = OrderedDict([("0", features)])
         out_channels = [x.size(1) for x in features.values()]
 
     if in_training:

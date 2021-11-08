@@ -961,16 +961,21 @@ class ColorJitter(Module):
 
     def __init__(self, brightness=0, contrast=0, saturation=0, hue=0):
         super().__init__()
-        self.brightness = self._check_input(brightness, 'brightness')
-        self.contrast = self._check_input(contrast, 'contrast')
-        self.saturation = self._check_input(saturation, 'saturation')
-        self.hue = self._check_input(hue, 'hue', center=0, bound=(-0.5, 0.5),
-                                     clip_first_on_zero=False)
+        self.brightness = self._check_input(brightness, "brightness")
+        self.contrast = self._check_input(contrast, "contrast")
+        self.saturation = self._check_input(saturation, "saturation")
+        self.hue = self._check_input(
+            hue, "hue", center=0, bound=(-0.5, 0.5), clip_first_on_zero=False
+        )
 
-    def _check_input(self, value, name, center=1, bound=(0, float('inf')), clip_first_on_zero=True):
+    def _check_input(
+        self, value, name, center=1, bound=(0, float("inf")), clip_first_on_zero=True
+    ):
         if isinstance(value, numbers.Number):
             if value < 0:
-                raise ValueError("If {} is a single number, it must be non negative.".format(name))
+                raise ValueError(
+                    "If {} is a single number, it must be non negative.".format(name)
+                )
             value = [center - float(value), center + float(value)]
             if clip_first_on_zero:
                 value[0] = max(value[0], 0.0)
@@ -978,7 +983,11 @@ class ColorJitter(Module):
             if not bound[0] <= value[0] <= value[1] <= bound[1]:
                 raise ValueError("{} values should be between {}".format(name, bound))
         else:
-            raise TypeError("{} should be a single number or a list/tuple with length 2.".format(name))
+            raise TypeError(
+                "{} should be a single number or a list/tuple with length 2.".format(
+                    name
+                )
+            )
 
         # if value is 0 or (1., 1.) for brightness/contrast/saturation
         # or (0., 0.) for hue, do nothing
@@ -987,11 +996,14 @@ class ColorJitter(Module):
         return value
 
     @staticmethod
-    def get_params(brightness: Optional[List[float]],
-                   contrast: Optional[List[float]],
-                   saturation: Optional[List[float]],
-                   hue: Optional[List[float]]
-                   ) -> Tuple[Tensor, Optional[float], Optional[float], Optional[float], Optional[float]]:
+    def get_params(
+        brightness: Optional[List[float]],
+        contrast: Optional[List[float]],
+        saturation: Optional[List[float]],
+        hue: Optional[List[float]],
+    ) -> Tuple[
+        Tensor, Optional[float], Optional[float], Optional[float], Optional[float]
+    ]:
         """Get the parameters for the randomized transform to be applied on image.
 
         Args:
@@ -1010,9 +1022,21 @@ class ColorJitter(Module):
         """
         fn_idx = flow.randperm(4)
 
-        b = None if brightness is None else float(flow.empty(1).uniform_(brightness[0], brightness[1]))
-        c = None if contrast is None else float(flow.empty(1).uniform_(contrast[0], contrast[1]))
-        s = None if saturation is None else float(flow.empty(1).uniform_(saturation[0], saturation[1]))
+        b = (
+            None
+            if brightness is None
+            else float(flow.empty(1).uniform_(brightness[0], brightness[1]))
+        )
+        c = (
+            None
+            if contrast is None
+            else float(flow.empty(1).uniform_(contrast[0], contrast[1]))
+        )
+        s = (
+            None
+            if saturation is None
+            else float(flow.empty(1).uniform_(saturation[0], saturation[1]))
+        )
         h = None if hue is None else float(flow.empty(1).uniform_(hue[0], hue[1]))
 
         return fn_idx, b, c, s, h
@@ -1025,8 +1049,13 @@ class ColorJitter(Module):
         Returns:
             PIL Image or Tensor: Color jittered image.
         """
-        fn_idx, brightness_factor, contrast_factor, saturation_factor, hue_factor = \
-            self.get_params(self.brightness, self.contrast, self.saturation, self.hue)
+        (
+            fn_idx,
+            brightness_factor,
+            contrast_factor,
+            saturation_factor,
+            hue_factor,
+        ) = self.get_params(self.brightness, self.contrast, self.saturation, self.hue)
 
         for fn_id in fn_idx:
             if fn_id == 0 and brightness_factor is not None:
@@ -1041,11 +1070,11 @@ class ColorJitter(Module):
         return img
 
     def __repr__(self):
-        format_string = self.__class__.__name__ + '('
-        format_string += 'brightness={0}'.format(self.brightness)
-        format_string += ', contrast={0}'.format(self.contrast)
-        format_string += ', saturation={0}'.format(self.saturation)
-        format_string += ', hue={0})'.format(self.hue)
+        format_string = self.__class__.__name__ + "("
+        format_string += "brightness={0}".format(self.brightness)
+        format_string += ", contrast={0}".format(self.contrast)
+        format_string += ", saturation={0}".format(self.saturation)
+        format_string += ", hue={0})".format(self.hue)
         return format_string
 
 

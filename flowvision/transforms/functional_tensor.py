@@ -65,7 +65,11 @@ def _max_value(dtype: flow.dtype) -> float:
 def _assert_channels(img: Tensor, permitted: List[int]) -> None:
     c = _get_image_num_channels(img)
     if c not in permitted:
-        raise TypeError("Input image tensor permitted channel values are {}, but found {}".format(permitted, c))
+        raise TypeError(
+            "Input image tensor permitted channel values are {}, but found {}".format(
+                permitted, c
+            )
+        )
 
 
 def _cast_squeeze_in(
@@ -182,11 +186,15 @@ def crop(img: Tensor, top: int, left: int, height: int, width: int) -> Tensor:
 
 def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
     if img.ndim < 3:
-        raise TypeError("Input image tensor should have at least 3 dimensions, but found {}".format(img.ndim))
+        raise TypeError(
+            "Input image tensor should have at least 3 dimensions, but found {}".format(
+                img.ndim
+            )
+        )
     _assert_channels(img, [3])
 
     if num_output_channels not in (1, 3):
-        raise ValueError('num_output_channels should be either 1 or 3')
+        raise ValueError("num_output_channels should be either 1 or 3")
 
     r, g, b = img.unbind(dim=-3)
     # This implementation closely follows the TF one:
@@ -202,7 +210,9 @@ def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
 
 def adjust_brightness(img: Tensor, brightness_facotr: float) -> Tensor:
     if brightness_facotr < 0:
-        raise ValueError('brightness_factor ({}) is not non-negative.'.format(brightness_facotr))
+        raise ValueError(
+            "brightness_factor ({}) is not non-negative.".format(brightness_facotr)
+        )
 
     _assert_image_tensor(img)
 
@@ -213,7 +223,9 @@ def adjust_brightness(img: Tensor, brightness_facotr: float) -> Tensor:
 
 def adjust_contrast(img: Tensor, contrast_factor: float) -> Tensor:
     if contrast_factor < 0:
-        raise ValueError('contrast_factor ({}) is not non-negative.'.format(contrast_factor))
+        raise ValueError(
+            "contrast_factor ({}) is not non-negative.".format(contrast_factor)
+        )
 
     _assert_image_tensor(img)
 
@@ -227,10 +239,10 @@ def adjust_contrast(img: Tensor, contrast_factor: float) -> Tensor:
 
 def adjust_hue(img: Tensor, hue_factor: float) -> Tensor:
     if not (-0.5 <= hue_factor <= 0.5):
-        raise ValueError('hue_factor ({}) is not in [-0.5, 0.5].'.format(hue_factor))
+        raise ValueError("hue_factor ({}) is not in [-0.5, 0.5].".format(hue_factor))
 
     if not (isinstance(img, flow.Tensor)):
-        raise TypeError('Input img should be Tensor image')
+        raise TypeError("Input img should be Tensor image")
 
     _assert_image_tensor(img)
 
@@ -256,7 +268,9 @@ def adjust_hue(img: Tensor, hue_factor: float) -> Tensor:
 
 def adjust_saturation(img: Tensor, saturation_factor: float) -> Tensor:
     if saturation_factor < 0:
-        raise ValueError('saturation_factor ({}) is not non-negative.'.format(saturation_factor))
+        raise ValueError(
+            "saturation_factor ({}) is not non-negative.".format(saturation_factor)
+        )
 
     _assert_image_tensor(img)
 
@@ -305,7 +319,7 @@ def _rgb2hsv(img: Tensor) -> Tensor:
     hr = (maxc == r) * (bc - gc)
     hg = ((maxc == g) & (maxc != r)) * (2.0 + rc - bc)
     hb = ((maxc != g) & (maxc != r)) * (4.0 + gc - rc)
-    h = (hr + hg + hb)
+    h = hr + hg + hb
     h = flow.fmod((h / 6.0 + 1.0), 1.0)
     return flow.stack((h, s, maxc), dim=-3)
 
@@ -329,7 +343,6 @@ def _hsv2rgb(img: Tensor) -> Tensor:
     a4 = flow.stack((a1, a2, a3), dim=-4)
 
     return flow.sum(mask.to(dtype=img.dtype).unsqueeze(0) * a4, dim=1)
-
 
 
 def _pad_symmetric(img: Tensor, padding: List[int]) -> Tensor:
