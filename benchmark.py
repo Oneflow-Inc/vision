@@ -66,8 +66,27 @@ class ImageNetDataLoader(DataLoader):
         )
 
 
+class AverageMeter:
+    """Computes and stores the average and current value"""
+
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
+
+    def update(self, val, n=1):
+        self.val = val
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count
+
+
 def accuracy(output, target, topk=(1,)):
-    """Computes the precision@k for the specified values of k""" ""
+    """Computes the precision@k for the specified values of k"""
     maxk = max(topk)
     batch_size = target.size(0)
 
@@ -75,11 +94,7 @@ def accuracy(output, target, topk=(1,)):
     pred = pred.transpose(-1, -2)
     correct = pred.eq(target.view(1, -1).expand_as(pred))
 
-    res = []
-    for k in topk:
-        correct_k = correct[:k].contiguous().view(-1).float().sum(0)
-        res.append(correct_k / batch_size * 100.0)
-    return res
+    return [correct[:k].reshape(-1).float().sum(0) * 100. / batch_size for k in topk]
 
 
 def main(args):
@@ -101,8 +116,8 @@ def main(args):
     total_batch = len(data_loader)
 
     print("Start Evaluation")
-    acc1s = []
-    acc5s = []
+    Top_1_m = AverageMeter()
+    Top_5_m = AverageMeter()
     model.eval()
     with flow.no_grad():
         pbar = tqdm(enumerate(data_loader), total=total_batch)
@@ -119,14 +134,14 @@ def main(args):
                 pred_logits = model(data)
             acc1, acc5 = accuracy(pred_logits, target, topk=(1, 5))
 
-            acc1s.append(acc1.item())
-            acc5s.append(acc5.item())
+            Top_1_m.update(acc1.item(), pred_logits.size(0))
+            Top_5_m.update(acc5.item(), pred_logits.size(0))
 
             pbar.set_postfix(acc1=acc1.item(), acc5=acc5.item())
 
     print(
         "Evaluation on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}".format(
-            "ImageNet", np.mean(acc1s), np.mean(acc5s)
+            "ImageNet", Top_1_m.avg, Top_5_m.avg
         )
     )
 
