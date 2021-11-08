@@ -1,3 +1,4 @@
+from . import detection
 from .alexnet import *
 from .densenet import *
 from .vit import *
