@@ -15,6 +15,7 @@ limitations under the License.
 """
 import os
 import warnings
+import tarfile
 import collections
 
 from xml.etree.ElementTree import Element as ET_Element
@@ -28,6 +29,7 @@ from typing import Any, Callable, Dict, Optional, Tuple, List
 
 from .utils import download_and_extract_archive, verify_str_arg
 from .vision import VisionDataset
+from .utils import download_url, check_integrity
 
 
 DATASET_YEAR_DICT = {
@@ -254,3 +256,9 @@ class VOCDetection(_VOCBase):
             if not children:
                 voc_dict[node.tag] = text
         return voc_dict
+
+
+def download_extract(url, root, filename, md5):
+    download_url(url, root, filename, md5)
+    with tarfile.open(os.path.join(root, filename), "r") as tar:
+        tar.extractall(path=root)
