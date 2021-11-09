@@ -52,19 +52,30 @@ class Caltech101(VisionDataset):
         target_transform: Optional[Callable] = None,
         download: bool = False,
     ) -> None:
-        super().__init__(os.path.join(root, "caltech101"), transform=transform, target_transform=target_transform)
+        super().__init__(
+            os.path.join(root, "caltech101"),
+            transform=transform,
+            target_transform=target_transform,
+        )
         os.makedirs(self.root, exist_ok=True)
         if isinstance(target_type, str):
             target_type = [target_type]
-        self.target_type = [verify_str_arg(t, "target_type", ("category", "annotation")) for t in target_type]
+        self.target_type = [
+            verify_str_arg(t, "target_type", ("category", "annotation"))
+            for t in target_type
+        ]
 
         if download:
             self.download()
 
         if not self._check_integrity():
-            raise RuntimeError("Dataset not found or corrupted. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found or corrupted. You can use download=True to download it"
+            )
 
-        self.categories = sorted(os.listdir(os.path.join(self.root, "101_ObjectCategories")))
+        self.categories = sorted(
+            os.listdir(os.path.join(self.root, "101_ObjectCategories"))
+        )
         self.categories.remove("BACKGROUND_Google")  # this is not a real class
 
         # For some reason, the category names in "101_ObjectCategories" and
@@ -76,7 +87,9 @@ class Caltech101(VisionDataset):
             "Motorbikes": "Motorbikes_16",
             "airplanes": "Airplanes_Side_2",
         }
-        self.annotation_categories = list(map(lambda x: name_map[x] if x in name_map else x, self.categories))
+        self.annotation_categories = list(
+            map(lambda x: name_map[x] if x in name_map else x, self.categories)
+        )
 
         self.index: List[int] = []
         self.y = []
@@ -175,23 +188,33 @@ class Caltech256(VisionDataset):
         target_transform: Optional[Callable] = None,
         download: bool = False,
     ) -> None:
-        super().__init__(os.path.join(root, "caltech256"), transform=transform, target_transform=target_transform)
+        super().__init__(
+            os.path.join(root, "caltech256"),
+            transform=transform,
+            target_transform=target_transform,
+        )
         os.makedirs(self.root, exist_ok=True)
 
         if download:
             self.download()
 
         if not self._check_integrity():
-            raise RuntimeError("Dataset not found or corrupted. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found or corrupted. You can use download=True to download it"
+            )
 
-        self.categories = sorted(os.listdir(os.path.join(self.root, "256_ObjectCategories")))
+        self.categories = sorted(
+            os.listdir(os.path.join(self.root, "256_ObjectCategories"))
+        )
         self.index: List[int] = []
         self.y = []
         for (i, c) in enumerate(self.categories):
             n = len(
                 [
                     item
-                    for item in os.listdir(os.path.join(self.root, "256_ObjectCategories", c))
+                    for item in os.listdir(
+                        os.path.join(self.root, "256_ObjectCategories", c)
+                    )
                     if item.endswith(".jpg")
                 ]
             )
