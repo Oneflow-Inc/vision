@@ -339,31 +339,13 @@ class SSD(nn.Module):
             boxes = self.box_coder.decode_single(boxes, anchors)
             boxes = box_ops.clip_boxes_to_image(boxes, image_shape)
 
-            image_boxes = []
-            image_scores = []
-            image_labels = []
-            for label in range(1, num_classes):
-                score = scores[:, label]
-
-                keep_idxs = score > self.score_thresh
-                score = score[keep_idxs]
-                box = boxes[keep_idxs]
-
-                # keep only topk scoring predictions
-                num_topk = min(self.topk_candidates, score.size(0))
-                score, idxs = score.topk(num_topk)
-                box = box[idxs]
-
-                image_boxes.append(box)
-                image_scores.append(score)
-                # TODO (shijie wang): use full_like
-                image_labels.append(
-                    flow.full(score.shape, value=label, dtype=flow.int64, device=device)
-                )
-
-            image_boxes = flow.cat(image_boxes, dim=0)
-            image_scores = flow.cat(image_scores, dim=0)
-            image_labels = flow.cat(image_labels, dim=0)
+            scores = scores[:, 1:]
+            image_scores, idxs = scores.topk(self.topk_candidates, dim=0)
+            keep_idxs = image_scores > self.score_thresh
+            image_scores = image_scores[keep_idxs]
+            box_idx = idxs[keep_idxs]
+            image_boxes = boxes[box_idx]
+            image_labels = flow.argwhere(keep_idxs)[:, 1] + 1
 
             # non-maximum suppression
             keep = box_ops.batched_nms(
