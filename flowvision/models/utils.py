@@ -43,8 +43,8 @@ def _legacy_zip_load(filename, model_dir, map_location):
     #       We deliberately don't handle tarfile here since our legacy serialization format was in tar.
     with zipfile.ZipFile(filename) as f:
         members = f.infolist()
-        extraced_name = members[0].filename
-        extracted_file = os.path.join(model_dir, extraced_name)
+        extracted_name = members[0].filename
+        extracted_file = os.path.join(model_dir, extracted_name)
         if not os.path.exists(extracted_file):
             os.mkdir(extracted_file)
             f.extractall(model_dir)

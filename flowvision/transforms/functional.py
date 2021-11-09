@@ -215,6 +215,132 @@ def convert_image_dtype(
     return F_t.convert_image_dtype(image, dtype)
 
 
+def to_pil_image(pic, mode=None):
+    """Convert a tensor or an ndarray to PIL Image.
+
+    See :class:`~flowvision.transforms.ToPILImage` for more details.
+
+    Args:
+        pic (Tensor or numpy.ndarray): Image to be converted to PIL Image.
+        mode (`PIL.Image mode`_): color space and pixel depth of input data (optional).
+
+    .. _PIL.Image mode: https://pillow.readthedocs.io/en/latest/handbook/concepts.html#concept-modes
+
+    Returns:
+        PIL Image: Image converted to PIL Image.
+    """
+    if not (isinstance(pic, flow.Tensor) or isinstance(pic, np.ndarray)):
+        raise TypeError("pic should be Tensor or ndarray. Got {}".format(type(pic)))
+
+    elif isinstance(pic, flow.Tensor):
+        if pic.ndimension() not in {2, 3}:
+            raise ValueError(
+                "pic should be 2/3 dimensional. Got {} dimensions.".format(
+                    pic.ndimension()
+                )
+            )
+
+        elif pic.ndimension() == 2:
+            # if 2D image, add channel dimension (CHW)
+            pic = pic.unsqueeze(0)
+
+        # check number of channels
+        if pic.shape[-3] > 4:
+            raise ValueError(
+                "pic should not have > 4 channels. Got {} channels.".format(
+                    pic.shape[-3]
+                )
+            )
+
+    elif isinstance(pic, np.ndarray):
+        if pic.ndim not in {2, 3}:
+            raise ValueError(
+                "pic should be 2/3 dimensional. Got {} dimensions.".format(pic.ndim)
+            )
+
+        elif pic.ndim == 2:
+            # if 2D image, add channel dimension (HWC)
+            pic = np.expand_dims(pic, 2)
+
+        # check number of channels
+        if pic.shape[-1] > 4:
+            raise ValueError(
+                "pic should not have > 4 channels. Got {} channels.".format(
+                    pic.shape[-1]
+                )
+            )
+
+    npimg = pic
+    if isinstance(pic, flow.Tensor):
+        if pic.is_floating_point() and mode != "F":
+            pic = pic.mul(255).byte()
+        npimg = np.transpose(pic.cpu().numpy(), (1, 2, 0))
+
+    if not isinstance(npimg, np.ndarray):
+        raise TypeError(
+            "Input pic must be a flow.Tensor or NumPy ndarray, "
+            + "not {}".format(type(npimg))
+        )
+
+    if npimg.shape[2] == 1:
+        expected_mode = None
+        npimg = npimg[:, :, 0]
+        if npimg.dtype == np.uint8:
+            expected_mode = "L"
+        elif npimg.dtype == np.int16:
+            expected_mode = "I;16"
+        elif npimg.dtype == np.int32:
+            expected_mode = "I"
+        elif npimg.dtype == np.float32:
+            expected_mode = "F"
+        if mode is not None and mode != expected_mode:
+            raise ValueError(
+                "Incorrect mode ({}) supplied for input type {}. Should be {}".format(
+                    mode, np.dtype, expected_mode
+                )
+            )
+        mode = expected_mode
+
+    elif npimg.shape[2] == 2:
+        permitted_2_channel_modes = ["LA"]
+        if mode is not None and mode not in permitted_2_channel_modes:
+            raise ValueError(
+                "Only modes {} are supported for 2D inputs".format(
+                    permitted_2_channel_modes
+                )
+            )
+
+        if mode is None and npimg.dtype == np.uint8:
+            mode = "LA"
+
+    elif npimg.shape[2] == 4:
+        permitted_4_channel_modes = ["RGBA", "CMYK", "RGBX"]
+        if mode is not None and mode not in permitted_4_channel_modes:
+            raise ValueError(
+                "Only modes {} are supported for 4D inputs".format(
+                    permitted_4_channel_modes
+                )
+            )
+
+        if mode is None and npimg.dtype == np.uint8:
+            mode = "RGBA"
+    else:
+        permitted_3_channel_modes = ["RGB", "YCbCr", "HSV"]
+        if mode is not None and mode not in permitted_3_channel_modes:
+            raise ValueError(
+                "Only modes {} are supported for 3D inputs".format(
+                    permitted_3_channel_modes
+                )
+            )
+        if mode is None and npimg.dtype == np.uint8:
+            mode = "RGB"
+
+    if mode is None:
+        raise TypeError("Input type {} is not supported".format(npimg.dtype))
+
+    return Image.fromarray(npimg, mode=mode)
+
+
 def normalize(
     tensor: Tensor, mean: List[float], std: List[float], inplace: bool = False
 ) -> Tensor:
@@ -592,6 +718,100 @@ def ten_crop(img: Tensor, size: List[int], vertical_flip: bool = False) -> List[
 
     second_five = five_crop(img, size)
     return first_five + second_five
+
+
+def adjust_brightness(img: Tensor, brightness_factor: float) -> Tensor:
+    """Adjust brightness of an image.
+
+    Args:
+        img (PIL Image or Tensor): Image to be adjusted.
+            If img is flow Tensor, it is expected to be in [..., 1 or 3, H, W] format,
+            where ... means it can have an arbitrary number of leading dimensions.
+        brightness_factor (float):  How much to adjust the brightness. Can be
+            any non negative number. 0 gives a black image, 1 gives the
+            original image while 2 increases the brightness by a factor of 2.
+
+    Returns:
+        PIL Image or Tensor: Brightness adjusted image.
+    """
+    if not isinstance(img, flow.Tensor):
+        return F_pil.adjust_brightness(img, brightness_factor)
+
+    return F_t.adjust_brightness(img, brightness_factor)
+
+
+def adjust_contrast(img: Tensor, contrast_factor: float) -> Tensor:
+    """Adjust contrast of an image.
+
+    Args:
+        img (PIL Image or Tensor): Image to be adjusted.
+            If img is flow Tensor, it is expected to be in [..., 3, H, W] format,
+            where ... means it can have an arbitrary number of leading dimensions.
+        contrast_factor (float): How much to adjust the contrast. Can be any
+            non negative number. 0 gives a solid gray image, 1 gives the
+            original image while 2 increases the contrast by a factor of 2.
+
+    Returns:
+        PIL Image or Tensor: Contrast adjusted image.
+    """
+    if not isinstance(img, flow.Tensor):
+        return F_pil.adjust_contrast(img, contrast_factor)
+
+    return F_t.adjust_contrast(img, contrast_factor)
+
+
+def adjust_saturation(img: Tensor, saturation_factor: float) -> Tensor:
+    """Adjust color saturation of an image.
+
+    Args:
+        img (PIL Image or Tensor): Image to be adjusted.
+            If img is flow Tensor, it is expected to be in [..., 3, H, W] format,
+            where ... means it can have an arbitrary number of leading dimensions.
+        saturation_factor (float):  How much to adjust the saturation. 0 will
+            give a black and white image, 1 will give the original image while
+            2 will enhance the saturation by a factor of 2.
+
+    Returns:
+        PIL Image or Tensor: Saturation adjusted image.
+    """
+    if not isinstance(img, flow.Tensor):
+        return F_pil.adjust_saturation(img, saturation_factor)
+
+    return F_t.adjust_saturation(img, saturation_factor)
+
+
+def adjust_hue(img: Tensor, hue_factor: float) -> Tensor:
+    """Adjust hue of an image.
+
+    The image hue is adjusted by converting the image to HSV and
+    cyclically shifting the intensities in the hue channel (H).
+    The image is then converted back to original image mode.
+
+    `hue_factor` is the amount of shift in H channel and must be in the
+    interval `[-0.5, 0.5]`.
+
+    See `Hue`_ for more details.
+
+    .. _Hue: https://en.wikipedia.org/wiki/Hue
+
+    Args:
+        img (PIL Image or Tensor): Image to be adjusted.
+            If img is flow Tensor, it is expected to be in [..., 3, H, W] format,
+            where ... means it can have an arbitrary number of leading dimensions.
+            If img is PIL Image mode "1", "L", "I", "F" and modes with transparency (alpha channel) are not supported.
+        hue_factor (float):  How much to shift the hue channel. Should be in
+            [-0.5, 0.5]. 0.5 and -0.5 give complete reversal of hue channel in
+            HSV space in positive and negative direction respectively.
+            0 means no shift. Therefore, both -0.5 and 0.5 will give an image
+            with complementary colors while 0 gives the original image.
+
+    Returns:
+        PIL Image or Tensor: Hue adjusted image.
+    """
+    if not isinstance(img, flow.Tensor):
+        return F_pil.adjust_hue(img, hue_factor)
+
+    return F_t.adjust_hue(img, hue_factor)
 
 
 def _get_inverse_affine_matrix(

@@ -13,7 +13,7 @@ pip install flowvision==0.0.3
 ```
 
 ## Supported Model
-All of supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
+All of the supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
 
 
 ## Usage
@@ -128,4 +128,9 @@ ModelCreator.model_table('vit*', pretrained=True)
 </details>
 
 ## Model Zoo
-We did all our tests under the same setting, please check the model page [here](MODEL_ZOO.md) for more details.
+We have conducted all the tests under the same setting, please refer to the model page [here](MODEL_ZOO.md) for more details.
+
+## Disclaimer on Datasets
+This is a utility library that downloads and prepares public datasets. We do not host or distribute these datasets, vouch for their quality or fairness, or claim that you have license to use the dataset. It is your responsibility to determine whether you have permission to use the dataset under the dataset's license.
+
+If you're a dataset owner and wish to update any part of it (description, citation, etc.), or do not want your dataset to be included in this library, please get in touch through a GitHub issue. Thanks for your contribution to the ML community!
