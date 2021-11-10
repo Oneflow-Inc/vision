@@ -1,6 +1,6 @@
 set -aux
 
-MODEL="resmlp_12"
+MODEL="rexnetv1_1_0"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
