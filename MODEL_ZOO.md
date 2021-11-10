@@ -65,3 +65,4 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | cswin_large_224        | 85.7697 | 97.7362 |    64       |   224      |
 | cswin_base_384         | 85.0683 | 97.3865 |    64       |   224      |
 | cswin_large_384        | - | - |    64       |   224      |
+| ghostnet | 73.9820 | 91.4620 | 64 | 224 |
