@@ -5,7 +5,7 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 When `crop-size` equals to 0.875, we first resize the image from `224` to `(224 / 0.875) = 256` and then use centercrop operation to get the input 224 image.
 
 |                        |    top1 |    top5 |  batch_size | image size | crop-size | interpolation |
-|:-----------------------|--------:|--------:|------------:|-----------:|:---------:|:-------------:|
+|:-----------------------|--------:|--------:|------------:|-----------:|----------:|--------------:|
 | alexnet                | 56.4798 | 79.0281 |     64      |   224      |  0.875    |   bilinear    |
 | vgg11                  | 69.0018 | 88.6029 |     64      |   224      |  0.875    |   bilinear    |
 | vgg13                  | 69.9029 | 89.2203 |     64      |   224      |  0.875    |   bilinear    |
