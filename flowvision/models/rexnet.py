@@ -8,7 +8,10 @@ from .registry import ModelCreator
 
 model_urls = {
     "rexnetv1_1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnetv1_1_0.zip",
-    "rexnetv1_1_3": None,
+    "rexnetv1_1_3": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnetv1_1_3.zip",
+    "rexnetv1_1_5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnetv1_1_5.zip",
+    "rexnetv1_2_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnetv1_2_0.zip",
+    "rexnetv1_3_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnetv1_3_0.zip",
 }
 
 
@@ -163,3 +166,26 @@ def rexnetv1_1_0(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(width_mult=1.0, **kwargs)
     return _create_rexnetv1("rexnetv1_1_0", pretrained=pretrained, progress=progress, **model_kwargs)
 
+
+@ModelCreator.register_model
+def rexnetv1_1_3(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(width_mult=1.3, **kwargs)
+    return _create_rexnetv1("rexnetv1_1_3", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def rexnetv1_1_5(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(width_mult=1.5, **kwargs)
+    return _create_rexnetv1("rexnetv1_1_5", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def rexnetv1_2_0(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(width_mult=2.0, **kwargs)
+    return _create_rexnetv1("rexnetv1_2_0", pretrained=pretrained, progress=progress, **model_kwargs)
+
+
+@ModelCreator.register_model
+def rexnetv1_3_0(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(width_mult=3.0, **kwargs)
+    return _create_rexnetv1("rexnetv1_3_0", pretrained=pretrained, progress=progress, **model_kwargs)
