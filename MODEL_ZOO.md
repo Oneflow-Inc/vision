@@ -1,5 +1,8 @@
 ## Model Zoo
-Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64 under the same data transformation. There may be some difference with the accuracy of the official pretrained weight because of the test environments.
+Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64.The default `image size` equals to 224. When testing the pretrained weight under default settings, we first enlarge the image according to the `crop-size` and then use `centercrop` method to crop the image to the corresponding size.
+
+**example**
+When `crop-size` equals to 0.875, we first resize the image from `224` to `(224 / 0.875) = 256` and then use centercrop operation to get the input 224 image.
 
 |                        |    top1 |    top5 |  batch_size | image size | crop-size | interpolation |
 |:-----------------------|--------:|--------:|------------:|-----------:|:---------:|:-------------:|
@@ -36,6 +39,7 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | mobilenet_v3_large     | 74.0070 | 91.3243 |     64      |   224      |  0.875    |   bilinear    |
 | mnasnet 0.5            | 69.6930 | 87.4480 |     64      |   224      |  0.875    |   bilinear    |
 | mnasnet 1.0            | 73.4215 | 91.4942 |     64      |   224      |  0.875    |   bilinear    |
+| ghostnet               | 73.9820 | 91.4620 |     64      |   224      |  0.875    |   bilinear    |
 | rexnetv1_1_0           | 78.0840 | 93.8700 |     64      |   224      |  0.875    |   bilinear    |
 | vit-b-16-384           | 84.1672 | 97.1527 |     64      |   384      |  1.0      |   bilinear    |
 | vit-b-32-384           | 81.7116 | 96.1217 |     64      |   384      |  1.0      |   bilinear    |
@@ -60,9 +64,9 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | crossformer_small_patch4_group7_224 | 82.2410 | 95.9579 |  64  | 224  |  0.875    |   bicubic    |
 | crossformer_base_patch4_group7_224  | 83.2681 | 96.4694 |  64  | 224  |  0.875    |   bicubic    |
 | crossformer_large_patch4_group7_224 | 83.7516 | 96.4954 |  64  | 224  |  0.875    |   bicubic    |
-| cswin_tiny_224         | 80.5147 | 95.1746 |    64       |   224      |  0.875    |   bicubic    |
-| cswin_small_224        | 81.7355 | 95.6422 |    64       |   224      |  0.875    |   bicubic    |
-| cswin_base_224         | 83.5458 | 96.5733 |    64       |   224      |  0.875    |   bicubic    |
-| cswin_large_224        | 85.7697 | 97.7362 |    64       |   224      |  0.875    |   bicubic    |
-| cswin_base_384         | 85.0683 | 97.3865 |    64       |   224      |  0.875    |   bicubic    |
-| cswin_large_384        | - | - |    64       |   224      |  0.875    |   bicubic    |
+| cswin_tiny_224         | 80.5147 | 95.1746 |    64       |   224      |  0.9      |   bicubic    |
+| cswin_small_224        | 81.7355 | 95.6422 |    64       |   224      |  0.9      |   bicubic    |
+| cswin_base_224         | 83.5458 | 96.5733 |    64       |   224      |  0.9      |   bicubic    |
+| cswin_large_224        | 85.7697 | 97.7362 |    64       |   224      |  0.9      |   bicubic    |
+| cswin_base_384         | 85.0683 | 97.3865 |    64       |   224      |  0.9      |   bicubic    |
+| cswin_large_384        | - | - |    64       |   224      |  0.9      |   bicubic    |
