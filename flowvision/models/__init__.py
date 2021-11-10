@@ -20,6 +20,7 @@ from .res_mlp import *
 from .mlp_mixer import *
 from .rexnet import *
 from .rexnet_lite import *
+from .ghostnet import *
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
