@@ -2,20 +2,17 @@ import oneflow as flow
 import oneflow.nn as nn
 from math import ceil
 
+from .utils import load_state_dict_from_url
+from .registry import ModelCreator
+
+
+model_urls = {
+    "rexnetv1_1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnetv1_1_0.zip",
+    "rexnetv1_1_3": None,
+}
+
 
 # TODO: Add Memory Efficient SiLU Module
-def silu(x, inplace=False):
-    return x.mul_(x.sigmoid()) if inplace else x.mul(x.sigmoid())
-
-class SiLU(nn.Module):
-    def __init__(self, inplace=True):
-        super(SiLU, self).__init__()
-        self.inplace = inplace
-
-    def forward(self, x):
-        return silu(x, self.inplace)
-
-
 def ConvBNAct(out, in_channels, channels, kernel=1, stride=1, pad=0,
               num_group=1, active=True, relu6=False):
     out.append(nn.Conv2d(in_channels, channels, kernel,
@@ -29,7 +26,7 @@ def ConvBNSiLU(out, in_channels, channels, kernel=1, stride=1, pad=0, num_group=
     out.append(nn.Conv2d(in_channels, channels, kernel,
                          stride, pad, groups=num_group, bias=False))
     out.append(nn.BatchNorm2d(channels))
-    out.append(SiLU(inplace=True))
+    out.append(nn.SiLU(inplace=True))
 
 
 class SE(nn.Module):
@@ -59,19 +56,24 @@ class LinearBottleneck(nn.Module):
         self.out_channels = channels
 
         out = []
+        # Point-Wise Conv
         if t != 1:
             dw_channels = in_channels * t
             ConvBNSiLU(out, in_channels=in_channels, channels=dw_channels)
         else:
             dw_channels = in_channels
         
-        ConvBNAct(out, in_channels=dw_channels, channel=dw_channels, kernel=3, stride=stride, pad=1,
+        # Depth-Wise Conv
+        ConvBNAct(out, in_channels=dw_channels, channels=dw_channels, kernel=3, stride=stride, pad=1,
                   num_group=dw_channels, active=False)
 
+        # SE Module
         if use_se:
             out.append(SE(dw_channels, dw_channels, se_ratio))
 
         out.append(nn.ReLU6())
+
+        # Point-Wise Conv without Activation
         ConvBNAct(out, in_channels=dw_channels, channels=channels, active=False, relu6=True)
         self.out = nn.Sequential(*out)
 
@@ -80,7 +82,7 @@ class LinearBottleneck(nn.Module):
         if self.use_shortcut:
             out[:, 0:self.in_channels] += x
         
-        return x
+        return out
 
 
 class RexNetV1(nn.Module):
@@ -139,3 +141,25 @@ class RexNetV1(nn.Module):
             nn.Dropout(dropout_ratio),
             nn.Conv2d(pen_channels, classes, 1, bias=True))
     
+    def extract_features(self, x):
+        return self.features[:-1](x)
+    
+    def forward(self, x):
+        x = self.features(x)
+        x = self.output(x).flatten(1)
+        return x
+
+
+def _create_rexnetv1(arch, pretrained=False, progress=True, **model_kwargs):
+    model = RexNetV1(**model_kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        model.load_state_dict(state_dict)
+    return model
+
+
+@ModelCreator.register_model
+def rexnetv1_1_0(pretrained=False, progress=True, **kwargs):
+    model_kwargs = dict(width_mult=1.0, **kwargs)
+    return _create_rexnetv1("rexnetv1_1_0", pretrained=pretrained, progress=progress, **model_kwargs)
+

@@ -36,6 +36,7 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 | mobilenet_v3_large     | 74.0070 | 91.3243 |     64      |   224      |
 | mnasnet 0.5            | 69.6930 | 87.4480 |     64      |   224      |
 | mnasnet 1.0            | 73.4215 | 91.4942 |     64      |   224      |
+| rexnetv1_1_0           | 78.0840 | 93.8700 |     64      |   224      |
 | vit-b-16-384           | 84.1672 | 97.1527 |     64      |   384      |
 | vit-b-32-384           | 81.7116 | 96.1217 |     64      |   384      |
 | vit-l-16-384           | 85.0444 | 97.3605 |     64      |   384      |
