@@ -30,7 +30,7 @@ def _legacy_tar_load(filename, model_dir, map_location):
         extracted_file = os.path.join(model_dir, extracted_name)
         if not os.path.exists(model_dir):
             os.mkdir(model_dir)
-            f.extractall(model_dir)
+        f.extractall(model_dir)
     return flow.load(extracted_file)
 
 
@@ -47,7 +47,7 @@ def _legacy_zip_load(filename, model_dir, map_location):
         extracted_file = os.path.join(model_dir, extracted_name)
         if not os.path.exists(extracted_file):
             os.mkdir(extracted_file)
-            f.extractall(model_dir)
+        f.extractall(model_dir)
     # TODO: flow.load doesn't have map_location
     # return flow.load(extracted_file, map_location=map_location)
     return flow.load(extracted_file)
