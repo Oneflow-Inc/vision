@@ -23,7 +23,9 @@ def recover_image(im):
 
 def stylize(args):
     content_image = load_image(args.content_image)
-    style_model = ModelCreator.create_model("neural_style_transfer", pretrained=True, style_model=args.style_model)
+    style_model = ModelCreator.create_model(
+        "neural_style_transfer", pretrained=True, style_model=args.style_model
+    )
     with flow.no_grad():
         style_model.to("cuda")
         output = style_model(flow.Tensor(content_image).clamp(0, 255).to("cuda"))
@@ -31,9 +33,7 @@ def stylize(args):
 
 
 def main():
-    arg_parser = argparse.ArgumentParser(
-        description="parser for fast-neural-style"
-    )
+    arg_parser = argparse.ArgumentParser(description="parser for fast-neural-style")
     arg_parser.add_argument(
         "--content-image",
         type=str,

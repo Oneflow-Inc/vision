@@ -14,8 +14,9 @@ style_model_urls = {
     "candy": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/neural_style_transfer/candy_oneflow.tar.gz",
     "mosaic": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/neural_style_transfer/mosaic_oneflow.tar.gz",
     "rain_princess": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/neural_style_transfer/rain_princess_oneflow.tar.gz",
-    "udnie": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/neural_style_transfer/udnie_oneflow.tar.gz"
+    "udnie": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/neural_style_transfer/udnie_oneflow.tar.gz",
 }
+
 
 class ConvLayer(flow.nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride):
@@ -116,6 +117,7 @@ class NeuralStyleTransfer(flow.nn.Module):
         y = flow.clamp(y, 0, 255)
         return y
 
+
 @ModelCreator.register_model
 def neural_style_transfer(
     pretrained: bool = False,
@@ -133,7 +135,9 @@ def neural_style_transfer(
         model_dir (str): Path for saving the pretrained model
         style_model (str): Which style of pretrained model to download 
     """
-    assert style_model in style_model_urls.keys(), "`style_model` must choose from [sketch, candy, mosaic, rain_princess, udnie]"
+    assert (
+        style_model in style_model_urls.keys()
+    ), "`style_model` must choose from [sketch, candy, mosaic, rain_princess, udnie]"
 
     model = NeuralStyleTransfer(**kwargs)
     if pretrained:
