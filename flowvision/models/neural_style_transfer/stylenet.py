@@ -33,7 +33,6 @@ class ConvLayer(flow.nn.Module):
 class ResidualBlock(flow.nn.Module):
     """ResidualBlock
     introduced in: https://arxiv.org/abs/1512.03385
-    recommended architecture: http://flow.ch/blog/2016/02/04/resnets.html
     """
 
     def __init__(self, channels):
