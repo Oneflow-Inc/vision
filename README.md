@@ -9,7 +9,7 @@ python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu1
 ```
 - install latest version of `flowvision`
 ```bash
-pip install flowvision==0.0.3
+pip install flowvision==0.0.4
 ```
 
 ## Supported Model

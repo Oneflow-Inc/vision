@@ -26,3 +26,4 @@ Most included models have pretrained weights from:
 - [ViT](flowvision/models/vit.py)
 - [ConvMixer](flowvision/models/conv_mixer.py)
 - [PVT](flowvision/models/pvt.py)
+- [NeuralStyleTransfer](flowvision/models/neural_style_transfer/stylenet.py)
