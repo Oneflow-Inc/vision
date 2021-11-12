@@ -35,15 +35,15 @@ class ModelCreator(object):
 
     @staticmethod
     def create_model(
-        model_name: str, pretrained: bool = False, checkpoint: bool = None
+        model_name: str, pretrained: bool = False, checkpoint: str = None, **kwargs
     ):
         if model_name in ModelCreator._model_entrypoints:
             create_fn = ModelCreator._model_entrypoints[model_name]
         else:
             raise RuntimeError("Unknown model (%s)" % model_name)
-        model = create_fn(pretrained=pretrained)
+        model = create_fn(pretrained=pretrained, **kwargs)
 
-        if checkpoint:
+        if checkpoint is not None:
             state_dict = flow.load(checkpoint)
             model.load_state_dict(state_dict)
         return model

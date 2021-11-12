@@ -84,6 +84,7 @@ def CUDAExtension(name, sources, *args, **kwargs):
     """
     library_dirs = kwargs.get("library_dirs", [])
     library_dirs += _get_oneflow_lib_path()
+    library_dirs.append("{}/lib64".format(_find_cuda_home()))
     kwargs["library_dirs"] = library_dirs
 
     libraries = kwargs.get("libraries", [])
@@ -92,6 +93,7 @@ def CUDAExtension(name, sources, *args, **kwargs):
 
     include_dirs = kwargs.get("include_dirs", [])
     include_dirs.append(_get_oneflow_include_path())
+    include_dirs.append("{}/include".format(_find_cuda_home()))
     kwargs["include_dirs"] = include_dirs
 
     kwargs["language"] = "c++"
