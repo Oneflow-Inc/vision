@@ -14,8 +14,8 @@ def dispatch_clip_grad(parameters, value: float, mode: str = 'norm', norm_type: 
     """
     if mode == 'norm':
         flow.nn.utils.clip_grad_norm_(parameters, value, norm_type=norm_type)
-    # elif mode == 'value':
-    #     flow.nn.utils.clip_grad_value_(parameters, value)
+    elif mode == 'value':
+        flow.nn.utils.clip_grad_value_(parameters, value)
     elif mode == 'agc':
         adaptive_clip_grad(parameters, value, norm_type=norm_type)
     else:
