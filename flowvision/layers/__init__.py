@@ -5,6 +5,9 @@ from .regularization import *
 from .weight_init import *
 
 
+from .build import LAYER_REGISTRY, build_layers
+
+
 def lib_path():
     import os
     import glob

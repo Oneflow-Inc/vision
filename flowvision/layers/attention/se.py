@@ -1,9 +1,10 @@
 import oneflow as flow
 import oneflow.nn as nn
 
-__all__ = ["SE"]
+from flowvision.layers.build import LAYER_REGISTRY
 
 
+@LAYER_REGISTRY.register
 class SE(nn.Module):
     def __init__(
         self,

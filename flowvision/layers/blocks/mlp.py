@@ -2,7 +2,10 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
 
+from flowvision.layers.build import LAYER_REGISTRY
 
+
+@LAYER_REGISTRY.register
 class Mlp(nn.Module):
     def __init__(
         self,
@@ -29,6 +32,7 @@ class Mlp(nn.Module):
         return x
 
 
+@LAYER_REGISTRY.register
 class GluMlp(nn.Module):
     """ MLP w/ GLU style gating
     See: https://arxiv.org/abs/1612.08083, https://arxiv.org/abs/2002.05202
@@ -70,6 +74,7 @@ class GluMlp(nn.Module):
         return x
 
 
+@LAYER_REGISTRY.register
 class GatedMlp(nn.Module):
     """ MLP as used in gMLP
     """
@@ -109,6 +114,7 @@ class GatedMlp(nn.Module):
         return x
 
 
+@LAYER_REGISTRY.register
 class ConvMlp(nn.Module):
     """MLP using 1x1 convs that keeps spatial dims
     """
