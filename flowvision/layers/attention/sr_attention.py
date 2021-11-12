@@ -3,6 +3,7 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 from .build import ATT_REGISTRY
 
+
 @ATT_REGISTRY.register
 class SR_Attention(nn.Module):
     """Implemente Spatial Reduction Attention Module proposed in PVT (https://arxiv.org/pdf/2102.12122.pdf)
