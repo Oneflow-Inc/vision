@@ -1,9 +1,10 @@
 import oneflow as flow
 import oneflow.nn as nn
 
-__all__ = ["SE"]
+from .build import ATT_REGISTRY
 
 
+@ATT_REGISTRY.register
 class SE(nn.Module):
     def __init__(
         self,
