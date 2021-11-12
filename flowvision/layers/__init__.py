@@ -5,6 +5,11 @@ from .regularization import *
 from .weight_init import *
 
 
+from .build import LAYER_REGISTRY, build_layers
+
+print(LAYER_REGISTRY)
+
+
 def lib_path():
     import os
     import glob
@@ -15,4 +20,4 @@ def lib_path():
     return libs[0]
 
 
-ctypes.CDLL(lib_path())
+# ctypes.CDLL(lib_path())

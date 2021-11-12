@@ -1,10 +1,10 @@
 import oneflow as flow
 import oneflow.nn as nn
 
-from .build import ATT_REGISTRY
+from flowvision.layers.build import LAYER_REGISTRY
 
 
-@ATT_REGISTRY.register
+@LAYER_REGISTRY.register
 class SE(nn.Module):
     def __init__(
         self,

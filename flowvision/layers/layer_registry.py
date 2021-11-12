@@ -20,7 +20,7 @@ class Layer_Registry(Registry):
         elif inspect.isclass(obj):
             self._obj_args[name] = inspect.getfullargspec(obj)[0][1:]  # ignore the 'self' args in class
     
-    def get_zip_dict(self) -> list:
+    def get_zipped_dict(self) -> list:
         registered_obj_name = self._obj_map.keys()
         registered_obj_object = self._obj_map.values()
         registered_obj_args = self._obj_args.values()
@@ -28,7 +28,15 @@ class Layer_Registry(Registry):
     
     def __str__(self) -> str:
         table_headers = ["Names", "Objects", "Args"]
-        table_items = self.get_zip_dict()
+        table_items = self.get_zipped_dict()
+        table = tabulate(
+            table_items, headers=table_headers, tablefmt="fancy_grid"
+        )
+        return "Registry of {}:\n".format(self._name) + table
+
+    def __repr__(self) -> str:
+        table_headers = ["Names", "Objects", "Args"]
+        table_items = self.get_zipped_dict()
         table = tabulate(
             table_items, headers=table_headers, tablefmt="fancy_grid"
         )
