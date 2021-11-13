@@ -6,12 +6,13 @@ import oneflow.nn.functional as F
 class LabelSmoothingCrossEntropy(nn.Module):
     """NLL Loss with label smoothing
     """
+
     def __init__(self, smoothing=0.1):
         super(LabelSmoothingCrossEntropy, self).__init__()
         assert smoothing < 1.0
         self.smoothing = smoothing
-        self.confidence = 1. - smoothing
-    
+        self.confidence = 1.0 - smoothing
+
     def forward(self, x: flow.Tensor, target: flow.Tensor) -> flow.Tensor:
         # TODO: register F.log_softmax() function and switch flow.log(flow.softmax()) to F.log_softmax()
         logprobs = flow.log_softmax(x, dim=-1)
@@ -25,7 +26,6 @@ class LabelSmoothingCrossEntropy(nn.Module):
 
 
 class SoftTargetCrossEntropy(nn.Module):
-
     def __init__(self):
         super(SoftTargetCrossEntropy, self).__init__()
 
