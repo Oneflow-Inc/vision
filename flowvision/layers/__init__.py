@@ -3,6 +3,8 @@ from .attention import *
 from .blocks import *
 from .regularization import *
 from .weight_init import *
+from .layer_registry import *
+from .helpers import *
 
 
 from .build import LAYER_REGISTRY, build_layers

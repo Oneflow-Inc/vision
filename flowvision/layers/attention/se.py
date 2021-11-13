@@ -5,7 +5,7 @@ from flowvision.layers.build import LAYER_REGISTRY
 
 
 @LAYER_REGISTRY.register
-class SE(nn.Module):
+class SEModule(nn.Module):
     def __init__(
         self,
         channels,
@@ -15,7 +15,7 @@ class SE(nn.Module):
         gate_layer=nn.Sigmoid,
         mlp_bias=False,
     ):
-        super(SE, self).__init__()
+        super(SEModule, self).__init__()
         rd_channels = channels // reduction if rd_channels is None else rd_channels
         self.fc1 = nn.Conv2d(channels, rd_channels, 1, bias=mlp_bias)
         self.act = act_layer(inplace=True)
