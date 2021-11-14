@@ -3,6 +3,7 @@ from .models import *
 from .datasets import *
 from .transforms import *
 from .loss import *
+from .scheduler import *
 
 _image_backend = "PIL"
 
