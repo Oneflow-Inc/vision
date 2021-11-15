@@ -7,9 +7,6 @@ from ..utils import load_state_dict_from_url
 from flowvision.models.registry import ModelCreator
 
 
-__all__ = ["FCN"]
-
-
 model_urls = {
     'fcn_resnet50_coco': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/segmentation/FCN/fcn_resnet50_coco.zip",
     'fcn_resnet101_coco': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/segmentation/FCN/fcn_resnet101_coco.zip",
