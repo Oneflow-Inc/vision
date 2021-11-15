@@ -1,5 +1,6 @@
 from . import detection
 from . import neural_style_transfer
+from . import segmentation
 from .alexnet import *
 from .densenet import *
 from .vit import *
