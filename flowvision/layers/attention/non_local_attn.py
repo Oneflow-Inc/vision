@@ -12,7 +12,15 @@ class NonLocalAttn(nn.Module):
     """Spatial non-local block for image classification
     """
 
-    def __init__(self, in_channels, use_scale=True, rd_ratio=1/8, rd_channels=None, rd_divisor=8, **kwargs):
+    def __init__(
+        self,
+        in_channels,
+        use_scale=True,
+        rd_ratio=1 / 8,
+        rd_channels=None,
+        rd_divisor=8,
+        **kwargs
+    ):
         super(NonLocalAttn, self).__init__()
         if rd_channels is None:
             rd_channels = make_divisible(in_channels * rd_ratio, divisor=rd_divisor)
@@ -23,7 +31,7 @@ class NonLocalAttn(nn.Module):
         self.z = nn.Conv2d(rd_channels, in_channels, kernel_size=1, stride=1, bias=True)
         self.norm = nn.BatchNorm2d(in_channels)
         self.reset_parameters()
-    
+
     def forward(self, x):
         shortcut = x
 
@@ -49,7 +57,7 @@ class NonLocalAttn(nn.Module):
     def reset_parameters(self):
         for name, m in self.named_modules():
             if isinstance(m, nn.Conv2d):
-                init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
                 if len(list(m.parameters())) > 1:
                     init.constant_(m.bias, 0.0)
             elif isinstance(m, nn.BatchNorm2d):
