@@ -8,8 +8,8 @@ from flowvision.models.registry import ModelCreator
 
 
 model_urls = {
-    'fcn_resnet50_coco': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/segmentation/FCN/fcn_resnet50_coco.zip",
-    'fcn_resnet101_coco': "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/segmentation/FCN/fcn_resnet101_coco.zip",
+    "fcn_resnet50_coco": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/segmentation/FCN/fcn_resnet50_coco.zip",
+    "fcn_resnet101_coco": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/segmentation/FCN/fcn_resnet101_coco.zip",
 }
 
 
@@ -25,6 +25,7 @@ class FCN(_SimpleSegmentationModel):
             the backbone and returns a dense prediction.
         aux_classifier (nn.Module, optional): auxiliary classifier used during training
     """
+
     pass
 
 
@@ -36,27 +37,34 @@ class FCNHead(nn.Sequential):
             nn.BatchNorm2d(inter_channels),
             nn.ReLU(),
             nn.Dropout(0.1),
-            nn.Conv2d(inter_channels, channels, 1)
+            nn.Conv2d(inter_channels, channels, 1),
         ]
 
         super(FCNHead, self).__init__(*layers)
 
 
 def _fcn_segm_model(name, backbone_name, num_classes, aux, pretrained_backbone=True):
-    if 'resnet' in backbone_name:
+    if "resnet" in backbone_name:
         backbone = resnet.__dict__[backbone_name](
             pretrained=pretrained_backbone,
-            replace_stride_with_dilation=[False, True, True])
-        out_layer = 'layer4'
+            replace_stride_with_dilation=[False, True, True],
+        )
+        out_layer = "layer4"
         out_inplanes = 2048
-        aux_layer = 'layer3'
+        aux_layer = "layer3"
         aux_inplanes = 1024
-    elif 'mobilenet_v3' in backbone_name:
-        backbone = mobilenet_v3.__dict__[backbone_name](pretrained=pretrained_backbone, dilated=True).features
+    elif "mobilenet_v3" in backbone_name:
+        backbone = mobilenet_v3.__dict__[backbone_name](
+            pretrained=pretrained_backbone, dilated=True
+        ).features
 
         # Gather the indices of blocks which are strided. These are the locations of C1, ..., Cn-1 blocks.
         # The first and last blocks are always included because they are the C0 (conv1) and Cn.
-        stage_indices = [0] + [i for i, b in enumerate(backbone) if getattr(b, "_is_cn", False)] + [len(backbone) - 1]
+        stage_indices = (
+            [0]
+            + [i for i, b in enumerate(backbone) if getattr(b, "_is_cn", False)]
+            + [len(backbone) - 1]
+        )
         out_pos = stage_indices[-1]  # use C5 which has output_stride = 16
         out_layer = str(out_pos)
         out_inplanes = backbone[out_pos].out_channels
@@ -64,17 +72,19 @@ def _fcn_segm_model(name, backbone_name, num_classes, aux, pretrained_backbone=T
         aux_layer = str(aux_pos)
         aux_inplanes = backbone[aux_pos].out_channels
     else:
-        raise NotImplementedError('backbone {} is not supported as of now'.format(backbone_name))
+        raise NotImplementedError(
+            "backbone {} is not supported as of now".format(backbone_name)
+        )
 
-    return_layers = {out_layer: 'out'}
+    return_layers = {out_layer: "out"}
     if aux:
-        return_layers[aux_layer] = 'aux'
+        return_layers[aux_layer] = "aux"
     backbone = IntermediateLayerGetter(backbone, return_layers=return_layers)
 
     aux_classifier = None
     if aux:
         aux_classifier = FCNHead(aux_inplanes, num_classes)
-    
+
     classifier = FCNHead(out_inplanes, num_classes)
     base_model = FCN
 
@@ -82,7 +92,9 @@ def _fcn_segm_model(name, backbone_name, num_classes, aux, pretrained_backbone=T
     return fcn_model
 
 
-def _load_model(arch_type, backbone, pretrained, progress, num_classes, aux_loss, **kwargs):
+def _load_model(
+    arch_type, backbone, pretrained, progress, num_classes, aux_loss, **kwargs
+):
     if pretrained:
         aux_loss = True
         kwargs["pretrained_backbone"] = False
@@ -93,18 +105,21 @@ def _load_model(arch_type, backbone, pretrained, progress, num_classes, aux_loss
 
 
 def _load_weights(model, arch_type, backbone, progress):
-    arch = arch_type + '_' + backbone + '_coco'
+    arch = arch_type + "_" + backbone + "_coco"
     model_url = model_urls.get(arch, None)
     if model_url is None:
-        raise NotImplementedError('pretrained {} is not supported as of now'.format(arch))
+        raise NotImplementedError(
+            "pretrained {} is not supported as of now".format(arch)
+        )
     else:
         state_dict = load_state_dict_from_url(model_url, progress=progress)
         model.load_state_dict(state_dict)
 
 
 @ModelCreator.register_model
-def fcn_resnet50_coco(pretrained=False, progress=True,
-                 num_classes=21, aux_loss=None, **kwargs):
+def fcn_resnet50_coco(
+    pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
+):
     """Constructs a Fully-Convolutional Network model with a ResNet-50 backbone.
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
@@ -113,12 +128,15 @@ def fcn_resnet50_coco(pretrained=False, progress=True,
         num_classes (int): number of output classes of the model (including the background)
         aux_loss (bool): If True, it uses an auxiliary loss
     """
-    return _load_model('fcn', 'resnet50', pretrained, progress, num_classes, aux_loss, **kwargs)
+    return _load_model(
+        "fcn", "resnet50", pretrained, progress, num_classes, aux_loss, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def fcn_resnet101_coco(pretrained=False, progress=True,
-                  num_classes=21, aux_loss=None, **kwargs):
+def fcn_resnet101_coco(
+    pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
+):
     """Constructs a Fully-Convolutional Network model with a ResNet-101 backbone.
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
@@ -127,4 +145,6 @@ def fcn_resnet101_coco(pretrained=False, progress=True,
         num_classes (int): number of output classes of the model (including the background)
         aux_loss (bool): If True, it uses an auxiliary loss
     """
-    return _load_model('fcn', 'resnet101', pretrained, progress, num_classes, aux_loss, **kwargs)
+    return _load_model(
+        "fcn", "resnet101", pretrained, progress, num_classes, aux_loss, **kwargs
+    )
