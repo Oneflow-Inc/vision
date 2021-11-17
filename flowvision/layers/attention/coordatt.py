@@ -8,6 +8,7 @@ from flowvision.layers.activation import hard_swish
 from flowvision.layers.build import LAYER_REGISTRY
 
 
+@LAYER_REGISTRY.register()
 class CoordAttModule(nn.Module):
     def __init__(
             self, channels, out_channels=None, rd_ratio=1./16, rd_channels=None, rd_divisor=1,
