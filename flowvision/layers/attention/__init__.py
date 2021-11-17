@@ -4,3 +4,4 @@ from .non_local_attn import NonLocalAttn
 from .cbam import CbamModule
 from .eca import EcaModule
 from .bam import BAMModule
+from .global_context import GlobalContext
