@@ -2,7 +2,7 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from flowvision.layers import ConvBnAct
+from flowvision.layers.blocks import ConvBnAct
 from flowvision.models.helpers import make_divisible
 from flowvision.layers.build import LAYER_REGISTRY
 

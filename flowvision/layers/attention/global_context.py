@@ -6,12 +6,11 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
 
-from ..helpers import make_divisible
-from ..blocks.mlp import ConvMlp
-from ..regularization.norm import LayerNorm2d
+from flowvision.layers.helpers import make_divisible
+from flowvision.layers.blocks import ConvMlp
+from flowvision.layers.regularization import LayerNorm2d
 
 from flowvision.layers.build import LAYER_REGISTRY
-
 
 @LAYER_REGISTRY.register()
 class GlobalContext(nn.Module):
