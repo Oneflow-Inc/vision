@@ -5,3 +5,4 @@ from .cbam import CbamModule
 from .eca import EcaModule
 from .bam import BAMModule
 from .global_context import GlobalContext
+from .coordatt import CoordAttModule
