@@ -68,7 +68,7 @@ class BamSpatialAttn(nn.Module):
 
 
 @LAYER_REGISTRY.register()
-class BAM(nn.Module):
+class BAMModule(nn.Module):
     def __init__(self, channels, 
                        rd_ratio=1./16, 
                        rd_channels=None, 
@@ -78,7 +78,7 @@ class BAM(nn.Module):
                        num_channel_attn_layers=2,
                        num_spatial_attn_layers=2, 
                        mlp_bias=False):
-        super(BAM, self).__init__()
+        super(BAMModule, self).__init__()
         self.channel_att = BamChannelAttn(channels, rd_ratio, rd_channels, rd_divisor, act_layer, gate_layer, num_channel_attn_layers, mlp_bias)
         self.spatial_att = BamSpatialAttn(channels, rd_ratio, rd_channels, rd_divisor, act_layer, gate_layer, num_spatial_attn_layers, mlp_bias)
 
