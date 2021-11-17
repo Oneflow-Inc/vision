@@ -1,4 +1,6 @@
 from . import detection
+from . import neural_style_transfer
+from . import segmentation
 from .alexnet import *
 from .densenet import *
 from .vit import *
@@ -18,6 +20,9 @@ from .pvt import *
 from .cswin import *
 from .res_mlp import *
 from .mlp_mixer import *
+from .rexnet import *
+from .rexnet_lite import *
+from .ghostnet import *
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator

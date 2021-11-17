@@ -110,7 +110,7 @@ class NmsGpuKernel final : public user_op::OpKernel {
 #define REGISTER_NMS_GPU_KERNEL(dtype)                                                 \
   REGISTER_USER_KERNEL("nms")                                                          \
       .SetCreateFn<NmsGpuKernel<dtype>>()                                              \
-      .SetIsMatchedHob((user_op::HobDeviceTag() == "gpu")                              \
+      .SetIsMatchedHob((user_op::HobDeviceType() == DeviceType::kGPU)                              \
                        & (user_op::HobDataType("out", 0) == DataType::kInt8)           \
                        & (user_op::HobDataType("in", 0) == GetDataType<dtype>::value)) \
       .SetInferTmpSizeFn([](user_op::InferContext* ctx) {                              \
