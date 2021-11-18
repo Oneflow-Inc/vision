@@ -6,3 +6,4 @@ from .eca import EcaModule
 from .bam import BAMModule
 from .global_context import GlobalContext
 from .coordatt import CoordAttModule
+from .gct import GCTModule
