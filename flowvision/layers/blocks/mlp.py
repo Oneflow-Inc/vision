@@ -5,7 +5,7 @@ import oneflow.nn.init as init
 from flowvision.layers.build import LAYER_REGISTRY
 
 
-@LAYER_REGISTRY.register
+@LAYER_REGISTRY.register()
 class Mlp(nn.Module):
     def __init__(
         self,
