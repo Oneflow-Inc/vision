@@ -13,14 +13,14 @@ from .registry import ModelCreator
 model_urls = {
     "resmlp_12": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12.zip",
     "resmlp_12_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_dist.zip",
-    "resmlp_24": None,
-    "resmlp_24_dist": None,
-    "resmlp_24_dino": None,
-    "resmlp_36": None,
-    "resmlp_36_dist": None,
-    "resmlpB_24": None,
-    "resmlpB_24_in22k": None,
-    "resmlpB_24_dist": None,
+    "resmlp_24": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24.zip",
+    "resmlp_24_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dist.zip",
+    "resmlp_24_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dino.zip",
+    "resmlp_36": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36.zip",
+    "resmlp_36_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36_dist.zip",
+    "resmlpB_24": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24.zip",
+    "resmlpB_24_in22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24_in22k.zip",
+    "resmlpB_24_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24_dist.zip",
 }
 
 

@@ -10,7 +10,7 @@ def to_2tuple(x):
     return (x, x)
 
 
-@LAYER_REGISTRY.register
+@LAYER_REGISTRY.register()
 class PatchEmbed(nn.Module):
     """ 2D Image to Patch Embedding
     """
