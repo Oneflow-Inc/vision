@@ -257,7 +257,7 @@ if __name__ == "__main__":
         description="oneflow vision codebase",
         license="BSD",
         packages=find_packages(),
-        install_requires=["rich",],
+        install_requires=["rich", "tabulate", "six",],
         classifiers=[
             "License :: OSI Approved :: MIT License",
             "Programming Language :: Python :: 3",
@@ -274,9 +274,4 @@ if __name__ == "__main__":
         platforms="any",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        ext_modules=get_extensions(),
-        cmdclass={
-            "build_ext": BuildExtension.with_options(no_python_abi_suffix=True),
-            "clean": clean,
-        },
     )
