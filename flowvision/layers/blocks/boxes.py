@@ -22,19 +22,7 @@ def nms(boxes: Tensor, scores: Tensor, iou_threshold: float) -> Tensor:
     Returns:
         Tensor: int64 tensor with the indices of the elements that have been kept by NMS, sorted in decreasing order of scores
     """
-    score_inds = flow.argsort(scores, dim=0, descending=True)
-    boxes = flow._C.gather(boxes, score_inds, axis=0)
-    _nms_op = (
-        flow.builtin_op("nms")
-        .Input("in")
-        .Output("out")
-        .Attr("iou_threshold", iou_threshold)
-        .Attr("keep_n", -1)
-        .Build()
-    )
-    keep = _nms_op(boxes)[0]
-    index = flow.squeeze(flow.argwhere(keep), dim=[1])
-    return flow._C.gather(score_inds, index, axis=0)
+    return flow.nms(boxes, scores, iou_threshold)
 
 
 def batched_nms(

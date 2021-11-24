@@ -257,7 +257,11 @@ if __name__ == "__main__":
         description="oneflow vision codebase",
         license="BSD",
         packages=find_packages(),
-        install_requires=["rich",],
+        install_requires=[
+            "rich",
+            "tabulate",
+            "six",
+        ],
         classifiers=[
             "License :: OSI Approved :: MIT License",
             "Programming Language :: Python :: 3",
