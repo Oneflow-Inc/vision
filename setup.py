@@ -278,9 +278,4 @@ if __name__ == "__main__":
         platforms="any",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        ext_modules=get_extensions(),
-        cmdclass={
-            "build_ext": BuildExtension.with_options(no_python_abi_suffix=True),
-            "clean": clean,
-        },
     )
