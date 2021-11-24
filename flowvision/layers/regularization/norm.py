@@ -9,6 +9,7 @@ import oneflow.nn.functional as F
 # TODO: switch self.norm to F.layer_norm
 class LayerNorm2d(nn.Module):
     """ LayerNorm for channels of '2D' spatial BCHW tensors """
+
     def __init__(self, num_channels):
         super().__init__()
         self.norm = nn.LayerNorm(num_channels)

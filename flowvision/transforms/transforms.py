@@ -979,7 +979,7 @@ class ColorJitter(Module):
             value = [center - float(value), center + float(value)]
             if clip_first_on_zero:
                 value[0] = max(value[0], 0.0)
-        elif isinstance(value, (tuple, list)) and len(values) == 2:
+        elif isinstance(value, (tuple, list)) and len(value) == 2:
             if not bound[0] <= value[0] <= value[1] <= bound[1]:
                 raise ValueError("{} values should be between {}".format(name, bound))
         else:
@@ -1025,19 +1025,23 @@ class ColorJitter(Module):
         b = (
             None
             if brightness is None
-            else float(flow.empty(1).uniform_(brightness[0], brightness[1]))
+            else float(flow.empty(1).uniform_(brightness[0], brightness[1]).item())
         )
         c = (
             None
             if contrast is None
-            else float(flow.empty(1).uniform_(contrast[0], contrast[1]))
+            else float(flow.empty(1).uniform_(contrast[0], contrast[1]).item())
         )
         s = (
             None
             if saturation is None
-            else float(flow.empty(1).uniform_(saturation[0], saturation[1]))
+            else float(flow.empty(1).uniform_(saturation[0], saturation[1]).item())
         )
-        h = None if hue is None else float(flow.empty(1).uniform_(hue[0], hue[1]))
+        h = (
+            None
+            if hue is None
+            else float(flow.empty(1).uniform_(hue[0], hue[1]).item())
+        )
 
         return fn_idx, b, c, s, h
 
