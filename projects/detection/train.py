@@ -10,7 +10,8 @@ import flowvision.models.detection
 from flowvision.models import ModelCreator
 
 from coco_utils import get_coco, get_coco_kp
-from engine import evaluate
+from group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
+from engine import train_one_epoch, evaluate
 
 import presets
 import utils
@@ -110,7 +111,7 @@ def get_args_parser():
     parser.add_argument("--output-dir", default=".", help="path where to save")
     parser.add_argument("--resume", default="", help="resume from checkpoint")
     parser.add_argument("--start_epoch", default=0, type=int, help="start epoch")
-    parser.add_argument("--aspect-ratio-group-factor", default=-1, type=int)
+    parser.add_argument("--aspect-ratio-group-factor", default=3, type=int)
     parser.add_argument(
         "--trainable-backbone-layers",
         default=None,
@@ -180,7 +181,8 @@ def main(args):
         test_sampler = flow.utils.data.SequentialSampler(dataset_test)
 
     if args.aspect_ratio_group_factor >= 0:
-        raise ValueError("Do not support aspect_ratio_group_factor now.")
+        group_ids = create_aspect_ratio_groups(dataset, k=args.aspect_ratio_group_factor)
+        train_batch_sampler = GroupedBatchSampler(train_sampler, group_ids, args.batch_size)
     else:
         train_batch_sampler = flow.utils.data.BatchSampler(
             train_sampler, args.batch_size, drop_last=True
@@ -273,8 +275,5 @@ def main(args):
 
 
 if __name__ == "__main__":
-    import multiprocessing as mp
-
-    mp.set_start_method("spawn", True)
     args = get_args_parser().parse_args()
     main(args)

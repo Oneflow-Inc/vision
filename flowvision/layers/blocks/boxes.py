@@ -130,8 +130,8 @@ def _box_inter_union(boxes1: Tensor, boxes2: Tensor) -> Tuple[Tensor, Tensor]:
     area1 = box_area(boxes1)
     area2 = box_area(boxes2)
 
-    lt = flow.max(boxes1[:, None, :2], boxes2[:, :2])  # [N,M,2]
-    rb = flow.min(boxes1[:, None, :2], boxes2[:, 2:])  # [N,M,2]
+    lt = flow.maximum(boxes1[:, None, :2], boxes2[:, :2])  # [N,M,2]
+    rb = flow.minimum(boxes1[:, None, 2:], boxes2[:, 2:])  # [N,M,2]
 
     wh = _upcast(rb - lt).clamp(min=0)  # [N,M,2]
     inter = wh[:, :, 0] * wh[:, :, 1]  # [N,M]

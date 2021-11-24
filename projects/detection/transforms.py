@@ -35,7 +35,11 @@ class RandomHorizontalFlip(T.RandomHorizontalFlip):
             image = F.hflip(image)
             if target is not None:
                 width, _ = F._get_image_size(image)
-                target["boxes"][:, [0, 2]] = width - target["boxes"][:, [2, 0]]
+                # TODO (shijie wang): support setitem combining index. 
+                # target["boxes"][:, [0, 2]] = width - target["boxes"][:, [2, 0]]
+                temp = target["boxes"].clone()
+                target["boxes"][:, 0] = width - temp[:, 2]
+                target["boxes"][:, 2] = width - temp[:, 0]
                 if "masks" in target:
                     target["masks"] = target["masks"].flip(-1)
                 if "keypoints" in target:
@@ -94,7 +98,8 @@ class RandomIoUCrop(nn.Module):
 
         while True:
             # sample on option
-            idx = int(flow.randint(low=0, high=len(self.options), size=(1,)))
+            idx = flow.randint(low=0, high=len(self.options), size=(1,)).item()
+            min_jaccard_overlap = self.options[idx]
             if (
                 min_jaccard_overlap >= 1.0
             ):  # a value larger than 1 encodes the leave as-is option
@@ -103,16 +108,16 @@ class RandomIoUCrop(nn.Module):
             for _ in range(self.trials):
                 # check the aspect ratio limitations
                 r = self.min_scale + (self.max_scale - self.min_scale) * flow.rand(2)
-                new_w = int(orig_w * r[0])
-                new_h = int(orig_h * r[1])
+                new_w = int((orig_w * r[0]).item())
+                new_h = int((orig_h * r[1]).item())
                 aspect_ratio = new_w / new_h
                 if not (self.min_aspect_ratio <= aspect_ratio <= self.max_aspect_ratio):
                     continue
 
                 # check for 0 area crops
                 r = flow.rand(2)
-                left = int((orig_w - new_w) * r[0])
-                top = int((orig_h - new_h) * r[1])
+                left = int(((orig_w - new_w) * r[0]).item())
+                top = int(((orig_h - new_h) * r[1]).item())
                 right = left + new_w
                 bottom = top + new_h
                 if left == right or top == bottom:
@@ -124,7 +129,9 @@ class RandomIoUCrop(nn.Module):
                 is_within_crop_area = (
                     (left < cx) & (cx < right) & (top < cy) & (cy < bottom)
                 )
-                if not is_within_crop_area.any():
+                # TODO (shijie wang): Use tensor.any()
+                # if not is_within_crop_area.any():
+                if is_within_crop_area.sum() <= 0:
                     continue
 
                 # check at least 1 box with jaccard limitations
@@ -195,12 +202,12 @@ class RandomZoomOut(nn.Module):
         r = self.side_range[0] + flow.rand(1) * (
             self.side_range[1] - self.side_range[0]
         )
-        canvas_width = int(orig_w * r)
-        canvas_height = int(orig_h * r)
+        canvas_width = int((orig_w * r).item())
+        canvas_height = int((orig_h * r).item())
 
         r = flow.rand(2)
-        left = int((canvas_width - orig_w) * r[0])
-        top = int((canvas_height - orig_h) * r[1])
+        left = int(((canvas_width - orig_w) * r[0]).item())
+        top = int(((canvas_height - orig_h) * r[1]).item())
         right = canvas_width - (left + orig_w)
         bottom = canvas_height - (top + orig_h)
 
