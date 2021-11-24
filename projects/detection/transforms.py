@@ -35,7 +35,7 @@ class RandomHorizontalFlip(T.RandomHorizontalFlip):
             image = F.hflip(image)
             if target is not None:
                 width, _ = F._get_image_size(image)
-                # TODO (shijie wang): support setitem combining index. 
+                # TODO (shijie wang): support setitem combining index.
                 # target["boxes"][:, [0, 2]] = width - target["boxes"][:, [2, 0]]
                 temp = target["boxes"].clone()
                 target["boxes"][:, 0] = width - temp[:, 2]

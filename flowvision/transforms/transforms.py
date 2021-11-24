@@ -1037,7 +1037,11 @@ class ColorJitter(Module):
             if saturation is None
             else float(flow.empty(1).uniform_(saturation[0], saturation[1]).item())
         )
-        h = None if hue is None else float(flow.empty(1).uniform_(hue[0], hue[1]).item())
+        h = (
+            None
+            if hue is None
+            else float(flow.empty(1).uniform_(hue[0], hue[1]).item())
+        )
 
         return fn_idx, b, c, s, h
 

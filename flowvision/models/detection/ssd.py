@@ -224,39 +224,63 @@ class SSD(nn.Module):
         self.topk_candidates = topk_candidates
         self.neg_to_pos_ratio = (1.0 - positive_fraction) / positive_fraction
 
-    def compute_loss(self, targets: List[Dict[str, Tensor]], head_outputs: Dict[str, Tensor], anchors: List[Tensor],
-                     matched_idxs: List[Tensor]) -> Dict[str, Tensor]:
-        bbox_regression = head_outputs['bbox_regression']
-        cls_logits = head_outputs['cls_logits']
+    def compute_loss(
+        self,
+        targets: List[Dict[str, Tensor]],
+        head_outputs: Dict[str, Tensor],
+        anchors: List[Tensor],
+        matched_idxs: List[Tensor],
+    ) -> Dict[str, Tensor]:
+        bbox_regression = head_outputs["bbox_regression"]
+        cls_logits = head_outputs["cls_logits"]
 
         # Match original targets with default boxes
         num_foreground = 0
         bbox_loss = []
         cls_targets = []
-        for (targets_per_image, bbox_regression_per_image, cls_logits_per_image, anchors_per_image,
-             matched_idxs_per_image) in zip(targets, bbox_regression, cls_logits, anchors, matched_idxs):
+        for (
+            targets_per_image,
+            bbox_regression_per_image,
+            cls_logits_per_image,
+            anchors_per_image,
+            matched_idxs_per_image,
+        ) in zip(targets, bbox_regression, cls_logits, anchors, matched_idxs):
             # produce the matching between boxes and targets
             foreground_idxs_per_image = flow.where(matched_idxs_per_image >= 0)[0]
-            foreground_matched_idxs_per_image = matched_idxs_per_image[foreground_idxs_per_image]
+            foreground_matched_idxs_per_image = matched_idxs_per_image[
+                foreground_idxs_per_image
+            ]
             num_foreground += foreground_matched_idxs_per_image.numel()
 
             # Calculate regression loss
-            matched_gt_boxes_per_image = targets_per_image["boxes"][foreground_matched_idxs_per_image]
-            bbox_regression_per_image = bbox_regression_per_image[foreground_idxs_per_image, :]
+            matched_gt_boxes_per_image = targets_per_image["boxes"][
+                foreground_matched_idxs_per_image
+            ]
+            bbox_regression_per_image = bbox_regression_per_image[
+                foreground_idxs_per_image, :
+            ]
             anchors_per_image = anchors_per_image[foreground_idxs_per_image, :]
-            target_regression = self.box_coder.encode_single(matched_gt_boxes_per_image, anchors_per_image)
-            bbox_loss.append(flow.nn.functional.smooth_l1_loss(
-                bbox_regression_per_image,
-                target_regression,
-                beta=1.0,
-                reduction='sum'
-            ))
+            target_regression = self.box_coder.encode_single(
+                matched_gt_boxes_per_image, anchors_per_image
+            )
+            bbox_loss.append(
+                flow.nn.functional.smooth_l1_loss(
+                    bbox_regression_per_image,
+                    target_regression,
+                    beta=1.0,
+                    reduction="sum",
+                )
+            )
 
             # Estimate ground truth for class targets
-            gt_classes_target = flow.zeros((cls_logits_per_image.size(0), ), dtype=targets_per_image['labels'].dtype,
-                                           device=targets_per_image['labels'].device)
-            gt_classes_target[foreground_idxs_per_image] = \
-                targets_per_image['labels'][foreground_matched_idxs_per_image]
+            gt_classes_target = flow.zeros(
+                (cls_logits_per_image.size(0),),
+                dtype=targets_per_image["labels"].dtype,
+                device=targets_per_image["labels"].device,
+            )
+            gt_classes_target[foreground_idxs_per_image] = targets_per_image["labels"][
+                foreground_matched_idxs_per_image
+            ]
             cls_targets.append(gt_classes_target)
 
         bbox_loss = flow.stack(bbox_loss)
@@ -269,21 +293,26 @@ class SSD(nn.Module):
             cls_logits.view(-1, num_classes),
             cls_targets.view(-1),
             ignore_index=-100,
-            reduction='none'
+            reduction="none",
         ).view(cls_targets.size())
 
         # Hard Negative Sampling
         foreground_idxs = cls_targets > 0
         num_negative = self.neg_to_pos_ratio * foreground_idxs.sum(1, keepdim=True)
         negative_loss = cls_loss.clone()
-        negative_loss[foreground_idxs] = -float('inf')  # use -inf to detect positive values that creeped in the sample
+        negative_loss[foreground_idxs] = -float(
+            "inf"
+        )  # use -inf to detect positive values that creeped in the sample
         values, idx = negative_loss.sort(1, descending=True)
         background_idxs = idx.sort(1)[1] < num_negative
 
         N = max(1, num_foreground)
         return {
-            'bbox_regression': bbox_loss.sum() / N,
-            'classification': (cls_loss[foreground_idxs].sum() + cls_loss[background_idxs].sum()) / N,
+            "bbox_regression": bbox_loss.sum() / N,
+            "classification": (
+                cls_loss[foreground_idxs].sum() + cls_loss[background_idxs].sum()
+            )
+            / N,
         }
 
     def forward(
@@ -621,7 +650,11 @@ def ssd300_vgg16(
         pretrained_backbone = False
 
     backbone = _vgg_extractor(
-        "vgg16_features", False, progress, pretrained_backbone, trainable_backbone_layers
+        "vgg16_features",
+        False,
+        progress,
+        pretrained_backbone,
+        trainable_backbone_layers,
     )
     anchor_generator = DefaultBoxGenerator(
         [[2], [2, 3], [2, 3], [2, 3], [2], [2]],
