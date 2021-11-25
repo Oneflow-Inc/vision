@@ -4,10 +4,8 @@ import oneflow.nn.functional as F
 import oneflow.nn.init as init
 
 from flowvision.layers.helpers import make_divisible
-from flowvision.layers.build import LAYER_REGISTRY
 
 
-@LAYER_REGISTRY.register()
 class NonLocalAttn(nn.Module):
     """Spatial non-local block for image classification
     """

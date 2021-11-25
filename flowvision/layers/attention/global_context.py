@@ -10,10 +10,7 @@ from flowvision.layers.helpers import make_divisible
 from flowvision.layers.blocks import ConvMlp
 from flowvision.layers.regularization import LayerNorm2d
 
-from flowvision.layers.build import LAYER_REGISTRY
 
-
-@LAYER_REGISTRY.register()
 class GlobalContext(nn.Module):
     def __init__(
         self,
