@@ -5,7 +5,6 @@ import oneflow.nn.functional as F
 from typing import Tuple, Optional
 
 from .padding import pad_same, get_padding_value
-from flowvision.layers.build import LAYER_REGISTRY
 
 
 def conv2d_same(
@@ -21,7 +20,6 @@ def conv2d_same(
     return F.conv2d(x, weight, bias, stride, (0, 0), dilation, groups)
 
 
-@LAYER_REGISTRY.register()
 class Conv2dSame(nn.Conv2d):
     """ Tensorflow like 'SAME' convolution wrapper for 2D convolutions
     """

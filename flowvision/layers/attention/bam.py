@@ -4,7 +4,6 @@ import oneflow.nn.functional as F
 
 from flowvision.layers.blocks import ConvBnAct
 from flowvision.models.helpers import make_divisible
-from flowvision.layers.build import LAYER_REGISTRY
 
 
 class LinearBnAct(nn.Sequential):
@@ -122,7 +121,6 @@ class BamSpatialAttn(nn.Module):
         return x * x_attn.expand_as(x)
 
 
-@LAYER_REGISTRY.register()
 class BAMModule(nn.Module):
     def __init__(
         self,
