@@ -70,3 +70,13 @@ When `crop-size` equals to 0.875, we first resize the image from `224` to `(224 
 | cswin_large_224        | 85.7697 | 97.7362 |    64       |   224      |  0.9      |   bicubic    |
 | cswin_base_384         | 85.0683 | 97.3865 |    64       |   224      |  0.9      |   bicubic    |
 | cswin_large_384        | - | - |    64       |   224      |  0.9      |   bicubic    |
+| resmlp_12  |  76.6500 |93.1820 | 64| 224 | 0.9| bicubic|
+| resmlp_12_dist | 77.9540 | 93.5600| 64| 224 | 0.9| bicubic|
+| resmlp_24 | 79.3780 | 94.5460| 64| 224 | 0.9| bicubic|
+| resmlp_24_dist | 80.7600 | 95.2200| 64| 224 | 0.9| bicubic|
+| resmlp_24_dino | - | - | 64| 224 | 0.9| bicubic|
+| resmlp_36 | 79.7720 | 94.8860| 64| 224 | 0.9| bicubic|
+| resmlp_36_dist | 81.1500 | 95.4780| 64| 224 | 0.9| bicubic|
+| resmlpB_24 | 81.0380 |95.0200 | 64| 224 | 0.9| bicubic|
+| resmlpB_24_in22k | 84.3960 |97.1120 | 64| 224 | 0.9| bicubic|
+| resmlpB_24_dist | 83.5900 | 96.6500| 64| 224 | 0.9| bicubic|
