@@ -15,6 +15,7 @@ from ..registry import ModelCreator
 from ..utils import load_state_dict_from_url
 from flowvision.layers.blocks import boxes as box_ops
 
+__all__ = ["SSD", "ssd300_vgg16"]
 
 model_urls = {
     "ssd300_vgg16_coco": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/detection/ssd/ssd300_vgg16.tar.gz"
