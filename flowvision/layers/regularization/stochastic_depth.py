@@ -4,7 +4,10 @@ import oneflow as flow
 import oneflow.nn as nn
 from oneflow import Tensor
 
-def stochastic_depth(input: Tensor, p: float, mode: str, training: bool = True) -> Tensor:
+
+def stochastic_depth(
+    input: Tensor, p: float, mode: str, training: bool = True
+) -> Tensor:
     """
     Implements the Stochastic Depth from `"Deep Networks with Stochastic Depth"
     <https://arxiv.org/abs/1603.09382>`_ used for randomly dropping residual
@@ -26,7 +29,6 @@ def stochastic_depth(input: Tensor, p: float, mode: str, training: bool = True) 
         raise ValueError(f"mode has to be either 'batch' or 'row', but got {mode}")
     if not training or p == 0.0:
         return input
-    
 
     survival_rate = 1.0 - p
     if mode == "row":  # randomly samples some data of one batch and set them zero
