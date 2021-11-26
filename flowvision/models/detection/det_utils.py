@@ -5,6 +5,8 @@ from collections import OrderedDict
 from oneflow import Tensor
 from typing import List, Tuple
 
+from flowvision.layers.blocks.misc import FrozenBatchNorm2d
+
 
 def encode_boxes(reference_boxes, proposals, weights):
     # type: (flow.Tensor, flow.Tensor, flow.Tensor) -> flow.Tensor
@@ -259,6 +261,22 @@ class SSDMatcher(Matcher):
         )
 
         return matches
+
+
+def overwrite_eps(model, eps):
+    """
+    This method overwrites the default eps values of all the
+    FrozenBatchNorm2d layers of the model with the provided value.
+    The overwrite is applied only when the pretrained weights are
+    loaded to maintain compatibility with previous versions.
+
+    Args:
+        model (nn.Module): The model on which we perform the overwrite.
+        eps (float): The new value of eps.
+    """
+    for module in model.modules():
+        if isinstance(module, FrozenBatchNorm2d):
+            module.eps = eps
 
 
 def retrieve_out_channels(model, size):

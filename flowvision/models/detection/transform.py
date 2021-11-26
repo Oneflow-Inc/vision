@@ -25,7 +25,7 @@ def _resize_image_and_masks(
     else:
         min_size = flow.min(im_shape).to(dtype=flow.float32)
         max_size = flow.max(im_shape).to(dtype=flow.float32)
-        scale = flow.min(self_min_size / min_size, self_max_size / max_size)
+        scale = flow.minimum(self_min_size / min_size, self_max_size / max_size)
         scale_factor = scale.item()
         recompute_scale_factor = True
 
