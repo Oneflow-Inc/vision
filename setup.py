@@ -5,7 +5,7 @@ import setuptools
 import subprocess
 import distutils.command.clean
 import distutils.spawn
-import oneflow as flow
+#import oneflow as flow
 from setuptools import find_packages
 from setuptools.command.build_ext import build_ext
 
