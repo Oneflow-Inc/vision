@@ -61,7 +61,7 @@ class D(nn.Module):
         return self.d(x_flat)
 
 
-def sample_image(n_row, batches_done, g, one_hot):
+def sample_image(n_row, batches_done, g):
     """Saves a grid of generated digits ranging from 0 to n_classes"""
     # Sample noise
     z = flow.tensor(np.random.normal(0, 1, (n_row ** 2, opt.len_z)), dtype=flow.float32)
@@ -119,7 +119,7 @@ def Train(opt, dataloader):
 
             batches_done = epoch * len(dataloader) + i
             if batches_done % opt.sample_interval == 0:
-                sample_image(opt.n_classes, batches_done, g, one_hot)
+                sample_image(opt.n_classes, batches_done, g,)
 
 
 if __name__ == '__main__':
