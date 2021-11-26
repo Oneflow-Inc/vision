@@ -38,6 +38,7 @@ from .transforms import (
     TenCrop,
     InterpolationMode,
 )
+from .random_erasing import RandomErasing
 
 __all__ = [
     "Compose",
@@ -63,4 +64,5 @@ __all__ = [
     "FiveCrop",
     "TenCrop",
     "InterpolationMode",
+    "RandomErasing",
 ]
