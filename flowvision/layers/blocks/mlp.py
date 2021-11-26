@@ -72,7 +72,6 @@ class GluMlp(nn.Module):
         return x
 
 
-
 class GatedMlp(nn.Module):
     """ MLP as used in gMLP
     """
