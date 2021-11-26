@@ -5,10 +5,8 @@ import math
 
 from flowvision.layers.helpers import make_divisible
 from flowvision.layers.activation import hard_swish
-from flowvision.layers.build import LAYER_REGISTRY
 
 
-@LAYER_REGISTRY.register()
 class CoordAttModule(nn.Module):
     def __init__(
         self,

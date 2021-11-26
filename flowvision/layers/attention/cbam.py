@@ -6,8 +6,6 @@ import math
 from ..helpers import make_divisible
 from ..blocks import ConvBnAct
 
-from flowvision.layers.build import LAYER_REGISTRY
-
 
 class ChannelAttn(nn.Module):
     """ Original CBAM channel attention module, currently avg + max pool variant only.
@@ -71,7 +69,6 @@ class SpatialAttn(nn.Module):
         return x * self.gate(x_attn)
 
 
-@LAYER_REGISTRY.register()
 class CbamModule(nn.Module):
     def __init__(
         self,

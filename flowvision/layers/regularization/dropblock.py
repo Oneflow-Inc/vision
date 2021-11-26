@@ -3,10 +3,7 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 from oneflow import Tensor
 
-from flowvision.layers.build import LAYER_REGISTRY
 
-
-@LAYER_REGISTRY.register
 class DropBlock(nn.Module):
     def __init__(self, block_size: int = 7, p: float = 0.5):
         super(DropBlock, self).__init__()

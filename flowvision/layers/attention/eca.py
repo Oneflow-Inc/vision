@@ -4,10 +4,8 @@ import oneflow.nn.functional as F
 import math
 
 from ..helpers import make_divisible
-from flowvision.layers.build import LAYER_REGISTRY
 
 
-@LAYER_REGISTRY.register()
 class EcaModule(nn.Module):
     """ECA module
     """
