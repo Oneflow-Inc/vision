@@ -3,13 +3,19 @@ Datasets, Transforms and Models specific to Computer Vision
 
 
 ## Installation
-- install the nightly version of `oneflow`
+- First install the nightly version of `OneFlow`
 ```bash
 python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu102
 ```
-- install latest version of `flowvision`
+
+- Then install the latest stable release of `flowvision`
 ```bash
 pip install flowvision==0.0.4
+```
+
+- Or install the nightly release of `flowvision`
+```bash
+pip install -i https://test.pypi.org/simple/ flowvision==0.0.4
 ```
 
 ## Supported Model
