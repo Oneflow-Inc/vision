@@ -1,9 +1,38 @@
 import oneflow as flow
+from oneflow.utils.data import DataLoader
 import numpy as np
 from PIL import Image
+from flowvision.datasets import ImageFolder
 from flowvision.transforms import RandomErasing
 from flowvision.transforms import rand_augment_transform, auto_augment_transform, augment_and_mix_transform
+from flowvision.transforms import create_transform
 
+
+# class ImageNetDataLoader(DataLoader):
+#     def __init__(
+#         self, split="train", image_size=224, batch_size=16, num_workers=8
+#     ):
+
+#         transform = create_transform(
+#             input_size=224,
+#             is_training=True,
+#             color_jitter=0.4,
+#             auto_augment="rand-m9-mstd0.5-inc1",
+#             re_prob=0.25,
+#             re_mode="pixel",
+#             re_count=1,
+#             interpolation="bicubic"
+#         )
+
+#         self.dataset = ImageFolder(
+#             root="/DATA/disk1/ImageNet/extract/train", transform=transform
+#         )
+#         super(ImageNetDataLoader, self).__init__(
+#             dataset=self.dataset,
+#             batch_size=batch_size,
+#             shuffle=True if split == "train" else False,
+#             num_workers=num_workers,
+#         )
 
 
 def test_random_erasing():
@@ -39,7 +68,23 @@ def test_aa():
     rand_augment(x)
 
 
+def test_transform_factory():
+    x = np.random.randn(224, 224, 3)
+    x = Image.fromarray(x, mode="RGB")
+    transform = create_transform(
+            input_size=224,
+            is_training=True,
+            color_jitter=0.4,
+            auto_augment="rand-m9-mstd0.5-inc1",
+            re_prob=0.25,
+            re_mode="pixel",
+            re_count=1,
+            interpolation="bicubic"
+        )
+    transform(x)
+
 
 if __name__ == "__main__":
     test_random_erasing()
     test_aa()
+    test_transform_factory()

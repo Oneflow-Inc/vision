@@ -31,6 +31,12 @@ from oneflow.framework.tensor import Tensor
 from . import functional_pil as F_pil
 from . import functional_tensor as F_t
 
+try:
+    from flowvision.transforms.functional import InterpolationMode
+    has_interpolation_mode = True
+except ImportError:
+    has_interpolation_mode = False
+
 
 class InterpolationMode(Enum):
     r"""Interpolation modes
@@ -65,6 +71,43 @@ pil_modes_mapping = {
     InterpolationMode.HAMMING: 5,
     InterpolationMode.LANCZOS: 1,
 }
+
+
+_pil_interpolation_to_str = {
+    Image.NEAREST: 'nearest',
+    Image.BILINEAR: 'bilinear',
+    Image.BICUBIC: 'bicubic',
+    Image.BOX: 'box',
+    Image.HAMMING: 'hamming',
+    Image.LANCZOS: 'lanczos',
+}
+_str_to_pil_interpolation = {b: a for a, b in _pil_interpolation_to_str.items()}
+
+
+if has_interpolation_mode:
+    _flow_interpolation_to_str = {
+        InterpolationMode.NEAREST: 'nearest',
+        InterpolationMode.BILINEAR: 'bilinear',
+        InterpolationMode.BICUBIC: 'bicubic',
+        InterpolationMode.BOX: 'box',
+        InterpolationMode.HAMMING: 'hamming',
+        InterpolationMode.LANCZOS: 'lanczos',
+    }
+    _str_to_flow_interpolation = {b: a for a, b in _flow_interpolation_to_str.items()}
+else:
+    _pil_interpolation_to_flow = {}
+    _flow_interpolation_to_str = {}
+
+
+def str_to_pil_interp(mode_str):
+    return _str_to_pil_interpolation[mode_str]
+
+
+def str_to_interp_mode(mode_str):
+    if has_interpolation_mode:
+        return _str_to_flow_interpolation[mode_str]
+    else:
+        return _str_to_pil_interpolation[mode_str]
 
 
 def _get_image_size(img: Tensor) -> List[int]:
