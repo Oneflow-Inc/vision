@@ -330,12 +330,27 @@ def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
 @ModelCreator.register_model
 def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    r"""ResNet-50 model from
+    """
+    Constructs the ResNet-50 model.
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
+    .. note::
+        xxx
+
+    xxxx
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained: Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        
+        >>> resnet50 = flowvision.resnet50(pretrained=True, progress=True)
+
     """
     return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
 

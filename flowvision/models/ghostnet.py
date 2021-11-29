@@ -276,7 +276,24 @@ class GhostNet(nn.Module):
 @ModelCreator.register_model
 def ghostnet(pretrained: bool = False, **kwargs):
     """
-    Constructs a GhostNet model
+    Constructs the GhostNet model
+
+    .. note::
+        xxx
+
+    xxxx
+
+    Args:
+        pretrained: whether to download the pretrained weights and then load the model. Default: ``False``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        
+        >>> ghostnet = flowvision.ghostnet(pretrained=True)
+
     """
     cfgs = [
         # k, t, c, SE, s
