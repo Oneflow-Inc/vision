@@ -39,6 +39,7 @@ from .transforms import (
     InterpolationMode,
 )
 from .random_erasing import RandomErasing
+from .auto_augment import AutoAugment, RandAugment, AugMixAugment, rand_augment_transform, augment_and_mix_transform, auto_augment_transform
 
 __all__ = [
     "Compose",
@@ -65,4 +66,10 @@ __all__ = [
     "TenCrop",
     "InterpolationMode",
     "RandomErasing",
+    "AutoAugment",
+    "RandAugment",
+    "AugMixAugment",
+    "rand_augment_transform",
+    "augment_and_mix_transform",
+    "auto_augment_transform",
 ]

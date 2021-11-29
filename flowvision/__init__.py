@@ -4,7 +4,6 @@ from .datasets import *
 from .transforms import *
 from .loss import *
 from .scheduler import *
-from .data import *
 
 _image_backend = "PIL"
 
