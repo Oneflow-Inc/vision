@@ -12,6 +12,7 @@ Then build docs by:
 
 ```bash
 cd ${flow-vision-path}/docs
+pip install -r requirements.txt --user
 make html
 ```
 
