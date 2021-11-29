@@ -16,6 +16,8 @@ from ..utils import load_state_dict_from_url
 from ..registry import ModelCreator
 
 
+__all__ = ["ssdlite320_mobilenet_v3_large"]
+
 model_urls = {
     "ssdlite320_mobilenet_v3_large_coco": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/detection/ssdlite/ssdlite320_mobilenet_v3_large_coco.tar.gz"
 }

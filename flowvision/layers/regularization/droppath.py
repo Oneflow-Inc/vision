@@ -1,7 +1,6 @@
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-from flowvision.layers.build import LAYER_REGISTRY
 
 
 def drop_path(x, drop_prob: float = 0.5, training: bool = False):
@@ -24,7 +23,6 @@ def drop_path(x, drop_prob: float = 0.5, training: bool = False):
     return output
 
 
-@LAYER_REGISTRY.register
 class DropPath(nn.Module):
     """Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks).
     """

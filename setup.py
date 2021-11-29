@@ -5,7 +5,8 @@ import setuptools
 import subprocess
 import distutils.command.clean
 import distutils.spawn
-import oneflow as flow
+
+# import oneflow as flow
 from setuptools import find_packages
 from setuptools.command.build_ext import build_ext
 
@@ -251,7 +252,7 @@ if __name__ == "__main__":
 
     setup(
         name="flowvision",
-        version="0.0.4",  # version number
+        version="0.0.42",  # version number
         author="flow vision contributors",
         author_email="596106517@qq.com",
         description="oneflow vision codebase",

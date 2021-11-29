@@ -3,14 +3,12 @@
 import oneflow as flow
 import oneflow.nn as nn
 
-from flowvision.layers.build import LAYER_REGISTRY
 
 # helpers
 def to_2tuple(x):
     return (x, x)
 
 
-@LAYER_REGISTRY.register()
 class PatchEmbed(nn.Module):
     """ 2D Image to Patch Embedding
     """

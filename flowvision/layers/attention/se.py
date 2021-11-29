@@ -1,10 +1,7 @@
 import oneflow as flow
 import oneflow.nn as nn
 
-from flowvision.layers.build import LAYER_REGISTRY
 
-
-@LAYER_REGISTRY.register
 class SEModule(nn.Module):
     def __init__(
         self,
