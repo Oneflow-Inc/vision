@@ -552,3 +552,306 @@ def auto_augment_transform(config_str, hparams):
             assert False, 'Unknown AutoAugment config section'
     aa_policy = auto_augment_policy(policy_name, hparams=hparams)
     return AutoAugment(aa_policy)
+
+
+_RAND_TRANSFORMS = [
+    'AutoContrast',
+    'Equalize',
+    'Invert',
+    'Rotate',
+    'Posterize',
+    'Solarize',
+    'SolarizeAdd',
+    'Color',
+    'Contrast',
+    'Brightness',
+    'Sharpness',
+    'ShearX',
+    'ShearY',
+    'TranslateXRel',
+    'TranslateYRel',
+    #'Cutout'  # NOTE I've implement this as random erasing separately
+]
+
+
+_RAND_INCREASING_TRANSFORMS = [
+    'AutoContrast',
+    'Equalize',
+    'Invert',
+    'Rotate',
+    'PosterizeIncreasing',
+    'SolarizeIncreasing',
+    'SolarizeAdd',
+    'ColorIncreasing',
+    'ContrastIncreasing',
+    'BrightnessIncreasing',
+    'SharpnessIncreasing',
+    'ShearX',
+    'ShearY',
+    'TranslateXRel',
+    'TranslateYRel',
+]
+
+
+# These experimental weights are based loosely on the relative improvements mentioned in paper.
+# They may not result in increased performance, but could likely be tuned to so.
+_RAND_CHOICE_WEIGHTS_0 = {
+    'Rotate': 0.3,
+    'ShearX': 0.2,
+    'ShearY': 0.2,
+    'TranslateXRel': 0.1,
+    'TranslateYRel': 0.1,
+    'Color': .025,
+    'Sharpness': 0.025,
+    'AutoContrast': 0.025,
+    'Solarize': .005,
+    'SolarizeAdd': .005,
+    'Contrast': .005,
+    'Brightness': .005,
+    'Equalize': .005,
+    'Posterize': 0,
+    'Invert': 0,
+}
+
+
+def _select_rand_weights(weight_idx=0, transforms=None):
+    transforms = transforms or _RAND_TRANSFORMS
+    assert weight_idx == 0  # only one set of weights currently
+    rand_weights = _RAND_CHOICE_WEIGHTS_0
+    probs = [rand_weights[k] for k in transforms]
+    probs /= np.sum(probs)
+    return probs
+
+
+def rand_augment_ops(magnitude=10, hparams=None, transforms=None):
+    hparams = hparams or _HPARAMS_DEFAULT
+    transforms = transforms or _RAND_TRANSFORMS
+    return [AugmentOp(
+        name, prob=0.5, magnitude=magnitude, hparams=hparams) for name in transforms]
+
+
+class RandAugment:
+    def __init__(self, ops, num_layers=2, choice_weights=None):
+        self.ops = ops
+        self.num_layers = num_layers
+        self.choice_weights = choice_weights
+
+    def __call__(self, img):
+        # no replacement when using weighted choice
+        ops = np.random.choice(
+            self.ops, self.num_layers, replace=self.choice_weights is None, p=self.choice_weights)
+        for op in ops:
+            img = op(img)
+        return img
+
+    def __repr__(self):
+        fs = self.__class__.__name__ + f'(n={self.num_layers}, ops='
+        for op in self.ops:
+            fs += f'\n\t{op}'
+        fs += ')'
+        return fs
+
+
+def rand_augment_transform(config_str, hparams):
+    """
+    Create a RandAugment transform
+
+    :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
+    dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
+    sections, not order sepecific determine
+        'm' - integer magnitude of rand augment
+        'n' - integer num layers (number of transform ops selected per image)
+        'w' - integer probabiliy weight index (index of a set of weights to influence choice of op)
+        'mstd' -  float std deviation of magnitude noise applied, or uniform sampling if infinity (or > 100)
+        'mmax' - set upper bound for magnitude to something other than default of  _LEVEL_DENOM (10)
+        'inc' - integer (bool), use augmentations that increase in severity with magnitude (default: 0)
+    Ex 'rand-m9-n3-mstd0.5' results in RandAugment with magnitude 9, num_layers 3, magnitude_std 0.5
+    'rand-mstd1-w0' results in magnitude_std 1.0, weights 0, default magnitude of 10 and num_layers 2
+
+    :param hparams: Other hparams (kwargs) for the RandAugmentation scheme
+
+    :return: A PyTorch compatible Transform
+    """
+    magnitude = _LEVEL_DENOM  # default to _LEVEL_DENOM for magnitude (currently 10)
+    num_layers = 2  # default to 2 ops per image
+    weight_idx = None  # default to no probability weights for op choice
+    transforms = _RAND_TRANSFORMS
+    config = config_str.split('-')
+    assert config[0] == 'rand'
+    config = config[1:]
+    for c in config:
+        cs = re.split(r'(\d.*)', c)
+        if len(cs) < 2:
+            continue
+        key, val = cs[:2]
+        if key == 'mstd':
+            # noise param / randomization of magnitude values
+            mstd = float(val)
+            if mstd > 100:
+                # use uniform sampling in 0 to magnitude if mstd is > 100
+                mstd = float('inf')
+            hparams.setdefault('magnitude_std', mstd)
+        elif key == 'mmax':
+            # clip magnitude between [0, mmax] instead of default [0, _LEVEL_DENOM]
+            hparams.setdefault('magnitude_max', int(val))
+        elif key == 'inc':
+            if bool(val):
+                transforms = _RAND_INCREASING_TRANSFORMS
+        elif key == 'm':
+            magnitude = int(val)
+        elif key == 'n':
+            num_layers = int(val)
+        elif key == 'w':
+            weight_idx = int(val)
+        else:
+            assert False, 'Unknown RandAugment config section'
+    ra_ops = rand_augment_ops(magnitude=magnitude, hparams=hparams, transforms=transforms)
+    choice_weights = None if weight_idx is None else _select_rand_weights(weight_idx)
+    return RandAugment(ra_ops, num_layers, choice_weights=choice_weights)
+
+
+_AUGMIX_TRANSFORMS = [
+    'AutoContrast',
+    'ColorIncreasing',  # not in paper
+    'ContrastIncreasing',  # not in paper
+    'BrightnessIncreasing',  # not in paper
+    'SharpnessIncreasing',  # not in paper
+    'Equalize',
+    'Rotate',
+    'PosterizeIncreasing',
+    'SolarizeIncreasing',
+    'ShearX',
+    'ShearY',
+    'TranslateXRel',
+    'TranslateYRel',
+]
+
+
+def augmix_ops(magnitude=10, hparams=None, transforms=None):
+    hparams = hparams or _HPARAMS_DEFAULT
+    transforms = transforms or _AUGMIX_TRANSFORMS
+    return [AugmentOp(
+        name, prob=1.0, magnitude=magnitude, hparams=hparams) for name in transforms]
+
+
+class AugMixAugment:
+    """ AugMix Transform
+    Adapted and improved from impl here: https://github.com/google-research/augmix/blob/master/imagenet.py
+    From paper: 'AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty -
+    https://arxiv.org/abs/1912.02781
+    """
+    def __init__(self, ops, alpha=1., width=3, depth=-1, blended=False):
+        self.ops = ops
+        self.alpha = alpha
+        self.width = width
+        self.depth = depth
+        self.blended = blended  # blended mode is faster but not well tested
+
+    def _calc_blended_weights(self, ws, m):
+        ws = ws * m
+        cump = 1.
+        rws = []
+        for w in ws[::-1]:
+            alpha = w / cump
+            cump *= (1 - alpha)
+            rws.append(alpha)
+        return np.array(rws[::-1], dtype=np.float32)
+
+    def _apply_blended(self, img, mixing_weights, m):
+        # This is my first crack and implementing a slightly faster mixed augmentation. Instead
+        # of accumulating the mix for each chain in a Numpy array and then blending with original,
+        # it recomputes the blending coefficients and applies one PIL image blend per chain.
+        # TODO the results appear in the right ballpark but they differ by more than rounding.
+        img_orig = img.copy()
+        ws = self._calc_blended_weights(mixing_weights, m)
+        for w in ws:
+            depth = self.depth if self.depth > 0 else np.random.randint(1, 4)
+            ops = np.random.choice(self.ops, depth, replace=True)
+            img_aug = img_orig  # no ops are in-place, deep copy not necessary
+            for op in ops:
+                img_aug = op(img_aug)
+            img = Image.blend(img, img_aug, w)
+        return img
+
+    def _apply_basic(self, img, mixing_weights, m):
+        # This is a literal adaptation of the paper/official implementation without normalizations and
+        # PIL <-> Numpy conversions between every op. It is still quite CPU compute heavy compared to the
+        # typical augmentation transforms, could use a GPU / Kornia implementation.
+        img_shape = img.size[0], img.size[1], len(img.getbands())
+        mixed = np.zeros(img_shape, dtype=np.float32)
+        for mw in mixing_weights:
+            depth = self.depth if self.depth > 0 else np.random.randint(1, 4)
+            ops = np.random.choice(self.ops, depth, replace=True)
+            img_aug = img  # no ops are in-place, deep copy not necessary
+            for op in ops:
+                img_aug = op(img_aug)
+            mixed += mw * np.asarray(img_aug, dtype=np.float32)
+        np.clip(mixed, 0, 255., out=mixed)
+        mixed = Image.fromarray(mixed.astype(np.uint8))
+        return Image.blend(img, mixed, m)
+
+    def __call__(self, img):
+        mixing_weights = np.float32(np.random.dirichlet([self.alpha] * self.width))
+        m = np.float32(np.random.beta(self.alpha, self.alpha))
+        if self.blended:
+            mixed = self._apply_blended(img, mixing_weights, m)
+        else:
+            mixed = self._apply_basic(img, mixing_weights, m)
+        return mixed
+
+    def __repr__(self):
+        fs = self.__class__.__name__ + f'(alpha={self.alpha}, width={self.width}, depth={self.depth}, ops='
+        for op in self.ops:
+            fs += f'\n\t{op}'
+        fs += ')'
+        return fs
+
+
+def augment_and_mix_transform(config_str, hparams):
+    """ Create AugMix PyTorch transform
+
+    :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
+    dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
+    sections, not order sepecific determine
+        'm' - integer magnitude (severity) of augmentation mix (default: 3)
+        'w' - integer width of augmentation chain (default: 3)
+        'd' - integer depth of augmentation chain (-1 is random [1, 3], default: -1)
+        'b' - integer (bool), blend each branch of chain into end result without a final blend, less CPU (default: 0)
+        'mstd' -  float std deviation of magnitude noise applied (default: 0)
+    Ex 'augmix-m5-w4-d2' results in AugMix with severity 5, chain width 4, chain depth 2
+
+    :param hparams: Other hparams (kwargs) for the Augmentation transforms
+
+    :return: A PyTorch compatible Transform
+    """
+    magnitude = 3
+    width = 3
+    depth = -1
+    alpha = 1.
+    blended = False
+    config = config_str.split('-')
+    assert config[0] == 'augmix'
+    config = config[1:]
+    for c in config:
+        cs = re.split(r'(\d.*)', c)
+        if len(cs) < 2:
+            continue
+        key, val = cs[:2]
+        if key == 'mstd':
+            # noise param injected via hparams for now
+            hparams.setdefault('magnitude_std', float(val))
+        elif key == 'm':
+            magnitude = int(val)
+        elif key == 'w':
+            width = int(val)
+        elif key == 'd':
+            depth = int(val)
+        elif key == 'a':
+            alpha = float(val)
+        elif key == 'b':
+            blended = bool(val)
+        else:
+            assert False, 'Unknown AugMix config section'
+    hparams.setdefault('magnitude_std', float('inf'))  # default to uniform sampling (if not set via mstd arg)
+    ops = augmix_ops(magnitude=magnitude, hparams=hparams)
+    return AugMixAugment(ops, alpha=alpha, width=width, depth=depth, blended=blended)
