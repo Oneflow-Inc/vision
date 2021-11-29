@@ -30,7 +30,6 @@ from oneflow.framework.tensor import Tensor
 
 
 class ToNumpy:
-
     def __call__(self, pil_img):
         np_img = np.array(pil_img, dtype=np.uint8)
         if np_img.ndim < 3:

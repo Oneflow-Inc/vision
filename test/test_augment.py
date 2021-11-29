@@ -4,7 +4,11 @@ import numpy as np
 from PIL import Image
 from flowvision.datasets import ImageFolder
 from flowvision.transforms import RandomErasing
-from flowvision.transforms import rand_augment_transform, auto_augment_transform, augment_and_mix_transform
+from flowvision.transforms import (
+    rand_augment_transform,
+    auto_augment_transform,
+    augment_and_mix_transform,
+)
 from flowvision.transforms import create_transform
 
 
@@ -58,13 +62,17 @@ def test_aa():
     # test auto augmentation
     x = np.random.randn(224, 224, 3)
     x = Image.fromarray(x, mode="RGB")
-    auto_augment = auto_augment_transform(config_str="original-mstd0.5", hparams=aa_params)
+    auto_augment = auto_augment_transform(
+        config_str="original-mstd0.5", hparams=aa_params
+    )
     auto_augment(x)
 
     # test rand augmentation
     x = np.random.randn(224, 224, 3)
     x = Image.fromarray(x, mode="RGB")
-    rand_augment = rand_augment_transform(config_str="rand-m9-n3-mstd0.5", hparams=aa_params)
+    rand_augment = rand_augment_transform(
+        config_str="rand-m9-n3-mstd0.5", hparams=aa_params
+    )
     rand_augment(x)
 
 
@@ -72,15 +80,15 @@ def test_transform_factory():
     x = np.random.randn(224, 224, 3)
     x = Image.fromarray(x, mode="RGB")
     transform = create_transform(
-            input_size=224,
-            is_training=True,
-            color_jitter=0.4,
-            auto_augment="rand-m9-mstd0.5-inc1",
-            re_prob=0.25,
-            re_mode="pixel",
-            re_count=1,
-            interpolation="bicubic"
-        )
+        input_size=224,
+        is_training=True,
+        color_jitter=0.4,
+        auto_augment="rand-m9-mstd0.5-inc1",
+        re_prob=0.25,
+        re_mode="pixel",
+        re_count=1,
+        interpolation="bicubic",
+    )
     transform(x)
 
 

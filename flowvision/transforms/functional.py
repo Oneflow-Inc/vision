@@ -33,6 +33,7 @@ from . import functional_tensor as F_t
 
 try:
     from flowvision.transforms.functional import InterpolationMode
+
     has_interpolation_mode = True
 except ImportError:
     has_interpolation_mode = False
@@ -74,24 +75,24 @@ pil_modes_mapping = {
 
 
 _pil_interpolation_to_str = {
-    Image.NEAREST: 'nearest',
-    Image.BILINEAR: 'bilinear',
-    Image.BICUBIC: 'bicubic',
-    Image.BOX: 'box',
-    Image.HAMMING: 'hamming',
-    Image.LANCZOS: 'lanczos',
+    Image.NEAREST: "nearest",
+    Image.BILINEAR: "bilinear",
+    Image.BICUBIC: "bicubic",
+    Image.BOX: "box",
+    Image.HAMMING: "hamming",
+    Image.LANCZOS: "lanczos",
 }
 _str_to_pil_interpolation = {b: a for a, b in _pil_interpolation_to_str.items()}
 
 
 if has_interpolation_mode:
     _flow_interpolation_to_str = {
-        InterpolationMode.NEAREST: 'nearest',
-        InterpolationMode.BILINEAR: 'bilinear',
-        InterpolationMode.BICUBIC: 'bicubic',
-        InterpolationMode.BOX: 'box',
-        InterpolationMode.HAMMING: 'hamming',
-        InterpolationMode.LANCZOS: 'lanczos',
+        InterpolationMode.NEAREST: "nearest",
+        InterpolationMode.BILINEAR: "bilinear",
+        InterpolationMode.BICUBIC: "bicubic",
+        InterpolationMode.BOX: "box",
+        InterpolationMode.HAMMING: "hamming",
+        InterpolationMode.LANCZOS: "lanczos",
     }
     _str_to_flow_interpolation = {b: a for a, b in _flow_interpolation_to_str.items()}
 else:

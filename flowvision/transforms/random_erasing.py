@@ -34,10 +34,19 @@ class RandomErasing:
         max_count: maximum number of erasing blocks per image, area per box is scaled by count.
             per-image count is randomly chosen between 1 and this value.
     """
+
     def __init__(
         self,
-        probability=0.5, min_area=0.02, max_area=1/3, min_aspect=0.3, max_aspect=None,
-        mode='const', min_count=1, max_count=None, num_splits=0, device='cuda'
+        probability=0.5,
+        min_area=0.02,
+        max_area=1 / 3,
+        min_aspect=0.3,
+        max_aspect=None,
+        mode="const",
+        min_count=1,
+        max_count=None,
+        num_splits=0,
+        device="cuda",
     ):
         self.probability = probability
         self.min_area = min_area
@@ -50,34 +59,43 @@ class RandomErasing:
         self.mode = mode.lower()
         self.rand_color = False
         self.per_pixel = False
-        if self.mode == 'rand':
-            self.rand_color = True # per block random normal
-        elif self.mode == 'pixel':
-            self.per_pixel = True # per pixel random normal
+        if self.mode == "rand":
+            self.rand_color = True  # per block random normal
+        elif self.mode == "pixel":
+            self.per_pixel = True  # per pixel random normal
         else:
-            assert not self.mode or self.mode == 'const'
+            assert not self.mode or self.mode == "const"
         self.device = device
 
     def _erase(self, img, chan, img_h, img_w, dtype):
         if random.random() > self.probability:
             return
         area = img_h * img_w
-        count = self.min_count if self.min_count == self.max_count else \
-            random.randint(self.min_count, self.max_count)
+        count = (
+            self.min_count
+            if self.min_count == self.max_count
+            else random.randint(self.min_count, self.max_count)
+        )
         for _ in range(count):
             for attempt in range(10):
-                target_area = random.uniform(self.min_area, self.max_area) * area / count
+                target_area = (
+                    random.uniform(self.min_area, self.max_area) * area / count
+                )
                 aspect_ratio = math.exp(random.uniform(*self.log_aspect_ratio))
                 h = int(round(math.sqrt(target_area * aspect_ratio)))
                 w = int(round(math.sqrt(target_area / aspect_ratio)))
                 if w < img_w and h < img_h:
                     top = random.randint(0, img_h - h)
                     left = random.randint(0, img_w - w)
-                    img[:, top:top + h, left:left + w] = _get_pixels(
-                        self.per_pixel, self.rand_color, (chan, h, w),
-                        dtype=dtype, device=self.device)
+                    img[:, top : top + h, left : left + w] = _get_pixels(
+                        self.per_pixel,
+                        self.rand_color,
+                        (chan, h, w),
+                        dtype=dtype,
+                        device=self.device,
+                    )
                     break
-    
+
     def __call__(self, input):
         if len(input.size()) == 3:
             self._erase(input, *input.size(), input.dtype)
@@ -91,6 +109,6 @@ class RandomErasing:
 
     def __repr__(self):
         # NOTE simplified state for repr
-        fs = self.__class__.__name__ + f'(p={self.probability}, mode={self.mode}'
-        fs += f', count=({self.min_count}, {self.max_count}))'
+        fs = self.__class__.__name__ + f"(p={self.probability}, mode={self.mode}"
+        fs += f", count=({self.min_count}, {self.max_count}))"
         return fs
