@@ -15,9 +15,6 @@ import sys
 import flowvision
 
 sys.path.insert(0, os.path.abspath("."))
-# CN_DOCS = os.getenv("CN_DOCS")
-# if CN_DOCS:
-#     import cn
 
 # -- Project information -----------------------------------------------------
 

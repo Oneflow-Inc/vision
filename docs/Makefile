@@ -13,9 +13,6 @@ help:
 
 .PHONY: help Makefile
 
-#html_cn: Makefile
-#	@CN_DOCS=1 $(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)-cn" $(SPHINXOPTS) $(O)
-
 html: Makefile
 	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
