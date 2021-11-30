@@ -17,6 +17,7 @@ ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
 CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
+
 def get_mean_std(mode="imagenet_default_mean_std"):
     if mode == "imagenet_default_mean_std":
         mean = (0.485, 0.456, 0.406)
@@ -31,7 +32,16 @@ def get_mean_std(mode="imagenet_default_mean_std"):
 
 class ImageNetDataLoader(DataLoader):
     def __init__(
-        self, data_dir, split="train", image_size=224, img_mean=(0.485, 0.456, 0.406), img_std=(0.229, 0.224, 0.225), crop_pct=0.875, interpolation="bibubic", batch_size=16, num_workers=8
+        self,
+        data_dir,
+        split="train",
+        image_size=224,
+        img_mean=(0.485, 0.456, 0.406),
+        img_std=(0.229, 0.224, 0.225),
+        crop_pct=0.875,
+        interpolation="bibubic",
+        batch_size=16,
+        num_workers=8,
     ):
 
         if split == "train":
@@ -47,7 +57,9 @@ class ImageNetDataLoader(DataLoader):
             scale_size = int(math.floor(image_size / crop_pct))
             transform = transforms.Compose(
                 [
-                    transforms.Resize(scale_size, interpolation=str_to_interp_mode(interpolation))  # 3: bibubic
+                    transforms.Resize(
+                        scale_size, interpolation=str_to_interp_mode(interpolation)
+                    )  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
@@ -168,13 +180,20 @@ def _parse_args():
         "--num_workers", type=int, default=8, help="num workers in dataloader"
     )
     parser.add_argument(
-        "--normalize_mode", type=str, default="imagenet_default_mean_std", choices=['imagenet_default_mean_std', 'vit_mean_std'],help="the normalization mode"
+        "--normalize_mode",
+        type=str,
+        default="imagenet_default_mean_std",
+        choices=["imagenet_default_mean_std", "vit_mean_std"],
+        help="the normalization mode",
     )
     parser.add_argument(
         "--crop_pct", type=float, default=0.875, help="image crop ratio controller"
     )
     parser.add_argument(
-        "--interpolation", type=str, default="bicubic", help="interpolation method to choose"
+        "--interpolation",
+        type=str,
+        default="bicubic",
+        help="interpolation method to choose",
     )
     return parser.parse_args()
 
