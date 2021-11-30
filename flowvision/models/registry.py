@@ -1,9 +1,14 @@
+"""ModelCreator Func
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/registry.py
+"""
+
 import sys
 import re
 import fnmatch
 from collections import defaultdict
 from copy import deepcopy
 import oneflow as flow
+from tabulate import tabulate
 
 
 class ModelCreator(object):
@@ -49,7 +54,7 @@ class ModelCreator(object):
         return model
 
     @staticmethod
-    def model_table(filter="", pretrained=False):
+    def model_table(filter="", pretrained=False, **kwargs):
         all_models = ModelCreator._model_entrypoints.keys()
         if filter:
             models = []
@@ -70,19 +75,8 @@ class ModelCreator(object):
         else:
             for model in sorted_model:
                 show_dict[model] = ModelCreator._model_list[model]
-
-        # ModelCreator._model_list
-
-        from rich.table import Table
-        from rich import print
-
-        table = Table(title="Models")
-        table.add_column("Name", justify="left", no_wrap=True)
-        table.add_column("Pretrained", justify="left", no_wrap=True)
-
-        [
-            table.add_row(k, "true" if show_dict[k] else "false")
-            for k in show_dict.keys()
-        ]
-
-        print(table)
+        
+        table_headers = ["Supported Models", "Pretrained"]
+        table_items = [(k, "true" if show_dict[k] else "false") for k in show_dict.keys()]
+        table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid", **kwargs)
+        return table

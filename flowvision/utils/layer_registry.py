@@ -33,12 +33,12 @@ class Layer_Registry(Registry):
 
     def __str__(self) -> str:
         table_headers = ["Names", "Objects", "Args"]
-        table_items = self.get_zipped_dict()
+        table_items = self.get_zip_dict()
         table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid")
         return "Registry of {}:\n".format(self._name) + table
 
     def __repr__(self) -> str:
         table_headers = ["Names", "Objects", "Args"]
-        table_items = self.get_zipped_dict()
+        table_items = self.get_zip_dict()
         table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid")
         return "Registry of {}:\n".format(self._name) + table
