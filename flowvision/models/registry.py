@@ -5,7 +5,6 @@ from collections import defaultdict
 from copy import deepcopy
 import oneflow as flow
 from tabulate import tabulate
-# from rich.table import Table
 
 
 class ModelCreator(object):
