@@ -4,6 +4,8 @@ import fnmatch
 from collections import defaultdict
 from copy import deepcopy
 import oneflow as flow
+from tabulate import tabulate
+# from rich.table import Table
 
 
 class ModelCreator(object):
@@ -70,19 +72,8 @@ class ModelCreator(object):
         else:
             for model in sorted_model:
                 show_dict[model] = ModelCreator._model_list[model]
-
-        # ModelCreator._model_list
-
-        from rich.table import Table
-        from rich import print
-
-        table = Table(title="Models")
-        table.add_column("Name", justify="left", no_wrap=True)
-        table.add_column("Pretrained", justify="left", no_wrap=True)
-
-        [
-            table.add_row(k, "true" if show_dict[k] else "false")
-            for k in show_dict.keys()
-        ]
-
-        print(table)
+        
+        table_headers = ["Names", "Pretrained"]
+        table_items = [(k, "true" if show_dict[k] else "false") for k in show_dict.keys()]
+        table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid")
+        return table
