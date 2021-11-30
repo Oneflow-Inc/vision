@@ -75,8 +75,12 @@ class ModelCreator(object):
         else:
             for model in sorted_model:
                 show_dict[model] = ModelCreator._model_list[model]
-        
+
         table_headers = ["Supported Models", "Pretrained"]
-        table_items = [(k, "true" if show_dict[k] else "false") for k in show_dict.keys()]
-        table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid", **kwargs)
+        table_items = [
+            (k, "true" if show_dict[k] else "false") for k in show_dict.keys()
+        ]
+        table = tabulate(
+            table_items, headers=table_headers, tablefmt="fancy_grid", **kwargs
+        )
         return table

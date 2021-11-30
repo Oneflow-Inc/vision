@@ -252,7 +252,7 @@ if __name__ == "__main__":
 
     setup(
         name="flowvision",
-        version="0.0.42",  # version number
+        version="0.0.5",  # version number
         author="flow vision contributors",
         author_email="596106517@qq.com",
         description="oneflow vision codebase",
