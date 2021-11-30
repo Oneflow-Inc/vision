@@ -6,6 +6,7 @@ from typing import Union, Optional, List, Tuple, Text, BinaryIO
 import pathlib
 import oneflow as flow
 import math
+
 irange = range
 
 
@@ -39,9 +40,15 @@ def make_grid(
         See this notebook `here <https://gist.github.com/anonymous/bf16430f7750c023141c562f3e9f2a91>`_
 
     """
-    if not (isinstance(tensor, flow.Tensor) or
-            (isinstance(tensor, list) and all(isinstance(t, flow.Tensor) for t in tensor))):
-        raise TypeError('tensor or list of tensors expected, got {}'.format(type(tensor)))
+    if not (
+        isinstance(tensor, flow.Tensor)
+        or (
+            isinstance(tensor, list) and all(isinstance(t, flow.Tensor) for t in tensor)
+        )
+    ):
+        raise TypeError(
+            "tensor or list of tensors expected, got {}".format(type(tensor))
+        )
 
     # if list of tensors, convert to a 4D mini-batch Tensor
     if isinstance(tensor, list):
@@ -60,12 +67,13 @@ def make_grid(
     if normalize is True:
         tensor = tensor.clone()  # avoid modifying tensor in-place
         if range is not None:
-            assert isinstance(range, tuple), \
-                "range has to be a tuple (min, max) if specified. min and max are numbers"
+            assert isinstance(
+                range, tuple
+            ), "range has to be a tuple (min, max) if specified. min and max are numbers"
 
         def norm_ip(img, min, max):
             img = img.clamp(min=min, max=max)
-            img = (img-min)/(max - min + 1e-5)
+            img = (img - min) / (max - min + 1e-5)
             return img
 
         def norm_range(t, range):
@@ -76,7 +84,7 @@ def make_grid(
             return img
 
         if scale_each is True:
-            bs = tensor.shape[0] # loop over mini-batch dimension
+            bs = tensor.shape[0]  # loop over mini-batch dimension
             for t in irange(bs):
                 tensor[t] = norm_range(tensor[t], range)
         else:
@@ -91,13 +99,20 @@ def make_grid(
     ymaps = int(math.ceil(float(nmaps) / xmaps))
     height, width = int(tensor.size(2) + padding), int(tensor.size(3) + padding)
     num_channels = tensor.size(1)
-    grid = flow.zeros((num_channels, height * ymaps + padding, width * xmaps + padding)) + pad_value
+    grid = (
+        flow.zeros((num_channels, height * ymaps + padding, width * xmaps + padding))
+        + pad_value
+    )
     k = 0
     for y in irange(ymaps):
         for x in irange(xmaps):
             if k >= nmaps:
                 break
-            grid[:, y * height + padding: (y+1) * height, x * width + padding: (x+1) * width,] = tensor[k]
+            grid[
+                :,
+                y * height + padding : (y + 1) * height,
+                x * width + padding : (x + 1) * width,
+            ] = tensor[k]
             k = k + 1
     return grid
 
@@ -124,10 +139,25 @@ def save_image(
         **kwargs: Other arguments are documented in ``make_grid``.
     """
     from PIL import Image
+
     tensor = flow.tensor(tensor.numpy())
-    grid = make_grid(tensor, nrow=nrow, padding=padding, pad_value=pad_value,
-                     normalize=normalize, range=range, scale_each=scale_each)
+    grid = make_grid(
+        tensor,
+        nrow=nrow,
+        padding=padding,
+        pad_value=pad_value,
+        normalize=normalize,
+        range=range,
+        scale_each=scale_each,
+    )
     # Add 0.5 after unnormalizing to [0, 255] to round to nearest integer
-    ndarr = grid.mul(255).add(0.5).clamp(0, 255).permute(1, 2, 0).to('cpu', flow.uint8).numpy()
+    ndarr = (
+        grid.mul(255)
+        .add(0.5)
+        .clamp(0, 255)
+        .permute(1, 2, 0)
+        .to("cpu", flow.uint8)
+        .numpy()
+    )
     im = Image.fromarray(ndarr)
     im.save(fp, format=format)
