@@ -6,7 +6,7 @@ from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
 from tqdm import tqdm
 from flowvision.models import ModelCreator
-from flowvision.transforms.functional import str_to_interp_mode, str_to_pil_interp
+from flowvision.transforms.functional import str_to_interp_mode
 import argparse
 import math
 
@@ -47,7 +47,7 @@ class ImageNetDataLoader(DataLoader):
             scale_size = int(math.floor(image_size / crop_pct))
             transform = transforms.Compose(
                 [
-                    transforms.Resize(scale_size, interpolation=str_to_pil_interp(interpolation))  # 3: bibubic
+                    transforms.Resize(scale_size, interpolation=str_to_interp_mode(interpolation))  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
