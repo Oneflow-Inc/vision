@@ -1,3 +1,7 @@
+"""ModelCreator Func
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/registry.py
+"""
+
 import sys
 import re
 import fnmatch
@@ -50,7 +54,7 @@ class ModelCreator(object):
         return model
 
     @staticmethod
-    def model_table(filter="", pretrained=False):
+    def model_table(filter="", pretrained=False, **kwargs):
         all_models = ModelCreator._model_entrypoints.keys()
         if filter:
             models = []
@@ -72,7 +76,7 @@ class ModelCreator(object):
             for model in sorted_model:
                 show_dict[model] = ModelCreator._model_list[model]
         
-        table_headers = ["Names", "Pretrained"]
+        table_headers = ["Supported Models", "Pretrained"]
         table_items = [(k, "true" if show_dict[k] else "false") for k in show_dict.keys()]
-        table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid")
+        table = tabulate(table_items, headers=table_headers, tablefmt="fancy_grid", **kwargs)
         return table
