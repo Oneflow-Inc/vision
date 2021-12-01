@@ -1,9 +1,14 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/resnet.py
+"""
+from typing import Type, Any, Callable, Union, List, Optional
+
 import oneflow as flow
 import oneflow.nn as nn
 from oneflow import Tensor
-from .utils import load_state_dict_from_url
+
 from .registry import ModelCreator
-from typing import Type, Any, Callable, Union, List, Optional
+from .utils import load_state_dict_from_url
 
 __all__ = [
     "ResNet",
@@ -306,24 +311,46 @@ def _resnet(
 
 @ModelCreator.register_model
 def resnet18(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    r"""ResNet-18 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    """
+    Constructs the ResNet-18 model.
+
+    .. note::
+        `Deep Residual Learning for Image Recognition <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnet18 = flowvision.resnet18(pretrained=True, progress=True)
+
     """
     return _resnet("resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    r"""ResNet-34 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    """
+    Constructs the ResNet-34 model.
+
+    .. note::
+        `Deep Residual Learning for Image Recognition <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnet34 = flowvision.resnet34(pretrained=True, progress=True)
+
     """
     return _resnet("resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
@@ -332,15 +359,12 @@ def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
     """
     Constructs the ResNet-50 model.
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
     .. note::
-        xxx
-
-    xxxx
+        `Deep Residual Learning for Image Recognition <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
     Args:
-        pretrained: Whether to download the pre-trained model on ImageNet. Default: ``False``
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
 
     For example:
@@ -348,7 +372,6 @@ def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        
         >>> resnet50 = flowvision.resnet50(pretrained=True, progress=True)
 
     """
@@ -357,12 +380,23 @@ def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
 @ModelCreator.register_model
 def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    r"""ResNet-101 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    """
+    Constructs the ResNet-101 model.
+
+    .. note::
+        `Deep Residual Learning for Image Recognition <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnet101 = flowvision.resnet101(pretrained=True, progress=True)
+
     """
     return _resnet(
         "resnet101", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
@@ -371,12 +405,23 @@ def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
 
 @ModelCreator.register_model
 def resnet152(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    r"""ResNet-152 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+    """
+    Constructs the ResNet-152 model.
+
+    .. note::
+        `Deep Residual Learning for Image Recognition <https://arxiv.org/pdf/1512.03385.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnet152 = flowvision.resnet152(pretrained=True, progress=True)
+
     """
     return _resnet(
         "resnet152", Bottleneck, [3, 8, 36, 3], pretrained, progress, **kwargs
@@ -387,12 +432,23 @@ def resnet152(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
 def resnext50_32x4d(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ResNet:
-    r"""ResNeXt-50 32x4d model from
-    `"Aggregated Residual Transformation for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_.
+    """
+    Constructs the ResNeXt-50 32x4d model.
+
+    .. note::
+        `Aggregated Residual Transformation for Deep Neural Networks <https://arxiv.org/pdf/1611.05431.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnext50_32x4d = flowvision.resnext50_32x4d(pretrained=True, progress=True)
+
     """
     kwargs["groups"] = 32
     kwargs["width_per_group"] = 4
@@ -405,12 +461,23 @@ def resnext50_32x4d(
 def resnext101_32x8d(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ResNet:
-    r"""ResNeXt-101 32x8d model from
-    `"Aggregated Residual Transformation for Deep Neural Networks" <https://arxiv.org/pdf/1611.05431.pdf>`_.
+    """
+    Constructs the ResNeXt-101 32x8d model.
+
+    .. note::
+        `Aggregated Residual Transformation for Deep Neural Networks <https://arxiv.org/pdf/1611.05431.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnext101_32x8d = flowvision.resnext101_32x8d(pretrained=True, progress=True)
+
     """
     kwargs["groups"] = 32
     kwargs["width_per_group"] = 8
@@ -423,17 +490,27 @@ def resnext101_32x8d(
 def wide_resnet50_2(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ResNet:
-    r"""Wide ResNet-50-2 model from
-    `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
+    """
+    Constructs the Wide ResNet-50-2 model.
 
-    The model is the same as ResNet except for the bottleneck number of channels
-    which is twice larger in every block. The number of channels in outer 1x1
-    convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-    channels, and in Wide ResNet-50-2 has 2048-1024-2048.
+    .. note::
+        `Wide Residual Networks <https://arxiv.org/pdf/1605.07146.pdf>`_.
+        The model is the same as ResNet except for the bottleneck number of channels
+        which is twice larger in every block. The number of channels in outer 1x1
+        convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
+        channels, and in Wide ResNet-50-2 has 2048-1024-2048.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> wide_resnet50_2 = flowvision.wide_resnet50_2(pretrained=True, progress=True)
+
     """
     kwargs["width_per_group"] = 64 * 2
     return _resnet(
@@ -445,17 +522,26 @@ def wide_resnet50_2(
 def wide_resnet101_2(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ResNet:
-    r"""Wide ResNet-101-2 model from
-    `"Wide Residual Networks" <https://arxiv.org/pdf/1605.07146.pdf>`_.
+    """
+    Constructs the Wide ResNet-101-2 model.
 
-    The model is the same as ResNet except for the bottleneck number of channels
-    which is twice larger in every block. The number of channels in outer 1x1
-    convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-    channels, and in Wide ResNet-50-2 has 2048-1024-2048.
+    .. note::
+        `Wide Residual Networks <https://arxiv.org/pdf/1605.07146.pdf>`_.
+        The model is the same as ResNet except for the bottleneck number of channels
+        which is twice larger in every block. The number of channels in outer 1x1
+        convolutions is the same, e.g. 
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> wide_resnet101_2 = flowvision.wide_resnet101_2(pretrained=True, progress=True)
+
     """
     kwargs["width_per_group"] = 64 * 2
     return _resnet(
