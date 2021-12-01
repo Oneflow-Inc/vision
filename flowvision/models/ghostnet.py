@@ -300,7 +300,7 @@ def ghostnet(
     .. code-block:: python
 
         >>> import flowvision
-        >>> ghostnet = flowvision.ghostnet(pretrained=True, progress=True, num_classes=1000, width=1.0, dropout=0.2)
+        >>> ghostnet = flowvision.models.ghostnet(pretrained=True, progress=True, num_classes=1000, width=1.0, dropout=0.2)
 
     """
     cfgs = [
