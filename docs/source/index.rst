@@ -7,6 +7,13 @@ Welcome to flowvision's documentation!
 ======================================
 
 .. toctree::
+   :glob:
+   :maxdepth: 1
+   :caption: Tutorials
+
+   tutorials/*
+
+.. toctree::
    :maxdepth: 1
    :caption: Flowvision Python API
 
