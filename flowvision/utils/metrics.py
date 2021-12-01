@@ -27,7 +27,8 @@ def accuracy(output, target, topk=(1,)):
     maxk = min(max(topk), output.size()[1])
     batch_size = target.size(0)
     _, pred = output.topk(maxk, 1, True, True)
-    pred = pred.t()
+    # TODO: add tensor.t() method
+    pred = pred.transpose(-1, -2)
     correct = pred.eq(target.reshape(1, -1).expand_as(pred))
     return [
         correct[: min(k, maxk)].reshape(-1).float().sum(0) * 100.0 / batch_size
