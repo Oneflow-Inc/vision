@@ -2,8 +2,10 @@ import oneflow as flow
 from flowvision.utils.metrics import accuracy
 from flowvision.models.alexnet import alexnet
 
+
 def test_acc(preds, target):
     return accuracy(preds, target, topk=(1, 5))
+
 
 if __name__ == "__main__":
     target = flow.arange(0, 16)
