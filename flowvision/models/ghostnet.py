@@ -282,7 +282,7 @@ def ghostnet(pretrained: bool = False, progress: bool = True, num_classes: int =
         `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
 
     Args:
-        pretrained (bool): whether to download the pretrained weights and then load the model. Default: ``False``
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
         num_classes (int): The number of classification classes. Default: ``1000``
         width (float): Convolution output channel expand rate. Default: ``1.0``
