@@ -2,6 +2,10 @@ flowvision.models
 ===================================
 Pretrain Models for Visual Tasks
 ----------------------------------
+
+Classification
+-------------------------------
+
 .. currentmodule:: flowvision.models
 .. automodule:: flowvision.models
     :members: ghostnet,
@@ -14,4 +18,13 @@ Pretrain Models for Visual Tasks
         resnext101_32x8d,
         wide_resnet50_2,
         wide_resnet101_2,
+
+Neural Style
+-------------------------------
+
+.. currentmodule:: flowvision.models
+.. automodule:: flowvision.models
+    :members:
+        neural_style_transfer,
+
         
