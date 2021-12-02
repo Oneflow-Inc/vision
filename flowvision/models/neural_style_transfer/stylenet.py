@@ -1,9 +1,12 @@
+"""
+Modified from https://github.com/Oneflow-Inc/models/blob/main/Vision/style_transform/fast_neural_style/neural_style/transformer_net.py
+"""
+from typing import Any
+
 import oneflow as flow
 
-from ..utils import load_state_dict_from_url
 from ..registry import ModelCreator
-
-from typing import Any
+from ..utils import load_state_dict_from_url
 
 
 __all__ = ["NeuralStyleTransfer", "neural_style_transfer"]
@@ -122,18 +125,29 @@ class NeuralStyleTransfer(flow.nn.Module):
 def neural_style_transfer(
     pretrained: bool = False,
     progress: bool = True,
-    model_dir: str = "./checkpoints",
     style_model: str = "sketch",
     **kwargs: Any
 ) -> NeuralStyleTransfer:
-    r"""Neural style transfer model architecture from the
-    `"Perceptual Losses for Real-Time Style Transfer..." <https://arxiv.org/abs/1603.08155>`_ paper.
-    The required minimum input size of the model is 256x256.
+    """
+    Constructs the Neural Style Transfer model.
+
+    .. note::
+        `Perceptual Losses for Real-Time Style Transfer and Super-Resolution <https://arxiv.org/abs/1603.08155>`_.
+        The required minimum input size of the model is 256x256.
+        For more details for how to use this model, users can refer to: `neural_style_transfer project <https://github.com/Oneflow-Inc/vision/tree/main/projects/neural_style_transfer>`_.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-        model_dir (str): Path for saving the pretrained model
-        style_model (str): Which style of pretrained model to download 
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        style_model (str): Which pretrained style model to download, user can choose from [sketch, candy, mosaic, rain_princess, udnie]. Default: ``sketch``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> neural_style_transfer = flowvision.models.neural_style_transfer(pretrained=True, progress=True, style_model = "sketch")
+
     """
     assert (
         style_model in style_model_urls.keys()
@@ -142,7 +156,7 @@ def neural_style_transfer(
     model = NeuralStyleTransfer(**kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(
-            style_model_urls[style_model], model_dir=model_dir, progress=progress
+            style_model_urls[style_model], progress=progress
         )
         model.load_state_dict(state_dict)
     return model
