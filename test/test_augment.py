@@ -3,13 +3,13 @@ from oneflow.utils.data import DataLoader
 import numpy as np
 from PIL import Image
 from flowvision.datasets import ImageFolder
-from flowvision.transforms import RandomErasing
-from flowvision.transforms import (
+from flowvision.data import RandomErasing
+from flowvision.data import (
     rand_augment_transform,
     auto_augment_transform,
     augment_and_mix_transform,
 )
-from flowvision.transforms import create_transform
+from flowvision.data import create_transform
 
 
 # class ImageNetDataLoader(DataLoader):
