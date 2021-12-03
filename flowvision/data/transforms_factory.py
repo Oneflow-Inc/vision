@@ -7,18 +7,18 @@ import math
 import oneflow as flow
 from flowvision import transforms
 
-from flowvision.transforms.constants import (
+from flowvision.data.constants import (
     IMAGENET_DEFAULT_MEAN,
     IMAGENET_DEFAULT_STD,
     DEFAULT_CROP_PCT,
 )
-from flowvision.transforms.auto_augment import (
+from flowvision.data.auto_augment import (
     rand_augment_transform,
     augment_and_mix_transform,
     auto_augment_transform,
 )
 from flowvision.transforms.functional import str_to_interp_mode, str_to_pil_interp
-from flowvision.transforms.random_erasing import RandomErasing
+from flowvision.data.random_erasing import RandomErasing
 
 
 def transforms_noaug_train(

@@ -164,6 +164,7 @@ class Mixup:
                     x[i][:, yl:yh, xl:xh] = x_orig[j][:, yl:yh, xl:xh]
                     lam_batch[i] = lam
                 else:
+                    lam = flow.tensor(lam, device=x.device, dtype=x.dtype)
                     x[i] = x[i] * lam + x_orig[i] * (1 - lam)
         return flow.tensor(lam_batch, device=x.device, dtype=x.dtype).unsqueeze(1)
 
@@ -183,6 +184,8 @@ class Mixup:
                     x[j][:, yl:yh, xl:xh] = x_orig[i][:, yl:yh, xl:xh]
                     lam_batch[i] = lam
                 else:
+                    # TODO: support tensor * numpy
+                    lam = flow.tensor(lam, device=x.device, dtype=x.dtype)
                     x[i] = x[i] * lam + x_orig[j] * (1 - lam)
                     x[j] = x[j] * lam + x_orig[i] * (1 - lam)
         lam_batch = np.concatenate((lam_batch, lam_batch[::-1]))
