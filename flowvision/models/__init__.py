@@ -1,6 +1,3 @@
-from . import detection
-from . import neural_style_transfer
-from . import segmentation
 from .alexnet import *
 from .densenet import *
 from .vit import *
@@ -24,6 +21,9 @@ from .rexnet import *
 from .rexnet_lite import *
 from .ghostnet import *
 from .res2net import *
+from .neural_style_transfer import *
+from .detection import *
+from .segmentation import *
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator

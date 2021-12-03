@@ -1,14 +1,12 @@
 import os
 import oneflow as flow
-import oneflow.nn as nn
 from oneflow.utils.data import DataLoader
 from oneflow.utils.vision import transforms
 from oneflow.utils.vision.transforms import InterpolationMode
 from oneflow.utils.vision.datasets import ImageFolder
 from tqdm import tqdm
-import numpy as np
-from functools import partial
 from flowvision.models import ModelCreator
+from flowvision.transforms.functional import str_to_interp_mode
 import argparse
 import math
 
@@ -19,18 +17,31 @@ ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
 CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
-IMAGENET_DEFAULT_MEAN = [0.485, 0.456, 0.406]
-IMAGENET_DEFAULT_STD = [0.229, 0.224, 0.225]
 
-VIT_DEFAULT_MEAN = [0.5, 0.5, 0.5]
-VIT_DEFAULT_STD = [0.5, 0.5, 0.5]
-
-DEFAULT_CROP_SIZE = 0.9
+def get_mean_std(mode="imagenet_default_mean_std"):
+    if mode == "imagenet_default_mean_std":
+        mean = (0.485, 0.456, 0.406)
+        std = (0.229, 0.224, 0.225)
+    elif mode == "vit_mean_std":
+        mean = (0.5, 0.5, 0.5)
+        std = (0.5, 0.5, 0.5)
+    else:
+        raise NotImplementedError(f"Unkown mode: {mode}")
+    return mean, std
 
 
 class ImageNetDataLoader(DataLoader):
     def __init__(
-        self, data_dir, split="train", image_size=224, batch_size=16, num_workers=8
+        self,
+        data_dir,
+        split="train",
+        image_size=224,
+        img_mean=(0.485, 0.456, 0.406),
+        img_std=(0.229, 0.224, 0.225),
+        crop_pct=0.875,
+        interpolation="bibubic",
+        batch_size=16,
+        num_workers=8,
     ):
 
         if split == "train":
@@ -39,19 +50,21 @@ class ImageNetDataLoader(DataLoader):
                     transforms.Resize((image_size, image_size)),
                     transforms.RandomHorizontalFlip(),
                     transforms.ToTensor(),
-                    transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
+                    transforms.Normalize(img_mean, img_std),
                 ]
             )
         else:
-            scale_size = int(math.floor(image_size / DEFAULT_CROP_SIZE))
+            scale_size = int(math.floor(image_size / crop_pct))
             transform = transforms.Compose(
                 [
-                    transforms.Resize(scale_size, interpolation=3)  # 3: bibubic
+                    transforms.Resize(
+                        scale_size, interpolation=str_to_interp_mode(interpolation)
+                    )  # 3: bibubic
                     if image_size == 224
                     else transforms.Resize(image_size, interpolation=3),
                     transforms.CenterCrop(image_size),
                     transforms.ToTensor(),
-                    transforms.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
+                    transforms.Normalize(img_mean, img_std),
                 ]
             )
 
@@ -101,6 +114,9 @@ def main(args):
     model = ModelCreator.create_model(args.model, pretrained=True)
     data_dir = args.data_path
     img_size = args.img_size
+    img_mean, img_std = get_mean_std(args.normalize_mode)
+    crop_pct = args.crop_pct
+    interpolation = args.interpolation
     batch_size = args.batch_size
     num_workers = args.num_workers
 
@@ -109,6 +125,10 @@ def main(args):
     data_loader = ImageNetDataLoader(
         data_dir=data_dir,
         image_size=img_size,
+        img_mean=img_mean,
+        img_std=img_std,
+        crop_pct=crop_pct,
+        interpolation=interpolation,
         batch_size=batch_size,
         num_workers=num_workers,
         split="val",
@@ -158,6 +178,22 @@ def _parse_args():
     parser.add_argument("--img_size", type=int, default=224, help="test batch size")
     parser.add_argument(
         "--num_workers", type=int, default=8, help="num workers in dataloader"
+    )
+    parser.add_argument(
+        "--normalize_mode",
+        type=str,
+        default="imagenet_default_mean_std",
+        choices=["imagenet_default_mean_std", "vit_mean_std"],
+        help="the normalization mode",
+    )
+    parser.add_argument(
+        "--crop_pct", type=float, default=0.875, help="image crop ratio controller"
+    )
+    parser.add_argument(
+        "--interpolation",
+        type=str,
+        default="bicubic",
+        help="interpolation method to choose",
     )
     return parser.parse_args()
 

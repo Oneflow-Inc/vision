@@ -1,15 +1,15 @@
 """
-Creates a GhostNet Model as defined in:
-GhostNet: More Features from Cheap Operations By Kai Han, Yunhe Wang, Qi Tian, Jianyuan Guo, Chunjing Xu, Chang Xu.
-https://arxiv.org/abs/1911.11907
 Modified from https://github.com/iamhankai/ghostnet.pytorch/blob/master/ghost_net.py
 """
+import math
+from typing import Any
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import math
-from .utils import load_state_dict_from_url
+
 from .registry import ModelCreator
+from .utils import load_state_dict_from_url
 
 
 __all__ = ["ghostnet"]
@@ -274,9 +274,34 @@ class GhostNet(nn.Module):
 
 
 @ModelCreator.register_model
-def ghostnet(pretrained: bool = False, **kwargs):
+def ghostnet(
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: int = 1000,
+    width: float = 1.0,
+    dropout: float = 0.2,
+    **kwargs: Any
+):
     """
-    Constructs a GhostNet model
+    Constructs the GhostNet model.
+
+    .. note::
+        `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        num_classes (int): The number of classification classes. Default: ``1000``
+        width (float): Convolution output channel expand rate. Default: ``1.0``
+        dropout (float): Dropout rate. Default: ``0.2``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> ghostnet = flowvision.models.ghostnet(pretrained=True, progress=True, num_classes=1000, width=1.0, dropout=0.2)
+
     """
     cfgs = [
         # k, t, c, SE, s
@@ -306,13 +331,15 @@ def ghostnet(pretrained: bool = False, **kwargs):
             [5, 960, 160, 0.25, 1],
         ],
     ]
-    model = GhostNet(cfgs, **kwargs)
+    model = GhostNet(
+        cfgs, num_classes=num_classes, width=width, dropout=dropout, **kwargs
+    )
     if pretrained:
         arch = "ghostnet"
         if model_urls.get(arch, None) is None:
             raise ValueError(
                 "No checkpoint is available for model type {}".format(arch)
             )
-        state_dict = load_state_dict_from_url(model_urls[arch], progress=True)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model

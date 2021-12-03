@@ -55,7 +55,6 @@ def googlenet(
             )
         original_aux_logits = kwargs["aux_logits"]
         kwargs["aux_logits"] = True
-        kwargs["init_weights"] = False
         model = GoogLeNet(**kwargs)
         state_dict = load_state_dict_from_url(
             model_urls["googlenet"], progress=progress
