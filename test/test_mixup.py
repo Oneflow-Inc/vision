@@ -3,9 +3,14 @@ import oneflow as flow
 from flowvision.data import Mixup
 
 
-
 def test_mixup(x, target, switch_prob=0.5, mode="batch"):
-    mixup = Mixup(mixup_alpha=1., cutmix_alpha=1., switch_prob=switch_prob, label_smoothing=0., mode=mode)
+    mixup = Mixup(
+        mixup_alpha=1.0,
+        cutmix_alpha=1.0,
+        switch_prob=switch_prob,
+        label_smoothing=0.0,
+        mode=mode,
+    )
     x, target = mixup(x, target)
     return x, target
 
