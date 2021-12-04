@@ -7,9 +7,10 @@ from numpy.lib.arraysetops import union1d
 import oneflow as flow
 from torch._C import dtype
 from test_utils import GenArgDict, GenArgList
-from flowvision.loss.cross_entropy import (
+from flowvision.loss import (
     SoftTargetCrossEntropy,
     LabelSmoothingCrossEntropy,
+    JsdCrossEntropy,
 )
 
 
