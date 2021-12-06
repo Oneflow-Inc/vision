@@ -176,7 +176,7 @@ def vgg11(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg11 = flowvision.models.vgg11(pretrained=True, progress=True)
+        >>> vgg11 = flowvision.models.vgg11(pretrained=False, progress=True)
 
     """
     return _vgg("vgg11", "A", False, pretrained, progress, **kwargs)
@@ -200,7 +200,7 @@ def vgg11_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg11_bn = flowvision.models.vgg11_bn(pretrained=True, progress=True)
+        >>> vgg11_bn = flowvision.models.vgg11_bn(pretrained=False, progress=True)
 
     """
     return _vgg("vgg11_bn", "A", True, pretrained, progress, **kwargs)
@@ -224,7 +224,7 @@ def vgg13(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg13 = flowvision.models.vgg13(pretrained=True, progress=True)
+        >>> vgg13 = flowvision.models.vgg13(pretrained=False, progress=True)
 
     """
     return _vgg("vgg13", "B", False, pretrained, progress, **kwargs)
@@ -248,7 +248,7 @@ def vgg13_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg13_bn = flowvision.models.vgg13_bn(pretrained=True, progress=True)
+        >>> vgg13_bn = flowvision.models.vgg13_bn(pretrained=False, progress=True)
 
     """
     return _vgg("vgg13_bn", "B", True, pretrained, progress, **kwargs)
@@ -272,7 +272,7 @@ def vgg16(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg16 = flowvision.models.vgg16(pretrained=True, progress=True)
+        >>> vgg16 = flowvision.models.vgg16(pretrained=False, progress=True)
 
     """
     return _vgg("vgg16", "D", False, pretrained, progress, **kwargs)
@@ -296,7 +296,7 @@ def vgg16_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg16_bn = flowvision.models.vgg16_bn(pretrained=True, progress=True)
+        >>> vgg16_bn = flowvision.models.vgg16_bn(pretrained=False, progress=True)
 
     """
     return _vgg("vgg16_bn", "D", True, pretrained, progress, **kwargs)

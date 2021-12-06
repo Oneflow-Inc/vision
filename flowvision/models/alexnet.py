@@ -77,7 +77,7 @@ def alexnet(
     .. code-block:: python
 
         >>> import flowvision
-        >>> alexnet = flowvision.models.alexnet(pretrained=True, progress=True, num_classes=1000)
+        >>> alexnet = flowvision.models.alexnet(pretrained=False, progress=True, num_classes=1000)
 
     """
     model = AlexNet(**kwargs)

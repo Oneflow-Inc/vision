@@ -303,7 +303,7 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_b_16_224 = flowvision.models.vit_b_16_224(pretrained=True, progress=True)
+        >>> vit_b_16_224 = flowvision.models.vit_b_16_224(pretrained=False, progress=True)
 
     """
     model = VisionTransformer(
@@ -343,7 +343,7 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_b_16_384 = flowvision.models.vit_b_16_384(pretrained=True, progress=True)
+        >>> vit_b_16_384 = flowvision.models.vit_b_16_384(pretrained=False, progress=True)
 
     """
     model = VisionTransformer(
@@ -383,7 +383,7 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_b_32_224 = flowvision.models.vit_b_32_224(pretrained=True, progress=True)
+        >>> vit_b_32_224 = flowvision.models.vit_b_32_224(pretrained=False, progress=True)
 
     """
     model = VisionTransformer(
@@ -423,7 +423,7 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_b_32_384 = flowvision.models.vit_b_32_384(pretrained=True, progress=True)
+        >>> vit_b_32_384 = flowvision.models.vit_b_32_384(pretrained=False, progress=True)
 
     """
     model = VisionTransformer(
@@ -463,7 +463,7 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_l_16_384 = flowvision.models.vit_l_16_384(pretrained=True, progress=True)
+        >>> vit_l_16_384 = flowvision.models.vit_l_16_384(pretrained=False, progress=True)
 
     """
     model = VisionTransformer(
@@ -503,7 +503,7 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_l_32_384 = flowvision.models.vit_l_32_384(pretrained=True, progress=True)
+        >>> vit_l_32_384 = flowvision.models.vit_l_32_384(pretrained=False, progress=True)
 
     """
     model = VisionTransformer(
