@@ -285,6 +285,14 @@ class VisionTransformer(nn.Module):
         return logits
 
 
+def _create_vision_transformer(arch, pretrained=False, progress=True, **model_kwargs):
+    model = VisionTransformer(**model_kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        model.load_state_dict(state_dict)
+    return model
+
+
 @ModelCreator.register_model
 def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     """
@@ -306,7 +314,7 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> vit_b_16_224 = flowvision.models.vit_b_16_224(pretrained=False, progress=True)
 
     """
-    model = VisionTransformer(
+    model_kwargs = dict(
         image_size=(224, 224),
         patch_size=(16, 16),
         emb_dim=768,
@@ -317,12 +325,14 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_16_224", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
@@ -346,7 +356,7 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> vit_b_16_384 = flowvision.models.vit_b_16_384(pretrained=False, progress=True)
 
     """
-    model = VisionTransformer(
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(16, 16),
         emb_dim=768,
@@ -357,12 +367,14 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_16_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_16_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
@@ -386,7 +398,7 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> vit_b_32_224 = flowvision.models.vit_b_32_224(pretrained=False, progress=True)
 
     """
-    model = VisionTransformer(
+    model_kwargs = dict(
         image_size=(224, 224),
         patch_size=(32, 32),
         emb_dim=768,
@@ -397,12 +409,14 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_32_224", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_32_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
@@ -426,7 +440,7 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> vit_b_32_384 = flowvision.models.vit_b_32_384(pretrained=False, progress=True)
 
     """
-    model = VisionTransformer(
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(32, 32),
         emb_dim=768,
@@ -437,12 +451,14 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_32_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_32_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
@@ -466,7 +482,7 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> vit_l_16_384 = flowvision.models.vit_l_16_384(pretrained=False, progress=True)
 
     """
-    model = VisionTransformer(
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(16, 16),
         emb_dim=1024,
@@ -478,11 +494,12 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         dropout_rate=0.1,
         feat_dim=None,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_l_16_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_l_16_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
@@ -506,7 +523,7 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> vit_l_32_384 = flowvision.models.vit_l_32_384(pretrained=False, progress=True)
 
     """
-    model = VisionTransformer(
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(32, 32),
         emb_dim=1024,
@@ -517,9 +534,11 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_l_32_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_l_32_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
+    )
