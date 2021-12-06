@@ -287,6 +287,25 @@ class VisionTransformer(nn.Module):
 
 @ModelCreator.register_model
 def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
+    """
+    Constructs the ViT-B-16-224 model.
+
+    .. note::
+        ViT-B-16-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_16_224 = flowvision.models.vit_b_16_224(pretrained=True, progress=True)
+
+    """
     model = VisionTransformer(
         image_size=(224, 224),
         patch_size=(16, 16),
@@ -308,6 +327,25 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
 
 @ModelCreator.register_model
 def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
+    """
+    Constructs the ViT-B-16-384 model.
+
+    .. note::
+        ViT-B-16-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_16_384 = flowvision.models.vit_b_16_384(pretrained=True, progress=True)
+
+    """
     model = VisionTransformer(
         image_size=(384, 384),
         patch_size=(16, 16),
@@ -329,6 +367,25 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
 
 @ModelCreator.register_model
 def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
+    """
+    Constructs the ViT-B-32-224 model.
+
+    .. note::
+        ViT-B-16-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_32_224 = flowvision.models.vit_b_32_224(pretrained=True, progress=True)
+
+    """
     model = VisionTransformer(
         image_size=(224, 224),
         patch_size=(32, 32),
@@ -350,6 +407,25 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
 
 @ModelCreator.register_model
 def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
+    """
+    Constructs the ViT-B-32-384 model.
+
+    .. note::
+        ViT-B-32-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_32_384 = flowvision.models.vit_b_32_384(pretrained=True, progress=True)
+
+    """
     model = VisionTransformer(
         image_size=(384, 384),
         patch_size=(32, 32),

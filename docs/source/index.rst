@@ -19,7 +19,7 @@ Welcome to flowvision's documentation!
 
    flowvision.datasets
    flowvision.layers
-   flowvision.losss
+   flowvision.loss
    flowvision.models
    flowvision.scheduler
    flowvision.transforms
