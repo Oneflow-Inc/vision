@@ -8,7 +8,8 @@ Classification
 
 .. currentmodule:: flowvision.models
 .. automodule:: flowvision.models
-    :members: ghostnet,
+    :members: alexnet,
+        ghostnet,
         resnet18,
         resnet34,
         resnet50,

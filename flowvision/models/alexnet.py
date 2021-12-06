@@ -66,7 +66,8 @@ def alexnet(
     Constructs the AlexNet model.
 
     .. note::
-        `AlexNet model architecture from <https://arxiv.org/abs/1911.11907>`_.
+        AlexNet model architecture from the `One weird trick... <https://arxiv.org/abs/1404.5997>`_ paper.
+        The required minimum input size of the model is 63x63.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
