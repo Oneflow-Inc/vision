@@ -331,7 +331,7 @@ class RegionProposalNetwork(nn.Module):
         # apply pred_bbox_deltas to anchors to obtain the decoded proposals
         # note that we detach the deltas because Faster R-CNN do not backprop thourgh
         # the proposals
-        proposals = self.box_coder.decode(pred_bbox_delta.detach(), anchors)
+        proposals = self.box_coder.decode(pred_bbox_deltas.detach(), anchors)
         proposals = proposals.view(num_images, -1, 4)
         boxes, scores = self.filter_proposals(proposals, objectness, images.image_sizes, num_anchors_per_level)
 
