@@ -1,11 +1,12 @@
+import numpy as np
+from typing import Any
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import numpy as np
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-
-from typing import Any
 
 __all__ = [
     "VisionTransformer",

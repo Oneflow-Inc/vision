@@ -1,15 +1,18 @@
+"""
+Modified from https://github.com/whai362/PVT/blob/v2/classification/pvt.py
+"""
+import numpy as np
+from functools import partial
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
-from functools import partial
-import numpy as np
 
-from flowvision.layers.regularization import DropPath
 from .helpers import to_2tuple
-
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from flowvision.layers.regularization import DropPath
 
 
 model_urls = {
