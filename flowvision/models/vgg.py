@@ -1,7 +1,12 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/vgg.py
+"""
+from typing import Union, List, Dict, Any, cast
+
 import oneflow as flow
 import oneflow.nn as nn
+
 from .utils import load_state_dict_from_url
-from typing import Union, List, Dict, Any, cast
 from .registry import ModelCreator
 
 
@@ -155,12 +160,30 @@ def _vgg(
 
 @ModelCreator.register_model
 def vgg11(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 11-layer model (configuration "A") from
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    # r"""VGG 11-layer model (configuration "A") from
+    # `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+
+    # Args:
+    #     pretrained (bool): If True, returns a model pre-trained on ImageNet
+    #     progress (bool): If True, displays a progress bar of the download to stderr
+    # """
+    """
+    Constructs the VGG-11 model (configuration "A").
+
+    .. note::
+        `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> alexnet = flowvision.models.vgg11(pretrained=True, progress=True, num_classes=1000)
+
     """
     return _vgg("vgg11", "A", False, pretrained, progress, **kwargs)
 

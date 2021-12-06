@@ -59,7 +59,6 @@ class AlexNet(nn.Module):
 def alexnet(
     pretrained: bool = False,
     progress: bool = True,
-    num_classes: int = 1000, 
     **kwargs: Any
 ) -> AlexNet:
     """
@@ -72,7 +71,6 @@ def alexnet(
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
-        num_classes (int): The number of classification classes. Default: ``1000``
 
     For example:
 
@@ -82,7 +80,7 @@ def alexnet(
         >>> alexnet = flowvision.models.alexnet(pretrained=True, progress=True, num_classes=1000)
 
     """
-    model = AlexNet(num_classes=num_classes, **kwargs)
+    model = AlexNet(**kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(
             model_urls["alexnet"], model_dir="./checkpoints", progress=progress
