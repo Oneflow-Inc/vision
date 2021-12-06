@@ -9,6 +9,7 @@ Classification
 .. currentmodule:: flowvision.models
 .. automodule:: flowvision.models
     :members: alexnet,
+        vgg11,
         ghostnet,
         resnet18,
         resnet34,
