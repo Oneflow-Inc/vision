@@ -320,7 +320,7 @@ def vgg19(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg19 = flowvision.models.vgg19(pretrained=True, progress=True)
+        >>> vgg19 = flowvision.models.vgg19(pretrained=False, progress=True)
 
     """
     return _vgg("vgg19", "E", False, pretrained, progress, **kwargs)
@@ -344,7 +344,7 @@ def vgg19_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> vgg19_bn = flowvision.models.vgg19_bn(pretrained=True, progress=True)
+        >>> vgg19_bn = flowvision.models.vgg19_bn(pretrained=False, progress=True)
 
     """
     return _vgg("vgg19_bn", "E", True, pretrained, progress, **kwargs)

@@ -83,6 +83,20 @@ ResNet
         wide_resnet101_2,
 
 
+ViT
+------
+
+.. autosummary::
+.. automodule:: flowvision.models
+    :members: 
+        vit_b_16_224,
+        vit_b_16_384,
+        vit_b_32_224,
+        vit_b_32_384,
+        vit_l_16_384,
+        vit_l_32_384,
+
+
 Neural Style
 ============
 
