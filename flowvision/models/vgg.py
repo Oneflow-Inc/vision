@@ -208,71 +208,143 @@ def vgg11_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
 @ModelCreator.register_model
 def vgg13(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 13-layer model (configuration "B")
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    """
+    Constructs the VGG-13 model (configuration "B").
+
+    .. note::
+        VGG 13-layer model (configuration “B”) from `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+        The required minimum input size of the model is 32x32.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vgg13 = flowvision.models.vgg13(pretrained=True, progress=True)
+
     """
     return _vgg("vgg13", "B", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def vgg13_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 13-layer model (configuration "B") with batch normalization
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    """
+    Constructs the VGG-13 model with batch normalization (configuration "B").
+
+    .. note::
+        VGG 13-layer model (configuration “B”) with batch normalization from `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+        The required minimum input size of the model is 32x32.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vgg13_bn = flowvision.models.vgg13_bn(pretrained=True, progress=True)
+
     """
     return _vgg("vgg13_bn", "B", True, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def vgg16(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 16-layer model (configuration "D")
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    """
+    Constructs the VGG-16 model (configuration "D").
+
+    .. note::
+        VGG 16-layer model (configuration “D”) from `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+        The required minimum input size of the model is 32x32.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vgg16 = flowvision.models.vgg16(pretrained=True, progress=True)
+
     """
     return _vgg("vgg16", "D", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def vgg16_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 16-layer model (configuration "D") with batch normalization
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    """
+    Constructs the VGG-16 model (configuration "D") with batch normalization.
+
+    .. note::
+        VGG 16-layer model (configuration “D”) with batch normalization from `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+        The required minimum input size of the model is 32x32.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vgg16_bn = flowvision.models.vgg16_bn(pretrained=True, progress=True)
+
     """
     return _vgg("vgg16_bn", "D", True, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def vgg19(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 19-layer model (configuration "E")
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    """
+    Constructs the VGG-19 model (configuration "E").
+
+    .. note::
+        VGG 19-layer model (configuration “E”) from `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+        The required minimum input size of the model is 32x32.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vgg19 = flowvision.models.vgg19(pretrained=True, progress=True)
+
     """
     return _vgg("vgg19", "E", False, pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def vgg19_bn(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> VGG:
-    r"""VGG 19-layer model (configuration 'E') with batch normalization
-    `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+    """
+    Constructs the VGG-19 model (configuration "E") with batch normalization.
+
+    .. note::
+        VGG 19-layer model (configuration “E”) with batch normalization from `"Very Deep Convolutional Networks For Large-Scale Image Recognition" <https://arxiv.org/pdf/1409.1556.pdf>`_.
+        The required minimum input size of the model is 32x32.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vgg19_bn = flowvision.models.vgg19_bn(pretrained=True, progress=True)
+
     """
     return _vgg("vgg19_bn", "E", True, pretrained, progress, **kwargs)
