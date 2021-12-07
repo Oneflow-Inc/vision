@@ -102,6 +102,17 @@ PVT
         pvt_large,
 
 
+ResMLP
+------
+
+.. automodule:: flowvision.models
+    :members: 
+        resmlp_12,
+        resmlp_12_dist,
+        resmlp_24,
+        resmlp_24_dist,
+
+
 Neural Style
 ============
 
