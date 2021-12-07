@@ -362,7 +362,7 @@ def pvt_tiny(pretrained=False, progress=True, **kwargs):
     Constructs the PVT-tiny model.
 
     .. note::
-        PVT-tiny model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        PVT-tiny model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -400,7 +400,7 @@ def pvt_small(pretrained=False, progress=True, **kwargs):
     Constructs the PVT-small model.
 
     .. note::
-        PVT-small model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        PVT-small model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -438,8 +438,7 @@ def pvt_medium(pretrained=False, progress=True, **kwargs):
     Constructs the PVT-medium model.
 
     .. note::
-        PVT-medium model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
-        The required input size of the model is 224x224.
+        PVT-medium model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -477,8 +476,7 @@ def pvt_large(pretrained=False, progress=True, **kwargs):
     Constructs the PVT-large model.
 
     .. note::
-        PVT-large model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
-        The required input size of the model is 224x224.
+        PVT-large model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``

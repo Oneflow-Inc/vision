@@ -21,8 +21,8 @@ architectures for image classification:
 -  `MobileNetV3`_
 -  `ResNeXt`_
 -  `MNASNet`_
--  `EfficientNet`_
--  `RegNet`_
+-  `ViT`_
+-  `PVT`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -30,15 +30,14 @@ architectures for image classification:
 .. _ResNet: https://arxiv.org/abs/1512.03385
 .. _SqueezeNet: https://arxiv.org/abs/1602.07360
 .. _DenseNet: https://arxiv.org/abs/1608.06993
-.. _Inception: https://arxiv.org/abs/1512.00567
+.. _InceptionV3: https://arxiv.org/abs/1512.00567
 .. _GoogLeNet: https://arxiv.org/abs/1409.4842
-.. _ShuffleNet: https://arxiv.org/abs/1807.11164
+.. _ShuffleNetV2: https://arxiv.org/abs/1807.11164
 .. _MobileNetV2: https://arxiv.org/abs/1801.04381
 .. _MobileNetV3: https://arxiv.org/abs/1905.02244
 .. _ResNeXt: https://arxiv.org/abs/1611.05431
 .. _MNASNet: https://arxiv.org/abs/1807.11626
-.. _EfficientNet: https://arxiv.org/abs/1905.11946
-.. _RegNet: https://arxiv.org/abs/2003.13678
+.. _ViT: https://arxiv.org/abs/2010.11929
 
 .. currentmodule:: flowvision.models
 
@@ -91,6 +90,16 @@ ViT
         vit_b_32_384,
         vit_l_16_384,
         vit_l_32_384,
+
+PVT
+------
+
+.. automodule:: flowvision.models
+    :members: 
+        pvt_tiny,
+        pvt_small,
+        pvt_medium,
+        pvt_large,
 
 
 Neural Style
