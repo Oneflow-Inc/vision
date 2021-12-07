@@ -288,7 +288,7 @@ def ghostnet(
     .. note::
         `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
 
-    .. figure:: https://github.com/Oneflow-Inc/vision/blob/docs/source/_static/images/ghostnet.png?raw=true
+    .. figure:: https://github.com/Oneflow-Inc/vision/blob/main/docs/source/_static/images/ghostnet.png?raw=true
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
