@@ -56,11 +56,7 @@ class AlexNet(nn.Module):
 
 
 @ModelCreator.register_model
-def alexnet(
-    pretrained: bool = False,
-    progress: bool = True,
-    **kwargs: Any
-) -> AlexNet:
+def alexnet(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> AlexNet:
     """
     Constructs the AlexNet model.
 
