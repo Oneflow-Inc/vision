@@ -23,6 +23,7 @@ architectures for image classification:
 -  `MNASNet`_
 -  `ViT`_
 -  `PVT`_
+-  `ResMLP`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -38,6 +39,8 @@ architectures for image classification:
 .. _ResNeXt: https://arxiv.org/abs/1611.05431
 .. _MNASNet: https://arxiv.org/abs/1807.11626
 .. _ViT: https://arxiv.org/abs/2010.11929
+.. _PVT: https://arxiv.org/abs/2102.12122
+.. _ResMLP: https://arxiv.org/abs/2105.03404
 
 .. currentmodule:: flowvision.models
 
@@ -111,6 +114,12 @@ ResMLP
         resmlp_12_dist,
         resmlp_24,
         resmlp_24_dist,
+        resmlp_24_dino,
+        resmlp_36,
+        resmlp_36_dist,
+        resmlpB_24,
+        resmlpB_24_in22k,
+        resmlpB_24_dist,
 
 
 Neural Style
