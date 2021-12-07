@@ -1,5 +1,5 @@
 flowvision.models
-===================================
+##############################
 Pretrain Models for Visual Tasks
 
 
@@ -45,7 +45,6 @@ architectures for image classification:
 Alexnet
 -------
 
-.. autosummary::
 .. automodule:: flowvision.models
     :members: alexnet
     
@@ -53,7 +52,6 @@ Alexnet
 VGG
 ---
 
-.. autosummary::
 .. automodule:: flowvision.models
     :members: 
         vgg11,
@@ -69,7 +67,6 @@ VGG
 ResNet
 ------
 
-.. autosummary::
 .. automodule:: flowvision.models
     :members: 
         resnet18,
@@ -86,7 +83,6 @@ ResNet
 ViT
 ------
 
-.. autosummary::
 .. automodule:: flowvision.models
     :members: 
         vit_b_16_224,
