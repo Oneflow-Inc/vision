@@ -65,6 +65,25 @@ def _batched_nms_coordinate_trick(
     return keep
 
 
+def remove_samll_boxes(boxes: Tensor, min_size: float) -> Tensor:
+    """
+    Remove boxes which contains at least one side smaller than min_size.
+
+    Args:
+        boxes (Tensor[N, 4]): boxes in ``(x1, y1, x2, y2)`` format
+            with ``0 <= x1 < x2`` and ``0 <= y1 < y2``.
+        min_size (float): minimum size
+
+    Returns:
+        Tensor[K]: indices of the boxes that have both sides
+        larger than min_size
+    """
+    ws, hs = boxes[:, 2] - boxes[:, 0], boxes[:, 3] - boxes[:, 1]
+    keep = (ws >= min_size) & (hs >= min_size)
+    keep = flow.where(keep)[0]
+    return keep
+
+
 def clip_boxes_to_image(boxes: Tensor, size: Tuple[int, int]) -> Tensor:
     """
     Clip boxes so that they lie inside an image of size `size`.
