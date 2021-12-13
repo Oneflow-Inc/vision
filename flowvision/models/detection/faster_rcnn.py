@@ -3,21 +3,31 @@ from oneflow import nn
 import oneflow.nn.functional as F
 
 from flowvision.layers.blocks import MultiScaleRoIAlign
+from flowvision.layers.blocks import misc as misc_nn_ops
 
 from .det_utils import overwrite_eps
 from ..utils import load_state_dict_from_url
+from ..registry import ModelCreator
 
+from ..resnet import resnet50
 from .anchor_utils import AnchorGenerator
 from .generalized_rcnn import GeneralizedRCNN
 from .rpn import RPNHead, RegionProposalNetwork
 from .roi_heads import RoIHeads
 from .transform import GeneralizedRCNNTransform
-from .backbone_utils import resnet_fpn_backbone, _validate_trainable_layers, mobilenet_backbone
+from .backbone_utils import (
+    _resnet_fpn_extractor,
+    _validate_trainable_layers,
+    _mobilenet_extractor,
+)
 
 
-__all__ = [
-    "FasterRCNN", "fasterrcnn_resnet50_fpn"
-]
+__all__ = ["FasterRCNN", "fasterrcnn_resnet50_fpn"]
+
+
+model_urls = {
+    "fasterrcnn_resnet50_fpn_coco": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/detection/faster_rcnn/fasterrcnn_resnet50_fpn_coco.tar.gz",
+}
 
 
 class FasterRCNN(GeneralizedRCNN):
@@ -96,57 +106,82 @@ class FasterRCNN(GeneralizedRCNN):
         bbox_reg_weights (Tuple[float, float, float, float]): weights for the encoding/decoding of the
             bounding boxes.
     """
-    def __init__(self, backbone, num_classes=None,
-                 # transform parameters
-                 min_size=800, max_size=1333,
-                 image_mean=None, image_std=None,
-                 # RPN parameters
-                 rpn_anchor_generator=None, rpn_head=None,
-                 rpn_pre_nms_top_n_train=2000, rpn_pre_nms_top_n_test=1000,
-                 rpn_post_nms_top_n_train=2000, rpn_post_nms_top_n_test=1000,
-                 rpn_nms_thresh=0.7,
-                 rpn_fg_iou_thresh=0.7, rpn_bg_iou_thresh=0.3,
-                 rpn_batch_size_per_image=256, rpn_positive_fraction=0.5,
-                 rpn_score_thresh=0.0,
-                 # Box parameters
-                 box_roi_pool=None, box_head=None, box_predictor=None,
-                 box_score_thresh=0.05, box_nms_thresh=0.5, box_detections_per_img=100,
-                 box_fg_iou_thresh=0.5, box_bg_iou_thresh=0.5,
-                 box_batch_size_per_image=512, box_positive_fraction=0.25,
-                 bbox_reg_weights=None):
+
+    def __init__(
+        self,
+        backbone,
+        num_classes=None,
+        # transform parameters
+        min_size=800,
+        max_size=1333,
+        image_mean=None,
+        image_std=None,
+        # RPN parameters
+        rpn_anchor_generator=None,
+        rpn_head=None,
+        rpn_pre_nms_top_n_train=2000,
+        rpn_pre_nms_top_n_test=1000,
+        rpn_post_nms_top_n_train=2000,
+        rpn_post_nms_top_n_test=1000,
+        rpn_nms_thresh=0.7,
+        rpn_fg_iou_thresh=0.7,
+        rpn_bg_iou_thresh=0.3,
+        rpn_batch_size_per_image=256,
+        rpn_positive_fraction=0.5,
+        rpn_score_thresh=0.0,
+        # Box parameters
+        box_roi_pool=None,
+        box_head=None,
+        box_predictor=None,
+        box_score_thresh=0.05,
+        box_nms_thresh=0.5,
+        box_detections_per_img=100,
+        box_fg_iou_thresh=0.5,
+        box_bg_iou_thresh=0.5,
+        box_batch_size_per_image=512,
+        box_positive_fraction=0.25,
+        bbox_reg_weights=None,
+    ):
 
         if not hasattr(backbone, "out_channels"):
             raise ValueError(
                 "backbone should contain an attribute out_channels "
                 "specifying the number of output channels (assumed to be the "
-                "same for all the levels)")
+                "same for all the levels)"
+            )
 
         assert isinstance(rpn_anchor_generator, (AnchorGenerator, type(None)))
         assert isinstance(box_roi_pool, (MultiScaleRoIAlign, type(None)))
 
         if num_classes is not None:
             if box_predictor is not None:
-                raise ValueError("num_classes should be None when box_predictor is specified")
+                raise ValueError(
+                    "num_classes should be None when box_predictor is specified"
+                )
         else:
             if box_predictor is None:
-                raise ValueError("num_classes should not be None when box_predictor "
-                                 "is not specified")
+                raise ValueError(
+                    "num_classes should not be None when box_predictor "
+                    "is not specified"
+                )
 
         out_channels = backbone.out_channels
 
         if rpn_anchor_generator is None:
             anchor_sizes = ((32,), (64,), (128,), (256,), (512,))
             aspect_ratios = ((0.5, 1.0, 2.0),) * len(anchor_sizes)
-            rpn_anchor_generator = AnchorGenerator(
-                anchor_sizes, aspect_ratios
-            )
+            rpn_anchor_generator = AnchorGenerator(anchor_sizes, aspect_ratios)
         if rpn_head is None:
             rpn_head = RPNHead(
                 out_channels, rpn_anchor_generator.num_anchors_per_location()[0]
             )
 
-        rpn_pre_nms_top_n = dict(training=rpn_pre_nms_top_n_train, testing=rpn_pre_nms_top_n_test)
-        rpn_post_nms_top_n = dict(training=rpn_post_nms_top_n_train, testing=rpn_post_nms_top_n_test)
+        rpn_pre_nms_top_n = dict(
+            training=rpn_pre_nms_top_n_train, testing=rpn_pre_nms_top_n_test
+        )
+        rpn_post_nms_top_n = dict(
+            training=rpn_post_nms_top_n_train, testing=rpn_post_nms_top_n_test
+        )
 
         rpn = RegionProposalNetwork(
             rpn_anchor_generator,
@@ -163,16 +198,13 @@ class FasterRCNN(GeneralizedRCNN):
 
         if box_roi_pool is None:
             box_roi_pool = MultiScaleRoIAlign(
-                featmap_names=['0', '1', '2', '3'],
-                output_size=7,
-                sampling_ratio=2)
+                featmap_names=["0", "1", "2", "3"], output_size=7, sampling_ratio=2
+            )
 
         if box_head is None:
             resolution = box_roi_pool.output_size[0]
             representation_size = 1024
-            box_head = TwoMLPHead(
-                out_channels * resolution ** 2,
-                representation_size)
+            box_head = TwoMLPHead(out_channels * resolution ** 2, representation_size)
 
         if box_predictor is None:
             representation_size = 1024
@@ -199,12 +231,67 @@ class FasterRCNN(GeneralizedRCNN):
             image_std = [0.229, 0.224, 0.225]
         transform = GeneralizedRCNNTransform(min_size, max_size, image_mean, image_std)
 
-        super(FasterRCNN, self.__init__)(backbone, rpn, roi_heads, transform)
+        super().__init__(backbone, rpn, roi_heads, transform)
 
 
-def fasterrcnn_resnet50_fpn(pretrained=False, progress=True,
-                            num_classes=91, pretrained_backbone=True,
-                            trainable_backbone_layers=None, **kwargs):
+class TwoMLPHead(nn.Module):
+    """
+    Standard heads for FPN-based models
+
+    Args:
+        in_channels (int): number of input channels
+        representation_size (int): size of the intermediate representation
+    """
+
+    def __init__(self, in_channels, representation_size):
+        super().__init__()
+
+        self.fc6 = nn.Linear(in_channels, representation_size)
+        self.fc7 = nn.Linear(representation_size, representation_size)
+
+    def forward(self, x):
+        x = x.flatten(start_dim=1)
+
+        x = F.relu(self.fc6(x))
+        x = F.relu(self.fc7(x))
+
+        return x
+
+
+class FastRCNNPredictor(nn.Module):
+    """
+    Standard classification + bounding box regression layers
+    for Fast R-CNN.
+
+    Args:
+        in_channels (int): number of input channels
+        num_classes (int): number of output classes (including background)
+    """
+
+    def __init__(self, in_channels, num_classes):
+        super().__init__()
+        self.cls_score = nn.Linear(in_channels, num_classes)
+        self.bbox_pred = nn.Linear(in_channels, num_classes * 4)
+
+    def forward(self, x):
+        if x.dim() == 4:
+            assert list(x.shape[2:]) == [1, 1]
+        x = x.flatten(start_dim=1)
+        scores = self.cls_score(x)
+        bbox_deltas = self.bbox_pred(x)
+
+        return scores, bbox_deltas
+
+
+@ModelCreator.register_model
+def fasterrcnn_resnet50_fpn(
+    pretrained=False,
+    progress=True,
+    num_classes=91,
+    pretrained_backbone=True,
+    trainable_backbone_layers=None,
+    **kwargs
+):
     """
     Constructs a Faster R-CNN model with a ResNet-50-FPN backbone.
 
@@ -243,13 +330,27 @@ def fasterrcnn_resnet50_fpn(pretrained=False, progress=True,
         num_classes (int): number of output classes of the model (including the background)
         pretrained_backbone (bool): If True, returns a model with backbone pre-trained on Imagenet
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
-            Valid values are between 0 and 5, with 5 meaning all backbone layers are trainable.
+            Valid values are between 0 and 5, with 5 meaning all backbone layers are trainable. If ``None`` is
+            passed (the default) this value is set to 3.
     """
     trainable_backbone_layers = _validate_trainable_layers(
-        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3)
+        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
+    )
 
     if pretrained:
         # no need to download the backbone if pretrained is set
         pretrained_backbone = False
-    backbone = resnet_fpn_backbone('resnet50', pretrained_backbone, trainable_backbone_layers=trainable_backbone_layers)
+    backbone = resnet50(
+        pretrained=pretrained_backbone,
+        progress=progress,
+        norm_layer=misc_nn_ops.FrozenBatchNorm2d,
+    )
+    backbone = _resnet_fpn_extractor(backbone, trainable_backbone_layers)
     model = FasterRCNN(backbone, num_classes, **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["fasterrcnn_resnet50_fpn_coco"], progress=progress
+        )
+        model.load_state_dict(state_dict)
+        overwrite_eps(model, 0.0)
+    return model

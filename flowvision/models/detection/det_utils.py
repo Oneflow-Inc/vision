@@ -59,8 +59,12 @@ class BalancedPositiveNegativeSampler:
             neg_idx_per_image = negative[perm2]
 
             # create binary mask from indices
-            pos_idx_per_image_mask = flow.zeros_like(matched_idxs_per_image, dtype=flow.uint8)
-            neg_idx_per_image_mask = flow.zeros_like(matched_idxs_per_image, dtype=flow.uint8)
+            pos_idx_per_image_mask = flow.zeros_like(
+                matched_idxs_per_image, dtype=flow.uint8
+            )
+            neg_idx_per_image_mask = flow.zeros_like(
+                matched_idxs_per_image, dtype=flow.uint8
+            )
 
             pos_idx_per_image_mask[pos_idx_per_image] = 1
             neg_idx_per_image_mask[neg_idx_per_image] = 1
@@ -134,7 +138,9 @@ class BoxCoder:
         self.weights = weights
         self.bbox_xform_clip = bbox_xform_clip
 
-    def encode(self, reference_boxes: List[Tensor], proposals: List[Tensor]) -> List[Tensor]:
+    def encode(
+        self, reference_boxes: List[Tensor], proposals: List[Tensor]
+    ) -> List[Tensor]:
         boxes_per_image = [len(b) for b in reference_boxes]
         reference_boxes = flow.cat(reference_boxes, dim=0)
         proposals = flow.cat(proposals, dim=0)

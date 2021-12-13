@@ -65,7 +65,7 @@ def _batched_nms_coordinate_trick(
     return keep
 
 
-def remove_samll_boxes(boxes: Tensor, min_size: float) -> Tensor:
+def remove_small_boxes(boxes: Tensor, min_size: float) -> Tensor:
     """
     Remove boxes which contains at least one side smaller than min_size.
 

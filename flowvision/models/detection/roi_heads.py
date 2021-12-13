@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Tuple
 import oneflow as flow
 import oneflow.nn.functional as F
 from oneflow import nn, Tensor
-from flowvision.layer.blocks import boxes as box_ops
+from flowvision.layers.blocks import boxes as box_ops
 
 from . import det_utils
 
@@ -28,10 +28,7 @@ def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
     regression_targets = flow.cat(regression_targets, dim=0)
 
     classification_loss = flow._C.cross_entropy(
-        class_logits,
-        labels,
-        ignore_index=-100,
-        reduction="none",
+        class_logits, labels, ignore_index=-100, reduction="none",
     )
 
     # get indices that correspond to the regression targets for
@@ -87,9 +84,13 @@ class RoIHeads(nn.Module):
 
         self.box_similarity = box_ops.box_iou
         # assign ground-truth boxes for each proposal
-        self.proposal_matcher = det_utils.Matcher(fg_iou_thresh, bg_iou_thresh, allow_low_quality_matches=False)
+        self.proposal_matcher = det_utils.Matcher(
+            fg_iou_thresh, bg_iou_thresh, allow_low_quality_matches=False
+        )
 
-        self.fg_bg_sampler = det_utils.BalancedPositiveNegativeSampler(batch_size_per_image, positive_fraction)
+        self.fg_bg_sampler = det_utils.BalancedPositiveNegativeSampler(
+            batch_size_per_image, positive_fraction
+        )
 
         if bbox_reg_weights is None:
             bbox_reg_weights = (10.0, 10.0, 5.0, 5.0)
@@ -133,7 +134,9 @@ class RoIHeads(nn.Module):
         # type: (List[Tensor], List[Tensor], List[Tensor]) -> Tuple[List[Tensor], List[Tensor]]
         matched_idxs = []
         labels = []
-        for proposals_in_image, gt_boxes_in_image, gt_labels_in_image in zip(proposals, gt_boxes, gt_labels):
+        for proposals_in_image, gt_boxes_in_image, gt_labels_in_image in zip(
+            proposals, gt_boxes, gt_labels
+        ):
 
             if gt_boxes_in_image.numel() == 0:
                 # Background image
@@ -141,9 +144,13 @@ class RoIHeads(nn.Module):
                 clamped_matched_idxs_in_image = flow.zeros(
                     (proposals_in_image.shape[0],), dtype=flow.int64, device=device
                 )
-                labels_in_image = flow.zeros((proposals_in_image.shape[0],), dtype=flow.int64, device=device)
+                labels_in_image = flow.zeros(
+                    (proposals_in_image.shape[0],), dtype=flow.int64, device=device
+                )
             else:
-                match_quality_matrix = box_ops.box_iou(gt_boxes_in_image, proposals_in_image)
+                match_quality_matrix = box_ops.box_iou(
+                    gt_boxes_in_image, proposals_in_image
+                )
                 matched_idxs_in_image = self.proposal_matcher(match_quality_matrix)
 
                 clamped_matched_idxs_in_image = matched_idxs_in_image.clamp(min=0)
@@ -152,11 +159,15 @@ class RoIHeads(nn.Module):
                 labels_in_image = labels_in_image.to(dtype=flow.int64)
 
                 # Label background (below the low threshold)
-                bg_inds = matched_idxs_in_image == self.proposal_matcher.BELOW_LOW_THRESHOLD
+                bg_inds = (
+                    matched_idxs_in_image == self.proposal_matcher.BELOW_LOW_THRESHOLD
+                )
                 labels_in_image[bg_inds] = 0
 
                 # Label ignore proposals (between low and high thresholds)
-                ignore_inds = matched_idxs_in_image == self.proposal_matcher.BETWEEN_THRESHOLDS
+                ignore_inds = (
+                    matched_idxs_in_image == self.proposal_matcher.BETWEEN_THRESHOLDS
+                )
                 labels_in_image[ignore_inds] = -1  # -1 is ignored by sampler
 
             matched_idxs.append(clamped_matched_idxs_in_image)
@@ -167,14 +178,19 @@ class RoIHeads(nn.Module):
         # type: (List[Tensor]) -> List[Tensor]
         sampled_pos_inds, sampled_neg_inds = self.fg_bg_sampler(labels)
         sampled_inds = []
-        for img_idx, (pos_inds_img, neg_inds_img) in enumerate(zip(sampled_pos_inds, sampled_neg_inds)):
+        for img_idx, (pos_inds_img, neg_inds_img) in enumerate(
+            zip(sampled_pos_inds, sampled_neg_inds)
+        ):
             img_sampled_inds = flow.where(pos_inds_img | neg_inds_img)[0]
             sampled_inds.append(img_sampled_inds)
         return sampled_inds
 
     def add_gt_proposals(self, proposals, gt_boxes):
         # type: (List[Tensor], List[Tensor]) -> List[Tensor]
-        proposals = [flow.cat((proposal, gt_box)) for proposal, gt_box in zip(proposals, gt_boxes)]
+        proposals = [
+            flow.cat((proposal, gt_box))
+            for proposal, gt_box in zip(proposals, gt_boxes)
+        ]
 
         return proposals
 
@@ -204,7 +220,9 @@ class RoIHeads(nn.Module):
         proposals = self.add_gt_proposals(proposals, gt_boxes)
 
         # get matching gt indices for each proposal
-        matched_idxs, labels = self.assign_target_to_proposals(proposals, gt_boxes, gt_labels)
+        matched_idxs, labels = self.assign_target_to_proposals(
+            proposals, gt_boxes, gt_labels
+        )
         # sample a fixed proportion of positive-negative proposals
         sampled_inds = self.subsample(labels)
         matched_gt_boxes = []
@@ -245,7 +263,9 @@ class RoIHeads(nn.Module):
         all_boxes = []
         all_scores = []
         all_labels = []
-        for boxes, scores, image_shape in zip(pred_boxes_list, pred_scores_list, image_shapes):
+        for boxes, scores, image_shape in zip(
+            pred_boxes_list, pred_scores_list, image_shapes
+        ):
             boxes = box_ops.clip_boxes_to_image(boxes, image_shape)
 
             # create labels for each prediction
@@ -300,13 +320,24 @@ class RoIHeads(nn.Module):
         if targets is not None:
             for t in targets:
                 floating_point_types = (flow.float, flow.double, flow.half)
-                assert t["boxes"].dtype in floating_point_types, "target boxes must of float type"
-                assert t["labels"].dtype == flow.int64, "target labels must of int64 type"
+                assert (
+                    t["boxes"].dtype in floating_point_types
+                ), "target boxes must of float type"
+                assert (
+                    t["labels"].dtype == flow.int64
+                ), "target labels must of int64 type"
                 if self.has_keypoint():
-                    assert t["keypoints"].dtype == flow.float32, "target keypoints must of float type"
+                    assert (
+                        t["keypoints"].dtype == flow.float32
+                    ), "target keypoints must of float type"
 
         if self.training:
-            proposals, matched_idxs, labels, regression_targets = self.select_training_samples(proposals, targets)
+            (
+                proposals,
+                matched_idxs,
+                labels,
+                regression_targets,
+            ) = self.select_training_samples(proposals, targets)
         else:
             labels = None
             regression_targets = None
@@ -320,18 +351,18 @@ class RoIHeads(nn.Module):
         losses = {}
         if self.training:
             assert labels is not None and regression_targets is not None
-            loss_classifier, loss_box_reg = fastrcnn_loss(class_logits, box_regression, labels, regression_targets)
+            loss_classifier, loss_box_reg = fastrcnn_loss(
+                class_logits, box_regression, labels, regression_targets
+            )
             losses = {"loss_classifier": loss_classifier, "loss_box_reg": loss_box_reg}
         else:
-            boxes, scores, labels = self.postprocess_detections(class_logits, box_regression, proposals, image_shapes)
+            boxes, scores, labels = self.postprocess_detections(
+                class_logits, box_regression, proposals, image_shapes
+            )
             num_images = len(boxes)
             for i in range(num_images):
                 result.append(
-                    {
-                        "boxes": boxes[i],
-                        "labels": labels[i],
-                        "scores": scores[i],
-                    }
+                    {"boxes": boxes[i], "labels": labels[i], "scores": scores[i],}
                 )
 
         return result, losses

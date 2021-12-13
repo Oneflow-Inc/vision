@@ -52,7 +52,11 @@ class LevelMapper:
         s = flow.sqrt(flow.cat([box_area(boxlist) for boxlist in boxlists]))
 
         # Eqn.(1) in FPN paper
-        target_lvls = flow.floor(self.lvl0 + flow.log2(s / self.s0) + flow.tensor(self.eps, dtype=s.dtype))
+        target_lvls = flow.floor(
+            self.lvl0
+            + flow.log2(s / self.s0)
+            + flow.tensor(self.eps, dtype=s.dtype, device=s.device)
+        )
         target_lvls = flow.clamp(target_lvls, min=self.k_min, max=self.k_max)
         return (target_lvls.to(flow.int64) - self.k_min).to(flow.int64)
 
@@ -61,7 +65,10 @@ def _convert_to_roi_format(boxes: List[Tensor]) -> Tensor:
     concat_boxes = flow.cat(boxes, dim=0)
     device, dtype = concat_boxes.device, concat_boxes.dtype
     ids = flow.cat(
-        [flow.full(b[:, :1].shape, i, dtype=dtype, device=device) for i, b in enumerate(boxes)],
+        [
+            flow.full(b[:, :1].shape, i, dtype=dtype, device=device)
+            for i, b in enumerate(boxes)
+        ],
         dim=0,
     )
     rois = flow.cat([ids, concat_boxes], dim=1)
@@ -74,14 +81,17 @@ def _infer_scale(feature: Tensor, original_size: List[int]) -> float:
     possible_scales: List[float] = []
     for s1, s2 in zip(size, original_size):
         approx_scale = float(s1) / float(s2)
-        scale = 2 ** float(flow.tensor(approx_scale).log2().round())
+        scale = 2 ** float(flow.tensor(approx_scale).log2().round().item())
         possible_scales.append(scale)
     assert possible_scales[0] == possible_scales[1]
     return possible_scales[0]
 
 
 def _setup_scales(
-    features: List[Tensor], image_shapes: List[Tuple[int, int]], canonical_scale: int, canonical_level: int
+    features: List[Tensor],
+    image_shapes: List[Tuple[int, int]],
+    canonical_scale: int,
+    canonical_level: int,
 ) -> Tuple[List[float], LevelMapper]:
     assert len(image_shapes) != 0
     max_x = 0
@@ -157,13 +167,7 @@ def _multiscale_roi_align(
 
     dtype, device = x_filtered[0].dtype, x_filtered[0].device
     result = flow.zeros(
-        (
-            num_rois,
-            num_channels,
-        )
-        + output_size,
-        dtype=dtype,
-        device=device,
+        (num_rois, num_channels,) + output_size, dtype=dtype, device=device,
     )
 
     for level, (per_level_feature, scale) in enumerate(zip(x_filtered, scales)):
@@ -177,7 +181,11 @@ def _multiscale_roi_align(
             spatial_scale=scale,
             sampling_ratio=sampling_ratio,
         )
-        result[idx_in_level] = result_idx_in_level.to(result.dtype)
+        # TODO (shijie wang): Use cmobined indexing.
+        # result[idx_in_level] = result_idx_in_level.to(result.dtype)
+        result = flow.tensor_scatter_nd_update(
+            result, idx_in_level[:, None], result_idx_in_level
+        )
 
     return result
 
@@ -202,7 +210,10 @@ class MultiScaleRoIAlign(nn.Module):
         canonical_level (int, optional): canonical_level for LevelMapper
     """
 
-    __annotations__ = {"scales": Optional[List[float]], "map_levels": Optional[LevelMapper]}
+    __annotations__ = {
+        "scales": Optional[List[float]],
+        "map_levels": Optional[LevelMapper],
+    }
 
     def __init__(
         self,

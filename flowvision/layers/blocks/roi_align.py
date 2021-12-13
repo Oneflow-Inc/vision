@@ -53,8 +53,13 @@ def roi_align(
     if not isinstance(rois, flow.Tensor):
         rois = convert_boxes_to_roi_format(rois)
     return flow.roi_align(
-        input, rois, spatial_scale, output_size[0], output_size[1],
-        sampling_ratio, aligned
+        input,
+        rois,
+        spatial_scale,
+        output_size[0],
+        output_size[1],
+        sampling_ratio,
+        aligned,
     )
 
 
@@ -77,7 +82,14 @@ class RoIAlign(nn.Module):
         self.aligned = aligned
 
     def forward(self, input: Tensor, rois: Tensor) -> Tensor:
-        return roi_align(input, rois, self.output_size, self.spatial_scale, self.sampling_ratio, self.aligned)
+        return roi_align(
+            input,
+            rois,
+            self.output_size,
+            self.spatial_scale,
+            self.sampling_ratio,
+            self.aligned,
+        )
 
     def __repr__(self) -> str:
         tmpstr = self.__class__.__name__ + "("
