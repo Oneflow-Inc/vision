@@ -1,11 +1,16 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/googlenet.py
+"""
 import warnings
 from collections import namedtuple
+from typing import Optional, Tuple, List, Callable, Any
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 from oneflow import Tensor
+
 from .utils import load_state_dict_from_url
-from typing import Optional, Tuple, List, Callable, Any
 from .registry import ModelCreator
 
 __all__ = ["GoogLeNet", "googlenet", "GoogLeNetOutputs", "_GoogLeNetOutputs"]
@@ -32,16 +37,27 @@ _GoogLeNetOutputs = GoogLeNetOutputs
 def googlenet(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> "GoogLeNet":
-    r"""GoogLeNet (Inception v1) model architecture from
-    `"Going Deeper with Convolutions" <http://arxiv.org/abs/1409.4842>`_.
+    """
+    Constructs the GoogLeNet (Inception v1) model.
+
+    .. note::
+        GoogLeNet (Inception v1) model from the `Going Deeper with Convolutions <http://arxiv.org/abs/1409.4842>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
         aux_logits (bool): If True, adds two auxiliary branches that can improve training.
             Default: *False* when pretrained is True otherwise *True*
         transform_input (bool): If True, preprocesses the input according to the method with which it
             was trained on ImageNet. Default: *False*
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> googlenet = flowvision.models.googlenet(pretrained=False, progress=True)
+
     """
     if pretrained:
         if "transform_input" not in kwargs:

@@ -72,6 +72,13 @@ VGG
         vgg19_bn,
 
 
+GoogLeNet
+---------
+.. automodule:: flowvision.models
+    :members: 
+        googlenet,
+
+
 ResNet
 ------
 .. automodule:: flowvision.models
