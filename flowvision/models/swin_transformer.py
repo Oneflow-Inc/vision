@@ -1,6 +1,11 @@
+"""
+Modified from https://github.com/microsoft/Swin-Transformer/blob/main/models/swin_transformer.py
+"""
+import numpy as np
+
 import oneflow as flow
 import oneflow.nn as nn
-import numpy as np
+
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
@@ -689,6 +694,24 @@ def _create_swin_transformer(arch, pretrained=False, progress=True, **model_kwar
 
 @ModelCreator.register_model
 def swin_tiny_patch4_window7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs Swin-T 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        Swin-T 224x224 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_tiny_patch4_window7_224 = flowvision.models.swin_tiny_patch4_window7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -709,6 +732,24 @@ def swin_tiny_patch4_window7_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def swin_small_patch4_window7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs Swin-S 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        Swin-S 224x224 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_small_patch4_window7_224 = flowvision.models.swin_small_patch4_window7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -729,6 +770,24 @@ def swin_small_patch4_window7_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def swin_base_patch4_window7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs Swin-B 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        Swin-B 224x224 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_base_patch4_window7_224 = flowvision.models.swin_base_patch4_window7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -749,6 +808,24 @@ def swin_base_patch4_window7_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def swin_base_patch4_window12_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs Swin-B 384x384 model trained on ImageNet-1k.
+
+    .. note::
+        Swin-B 384x384 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_base_patch4_window12_384 = flowvision.models.swin_base_patch4_window12_384(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=384,
         patch_size=4,
@@ -769,6 +846,24 @@ def swin_base_patch4_window12_384(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def swin_base_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs Swin-B 224x224 model pretrained on ImageNet-22k and fine tuned on ImageNet-1k.
+
+    .. note::
+        Swin-B 224x224 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_base_patch4_window7_224_in22k_to_1k = flowvision.models.swin_base_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -791,6 +886,24 @@ def swin_base_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True, **
 def swin_base_patch4_window12_384_in22k_to_1k(
     pretrained=False, progress=True, **kwargs
 ):
+    """
+    Constructs Swin-B 384x384 model pretrained on ImageNet-22k and fine tuned on ImageNet-1k.
+
+    .. note::
+        Swin-B 384x384 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_base_patch4_window12_384_in22k_to_1k = flowvision.models.swin_base_patch4_window12_384_in22k_to_1k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=384,
         patch_size=4,
@@ -813,6 +926,24 @@ def swin_base_patch4_window12_384_in22k_to_1k(
 def swin_large_patch4_window7_224_in22k_to_1k(
     pretrained=False, progress=True, **kwargs
 ):
+    """
+    Constructs Swin-L 224x224 model pretrained on ImageNet-22k and fine tuned on ImageNet-1k.
+
+    .. note::
+        Swin-L 224x224 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_large_patch4_window7_224_in22k_to_1k = flowvision.models.swin_large_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -835,6 +966,24 @@ def swin_large_patch4_window7_224_in22k_to_1k(
 def swin_large_patch4_window12_384_in22k_to_1k(
     pretrained=False, progress=True, **kwargs
 ):
+    """
+    Constructs Swin-L 384x384 model pretrained on ImageNet-22k and fine tuned on ImageNet-1k.
+
+    .. note::
+        Swin-L 384x384 model from `"Swin Transformer: Hierarchical Vision Transformer using Shifted Windows" <https://arxiv.org/pdf/2103.14030>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> swin_large_patch4_window12_384_in22k_to_1k = flowvision.models.swin_large_patch4_window12_384_in22k_to_1k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=384,
         patch_size=4,

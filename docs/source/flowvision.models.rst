@@ -127,7 +127,6 @@ GhostNet
 
 ViT
 ------
-
 .. automodule:: flowvision.models
     :members: 
         vit_b_16_224,
@@ -139,13 +138,27 @@ ViT
 
 PVT
 ------
-
 .. automodule:: flowvision.models
     :members: 
         pvt_tiny,
         pvt_small,
         pvt_medium,
         pvt_large,
+
+
+Swin-Transformer
+----------------
+.. automodule:: flowvision.models
+    :members: 
+        swin_tiny_patch4_window7_224,
+        swin_small_patch4_window7_224,
+        swin_base_patch4_window7_224,
+        swin_base_patch4_window12_384,
+        swin_base_patch4_window7_224_in22k_to_1k,
+        swin_base_patch4_window12_384_in22k_to_1k,
+        swin_large_patch4_window7_224_in22k_to_1k,
+        swin_large_patch4_window12_384_in22k_to_1k,
+
 
 
 Mlp-Mixer
