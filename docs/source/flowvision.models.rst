@@ -147,11 +147,24 @@ MNASNet
 
 GhostNet
 --------
-
 .. automodule:: flowvision.models
     :members:
         ghostnet,
 
+
+ReXNet
+------
+.. automodule:: flowvision.models
+    :members:
+        rexnetv1_1_0,
+        rexnetv1_1_3,
+        rexnetv1_1_5,
+        rexnetv1_2_0,
+        rexnetv1_3_0,
+        rexnet_lite_1_0,
+        rexnet_lite_1_3,
+        rexnet_lite_1_5,
+        rexnet_lite_2_0,
 
 
 ViT
