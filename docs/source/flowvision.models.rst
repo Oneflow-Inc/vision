@@ -82,6 +82,16 @@ ResNet
         wide_resnet101_2,
 
 
+DenseNet
+--------
+.. automodule:: flowvision.models
+    :members: 
+        densenet121,
+        densenet169,
+        densenet201,
+        densenet161,
+
+
 ShuffleNetV2
 ------------
 
