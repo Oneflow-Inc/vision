@@ -329,10 +329,7 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         **kwargs,
     )
     return _create_vision_transformer(
-        "vit_b_16_224",
-        pretrained=pretrained,
-        progress=progress,
-        **model_kwargs,
+        "vit_b_16_224", pretrained=pretrained, progress=progress, **model_kwargs,
     )
 
 
@@ -371,10 +368,7 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         **kwargs,
     )
     return _create_vision_transformer(
-        "vit_b_16_384",
-        pretrained=pretrained,
-        progress=progress,
-        **model_kwargs,
+        "vit_b_16_384", pretrained=pretrained, progress=progress, **model_kwargs,
     )
 
 
@@ -413,10 +407,7 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         **kwargs,
     )
     return _create_vision_transformer(
-        "vit_b_32_224",
-        pretrained=pretrained,
-        progress=progress,
-        **model_kwargs,
+        "vit_b_32_224", pretrained=pretrained, progress=progress, **model_kwargs,
     )
 
 
@@ -455,10 +446,7 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         **kwargs,
     )
     return _create_vision_transformer(
-        "vit_b_32_384",
-        pretrained=pretrained,
-        progress=progress,
-        **model_kwargs,
+        "vit_b_32_384", pretrained=pretrained, progress=progress, **model_kwargs,
     )
 
 
@@ -496,10 +484,7 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         feat_dim=None,
     )
     return _create_vision_transformer(
-        "vit_l_16_384",
-        pretrained=pretrained,
-        progress=progress,
-        **model_kwargs,
+        "vit_l_16_384", pretrained=pretrained, progress=progress, **model_kwargs,
     )
 
 
@@ -538,8 +523,5 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         **kwargs,
     )
     return _create_vision_transformer(
-        "vit_l_32_384",
-        pretrained=pretrained,
-        progress=progress,
-        **model_kwargs,
+        "vit_l_32_384", pretrained=pretrained, progress=progress, **model_kwargs,
     )
