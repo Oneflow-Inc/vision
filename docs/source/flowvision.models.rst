@@ -116,6 +116,16 @@ MobileNetV3
         mobilenet_v3_large,
 
 
+MNASNet
+-------
+.. automodule:: flowvision.models
+    :members:
+        mnasnet0_5,
+        mnasnet0_75,
+        mnasnet1_0,
+        mnasnet1_3,
+
+
 GhostNet
 --------
 
