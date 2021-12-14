@@ -124,6 +124,22 @@ PVT
         pvt_large,
 
 
+Mlp-Mixer
+---------
+.. automodule:: flowvision.models
+    :members: 
+        mlp_mixer_s16_224,
+        mlp_mixer_s32_224,
+        mlp_mixer_b16_224,
+        mlp_mixer_b32_224,
+        mlp_mixer_b16_224_in21k,
+        mlp_mixer_l16_224,
+        mlp_mixer_l32_224,
+        mlp_mixer_l16_224_in21k,
+        mlp_mixer_b16_224_miil,
+        mlp_mixer_b16_224_miil_in21k,
+
+
 ResMLP
 ------
 
@@ -139,6 +155,16 @@ ResMLP
         resmlpB_24,
         resmlpB_24_in22k,
         resmlpB_24_dist,
+
+
+gMLP
+----
+.. automodule:: flowvision.models
+    :members: 
+        gmlp_ti16_224,
+        gmlp_s16_224,
+        gmlp_b16_224,
+
 
 
 Neural Style

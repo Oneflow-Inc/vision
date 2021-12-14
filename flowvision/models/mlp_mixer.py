@@ -571,8 +571,24 @@ def mlp_mixer_b16_224_miil(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_b16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
-    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
-    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    Constructs the Mixer-B/16 224x224 ImageNet21k pretrained model.
+
+    .. note::
+        Mixer-B/16 224x224 ImageNet21k pretrained model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+        Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_b16_224_miil_in21k = flowvision.models.mlp_mixer_b16_224_miil_in21k(pretrained=False, progress=True)
+
     """
     model_kwargs = dict(
         num_classes=11221, patch_size=16, num_blocks=12, embed_dim=768, **kwargs
@@ -587,8 +603,23 @@ def mlp_mixer_b16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def gmlp_ti16_224(pretrained=False, progress=True, **kwargs):
-    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
-    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    Constructs the gMLP-tiny-16 224x224 model.
+
+    .. note::
+        gMLP-tiny-16 224x224 model from `"Pay Attention to MLPs" <https://arxiv.org/pdf/2105.08050.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> gmlp_ti16_224 = flowvision.models.gmlp_ti16_224(pretrained=False, progress=True)
+
     """
     model_kwargs = dict(
         patch_size=16,
@@ -606,8 +637,23 @@ def gmlp_ti16_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def gmlp_s16_224(pretrained=False, progress=True, **kwargs):
-    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
-    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    Constructs the gMLP-small-16 224x224 model.
+
+    .. note::
+        gMLP-small-16 224x224 model from `"Pay Attention to MLPs" <https://arxiv.org/pdf/2105.08050.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> gmlp_s16_224 = flowvision.models.gmlp_s16_224(pretrained=False, progress=True)
+
     """
     model_kwargs = dict(
         patch_size=16,
@@ -625,8 +671,23 @@ def gmlp_s16_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def gmlp_b16_224(pretrained=False, progress=True, **kwargs):
-    """ Mixer-B/16 224x224. ImageNet-1k pretrained weights.
-    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    Constructs the gMLP-base-16 224x224 model.
+
+    .. note::
+        gMLP-base-16 224x224 model from `"Pay Attention to MLPs" <https://arxiv.org/pdf/2105.08050.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> gmlp_b16_224 = flowvision.models.gmlp_b16_224(pretrained=False, progress=True)
+
     """
     model_kwargs = dict(
         patch_size=16,
