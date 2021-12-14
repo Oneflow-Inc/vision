@@ -1,15 +1,15 @@
+import math
+from functools import partial
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
-from functools import partial
-import math
-
-from flowvision.layers.regularization import DropPath
-from flowvision.layers.blocks import PatchEmbed
-from flowvision.layers.weight_init import lecun_normal_
 
 from .utils import load_state_dict_from_url, named_apply
 from .registry import ModelCreator
+from flowvision.layers.regularization import DropPath
+from flowvision.layers.blocks import PatchEmbed
+from flowvision.layers.weight_init import lecun_normal_
 
 
 model_urls = {
@@ -324,6 +324,24 @@ def _create_mlp_mixer(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_s16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Mixer-S/16 224x224 model.
+
+    .. note::
+        Mixer-S/16 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_s16_224 = flowvision.models.mlp_mixer_s16_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(patch_size=16, num_blocks=8, embed_dim=512, **kwargs)
     return _create_mlp_mixer(
         "mlp_mixer_s16_224", pretrained=pretrained, progress=progress, **model_kwargs
@@ -332,6 +350,24 @@ def mlp_mixer_s16_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_s32_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Mixer-S/32 224x224 model.
+
+    .. note::
+        Mixer-S/32 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_s32_224 = flowvision.models.mlp_mixer_s32_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(patch_size=32, num_blocks=8, embed_dim=512, **kwargs)
     return _create_mlp_mixer(
         "mlp_mixer_s32_224", pretrained=pretrained, progress=progress, **model_kwargs
@@ -340,6 +376,24 @@ def mlp_mixer_s32_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_b16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Mixer-B/16 224x224 model.
+
+    .. note::
+        Mixer-B/16 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_b16_224 = flowvision.models.mlp_mixer_b16_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
     return _create_mlp_mixer(
         "mlp_mixer_b16_224", pretrained=pretrained, progress=progress, **model_kwargs
@@ -348,6 +402,24 @@ def mlp_mixer_b16_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_b32_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Mixer-B/32 224x224 model.
+
+    .. note::
+        Mixer-B/32 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_b32_224 = flowvision.models.mlp_mixer_b32_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(patch_size=32, num_blocks=12, embed_dim=768, **kwargs)
     return _create_mlp_mixer(
         "mlp_mixer_b32_224", pretrained=pretrained, progress=progress, **model_kwargs
@@ -356,7 +428,25 @@ def mlp_mixer_b32_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_b16_224_in21k(pretrained=False, progress=True, **kwargs):
-    """the pretrained imagenet21k model for fine-tune"""
+    """
+    Constructs the Mixer-B/16 224x224 ImageNet21k pretrained model.
+
+    .. note::
+        Mixer-B/16 224x224 ImageNet21k pretrained model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+        Note that this model is the pretrained model for fine-tune on different datasets.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_b16_224_in21k = flowvision.models.mlp_mixer_b16_224_in21k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         num_classes=21843, patch_size=16, num_blocks=12, embed_dim=768, **kwargs
     )
@@ -370,6 +460,24 @@ def mlp_mixer_b16_224_in21k(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_l16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Mixer-L/16 224x224 model.
+
+    .. note::
+        Mixer-L/16 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_l16_224 = flowvision.models.mlp_mixer_l16_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(patch_size=16, num_blocks=24, embed_dim=1024, **kwargs)
     return _create_mlp_mixer(
         "mlp_mixer_l16_224", pretrained=pretrained, progress=progress, **model_kwargs
@@ -378,6 +486,24 @@ def mlp_mixer_l16_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_l32_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Mixer-L/32 224x224 model.
+
+    .. note::
+        Mixer-L/32 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_l32_224 = flowvision.models.mlp_mixer_l32_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(patch_size=32, num_blocks=24, embed_dim=1024, **kwargs)
     return _create_mlp_mixer(
         "mlp_mixer_l32_224", pretrained=pretrained, progress=progress, **model_kwargs
@@ -386,7 +512,25 @@ def mlp_mixer_l32_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_l16_224_in21k(pretrained=False, progress=True, **kwargs):
-    """the pretrained imagenet21k model for fine-tune"""
+    """
+    Constructs the Mixer-L/16 224x224 ImageNet21k pretrained model.
+
+    .. note::
+        Mixer-L/16 224x224 ImageNet21k pretrained model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+        Note that this model is the pretrained model for fine-tune on different datasets.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_l16_224_in21k = flowvision.models.mlp_mixer_l16_224_in21k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         num_classes=21843, patch_size=16, num_blocks=24, embed_dim=1024, **kwargs
     )
@@ -400,12 +544,28 @@ def mlp_mixer_l16_224_in21k(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mlp_mixer_b16_224_miil(pretrained=False, progress=True, **kwargs):
-    """ Mixer-B/16 224x224. ImageNet-21k pretrained weights.
-    Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K
+    """
+    Constructs the Mixer-B/16 224x224 model with different weights.
+
+    .. note::
+        Mixer-B/16 224x224 model from `"MLP-Mixer: An all-MLP Architecture for Vision" <https://arxiv.org/pdf/2105.01601.pdf>`_.
+        Weights taken from: https://github.com/Alibaba-MIIL/ImageNet21K.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mlp_mixer_b16_224_miil = flowvision.models.mlp_mixer_b16_224_miil(pretrained=False, progress=True)
+
     """
     model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
     return _create_mlp_mixer(
-        "mixer_b16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs
+        "mlp_mixer_b16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
