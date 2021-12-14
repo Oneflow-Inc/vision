@@ -46,14 +46,20 @@ architectures for image classification:
 
 Alexnet
 -------
-
 .. automodule:: flowvision.models
     :members: alexnet
     
 
+SqueezeNet
+----------
+.. automodule:: flowvision.models
+    :members: 
+        squeezenet1_0,
+        squeezenet1_1,
+
+
 VGG
 ---
-
 .. automodule:: flowvision.models
     :members: 
         vgg11,
@@ -68,7 +74,6 @@ VGG
 
 ResNet
 ------
-
 .. automodule:: flowvision.models
     :members: 
         resnet18,
