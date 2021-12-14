@@ -565,7 +565,10 @@ def mlp_mixer_b16_224_miil(pretrained=False, progress=True, **kwargs):
     """
     model_kwargs = dict(patch_size=16, num_blocks=12, embed_dim=768, **kwargs)
     return _create_mlp_mixer(
-        "mlp_mixer_b16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs
+        "mlp_mixer_b16_224_miil",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
