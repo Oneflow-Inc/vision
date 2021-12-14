@@ -1,5 +1,9 @@
+"""
+Modified from https://github.com/tmp-iclr/convmixer/blob/main/convmixer.py
+"""
 import oneflow as flow
 import oneflow.nn as nn
+
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
@@ -58,6 +62,24 @@ def ConvMixer(
 
 @ModelCreator.register_model
 def convmixer_1536_20(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs the ConvMixer model with 20 depth and 1536 hidden size.
+
+    .. note::
+        ConvMixer model with 20 depth and 1536 hidden size from the `Patched Are All You Need? <https://openreview.net/pdf?id=TVHS5Y4dNvM>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convmixer_1536_20 = flowvision.models.convmixer_1536_20(pretrained=False, progress=True)
+
+    """
     model = ConvMixer(1536, 20, kernel_size=9, patch_size=7, n_classes=1000)
     if pretrained:
         state_dict = load_state_dict_from_url(
@@ -71,6 +93,24 @@ def convmixer_1536_20(pretrained: bool = False, progress: bool = True, **kwargs)
 
 @ModelCreator.register_model
 def convmixer_768_32_relu(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs the ConvMixer model with 32 depth and 768 hidden size and ReLU activation layer.
+
+    .. note::
+        ConvMixer model with 32 depth and 768 hidden size and ReLU activation layer from the `Patched Are All You Need? <https://openreview.net/pdf?id=TVHS5Y4dNvM>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convmixer_768_32_relu = flowvision.models.convmixer_768_32_relu(pretrained=False, progress=True)
+
+    """
     model = ConvMixer(
         768, 32, kernel_size=7, patch_size=7, n_classes=1000, activation=nn.ReLU
     )
@@ -86,6 +126,24 @@ def convmixer_768_32_relu(pretrained: bool = False, progress: bool = True, **kwa
 
 @ModelCreator.register_model
 def convmixer_1024_20(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs the ConvMixer model with 20 depth and 1024 hidden size.
+
+    .. note::
+        ConvMixer model with 20 depth and 1024 hidden size from the `Patched Are All You Need? <https://openreview.net/pdf?id=TVHS5Y4dNvM>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convmixer_1024_20 = flowvision.models.convmixer_1024_20(pretrained=False, progress=True)
+
+    """
     model = ConvMixer(1024, 20, kernel_size=9, patch_size=14, n_classes=1000)
     if pretrained:
         state_dict = load_state_dict_from_url(

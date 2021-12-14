@@ -1,14 +1,18 @@
-import oneflow as flow
+"""
+Modified from https://github.com/microsoft/CSWin-Transformer/blob/main/models/cswin.py
+"""
 import math
-import oneflow.nn as nn
-from oneflow import Tensor
-import oneflow.nn.init as init
-from oneflow.nn.modules.container import ModuleList
-from flowvision.layers.regularization import DropPath
 import numpy as np
+
+import oneflow as flow
+import oneflow.nn as nn
+import oneflow.nn.init as init
+from oneflow import Tensor
+from oneflow.nn.modules.container import ModuleList
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from flowvision.layers.regularization import DropPath
 
 model_urls = {
     "cswin_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_tiny_224.zip",
@@ -509,6 +513,24 @@ def _create_cswin_transformer(arch, pretrained=False, progress=True, **model_kwa
 # 224 model
 @ModelCreator.register_model
 def cswin_tiny_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CSwin-T 224x224 model.
+
+    .. note::
+        CSwin-T 224x224 model from `"CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows" <https://arxiv.org/pdf/2107.00652.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> cswin_tiny_224 = flowvision.models.cswin_tiny_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=4,
         embed_dim=64,
@@ -525,6 +547,24 @@ def cswin_tiny_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def cswin_small_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CSwin-S 224x224 model.
+
+    .. note::
+        CSwin-S 224x224 model from `"CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows" <https://arxiv.org/pdf/2107.00652.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> cswin_small_224 = flowvision.models.cswin_small_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=4,
         embed_dim=64,
@@ -541,6 +581,24 @@ def cswin_small_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def cswin_base_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CSwin-B 224x224 model.
+
+    .. note::
+        CSwin-B 224x224 model from `"CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows" <https://arxiv.org/pdf/2107.00652.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> cswin_base_224 = flowvision.models.cswin_base_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=4,
         embed_dim=96,
@@ -557,6 +615,24 @@ def cswin_base_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def cswin_large_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CSwin-L 224x224 model.
+
+    .. note::
+        CSwin-L 224x224 model from `"CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows" <https://arxiv.org/pdf/2107.00652.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> cswin_large_224 = flowvision.models.cswin_large_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=4,
         embed_dim=144,
@@ -573,6 +649,24 @@ def cswin_large_224(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def cswin_base_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CSwin-B 384x384 model.
+
+    .. note::
+        CSwin-B 384x384 model from `"CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows" <https://arxiv.org/pdf/2107.00652.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> cswin_base_384 = flowvision.models.cswin_base_384(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=384,
         patch_size=4,
@@ -590,6 +684,24 @@ def cswin_base_384(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def cswin_large_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CSwin-L 384x384 model.
+
+    .. note::
+        CSwin-L 384x384 model from `"CSWin Transformer: A General Vision Transformer Backbone with Cross-Shaped Windows" <https://arxiv.org/pdf/2107.00652.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> cswin_large_384 = flowvision.models.cswin_large_384(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=384,
         patch_size=4,

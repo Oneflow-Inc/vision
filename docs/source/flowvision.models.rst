@@ -189,6 +189,17 @@ Swin-Transformer
         swin_large_patch4_window12_384_in22k_to_1k,
 
 
+CSwin-Transformer
+-----------------
+.. automodule:: flowvision.models
+    :members: 
+        cswin_tiny_224,
+        cswin_small_224,
+        cswin_base_224,
+        cswin_large_224,
+        cswin_base_384,
+        cswin_large_384,
+
 
 Mlp-Mixer
 ---------
@@ -232,6 +243,15 @@ gMLP
         gmlp_b16_224,
 
 
+ConvMixer
+---------
+.. automodule:: flowvision.models
+    :members: 
+        convmixer_1536_20,
+        convmixer_768_32_relu,
+        convmixer_1024_20,
+
+
 
 Neural Style
 ============
@@ -241,4 +261,4 @@ Neural Style
     :members:
         neural_style_transfer,
 
-        
+
