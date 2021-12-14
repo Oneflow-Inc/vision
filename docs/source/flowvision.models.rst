@@ -79,6 +79,13 @@ GoogLeNet
         googlenet,
 
 
+InceptionV3
+---------
+.. automodule:: flowvision.models
+    :members: 
+        inception_v3,
+
+
 ResNet
 ------
 .. automodule:: flowvision.models

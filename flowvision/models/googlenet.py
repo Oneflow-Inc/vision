@@ -42,6 +42,7 @@ def googlenet(
 
     .. note::
         GoogLeNet (Inception v1) model from the `Going Deeper with Convolutions <http://arxiv.org/abs/1409.4842>`_ paper.
+        The required minimum input size of the model is 15x15.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
