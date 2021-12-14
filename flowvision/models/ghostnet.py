@@ -283,7 +283,7 @@ def ghostnet(
     Constructs the GhostNet model.
 
     .. note::
-        `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
+        GhostNet model from `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
