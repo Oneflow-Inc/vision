@@ -214,6 +214,16 @@ CSwin-Transformer
         cswin_large_384,
 
 
+CrossFormer
+-----------
+.. automodule:: flowvision.models
+    :members: 
+        crossformer_tiny_patch4_group7_224,
+        crossformer_small_patch4_group7_224,
+        crossformer_base_patch4_group7_224,
+        crossformer_large_patch4_group7_224,
+
+
 Mlp-Mixer
 ---------
 .. automodule:: flowvision.models
