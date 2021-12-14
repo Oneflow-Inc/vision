@@ -1,12 +1,14 @@
 """
-Modified from 
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv2.py
 """
 import math
 from typing import Callable, Any, Optional, List
-from .utils import load_state_dict_from_url
-from .registry import ModelCreator
+
 import oneflow as flow
 from oneflow import nn, Tensor
+
+from .utils import load_state_dict_from_url
+from .registry import ModelCreator
 
 
 __all__ = ["MobileNetV2", "mobilenet_v2"]
@@ -245,12 +247,22 @@ def mobilenet_v2(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> MobileNetV2:
     """
-    Constructs a MobileNetV2 architecture from
-    `"MobileNetV2: Inverted Residuals and Linear Bottlenecks" <https://arxiv.org/abs/1801.04381>`_.
+    Constructs the MobileNetV2 model.
+
+    .. note::
+        MobileNetV2 model architecture from the `MobileNetV2: Inverted Residuals and Linear Bottlenecks <https://arxiv.org/abs/1801.04381>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mobilenet_v2 = flowvision.models.mobilenet_v2(pretrained=False, progress=True)
+
     """
     model = MobileNetV2(**kwargs)
     if pretrained:

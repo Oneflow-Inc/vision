@@ -1,7 +1,12 @@
-import oneflow as flow
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv3.py
+"""
 from functools import partial
-from oneflow import nn, Tensor
 from typing import Any, Callable, Dict, List, Optional, Sequence
+
+import oneflow as flow
+from oneflow import nn, Tensor
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
@@ -411,11 +416,22 @@ def mobilenet_v3_large(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> MobileNetV3:
     """
-    Constructs a large MobileNetV3 architecture from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
+    Constructs the MobileNetV3-Large model.
+
+    .. note::
+        MobileNetV3-Large model architecture from the `Searching for MobileNetV3 <https://arxiv.org/abs/1905.02244>`_ paper.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mobilenet_v3_large = flowvision.models.mobilenet_v3_large(pretrained=False, progress=True)
+
     """
     arch = "mobilenet_v3_large"
     inverted_residual_setting, last_channel = _mobilenet_v3_conf(arch, **kwargs)
@@ -429,11 +445,22 @@ def mobilenet_v3_small(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> MobileNetV3:
     """
-    Constructs a small MobileNetV3 architecture from
-    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
+    Constructs the MobileNetV3-Small model.
+
+    .. note::
+        MobileNetV3-Small model architecture from the `Searching for MobileNetV3 <https://arxiv.org/abs/1905.02244>`_ paper.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mobilenet_v3_small = flowvision.models.mobilenet_v3_small(pretrained=False, progress=True)
+
     """
     arch = "mobilenet_v3_small"
     inverted_residual_setting, last_channel = _mobilenet_v3_conf(arch, **kwargs)

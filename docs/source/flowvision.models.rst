@@ -94,13 +94,27 @@ DenseNet
 
 ShuffleNetV2
 ------------
-
 .. automodule:: flowvision.models
     :members:
         shufflenet_v2_x0_5,
         shufflenet_v2_x1_0,
         shufflenet_v2_x1_5,
         shufflenet_v2_x2_0,
+
+MobileNetV2
+-----------
+.. automodule:: flowvision.models
+    :members:
+        mobilenet_v2
+
+
+MobileNetV3
+-----------
+.. automodule:: flowvision.models
+    :members:
+        mobilenet_v3_small,
+        mobilenet_v3_large,
+
 
 GhostNet
 --------
