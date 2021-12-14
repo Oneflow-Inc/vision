@@ -277,9 +277,6 @@ class GhostNet(nn.Module):
 def ghostnet(
     pretrained: bool = False,
     progress: bool = True,
-    num_classes: int = 1000,
-    width: float = 1.0,
-    dropout: float = 0.2,
     **kwargs: Any
 ):
     """
@@ -291,16 +288,13 @@ def ghostnet(
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
-        num_classes (int): The number of classification classes. Default: ``1000``
-        width (float): Convolution output channel expand rate. Default: ``1.0``
-        dropout (float): Dropout rate. Default: ``0.2``
 
     For example:
 
     .. code-block:: python
 
         >>> import flowvision
-        >>> ghostnet = flowvision.models.ghostnet(pretrained=True, progress=True, num_classes=1000, width=1.0, dropout=0.2)
+        >>> ghostnet = flowvision.models.ghostnet(pretrained=True, progress=True)
 
     """
     cfgs = [
@@ -332,7 +326,7 @@ def ghostnet(
         ],
     ]
     model = GhostNet(
-        cfgs, num_classes=num_classes, width=width, dropout=dropout, **kwargs
+        cfgs, **kwargs
     )
     if pretrained:
         arch = "ghostnet"

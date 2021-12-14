@@ -10,20 +10,29 @@ The models subpackage contains definitions for the following model
 architectures for image classification:
 
 -  `AlexNet`_
--  `VGG`_
--  `ResNet`_
 -  `SqueezeNet`_
--  `DenseNet`_
--  `InceptionV3`_
+-  `VGG`_
 -  `GoogLeNet`_
+-  `InceptionV3`_
+-  `ResNet`_
+-  `ResNeXt`_
+-  `DenseNet`_
 -  `ShuffleNetV2`_
 -  `MobileNetV2`_
 -  `MobileNetV3`_
--  `ResNeXt`_
 -  `MNASNet`_
+-  `GhostNet`_
+-  `Res2Net`_
+-  `ReXNet`_
 -  `ViT`_
 -  `PVT`_
+-  `Swin_Transformer`_
+-  `CSwin_Transformer`_
+-  `CrossFormer`_
+-  `Mlp_Mixer`_
 -  `ResMLP`_
+-  `gMLP`_
+-  `ConvMixer`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -37,10 +46,20 @@ architectures for image classification:
 .. _MobileNetV2: https://arxiv.org/abs/1801.04381
 .. _MobileNetV3: https://arxiv.org/abs/1905.02244
 .. _ResNeXt: https://arxiv.org/abs/1611.05431
+.. _Res2Net: https://arxiv.org/abs/1904.01169
+.. _ReXNet: https://arxiv.org/abs/2007.00992
 .. _MNASNet: https://arxiv.org/abs/1807.11626
+.. _GhostNet: https://arxiv.org/abs/1911.11907
 .. _ViT: https://arxiv.org/abs/2010.11929
 .. _PVT: https://arxiv.org/abs/2102.12122
 .. _ResMLP: https://arxiv.org/abs/2105.03404
+.. _Swin_Transformer: https://arxiv.org/pdf/2103.14030
+.. _CSwin_Transformer: https://arxiv.org/abs/2107.00652
+.. _CrossFormer: https://arxiv.org/abs/2108.00154
+.. _Mlp_Mixer: https://arxiv.org/abs/2105.01601
+.. _ResMLP: https://arxiv.org/abs/2105.03404
+.. _gMLP: https://arxiv.org/abs/2105.08050
+.. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 
 .. currentmodule:: flowvision.models
 
