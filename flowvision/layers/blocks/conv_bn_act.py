@@ -14,10 +14,8 @@ class ConvBnAct(nn.Sequential):
         bias: bool = False,
         inplace: bool = True,
         **kwargs
-    ):  
-        layers = [
-            conv(in_features, out_features, **kwargs, bias=bias)
-        ]
+    ):
+        layers = [conv(in_features, out_features, **kwargs, bias=bias)]
         if norm_layer:
             layers.append(norm_layer(out_features))
         if act_layer:
