@@ -23,6 +23,7 @@ architectures for image classification:
 -  `MNASNet`_
 -  `GhostNet`_
 -  `Res2Net`_
+-  `EfficientNet`_
 -  `ReXNet`_
 -  `ViT`_
 -  `PVT`_
@@ -60,6 +61,7 @@ architectures for image classification:
 .. _ResMLP: https://arxiv.org/abs/2105.03404
 .. _gMLP: https://arxiv.org/abs/2105.08050
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
+.. _EfficientNet: https://arxiv.org/abs/1905.11946
 
 .. currentmodule:: flowvision.models
 
