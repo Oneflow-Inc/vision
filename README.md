@@ -15,7 +15,7 @@ pip install flowvision==0.0.5
 
 - Or install the nightly release of `flowvision`
 ```bash
-pip install -i https://test.pypi.org/simple/ flowvision==0.0.5
+pip install --extra-index-url https://test.pypi.org/simple/ flowvision==0.0.5
 ```
 
 ## Supported Model
