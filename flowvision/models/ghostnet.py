@@ -274,11 +274,7 @@ class GhostNet(nn.Module):
 
 
 @ModelCreator.register_model
-def ghostnet(
-    pretrained: bool = False,
-    progress: bool = True,
-    **kwargs: Any
-):
+def ghostnet(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     """
     Constructs the GhostNet model.
 
@@ -325,9 +321,7 @@ def ghostnet(
             [5, 960, 160, 0.25, 1],
         ],
     ]
-    model = GhostNet(
-        cfgs, **kwargs
-    )
+    model = GhostNet(cfgs, **kwargs)
     if pretrained:
         arch = "ghostnet"
         if model_urls.get(arch, None) is None:

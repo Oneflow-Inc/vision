@@ -23,11 +23,12 @@ architectures for image classification:
 -  `MNASNet`_
 -  `GhostNet`_
 -  `Res2Net`_
+-  `EfficientNet`_
 -  `ReXNet`_
 -  `ViT`_
 -  `PVT`_
--  `Swin_Transformer`_
--  `CSwin_Transformer`_
+-  `Swin-Transformer`_
+-  `CSwin-Transformer`_
 -  `CrossFormer`_
 -  `Mlp_Mixer`_
 -  `ResMLP`_
@@ -53,13 +54,14 @@ architectures for image classification:
 .. _ViT: https://arxiv.org/abs/2010.11929
 .. _PVT: https://arxiv.org/abs/2102.12122
 .. _ResMLP: https://arxiv.org/abs/2105.03404
-.. _Swin_Transformer: https://arxiv.org/pdf/2103.14030
-.. _CSwin_Transformer: https://arxiv.org/abs/2107.00652
+.. _Swin-Transformer: https://arxiv.org/abs/2103.14030
+.. _CSwin-Transformer: https://arxiv.org/abs/2107.00652
 .. _CrossFormer: https://arxiv.org/abs/2108.00154
 .. _Mlp_Mixer: https://arxiv.org/abs/2105.01601
 .. _ResMLP: https://arxiv.org/abs/2105.03404
 .. _gMLP: https://arxiv.org/abs/2105.08050
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
+.. _EfficientNet: https://arxiv.org/abs/1905.11946
 
 .. currentmodule:: flowvision.models
 
@@ -181,6 +183,20 @@ Res2Net
         res2net50_48w_2s,
         res2net50_14w_8s,
         res2net101_26w_4s,
+
+
+EfficientNet
+------------
+.. automodule:: flowvision.models
+    :members:
+        efficientnet_b0,
+        efficientnet_b1,
+        efficientnet_b2,
+        efficientnet_b3,
+        efficientnet_b4,
+        efficientnet_b5,
+        efficientnet_b6,
+        efficientnet_b7
 
 
 ReXNet
