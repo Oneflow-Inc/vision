@@ -339,7 +339,7 @@ def efficientnet_b0(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B0 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 256x224 for efficientnet-b0 model.
+        Note that the (resize-size, crop-size) should be (256, 224) for efficientnet-b0 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -363,7 +363,7 @@ def efficientnet_b1(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B1 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 256x240 for efficientnet-b1 model.
+        Note that the (resize-size, crop-size) should be (256, 240) for efficientnet-b1 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -387,7 +387,7 @@ def efficientnet_b2(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B2 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 288x288 for efficientnet-b2 model.
+        Note that the (resize-size, crop-size) should be (288, 288) for efficientnet-b2 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -411,7 +411,7 @@ def efficientnet_b3(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B3 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 320x300 for efficientnet-b3 model.
+        Note that the (resize-size, crop-size) should be (320, 300) for efficientnet-b3 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -435,7 +435,7 @@ def efficientnet_b4(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B4 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 384x380 for efficientnet-b4 model.
+        Note that the (resize-size, crop-size) should be (384, 380) for efficientnet-b4 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -459,7 +459,7 @@ def efficientnet_b5(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B5 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 489x456 for efficientnet-b4 model.
+        Note that the (resize-size, crop-size) should be (489, 456) for efficientnet-b5 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -492,7 +492,7 @@ def efficientnet_b6(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B6 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 561x528 for efficientnet-b4 model.
+        Note that the (resize-size, crop-size) should be (561, 528) for efficientnet-b6 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -525,7 +525,7 @@ def efficientnet_b7(pretrained: bool = False, progress: bool = True, **kwargs: A
 
     .. note::
         EfficientNet B7 model architecture from the `EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks <https://arxiv.org/abs/1905.11946>`_ paper.
-        Note that the input size should be 633x600 for efficientnet-b4 model.
+        Note that the (resize-size, crop-size) should be (633, 600) for efficientnet-b7 model when training and testing.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
