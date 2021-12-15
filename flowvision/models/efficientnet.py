@@ -13,7 +13,7 @@ from oneflow import Tensor
 from .registry import ModelCreator
 from .helpers import make_divisible
 from .utils import load_state_dict_from_url
-from flowvision.layers.regularization import StochasticDepth 
+from flowvision.layers.regularization import StochasticDepth
 from flowvision.layers.blocks import ConvBnAct
 
 
@@ -111,7 +111,9 @@ class MBConvConfig:
         return s.format(**self.__dict__)
 
     @staticmethod
-    def adjust_channels(channels: int, width_mult: float, min_value: Optional[int] = None) -> int:
+    def adjust_channels(
+        channels: int, width_mult: float, min_value: Optional[int] = None
+    ) -> int:
         return make_divisible(channels * width_mult, 8, min_value)
 
     @staticmethod
@@ -129,10 +131,12 @@ class MBConv(nn.Module):
     ) -> None:
         super().__init__()
 
-        if not(1 <= cnf.stride <=2):
+        if not (1 <= cnf.stride <= 2):
             raise ValueError("illegal stride value")
 
-        self.use_res_connect = cnf.stride == 1 and cnf.input_channels == cnf.out_channels
+        self.use_res_connect = (
+            cnf.stride == 1 and cnf.input_channels == cnf.out_channels
+        )
         layers: List[nn.Module] = []
         activation_layer = nn.SiLU
 
@@ -148,7 +152,7 @@ class MBConv(nn.Module):
                     act_layer=activation_layer,
                 )
             )
-        
+
         # depthwise
         layers.append(
             ConvBnAct(
@@ -164,12 +168,22 @@ class MBConv(nn.Module):
 
         # squeeze and excitation
         squeeze_channels = max(1, cnf.input_channels // 4)
-        layers.append(se_layer(expanded_channels, squeeze_channels, activation=partial(nn.SiLU, inplace=True)))
+        layers.append(
+            se_layer(
+                expanded_channels,
+                squeeze_channels,
+                activation=partial(nn.SiLU, inplace=True),
+            )
+        )
 
         # project
         layers.append(
             ConvBnAct(
-                expanded_channels, cnf.out_channels, kernel_size=1, norm_layer=norm_layer, act_layer=None
+                expanded_channels,
+                cnf.out_channels,
+                kernel_size=1,
+                norm_layer=norm_layer,
+                act_layer=None,
             )
         )
 
@@ -214,21 +228,28 @@ class EfficientNet(nn.Module):
             isinstance(inverted_residual_setting, Sequence)
             and all([isinstance(s, MBConvConfig) for s in inverted_residual_setting])
         ):
-            raise TypeError("The inverted_residual_setting should be List[MBConvConfig]")
-        
+            raise TypeError(
+                "The inverted_residual_setting should be List[MBConvConfig]"
+            )
+
         if block is None:
             block = MBConv
-        
+
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
-        
+
         layers: List[nn.Module] = []
 
         # building first layer
         firstconv_output_channels = inverted_residual_setting[0].input_channels
         layers.append(
             ConvBnAct(
-                3, firstconv_output_channels, kernel_size=3, stride=2, norm_layer=norm_layer, act_layer=nn.SiLU,
+                3,
+                firstconv_output_channels,
+                kernel_size=3,
+                stride=2,
+                norm_layer=norm_layer,
+                act_layer=nn.SiLU,
             )
         )
 
@@ -247,13 +268,15 @@ class EfficientNet(nn.Module):
                     block_cnf.stride = 1
 
                 # adjust stochastic depth probability based on the depth of the stage block
-                sd_prob = stochastic_depth_prob * float(stage_block_id) / total_stage_blocks
+                sd_prob = (
+                    stochastic_depth_prob * float(stage_block_id) / total_stage_blocks
+                )
 
                 stage.append(block(block_cnf, sd_prob, norm_layer))
                 stage_block_id += 1
 
             layers.append(nn.Sequential(*stage))
-        
+
         # building last several layers
         lastconv_input_channels = inverted_residual_setting[-1].out_channels
         lastconv_output_channels = 4 * lastconv_input_channels
@@ -301,7 +324,6 @@ class EfficientNet(nn.Module):
         return self._forward_impl(x)
 
 
-
 def _efficientnet(
     arch: str,
     width_mult: float,
@@ -331,7 +353,9 @@ def _efficientnet(
 
 
 @ModelCreator.register_model
-def efficientnet_b0(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b0(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B0 model.
 
@@ -351,11 +375,15 @@ def efficientnet_b0(pretrained: bool = False, progress: bool = True, **kwargs: A
         >>> efficientnet_b0 = flowvision.models.efficientnet_b0(pretrained=False, progress=True)
 
     """
-    return _efficientnet("efficientnet_b0", 1.0, 1.0, 0.2, pretrained, progress, **kwargs)
+    return _efficientnet(
+        "efficientnet_b0", 1.0, 1.0, 0.2, pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def efficientnet_b1(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b1(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B1 model.
 
@@ -375,11 +403,15 @@ def efficientnet_b1(pretrained: bool = False, progress: bool = True, **kwargs: A
         >>> efficientnet_b1 = flowvision.models.efficientnet_b1(pretrained=False, progress=True)
 
     """
-    return _efficientnet("efficientnet_b1", 1.0, 1.1, 0.2, pretrained, progress, **kwargs)
+    return _efficientnet(
+        "efficientnet_b1", 1.0, 1.1, 0.2, pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def efficientnet_b2(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b2(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B2 model.
 
@@ -399,11 +431,15 @@ def efficientnet_b2(pretrained: bool = False, progress: bool = True, **kwargs: A
         >>> efficientnet_b2 = flowvision.models.efficientnet_b2(pretrained=False, progress=True)
 
     """
-    return _efficientnet("efficientnet_b2", 1.1, 1.2, 0.3, pretrained, progress, **kwargs)
+    return _efficientnet(
+        "efficientnet_b2", 1.1, 1.2, 0.3, pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def efficientnet_b3(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b3(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B3 model.
 
@@ -423,11 +459,15 @@ def efficientnet_b3(pretrained: bool = False, progress: bool = True, **kwargs: A
         >>> efficientnet_b3 = flowvision.models.efficientnet_b3(pretrained=False, progress=True)
 
     """
-    return _efficientnet("efficientnet_b3", 1.2, 1.4, 0.3, pretrained, progress, **kwargs)
+    return _efficientnet(
+        "efficientnet_b3", 1.2, 1.4, 0.3, pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def efficientnet_b4(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b4(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B4 model.
 
@@ -447,11 +487,15 @@ def efficientnet_b4(pretrained: bool = False, progress: bool = True, **kwargs: A
         >>> efficientnet_b4 = flowvision.models.efficientnet_b4(pretrained=False, progress=True)
 
     """
-    return _efficientnet("efficientnet_b4", 1.4, 1.8, 0.4, pretrained, progress, **kwargs)
+    return _efficientnet(
+        "efficientnet_b4", 1.4, 1.8, 0.4, pretrained, progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
-def efficientnet_b5(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b5(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B5 model.
 
@@ -484,7 +528,9 @@ def efficientnet_b5(pretrained: bool = False, progress: bool = True, **kwargs: A
 
 
 @ModelCreator.register_model
-def efficientnet_b6(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b6(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B6 model.
 
@@ -517,7 +563,9 @@ def efficientnet_b6(pretrained: bool = False, progress: bool = True, **kwargs: A
 
 
 @ModelCreator.register_model
-def efficientnet_b7(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
+def efficientnet_b7(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
     """
     Constructs the EfficientNet B7 model.
 
