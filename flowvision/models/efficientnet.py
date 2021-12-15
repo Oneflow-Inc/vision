@@ -31,16 +31,14 @@ __all__ = [
 
 
 model_urls = {
-    # Weights ported from https://github.com/rwightman/pytorch-image-models/
-    "efficientnet_b0": "https://download.pytorch.org/models/efficientnet_b0_rwightman-3dd342df.pth",
-    "efficientnet_b1": "https://download.pytorch.org/models/efficientnet_b1_rwightman-533bc792.pth",
-    "efficientnet_b2": "https://download.pytorch.org/models/efficientnet_b2_rwightman-bcdf34b7.pth",
-    "efficientnet_b3": "https://download.pytorch.org/models/efficientnet_b3_rwightman-cf984f9c.pth",
-    "efficientnet_b4": "https://download.pytorch.org/models/efficientnet_b4_rwightman-7eb33cd5.pth",
-    # Weights ported from https://github.com/lukemelas/EfficientNet-PyTorch/
-    "efficientnet_b5": "https://download.pytorch.org/models/efficientnet_b5_lukemelas-b6417697.pth",
-    "efficientnet_b6": "https://download.pytorch.org/models/efficientnet_b6_lukemelas-c76e70fd.pth",
-    "efficientnet_b7": "https://download.pytorch.org/models/efficientnet_b7_lukemelas-dcc49843.pth",
+    "efficientnet_b0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b0.zip",
+    "efficientnet_b1": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b1.zip",
+    "efficientnet_b2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b2.zip",
+    "efficientnet_b3": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b3.zip",
+    "efficientnet_b4": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b4.zip",
+    "efficientnet_b5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b5.zip",
+    "efficientnet_b6": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b6.zip",
+    "efficientnet_b7": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/EfficientNet/efficientnet_b7.zip",
 }
 
 
