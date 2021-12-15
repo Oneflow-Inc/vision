@@ -50,7 +50,7 @@ def inception_v3(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     .. code-block:: python
 
         >>> import flowvision
-        >>> googlenet = flowvision.models.googlenet(pretrained=False, progress=True)
+        >>> inception_v3 = flowvision.models.inception_v3(pretrained=False, progress=True)
 
     """
     if pretrained:

@@ -317,7 +317,7 @@ def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_24_dist = flowvision.models.resmlp_24_dist(pretrained=False, progress=True)
+        >>> resmlp_24_dino = flowvision.models.resmlp_24_dino(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
