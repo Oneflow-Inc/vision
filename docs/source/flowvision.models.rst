@@ -27,8 +27,8 @@ architectures for image classification:
 -  `ReXNet`_
 -  `ViT`_
 -  `PVT`_
--  `Swin_Transformer`_
--  `CSwin_Transformer`_
+-  `Swin-Transformer`_
+-  `CSwin-Transformer`_
 -  `CrossFormer`_
 -  `Mlp_Mixer`_
 -  `ResMLP`_
@@ -54,8 +54,8 @@ architectures for image classification:
 .. _ViT: https://arxiv.org/abs/2010.11929
 .. _PVT: https://arxiv.org/abs/2102.12122
 .. _ResMLP: https://arxiv.org/abs/2105.03404
-.. _Swin_Transformer: https://arxiv.org/pdf/2103.14030
-.. _CSwin_Transformer: https://arxiv.org/abs/2107.00652
+.. _Swin-Transformer: https://arxiv.org/abs/2103.14030
+.. _CSwin-Transformer: https://arxiv.org/abs/2107.00652
 .. _CrossFormer: https://arxiv.org/abs/2108.00154
 .. _Mlp_Mixer: https://arxiv.org/abs/2105.01601
 .. _ResMLP: https://arxiv.org/abs/2105.03404
