@@ -1,14 +1,14 @@
-"""ModelCreator Func
+"""
 Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/registry.py
 """
-
 import sys
 import re
 import fnmatch
 from collections import defaultdict
 from copy import deepcopy
-import oneflow as flow
 from tabulate import tabulate
+
+import oneflow as flow
 
 
 class ModelCreator(object):

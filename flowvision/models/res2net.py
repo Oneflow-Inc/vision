@@ -1,9 +1,11 @@
-"""OneFlow implementation of Res2Net
 """
+Modified from https://github.com/Res2Net/Res2Net-PretrainedModels/blob/master/res2net.py
+"""
+import math
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import math
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
@@ -200,6 +202,24 @@ def _create_res2net(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def res2net50_26w_4s(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Res2Net-50_26w_4s model.
+
+    .. note::
+        Res2Net-50_26w_4s model from the `Res2Net: A New Multi-scale Backbone Architecture <https://arxiv.org/pdf/1904.01169.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> res2net50_26w_4s = flowvision.models.res2net50_26w_4s(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         block=Bottle2neck, layers=[3, 4, 6, 3], baseWidth=26, scale=4, **kwargs
     )
@@ -210,6 +230,24 @@ def res2net50_26w_4s(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def res2net101_26w_4s(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Res2Net-101_26w_4s model.
+
+    .. note::
+        Res2Net-101_26w_4s model from the `Res2Net: A New Multi-scale Backbone Architecture <https://arxiv.org/pdf/1904.01169.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> res2net101_26w_4s = flowvision.models.res2net101_26w_4s(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         block=Bottle2neck, layers=[3, 4, 23, 3], baseWidth=26, scale=4, **kwargs
     )
@@ -220,6 +258,24 @@ def res2net101_26w_4s(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def res2net50_26w_6s(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Res2Net-50_26w_6s model.
+
+    .. note::
+        Res2Net-50_26w_6s model from the `Res2Net: A New Multi-scale Backbone Architecture <https://arxiv.org/pdf/1904.01169.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> res2net50_26w_6s = flowvision.models.res2net50_26w_6s(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         block=Bottle2neck, layers=[3, 4, 6, 3], baseWidth=26, scale=6, **kwargs
     )
@@ -230,6 +286,24 @@ def res2net50_26w_6s(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def res2net50_26w_8s(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Res2Net-50_26w_8s model.
+
+    .. note::
+        Res2Net-50_26w_8s model from the `Res2Net: A New Multi-scale Backbone Architecture <https://arxiv.org/pdf/1904.01169.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> res2net50_26w_8s = flowvision.models.res2net50_26w_8s(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         block=Bottle2neck, layers=[3, 4, 6, 3], baseWidth=26, scale=8, **kwargs
     )
@@ -240,6 +314,24 @@ def res2net50_26w_8s(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def res2net50_48w_2s(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Res2Net-50_48w_2s model.
+
+    .. note::
+        Res2Net-50_48w_2s model from the `Res2Net: A New Multi-scale Backbone Architecture <https://arxiv.org/pdf/1904.01169.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> res2net50_48w_2s = flowvision.models.res2net50_48w_2s(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         block=Bottle2neck, layers=[3, 4, 6, 3], baseWidth=48, scale=2, **kwargs
     )
@@ -250,6 +342,24 @@ def res2net50_48w_2s(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def res2net50_14w_8s(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the Res2Net-50_14w_8s model.
+
+    .. note::
+        Res2Net-50_14w_8s model from the `Res2Net: A New Multi-scale Backbone Architecture <https://arxiv.org/pdf/1904.01169.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> res2net50_14w_8s = flowvision.models.res2net50_14w_8s(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         block=Bottle2neck, layers=[3, 4, 6, 3], baseWidth=14, scale=8, **kwargs
     )

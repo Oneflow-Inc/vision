@@ -14,12 +14,13 @@ Welcome to flowvision's documentation!
    tutorials/*
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Flowvision Python API
 
+   flowvision.data
    flowvision.datasets
    flowvision.layers
-   flowvision.losss
+   flowvision.loss
    flowvision.models
    flowvision.scheduler
    flowvision.transforms

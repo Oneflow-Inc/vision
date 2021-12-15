@@ -326,7 +326,7 @@ def resnet18(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnet18 = flowvision.models.resnet18(pretrained=True, progress=True)
+        >>> resnet18 = flowvision.models.resnet18(pretrained=False, progress=True)
 
     """
     return _resnet("resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, **kwargs)
@@ -349,7 +349,7 @@ def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnet34 = flowvision.models.resnet34(pretrained=True, progress=True)
+        >>> resnet34 = flowvision.models.resnet34(pretrained=False, progress=True)
 
     """
     return _resnet("resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, **kwargs)
@@ -372,7 +372,7 @@ def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnet50 = flowvision.models.resnet50(pretrained=True, progress=True)
+        >>> resnet50 = flowvision.models.resnet50(pretrained=False, progress=True)
 
     """
     return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
@@ -395,7 +395,7 @@ def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnet101 = flowvision.models.resnet101(pretrained=True, progress=True)
+        >>> resnet101 = flowvision.models.resnet101(pretrained=False, progress=True)
 
     """
     return _resnet(
@@ -420,7 +420,7 @@ def resnet152(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnet152 = flowvision.models.resnet152(pretrained=True, progress=True)
+        >>> resnet152 = flowvision.models.resnet152(pretrained=False, progress=True)
 
     """
     return _resnet(
@@ -447,7 +447,7 @@ def resnext50_32x4d(
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnext50_32x4d = flowvision.models.resnext50_32x4d(pretrained=True, progress=True)
+        >>> resnext50_32x4d = flowvision.models.resnext50_32x4d(pretrained=False, progress=True)
 
     """
     kwargs["groups"] = 32
@@ -476,7 +476,7 @@ def resnext101_32x8d(
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnext101_32x8d = flowvision.models.resnext101_32x8d(pretrained=True, progress=True)
+        >>> resnext101_32x8d = flowvision.models.resnext101_32x8d(pretrained=False, progress=True)
 
     """
     kwargs["groups"] = 32
@@ -509,7 +509,7 @@ def wide_resnet50_2(
     .. code-block:: python
 
         >>> import flowvision
-        >>> wide_resnet50_2 = flowvision.models.wide_resnet50_2(pretrained=True, progress=True)
+        >>> wide_resnet50_2 = flowvision.models.wide_resnet50_2(pretrained=False, progress=True)
 
     """
     kwargs["width_per_group"] = 64 * 2
@@ -540,7 +540,7 @@ def wide_resnet101_2(
     .. code-block:: python
 
         >>> import flowvision
-        >>> wide_resnet101_2 = flowvision.models.wide_resnet101_2(pretrained=True, progress=True)
+        >>> wide_resnet101_2 = flowvision.models.wide_resnet101_2(pretrained=False, progress=True)
 
     """
     kwargs["width_per_group"] = 64 * 2

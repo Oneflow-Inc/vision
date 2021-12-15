@@ -1,15 +1,18 @@
+"""
+Modified from https://github.com/whai362/PVT/blob/v2/classification/pvt.py
+"""
+import numpy as np
+from functools import partial
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
-from functools import partial
-import numpy as np
 
-from flowvision.layers.regularization import DropPath
 from .helpers import to_2tuple
-
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from flowvision.layers.regularization import DropPath
 
 
 model_urls = {
@@ -213,7 +216,7 @@ class PyramidVisionTransformer(nn.Module):
         self.depths = depths
         self.num_stages = num_stages
 
-        # TODO: update numpy version to flow version
+        # TODO: switch to flow.linspace func
         # stochastic depth
         dpr = [
             x for x in np.linspace(0, drop_path_rate, sum(depths))
@@ -355,6 +358,24 @@ def _create_pvt(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def pvt_tiny(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the PVT-tiny model.
+
+    .. note::
+        PVT-tiny model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_tiny = flowvision.models.pvt_tiny(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -366,6 +387,7 @@ def pvt_tiny(pretrained=False, progress=True, **kwargs):
         mlp_ratios=(8, 8, 4, 4),
         sr_ratios=(8, 4, 2, 1),
         drop_path_rate=0.1,
+        **kwargs,
     )
     return _create_pvt(
         "pvt_tiny", pretrained=pretrained, progress=progress, **model_kwargs,
@@ -374,6 +396,24 @@ def pvt_tiny(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def pvt_small(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the PVT-small model.
+
+    .. note::
+        PVT-small model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_small = flowvision.models.pvt_small(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -385,6 +425,7 @@ def pvt_small(pretrained=False, progress=True, **kwargs):
         mlp_ratios=(8, 8, 4, 4),
         sr_ratios=(8, 4, 2, 1),
         drop_path_rate=0.1,
+        **kwargs,
     )
     return _create_pvt(
         "pvt_small", pretrained=pretrained, progress=progress, **model_kwargs,
@@ -393,6 +434,24 @@ def pvt_small(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def pvt_medium(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the PVT-medium model.
+
+    .. note::
+        PVT-medium model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_medium = flowvision.models.pvt_medium(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -404,6 +463,7 @@ def pvt_medium(pretrained=False, progress=True, **kwargs):
         mlp_ratios=(8, 8, 4, 4),
         sr_ratios=(8, 4, 2, 1),
         drop_path_rate=0.1,
+        **kwargs,
     )
     return _create_pvt(
         "pvt_medium", pretrained=pretrained, progress=progress, **model_kwargs,
@@ -412,6 +472,24 @@ def pvt_medium(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def pvt_large(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the PVT-large model.
+
+    .. note::
+        PVT-large model from `"Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions" <https://arxiv.org/pdf/2102.12122.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_large = flowvision.models.pvt_large(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=4,
@@ -423,6 +501,7 @@ def pvt_large(pretrained=False, progress=True, **kwargs):
         mlp_ratios=(8, 8, 4, 4),
         sr_ratios=(8, 4, 2, 1),
         drop_path_rate=0.1,
+        **kwargs,
     )
     return _create_pvt(
         "pvt_large", pretrained=pretrained, progress=progress, **model_kwargs,

@@ -1,8 +1,8 @@
 flowvision.transforms
-=============================
+##############################
 
-Utils for Data Augmentation
-----------------------------------
+Utils for Image Transforms
+=============================
 
 .. currentmodule:: flowvision.transforms
 .. automodule:: flowvision.transforms

@@ -1,9 +1,13 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/alexnet.py
+"""
+from typing import Any
+
 import oneflow as flow
 import oneflow.nn as nn
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-
-from typing import Any
 
 
 __all__ = ["AlexNet", "alexnet"]
@@ -52,23 +56,30 @@ class AlexNet(nn.Module):
 
 
 @ModelCreator.register_model
-def alexnet(
-    pretrained: bool = False,
-    progress: bool = True,
-    model_dir: str = "./checkpoints",
-    **kwargs: Any
-) -> AlexNet:
-    r"""AlexNet model architecture from the
-    `"One weird trick..." <https://arxiv.org/abs/1404.5997>`_ paper.
-    The required minimum input size of the model is 63x63.
+def alexnet(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> AlexNet:
+    """
+    Constructs the AlexNet model.
+
+    .. note::
+        AlexNet model architecture from the `One weird trick... <https://arxiv.org/abs/1404.5997>`_ paper.
+        The required minimum input size of the model is 63x63.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> alexnet = flowvision.models.alexnet(pretrained=False, progress=True)
+
     """
     model = AlexNet(**kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(
-            model_urls["alexnet"], model_dir=model_dir, progress=progress
+            model_urls["alexnet"], model_dir="./checkpoints", progress=progress
         )
         model.load_state_dict(state_dict)
     return model
