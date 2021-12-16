@@ -4,79 +4,86 @@ Here we provide our test results of pretrained model on ImageNet2012, all tests 
 **example**
 When `crop-size` equals to 0.875, we first resize the image from `224` to `(224 / 0.875) = 256` and then use centercrop operation to get the input 224 image.
 
-|                        |    top1 |    top5 |  batch_size | image size | crop-size | interpolation |
-|:-----------------------|--------:|--------:|------------:|-----------:|----------:|--------------:|
-| alexnet                | 56.4798 | 79.0281 |     64      |   224      |  0.875    |   bilinear    |
-| vgg11                  | 69.0018 | 88.6029 |     64      |   224      |  0.875    |   bilinear    |
-| vgg13                  | 69.9029 | 89.2203 |     64      |   224      |  0.875    |   bilinear    |
-| vgg16                  | 71.5533 | 90.3553 |     64      |   224      |  0.875    |   bilinear    |
-| vgg19                  | 72.3485 | 90.8488 |     64      |   224      |  0.875    |   bilinear    |
-| vgg11_bn               | 70.3505 | 89.7838 |     64      |   224      |  0.875    |   bilinear    |
-| vgg13_bn               | 71.5533 | 90.3473 |     64      |   224      |  0.875    |   bilinear    |
-| vgg16_bn               | 73.3316 | 91.4942 |     64      |   224      |  0.875    |   bilinear    |
-| vgg19_bn               | 74.1948 | 91.8139 |     64      |   224      |  0.875    |   bilinear    |
-| resnet18               | 69.7450 | 89.0645 |     64      |   224      |  0.875    |   bilinear    |
-| resnet34               | 73.2976 | 91.4102 |     64      |   224      |  0.875    |   bilinear    |
-| resnet50               | 76.0989 | 92.8389 |     64      |   224      |  0.875    |   bilinear    |
-| resnet101              | 77.3477 | 93.5342 |     64      |   224      |  0.875    |   bilinear    |
-| resnet152              | 78.2848 | 94.0457 |     64      |   224      |  0.875    |   bilinear    |
-| resnext-50-32x4d       | 77.5855 | 93.6921 |     64      |   224      |  0.875    |   bilinear    |
-| resnext-101-32x8d      | 79.2719 | 94.5073 |     64      |   224      |  0.875    |   bilinear    |
-| wide resnet-50-2       | 78.4467 | 94.0737 |     64      |   224      |  0.875    |   bilinear    |
-| wide resnet-101-2      | 78.8183 | 94.2775 |     64      |   224      |  0.875    |   bilinear    |
-| densenet121            | 74.4106 | 91.9557 |     64      |   224      |  0.875    |   bilinear    |
-| densenet169            | 75.5635 | 92.7949 |     64      |   224      |  0.875    |   bilinear    |
-| densenet201            | 76.8702 | 93.3584 |     64      |   224      |  0.875    |   bilinear    |
-| densenet169            | 77.1120 | 93.5422 |     64      |   224      |  0.875    |   bilinear    |
-| googlenet              | 71.9849 | 90.9047 |     64      |   224      |  0.875    |   bilinear    |
-| inception_v3           | 77.4337 | 93.5842 |     64      |   299      |  1.0      |   bilinear    |
-| squeezenet 1.0         | 58.0543 | 80.3848 |     64      |   224      |  0.875    |   bilinear    |
-| squeezenet 1.1         | 58.1342 | 80.5826 |     64      |   224      |  0.875    |   bilinear    |
-| shufflenet_v2_x0_5     | 60.5059 | 81.7096 |     64      |   224      |  0.875    |   bilinear    |
-| shufflenet_v2_x1_0     | 69.3195 | 88.2912 |     64      |   224      |  0.875    |   bilinear    |
-| mobilenet_v2           | 71.8450 | 90.2653 |     64      |   224      |  0.875    |   bilinear    |
-| mobilenet_v3_small     | 67.6391 | 87.3781 |     64      |   224      |  0.875    |   bilinear    |
-| mobilenet_v3_large     | 74.0070 | 91.3243 |     64      |   224      |  0.875    |   bilinear    |
-| mnasnet 0.5            | 69.6930 | 87.4480 |     64      |   224      |  0.875    |   bilinear    |
-| mnasnet 1.0            | 73.4215 | 91.4942 |     64      |   224      |  0.875    |   bilinear    |
-| ghostnet               | 73.9820 | 91.4620 |     64      |   224      |  0.875    |   bilinear    |
-| rexnetv1_1_0           | 78.0840 | 93.8700 |     64      |   224      |  0.875    |   bilinear    |
-| vit-b-16-384           | 84.1672 | 97.1527 |     64      |   384      |  1.0      |   bilinear    |
-| vit-b-32-384           | 81.7116 | 96.1217 |     64      |   384      |  1.0      |   bilinear    |
-| vit-l-16-384           | 85.0444 | 97.3605 |     64      |   384      |  1.0      |   bilinear    |
-| vit-l-32-384           | 81.5217 | 96.0518 |     64      |   384      |  1.0      |   bilinear    |
-| convmixer_768_32_relu  | 80.0764 | 94.9896 |     64      |   224      |  0.875    |   bilinear    |
-| convmixer_1024_20      | 78.4127 | 94.2895 |     64      |   224      |  0.875    |   bilinear    |
-| convmixer_1536_20      | 81.0461 | 95.6194 |     64      |   224      |  0.875    |   bilinear    |
-| swin_tiny_patch4_window7_224  | 81.1641 | 95.5003 |  64   |   224     |  0.875    |   bicubic     |
-| swin_small_patch4_window7_224 | 83.1582 | 96.2376 |  64   |   224     |  0.875    |   bicubic    |
-| swin_base_patch4_window7_224  | 83.4039 | 96.4434 |  64   |   224     |  0.875    |   bicubic    |
-| swin_base_patch4_window12_384 | 84.4569 | 96.8950 |  64   |   384     |  1.0      |   bicubic    |
-| swin_base_patch4_window7_224_in22k_to_1k   | 85.1223 | 97.4744 |  64  |  224  |  0.875    |   bicubic    |
-| swin_base_patch4_window12_384_in22k_to_1k  | 86.4330 | 98.0619 |  64  |  384  |  1.0      |   bicubic    |
-| swin_large_patch4_window7_224_in22k_to_1k  | 86.2492 | 97.8800 |  64  |  224  |  0.875    |   bicubic    |
-| swin_large_patch4_window12_384_in22k_to_1k | 87.1241 | 98.2326 |  64  |  224  |  0.875    |   bicubic    |
-| pvt_tiny               | 74.7163 | 92.1595 |     64      |   224      |  0.875    |   bicubic    |
-| pvt_small              | 79.4697 | 94.7750 |     64      |   224      |  0.875    |   bicubic    |
-| pvt_medium             | 80.8564 | 95.5103 |     64      |   224      |  0.875    |   bicubic    |
-| pvt_large              | 81.5477 | 95.6482 |     64      |   224      |  0.875    |   bicubic    |
-| crossformer_tiny_patch4_group7_224  | 81.1461 | 95.3105 |  64  | 224  |  0.875    |   bicubic    |
-| crossformer_small_patch4_group7_224 | 82.2410 | 95.9579 |  64  | 224  |  0.875    |   bicubic    |
-| crossformer_base_patch4_group7_224  | 83.2681 | 96.4694 |  64  | 224  |  0.875    |   bicubic    |
-| crossformer_large_patch4_group7_224 | 83.7516 | 96.4954 |  64  | 224  |  0.875    |   bicubic    |
-| cswin_tiny_224         | 80.5147 | 95.1746 |    64       |   224      |  0.9      |   bicubic    |
-| cswin_small_224        | 81.7355 | 95.6422 |    64       |   224      |  0.9      |   bicubic    |
-| cswin_base_224         | 83.5458 | 96.5733 |    64       |   224      |  0.9      |   bicubic    |
-| cswin_large_224        | 85.7697 | 97.7362 |    64       |   224      |  0.9      |   bicubic    |
-| cswin_base_384         | 85.0683 | 97.3865 |    64       |   224      |  0.9      |   bicubic    |
-| cswin_large_384        | - | - |    64       |   224      |  0.9      |   bicubic    |
-| resmlp_12  |  76.6500 |93.1820 | 64| 224 | 0.9| bicubic|
-| resmlp_12_dist | 77.9540 | 93.5600| 64| 224 | 0.9| bicubic|
-| resmlp_24 | 79.3780 | 94.5460| 64| 224 | 0.9| bicubic|
-| resmlp_24_dist | 80.7600 | 95.2200| 64| 224 | 0.9| bicubic|
-| resmlp_24_dino | - | - | 64| 224 | 0.9| bicubic|
-| resmlp_36 | 79.7720 | 94.8860| 64| 224 | 0.9| bicubic|
-| resmlp_36_dist | 81.1500 | 95.4780| 64| 224 | 0.9| bicubic|
-| resmlpB_24 | 81.0380 |95.0200 | 64| 224 | 0.9| bicubic|
-| resmlpB_24_in22k | 84.3960 |97.1120 | 64| 224 | 0.9| bicubic|
-| resmlpB_24_dist | 83.5900 | 96.6500| 64| 224 | 0.9| bicubic|
+| Model Name (paper link)|    Top1 |    Top5 |Top-1(real)|Top-5(real)| #params| FLOPs| CPU latency | GPU throughput | Image size | Crop-size | Interpolation | chongce 2021/12/15
+|:----------------------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-----------:|:--------:|:----------:|:---------:|:-------------:|-------------:|
+| Alexnet                | 56.5220 | 79.0680 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Vgg11                  | 69.0200 | 88.6280 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Vgg13                  | 69.9280 | 89.2460 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Vgg16                  | 71.5920 | 90.3820 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Vgg19                  | 72.3760 | 90.8760 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Vgg11_bn               | 70.3700 | 89.8100 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Vgg13_bn               | 71.5860 | 90.3740 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Vgg16_bn               | 73.3600 | 91.5160 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Vgg19_bn               | 74.2180 | 91.8420 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnet18               | 69.7580 | 89.0780 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnet34               | 73.3140 | 91.4200 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnet50               | 76.1300 | 92.8620 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnet101              | 77.3740 | 93.5460 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnet152              | 78.3120 | 94.0460 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnext-50-32x4d       | 77.6180 | 93.6980 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Resnext-101-32x8d      | 79.3120 | 94.5260 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Wide resnet-50-2       | 78.4680 | 94.0860 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Wide resnet-101-2      | 78.8480 | 94.2840 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Densenet121            | 74.4340 | 91.9720 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Densenet169            | 75.6000 | 92.8060 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Densenet201            | 76.8960 | 93.3700 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Densenet161            | 77.1380 | 93.5600 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Googlenet              | 69.7780 | 89.5300 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Inception_v3           | 77.5080 | 93.6680 |         |         |         |         |             |          |   299      |  1.0      |   bilinear    |1
+| Squeezenet 1.0         | 58.0920 | 80.4200 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Squeezenet 1.1         | 58.1780 | 80.6240 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Shufflenet_v2_x0_5     | 60.5520 | 81.7460 |         |         |   1.4M  |   41M   |             |          |   224      |  0.875    |   bilinear    |1
+| Shufflenet_v2_x1_0     | 69.3620 | 88.3160 |         |         |   2.3M  |   146M  |             |          |   224      |  0.875    |   bilinear    |1
+| Mobilenet_v2           | 71.8780 | 90.2860 |         |         |   3.5M  |   300M  |             |          |   224      |  0.875    |   bilinear    |1
+| Mobilenet_v3_small     | 67.6680 | 87.4020 |         |         |   2.5M  |   56M   |             |          |   224      |  0.875    |   bilinear    |1
+| Mobilenet_v3_large     | 74.0420 | 91.3400 |         |         |   5.4M  |   219M  |             |          |   224      |  0.875    |   bilinear    |1
+| Mnasnet 0.5            | 67.7340 | 87.4900 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Mnasnet 1.0            | 73.4560 | 91.5100 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Ghostnet               | 73.9820 | 91.4620 |         |         |   5.2M  |   141M  |             |          |   224      |  0.875    |   bilinear    |1
+| Rexnetv1_1_0           | 77.8440 | 93.9240 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Rexnetv1_1_3           | 79.4600 | 94.7500 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Rexnetv1_1_5           | 80.2540 | 95.1760 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Rexnetv1_2_0           | 81.5740 | 95.6440 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Rexnetv1_3_0           | 82.6320 | 96.2500 |         |         |         |         |             |          |   224      |  0.875    |   bilinear    |1
+| Vit-b-16-384           | 84.2240 | 97.2180 |         |         |   86M   |   55.4G |             |          |   384      |  1.0      |   bilinear    | 1
+| Vit-b-32-384           | 81.6700 | 96.1280 |         |         |         |         |             |          |   384      |  1.0      |   bilinear    | 1
+| Vit-l-16-384           | 85.1540 | 97.3600 |         |         |   307M  |  190.7G |             |          |   384      |  1.0      |   bilinear    | 1
+| Vit-l-32-384           | 81.5080 | 96.0900 |         |         |         |         |             |          |   384      |  1.0      |   bilinear    | 1
+| Convmixer_768_32_relu  | 80.0760 | 94.9920 |         |         |   21.1M |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Convmixer_1024_20      | 77.0120 | 93.3840 |         |         |   24.4M |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Convmixer_1536_20      | 81.0560 | 95.6200 |         |         |   51.6M |         |             |          |   224      |  0.875    |   bilinear    | 1
+| Swin_tiny_patch4_window7_224  | 81.1860 | 95.5100 |         |         |    28M  |   4.5G  |             |          | 224 |  0.875    |   bicubic     | 1 
+| Swin_small_patch4_window7_224 | 83.1820 | 96.2400 |         |         |    50M  |   8.7G  |             |          | 224 |  0.875    |   bicubic     | 1 
+| Swin_base_patch4_window7_224  | 83.4180 | 96.4460 |         |         |    88M  |   15.4G |             |          | 224 |  0.875    |   bicubic     | 1 
+| Swin_base_patch4_window12_384 | 84.4760 | 96.8920 |         |         |    88M  |   47.1G |             |          | 384 |  1.0      |   bicubic     | 1 
+| Swin_base_patch4_window7_224_in22k_to_1k   | 85.1260 | 97.4800 |         |         |    88M  |   15.4G |             |          | 224 | 0.875 | bicubic | 1 
+| Swin_base_patch4_window12_384_in22k_to_1k  | 86.4300 | 98.0660 |         |         |    88M  |   47.1G |             |          | 384 | 1.0   | bicubic | 1 
+| Swin_large_patch4_window7_224_in22k_to_1k  | 86.2480 | 97.8780 |         |         |    197M |   34.5G |             |          | 224 | 0.875 | bicubic | 1
+| Swin_large_patch4_window12_384_in22k_to_1k | 87.1360 | 98.2320 |         |         |    197M |   103.9G|             |          | 384 | 1.0   | bicubic | 1 
+| Pvt_tiny               | 75.0960 | 92.4200 |         |         | 13.2M   |   1.9G  |             |          |   224      |  0.875    |   bicubic    |1
+| Pvt_small              | 79.7620 | 94.9420 |         |         | 24.5M   |   3.8G  |             |          |   224      |  0.875    |   bicubic    |1
+| Pvt_medium             | 81.1960 | 95.6420 |         |         | 44.2M   |   6.7G  |             |          |   224      |  0.875    |   bicubic    |1
+| Pvt_large              | 81.6940 | 95.8520 |         |         | 61.4M   |   9.8G  |             |          |   224      |  0.875    |   bicubic    |1
+| Crossformer_tiny_patch4_group7_224  | 81.5220 | 95.5200 |         |         |  27.8M  |  2.9G    |             |          | 224  | 0.875 |   bicubic |1
+| Crossformer_small_patch4_group7_224 | 82.4100 | 96.0440 |         |         |  30.7M  |  4.9G    |             |          | 224  | 0.875 |   bicubic |1
+| Crossformer_base_patch4_group7_224  | 83.3640 | 96.5400 |         |         |  52.0M  |  9.2G    |             |          | 224  | 0.875 |   bicubic |1
+| Crossformer_large_patch4_group7_224 | 83.8020 | 96.5620 |         |         |  90.0M  |  16.1G   |             |          | 224  | 0.875 |   bicubic |1
+| Cswin_tiny_224         | 82.8120 | 96.3000 |         |         |    23M  |   4.3G  |             |          |   224      |  0.9      |   bicubic    |1
+| Cswin_small_224        | 83.5960 | 96.5840 |         |         |    35M  |   6.9G  |             |          |   224      |  0.9      |   bicubic    |1
+| Cswin_base_224         | 84.2280 | 96.9120 |         |         |    78M  |   15.0G |             |          |   224      |  0.9      |   bicubic    |1
+| Cswin_large_224        | 86.5220 | 97.9920 |         |         |    173M |   31.5G |             |          |   224      |  0.9      |   bicubic    |1
+| Cswin_base_384         | 85.5100 | 97.4840 |         |         |    78M  |   47G   |             |          |   384      |  0.9      |   bicubic    |1
+| Cswin_large_384        | 87.4860 | 98.3460 |         |         |    173M |   96.8G |             |          |   384      |  0.9      |   bicubic    | 1
+| Resmlp_12              | 76.6080 | 93.1420 |         |         |    15M  |   3.0G  |             |          |   224      |  0.9      |   bicubic    |1
+| Resmlp_12_dist         | 77.9360 | 93.6400 |         |         |      |     |             |          |   224      |  0.9      |   bicubic    |1
+| Resmlp_24              | 79.3580 | 94.5320 |         |         |    30M  |   6.0G  |             |          |   224      |  0.9      |   bicubic    |1
+| Resmlp_24_dist         | 80.7720 | 95.2180 |         |         |      |     |             |          |   224      |  0.9      |   bicubic    |1
+| Resmlp_24_dino         |         |         |         |         |      |     |             |          |   224      |  0.9      |   bicubic    |
+| Resmlp_36              | 79.7420 | 94.8860 |         |         |    45M  |   8.9G  |             |          |   224      |  0.9      |   bicubic    |1
+| Resmlp_36_dist         | 81.0880 | 95.5820 |         |         |      |     |             |          |   224      |  0.9      |   bicubic    |1
+| ResmlpB_24             | 80.9440 | 95.0760 |         |         |      |     |             |          |   224      |  0.9      |   bicubic    |1
+| ResmlpB_24_in22k       | 84.3960 | 97.1580 |         |         |      |     |             |          |   224      |  0.9      |   bicubic    |1
+| ResmlpB_24_dist        | 83.6800 | 96.6740 |         |         |      |    |             |          |   224      |  0.9      |   bicubic    |1
+
+
+Acc was tested on 12/16/2021. Oneflow=0.6.0.dev20211205+cu102; Flowvision=0.5.1
