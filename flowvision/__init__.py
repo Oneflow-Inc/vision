@@ -6,6 +6,11 @@ from .loss import *
 from .scheduler import *
 from .data import *
 
+try:
+    from .version import __version__  # noqa: F401
+except ImportError:
+    pass
+
 _image_backend = "PIL"
 
 
