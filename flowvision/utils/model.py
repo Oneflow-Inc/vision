@@ -89,13 +89,43 @@ def freeze_batch_norm_2d(module):
         if module.affine:
             res.weight.data = module.weight.data.clone().detach()
             res.bias.data = module.bias.data.clone().detach()
-        # FIXME: Call `running_mean.data`, raise error: You shouldn't call `.data` for a LocalTensor
-        res.running_mean = module.running_mean
-        res.running_var = module.running_var
+        # FIXME: Call `running_mean.data`, raise warning: You shouldn't call `.data` for a LocalTensor
+        res.running_mean.data = module.running_mean.data
+        res.running_var.data = module.running_var.data
         res.eps = module.eps
     else:
         for name, child in module.named_children():
             new_child = freeze_batch_norm_2d(child)
+            if new_child is not child:
+                res.add_module(name, new_child)
+    return res
+
+
+def unfreeze_batch_norm_2d(module):
+    """
+    Converts all `FrozenBatchNorm2d` layers of provided module into `BatchNorm2d`. If `module` is itself and instance
+    of `FrozenBatchNorm2d`, it is converted into `BatchNorm2d` and returned. Otherwise, the module is walked
+    recursively and submodules are converted in place.
+
+    Args:
+        module (flow.nn.Module): Any PyTorch module.
+
+    Returns:
+        flow.nn.Module: Resulting module
+    """
+    res = module
+    if isinstance(module, FrozenBatchNorm2d):
+        res = nn.BatchNorm2d(module.num_features)
+        if module.affine:
+            res.weight.data = module.weight.data.clone().detach()
+            res.bias.data = module.bias.data.clone().detach()
+        # FIXME: the same as `freeze_batch_norm_2d` fn
+        res.running_mean.data = module.running_mean.data
+        res.running_var.data = module.running_var.data
+        res.eps = module.eps
+    else:
+        for name, child in module.named_children():
+            new_child = unfreeze_batch_norm_2d(child)
             if new_child is not child:
                 res.add_module(name, new_child)
     return res
