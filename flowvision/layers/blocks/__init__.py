@@ -4,3 +4,4 @@ from .mlp import Mlp, GluMlp, ConvMlp
 from .patch_embed import PatchEmbed
 from .conv2d_same import Conv2dSame
 from .poolers import MultiScaleRoIAlign
+from .misc import FrozenBatchNorm2d
