@@ -261,8 +261,7 @@ class Mixup:
             x[:, :, yl:yh, xl:xh] = x.flip(0)[:, :, yl:yh, xl:xh]
         else:
             x_flipped = x.flip(0).mul(1.0 - lam)
-            # TODO: switch to inplace version
-            x.mul(lam).add(x_flipped)
+            x.mul_(lam).add_(x_flipped)
         return lam
 
     def __call__(self, x, target):
