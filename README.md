@@ -10,12 +10,12 @@ python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu1
 
 - Then install the latest stable release of `flowvision`
 ```bash
-pip install flowvision==0.0.53
+pip install flowvision==0.0.54
 ```
 
 - Or install the nightly release of `flowvision`
 ```bash
-pip install -i https://test.pypi.org/simple/ flowvision==0.0.53
+pip install -i https://test.pypi.org/simple/ flowvision==0.0.54
 ```
 
 ## Supported Model
