@@ -9,4 +9,4 @@ jobs:
     steps:
     - name: Run a single-line script
       run: |
-        curl -X POST -d "branches=master" -d "token=${READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/oneflow/135376/
+        curl -X POST -d "branches=main" -d "token=${READTHEDOCS_TOKEN}"  readthedocs.org/api/v2/webhook/flowvisiontest/187665/
