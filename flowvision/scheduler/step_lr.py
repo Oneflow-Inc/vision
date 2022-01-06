@@ -1,4 +1,5 @@
-""" Step Scheduler borrowed from timm
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/scheduler/step_lr.py
 """
 import math
 import oneflow as flow

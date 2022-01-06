@@ -1,5 +1,5 @@
-""" MultiStep LR Scheduler
-Basic multi step LR schedule with warmup, noise.
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/scheduler/multistep_lr.py
 """
 import oneflow as flow
 import bisect

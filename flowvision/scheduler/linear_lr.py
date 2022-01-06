@@ -1,6 +1,11 @@
+"""
+Modified from https://github.com/microsoft/Swin-Transformer/blob/main/lr_scheduler.py
+"""
+
 import logging
 import math
 import numpy as np
+
 import oneflow as flow
 
 from .scheduler import Scheduler

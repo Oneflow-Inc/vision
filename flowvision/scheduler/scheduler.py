@@ -1,3 +1,7 @@
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/scheduler/scheduler.py
+"""
+
 from typing import Dict, Any
 
 import oneflow as flow
