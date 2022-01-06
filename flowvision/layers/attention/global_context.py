@@ -1,4 +1,5 @@
-"""OneFlow version of Global Context Attention Block borrowed from timm
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/global_context.py
 """
 
 import oneflow as flow

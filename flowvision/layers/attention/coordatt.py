@@ -1,7 +1,10 @@
+"""
+Modified from https://github.com/Andrew-Qibin/CoordAttention/blob/main/coordatt.py
+"""
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import math
 
 from flowvision.layers.helpers import make_divisible
 from flowvision.layers.activation import hard_swish

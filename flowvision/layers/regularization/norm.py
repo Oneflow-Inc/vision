@@ -1,4 +1,5 @@
-"""Normalization layers warpped by OneFlow borrowed from timm
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/norm.py
 """
 
 import oneflow as flow

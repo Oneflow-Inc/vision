@@ -1,9 +1,12 @@
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/eca.py
+"""
+
+import math
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import math
-
-from ..helpers import make_divisible
 
 
 class EcaModule(nn.Module):
