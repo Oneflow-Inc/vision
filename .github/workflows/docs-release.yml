@@ -2,6 +2,7 @@ name: Document Release
 
 on: push
 
+
 jobs:
   API_Document_Release:
     name: API Document Release
