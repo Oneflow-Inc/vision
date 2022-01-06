@@ -1,0 +1,11 @@
+name: API Document Release
+
+on: push
+
+jobs:
+  my_first_job:
+    name: My first job
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Run a single-line script
+      run: echo "Hello World!"
