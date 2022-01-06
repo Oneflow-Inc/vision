@@ -12,4 +12,4 @@ jobs:
       env:
         READTHEDOCS_TOKEN: ${{ secrets.READTHEDOCS_TOKEN }}
       run: |
-        curl -X POST -d "branches=main" -d "token=${READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/flowvisiontest/187665/
+        curl -X POST -d "branches=main" -d "token=${READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/flowvisiontest/187685/
