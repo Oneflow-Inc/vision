@@ -1,7 +1,9 @@
 name: Document Release
 
-on: push
-
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   API_Document_Release:
