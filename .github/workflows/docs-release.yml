@@ -8,5 +8,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - name: Run a single-line script
+      env:
+        READTHEDOCS_TOKEN: ${{ secrets.READTHEDOCS_TOKEN }}
       run: |
         curl -X POST -d "branches=main" -d "token=${READTHEDOCS_TOKEN}"  readthedocs.org/api/v2/webhook/flowvisiontest/187665/
