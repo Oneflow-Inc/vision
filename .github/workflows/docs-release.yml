@@ -8,4 +8,5 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
     - name: Run a single-line script
-      run: echo "Hello World!"
+      run: |
+        curl -X POST -d "branches=master" -d "token=${READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/oneflow/135376/
