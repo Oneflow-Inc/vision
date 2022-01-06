@@ -2,14 +2,11 @@ name: Document Release
 
 on: push
 
-
 jobs:
   API_Document_Release:
     name: API Document Release
     runs-on: ubuntu-18.04
     steps:
     - name: Syncing the webhook
-      env:
-        READTHEDOCS_TOKEN: ${{ secrets.READTHEDOCS_TOKEN }}
       run: |
-        curl -X POST -d "branches=main" -d "token=${READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/flowvisiontest/187685/
+        curl -X POST -d "branches=main" -d "token=51c1870fcb764bb70bb7f8899e50339194c2c140"  readthedocs.org/api/v2/webhook/flowvisiontest/187693/
