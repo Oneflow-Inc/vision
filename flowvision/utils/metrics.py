@@ -1,5 +1,5 @@
 """
-Eval Mmetrics
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/utils/metrics.py
 """
 
 

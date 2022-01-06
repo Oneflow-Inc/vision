@@ -1,10 +1,12 @@
 """
 Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/scheduler/multistep_lr.py
 """
-import oneflow as flow
 import bisect
-from .scheduler import Scheduler
 from typing import List
+
+import oneflow as flow
+
+from .scheduler import Scheduler
 
 
 class MultiStepLRScheduler(Scheduler):
