@@ -1,13 +1,13 @@
-name: API Document Release
+name: Document Release
 
 on: push
 
 jobs:
-  my_first_job:
-    name: My first job
+  API_Document_Release:
+    name: API Document Release
     runs-on: ubuntu-18.04
     steps:
-    - name: Run a single-line script
+    - name: Syncing the webhook script
       env:
         READTHEDOCS_TOKEN: ${{ secrets.READTHEDOCS_TOKEN }}
       run: |
