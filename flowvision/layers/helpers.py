@@ -1,5 +1,9 @@
-from itertools import repeat
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/helpers.py
+"""
+
 import collections.abc
+from itertools import repeat
 
 
 # From PyTorch internals

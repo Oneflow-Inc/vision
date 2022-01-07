@@ -1,6 +1,11 @@
-import oneflow as flow
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/weight_init.py
+"""
+
 import math
 import warnings
+
+import oneflow as flow
 import oneflow.nn.init as init
 from oneflow.nn.init import _calculate_fan_in_and_fan_out
 

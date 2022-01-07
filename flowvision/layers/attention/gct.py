@@ -1,10 +1,10 @@
-"""Gated Channel Transformation <https://arxiv.org/abs/1909.11519>
+"""
+Modified from https://github.com/z-x-yang/GCT/blob/master/PyTorch/GCT.py
 """
 
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import math
 
 
 class GCTModule(nn.Module):

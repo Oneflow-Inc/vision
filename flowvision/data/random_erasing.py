@@ -1,4 +1,5 @@
-"""OneFlow implementation of Random Erasing(Cutout) borrowed from timm
+"""OneFlow implementation of Random Erasing(Cutout)
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/data/random_erasing.py
 """
 
 import random

@@ -1,3 +1,7 @@
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/non_local_attn.py
+"""
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
