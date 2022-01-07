@@ -101,7 +101,7 @@ GoogLeNet
 
 
 InceptionV3
----------
+-----------
 .. automodule:: flowvision.models
     :members: 
         inception_v3,
