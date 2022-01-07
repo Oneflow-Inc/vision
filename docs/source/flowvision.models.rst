@@ -7,9 +7,6 @@ Classification
 ==============
 
 The models subpackage contains definitions for the following model
-
-Test by lixiang
-
 architectures for image classification:
 
 -  `AlexNet`_
@@ -104,7 +101,7 @@ GoogLeNet
 
 
 InceptionV3
----------
+-----------
 .. automodule:: flowvision.models
     :members: 
         inception_v3,
