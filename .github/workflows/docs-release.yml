@@ -12,6 +12,6 @@ jobs:
     steps:
     - name: Syncing the webhook
       env:
-        READTHEDOCS_TOKEN: ${{ secrets.READTHEDOCS_TOKEN }}
+        FLOWVISION_READTHEDOCS_TOKEN: ${{ secrets.FLOWVISION_READTHEDOCS_TOKEN }}
       run: |
-        curl -X POST -d "branches=main" -d "token=${READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/flowvision/187769/
+        curl -X POST -d "branches=main" -d "token=${FLOWVISION_READTHEDOCS_TOKEN}"  https://readthedocs.org/api/v2/webhook/flowvision/187769/
