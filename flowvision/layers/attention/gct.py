@@ -7,7 +7,6 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 
 
-
 class GCTModule(nn.Module):
     def __init__(self, channels, epsilon=1e-5, mode="l2", after_relu=False):
         super(GCTModule, self).__init__()
