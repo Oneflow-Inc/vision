@@ -4,3 +4,4 @@ from .linear_lr import LinearLRScheduler
 from .step_lr import StepLRScheduler
 from .multistep_lr import MultiStepLRScheduler
 from .plateau_lr import PlateauLRScheduler
+from .poly_lr import PolyLRScheduler
