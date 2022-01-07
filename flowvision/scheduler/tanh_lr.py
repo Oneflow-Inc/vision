@@ -19,29 +19,36 @@ class TanhLRScheduler(Scheduler):
     This is described in the paper https://arxiv.org/abs/1806.01593
     """
 
-    def __init__(self,
-                 optimizer: flow.optim.Optimizer,
-                 t_initial: int,
-                 lb: float = -7.,
-                 ub: float = 3.,
-                 lr_min: float = 0.,
-                 cycle_mul: float = 1.,
-                 cycle_decay: float = 1.,
-                 cycle_limit: int = 1,
-                 warmup_t=0,
-                 warmup_lr_init=0,
-                 warmup_prefix=False,
-                 t_in_epochs=True,
-                 noise_range_t=None,
-                 noise_pct=0.67,
-                 noise_std=1.0,
-                 noise_seed=42,
-                 initialize=True) -> None:
+    def __init__(
+        self,
+        optimizer: flow.optim.Optimizer,
+        t_initial: int,
+        lb: float = -7.0,
+        ub: float = 3.0,
+        lr_min: float = 0.0,
+        cycle_mul: float = 1.0,
+        cycle_decay: float = 1.0,
+        cycle_limit: int = 1,
+        warmup_t=0,
+        warmup_lr_init=0,
+        warmup_prefix=False,
+        t_in_epochs=True,
+        noise_range_t=None,
+        noise_pct=0.67,
+        noise_std=1.0,
+        noise_seed=42,
+        initialize=True,
+    ) -> None:
         super().__init__(
-            optimizer, param_group_field="lr",
-            noise_range_t=noise_range_t, noise_pct=noise_pct, noise_std=noise_std, noise_seed=noise_seed,
-            initialize=initialize)
-        
+            optimizer,
+            param_group_field="lr",
+            noise_range_t=noise_range_t,
+            noise_pct=noise_pct,
+            noise_std=noise_std,
+            noise_seed=noise_seed,
+            initialize=initialize,
+        )
+
         assert t_initial > 0
         assert lr_min >= 0
         assert lb < ub
@@ -60,7 +67,9 @@ class TanhLRScheduler(Scheduler):
         self.warmup_prefix = warmup_prefix
         self.t_in_epochs = t_in_epochs
         if self.warmup_t:
-            t_v = self.base_values if self.warmup_prefix else self._get_lr(self.warmup_t)
+            t_v = (
+                self.base_values if self.warmup_prefix else self._get_lr(self.warmup_t)
+            )
             self.warmup_steps = [(v - warmup_lr_init) / self.warmup_t for v in t_v]
             super().update_groups(self.warmup_lr_init)
         else:
@@ -74,9 +83,16 @@ class TanhLRScheduler(Scheduler):
                 t = t - self.warmup_t
 
             if self.cycle_mul != 1:
-                i = math.floor(math.log(1 - t / self.t_initial * (1 - self.cycle_mul), self.cycle_mul))
+                i = math.floor(
+                    math.log(
+                        1 - t / self.t_initial * (1 - self.cycle_mul), self.cycle_mul
+                    )
+                )
                 t_i = self.cycle_mul ** i * self.t_initial
-                t_curr = t - (1 - self.cycle_mul ** i) / (1 - self.cycle_mul) * self.t_initial
+                t_curr = (
+                    t
+                    - (1 - self.cycle_mul ** i) / (1 - self.cycle_mul) * self.t_initial
+                )
             else:
                 i = t // self.t_initial
                 t_i = self.t_initial
@@ -88,13 +104,16 @@ class TanhLRScheduler(Scheduler):
 
                 tr = t_curr / t_i
                 lrs = [
-                    self.lr_min + 0.5 * (lr_max - self.lr_min) * (1 - math.tanh(self.lb * (1. - tr) + self.ub * tr))
+                    self.lr_min
+                    + 0.5
+                    * (lr_max - self.lr_min)
+                    * (1 - math.tanh(self.lb * (1.0 - tr) + self.ub * tr))
                     for lr_max in lr_max_values
                 ]
             else:
                 lrs = [self.lr_min for _ in self.base_values]
         return lrs
-    
+
     def get_epoch_values(self, epoch: int):
         if self.t_in_epochs:
             return self._get_lr(epoch)
@@ -112,4 +131,10 @@ class TanhLRScheduler(Scheduler):
         if self.cycle_mul == 1.0:
             return self.t_initial * cycles
         else:
-            return int(math.floor(-self.t_initial * (self.cycle_mul ** cycles - 1) / (1 - self.cycle_mul)))
+            return int(
+                math.floor(
+                    -self.t_initial
+                    * (self.cycle_mul ** cycles - 1)
+                    / (1 - self.cycle_mul)
+                )
+            )
