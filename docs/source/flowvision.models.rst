@@ -5,7 +5,7 @@ Pretrain Models for Visual Tasks
 
 Classification
 ==============
-test by lixiang
+test
 The models subpackage contains definitions for the following model
 architectures for image classification:
 
