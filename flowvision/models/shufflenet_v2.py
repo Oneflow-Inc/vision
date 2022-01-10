@@ -1,7 +1,12 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/shufflenetv2.py
+"""
+from typing import Callable, Any, List
+
 import oneflow as flow
 from oneflow import Tensor
 import oneflow.nn as nn
-from typing import Callable, Any, List
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
@@ -207,13 +212,22 @@ def shufflenet_v2_x0_5(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ShuffleNetV2:
     """
-    Constructs a ShuffleNetV2 with 0.5x output channels, as described in
-    `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
-    <https://arxiv.org/abs/1807.11164>`_.
+    Constructs the ShuffleNetV2(0.5x) model.
+
+    .. note::
+        ShuffleNetV2 with 0.5x output channels model architecture from the `ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design <https://arxiv.org/abs/1807.11164>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> shufflenet_v2_x0_5 = flowvision.models.shufflenet_v2_x0_5(pretrained=False, progress=True)
+
     """
     return _shufflenetv2(
         "shufflenet_v2_x0_5",
@@ -230,13 +244,22 @@ def shufflenet_v2_x1_0(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ShuffleNetV2:
     """
-    Constructs a ShuffleNetV2 with 1.0x output channels, as described in
-    `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
-    <https://arxiv.org/abs/1807.11164>`_.
+    Constructs the ShuffleNetV2(1.0x) model.
+
+    .. note::
+        ShuffleNetV2 with 1.0x output channels model architecture from the `ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design <https://arxiv.org/abs/1807.11164>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> shufflenet_v2_x1_0 = flowvision.models.shufflenet_v2_x1_0(pretrained=False, progress=True)
+
     """
     return _shufflenetv2(
         "shufflenet_v2_x1_0",
@@ -253,13 +276,22 @@ def shufflenet_v2_x1_5(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ShuffleNetV2:
     """
-    Constructs a ShuffleNetV2 with 1.5x output channels, as described in
-    `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
-    <https://arxiv.org/abs/1807.11164>`_.
+    Constructs the ShuffleNetV2(1.5x) model.
+
+    .. note::
+        ShuffleNetV2 with 1.5x output channels model architecture from the `ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design <https://arxiv.org/abs/1807.11164>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> shufflenet_v2_x1_5 = flowvision.models.shufflenet_v2_x1_5(pretrained=False, progress=True)
+
     """
     return _shufflenetv2(
         "shufflenet_v2_x1_5",
@@ -276,13 +308,22 @@ def shufflenet_v2_x2_0(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> ShuffleNetV2:
     """
-    Constructs a ShuffleNetV2 with 2.0x output channels, as described in
-    `"ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design"
-    <https://arxiv.org/abs/1807.11164>`_.
+    Constructs the ShuffleNetV2(2.0x) model.
+
+    .. note::
+        ShuffleNetV2 with 2.0x output channels model architecture from the `ShuffleNet V2: Practical Guidelines for Efficient CNN Architecture Design <https://arxiv.org/abs/1807.11164>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> shufflenet_v2_x2_0 = flowvision.models.shufflenet_v2_x2_0(pretrained=False, progress=True)
+
     """
     return _shufflenetv2(
         "shufflenet_v2_x2_0",

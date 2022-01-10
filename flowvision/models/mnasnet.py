@@ -1,7 +1,12 @@
-import oneflow as flow
-import oneflow.nn as nn
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mnasnet.py
+"""
 import math
 import warnings
+
+import oneflow as flow
+import oneflow.nn as nn
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
@@ -168,12 +173,23 @@ def _load_pretrained(model_name, model, progress):
 
 @ModelCreator.register_model
 def mnasnet0_5(pretrained=False, progress=True, **kwargs):
-    """MNASNet with depth multiplier of 0.5 from
-    `"MnasNet: Platform-Aware Neural Architecture Search for Mobile"
-    <https://arxiv.org/pdf/1807.11626.pdf>`_.
+    """
+    Constructs the MNASNet model with depth multiplier of 0.5.
+
+    .. note::
+        MNASNet model with depth multiplier of 0.5 from the `MnasNet: Platform-Aware Neural Architecture Search for Mobile <https://arxiv.org/pdf/1807.11626.pdf>`_ paper.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mnasnet0_5 = flowvision.models.mnasnet0_5(pretrained=False, progress=True)
+
     """
     model = MNASNet(0.5, **kwargs)
     if pretrained:
@@ -183,12 +199,23 @@ def mnasnet0_5(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mnasnet0_75(pretrained=False, progress=True, **kwargs):
-    """MNASNet with depth multiplier of 0.75 from
-    `"MnasNet: Platform-Aware Neural Architecture Search for Mobile"
-    <https://arxiv.org/pdf/1807.11626.pdf>`_.
+    """
+    Constructs the MNASNet model with depth multiplier of 0.75.
+
+    .. note::
+        MNASNet model with depth multiplier of 0.75 from the `MnasNet: Platform-Aware Neural Architecture Search for Mobile <https://arxiv.org/pdf/1807.11626.pdf>`_ paper.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mnasnet0_75 = flowvision.models.mnasnet0_75(pretrained=False, progress=True)
+
     """
     model = MNASNet(0.75, **kwargs)
     if pretrained:
@@ -198,14 +225,24 @@ def mnasnet0_75(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mnasnet1_0(pretrained=False, progress=True, **kwargs):
-    """MNASNet with depth multiplier of 1.0 from
-    `"MnasNet: Platform-Aware Neural Architecture Search for Mobile"
-    <https://arxiv.org/pdf/1807.11626.pdf>`_.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
     """
-    print("build mnasnet1_0 model")
+    Constructs the MNASNet model with depth multiplier of 1.0.
+
+    .. note::
+        MNASNet model with depth multiplier of 1.0 from the `MnasNet: Platform-Aware Neural Architecture Search for Mobile <https://arxiv.org/pdf/1807.11626.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mnasnet1_0 = flowvision.models.mnasnet1_0(pretrained=False, progress=True)
+
+    """
     model = MNASNet(1.0, **kwargs)
     if pretrained:
         _load_pretrained("mnasnet1_0", model, progress)
@@ -214,12 +251,23 @@ def mnasnet1_0(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def mnasnet1_3(pretrained=False, progress=True, **kwargs):
-    """MNASNet with depth multiplier of 1.3 from
-    `"MnasNet: Platform-Aware Neural Architecture Search for Mobile"
-    <https://arxiv.org/pdf/1807.11626.pdf>`_.
+    """
+    Constructs the MNASNet model with depth multiplier of 1.3.
+
+    .. note::
+        MNASNet model with depth multiplier of 1.3 from the `MnasNet: Platform-Aware Neural Architecture Search for Mobile <https://arxiv.org/pdf/1807.11626.pdf>`_ paper.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mnasnet1_3 = flowvision.models.mnasnet1_3(pretrained=False, progress=True)
+
     """
     model = MNASNet(1.3, **kwargs)
     if pretrained:

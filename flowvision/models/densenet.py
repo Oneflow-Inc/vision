@@ -1,8 +1,13 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/densenet.py
+"""
+from collections import OrderedDict
+from typing import Any, List, Tuple
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-from collections import OrderedDict
-from typing import Any, List, Tuple
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
@@ -269,12 +274,24 @@ def _densenet(
 def densenet121(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> DenseNet:
-    r"""Densenet-121 model from
-    `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
-    The required minimum input size of the model is 29x29.
+    """
+    Constructs the DenseNet-121 model.
+
+    .. note::
+        DenseNet-121 model architecture from the `Densely Connected Convolutional Networks <https://arxiv.org/pdf/1608.06993.pdf>`_ paper.
+        The required minimum input size of the model is 29x29.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> densenet121 = flowvision.models.densenet121(pretrained=False, progress=True)
+
     """
     return _densenet(
         "densenet121", 32, (6, 12, 24, 16), 64, pretrained, progress, **kwargs
@@ -285,12 +302,24 @@ def densenet121(
 def densenet161(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> DenseNet:
-    r"""Densenet-161 model from
-    `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
-    The required minimum input size of the model is 29x29.
+    """
+    Constructs the DenseNet-161 model.
+
+    .. note::
+        DenseNet-161 model architecture from the `Densely Connected Convolutional Networks <https://arxiv.org/pdf/1608.06993.pdf>`_ paper.
+        The required minimum input size of the model is 29x29.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> densenet161 = flowvision.models.densenet161(pretrained=False, progress=True)
+
     """
     return _densenet(
         "densenet161", 48, (6, 12, 36, 24), 96, pretrained, progress, **kwargs
@@ -301,9 +330,24 @@ def densenet161(
 def densenet169(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> DenseNet:
-    r"""Densenet-169 model from
-    `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
-    The required minimum input size of the model is 29x29.
+    """
+    Constructs the DenseNet-169 model.
+
+    .. note::
+        DenseNet-169 model architecture from the `Densely Connected Convolutional Networks <https://arxiv.org/pdf/1608.06993.pdf>`_ paper.
+        The required minimum input size of the model is 29x29.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> densenet169 = flowvision.models.densenet169(pretrained=False, progress=True)
+
     """
     return _densenet(
         "densenet169", 32, (6, 12, 32, 32), 64, pretrained, progress, **kwargs
@@ -314,12 +358,24 @@ def densenet169(
 def densenet201(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> DenseNet:
-    r"""Densenet-201 model from
-    `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
-    The required minimum input size of the model is 29x29.
+    """
+    Constructs the DenseNet-201 model.
+
+    .. note::
+        DenseNet-201 model architecture from the `Densely Connected Convolutional Networks <https://arxiv.org/pdf/1608.06993.pdf>`_ paper.
+        The required minimum input size of the model is 29x29.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> densenet201 = flowvision.models.densenet201(pretrained=False, progress=True)
+
     """
     return _densenet(
         "densenet201", 32, (6, 12, 48, 32), 64, pretrained, progress, **kwargs

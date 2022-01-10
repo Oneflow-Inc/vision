@@ -1,6 +1,11 @@
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/scheduler/cosine_lr.py
+"""
+
 import logging
 import math
 import numpy as np
+
 import oneflow as flow
 
 from .scheduler import Scheduler

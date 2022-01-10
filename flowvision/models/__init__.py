@@ -21,6 +21,7 @@ from .rexnet import *
 from .rexnet_lite import *
 from .ghostnet import *
 from .res2net import *
+from .efficientnet import *
 from .neural_style_transfer import *
 from .detection import *
 from .segmentation import *

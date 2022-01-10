@@ -16,6 +16,27 @@ try:
 except ImportError:
     from distutils.core import setup
 
+version = "0.0.54"
+package_name = "flowvision"
+cwd = os.path.dirname(os.path.abspath(__file__))
+
+sha = "Unknown"
+try:
+    sha = (
+        subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=cwd)
+        .decode("ascii")
+        .strip()
+    )
+except Exception:
+    pass
+
+
+def write_version_file():
+    version_path = os.path.join(cwd, "flowvision", "version.py")
+    with open(version_path, "w") as f:
+        f.write(f"__version__ = '{version}'\n")
+        f.write(f"git_version = {repr(sha)}\n")
+
 
 def _is_cuda_file(path):
     return os.path.splitext(path)[1] in [".cu", ".cuh"]
@@ -247,14 +268,18 @@ class clean(distutils.command.clean.clean):
 
 
 if __name__ == "__main__":
+    print(f"Building wheel {package_name}-{version}")
+
     with open("README.md", "r") as fh:
         long_description = fh.read()
 
+    write_version_file()
+
     setup(
-        name="flowvision",
-        version="0.0.5",  # version number
+        name=package_name,
+        version=version,  # version number
         author="flow vision contributors",
-        author_email="596106517@qq.com",
+        author_email="rentianhe@oneflow.org",
         description="oneflow vision codebase",
         license="BSD",
         packages=find_packages(),

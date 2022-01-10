@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/facebookresearch/deit/blob/main/resmlp_models.py
+"""
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
@@ -164,6 +167,24 @@ def _create_resmlp(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def resmlp_12(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-12 model.
+
+    .. note::
+        ResMLP-12 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_12 = flowvision.models.resmlp_12(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -179,6 +200,25 @@ def resmlp_12(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-12 model with distillation.
+
+    .. note::
+        ResMLP-12 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that tht model is the same as resmlp_12 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_12_dist = flowvision.models.resmlp_12_dist(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -194,6 +234,24 @@ def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlp_24(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-24 model.
+
+    .. note::
+        ResMLP-24 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_24 = flowvision.models.resmlp_24(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -209,6 +267,25 @@ def resmlp_24(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-24 model with distillation.
+
+    .. note::
+        ResMLP-24 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that tht model is the same as resmlp_24 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_24_dist = flowvision.models.resmlp_24_dist(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -224,6 +301,25 @@ def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-24 model trained under DINO proposed in `"Emerging Properties in Self-Supervised Vision Transformers" <https://arxiv.org/abs/2104.14294>`_.
+
+    .. note::
+        ResMLP-24 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that tht model is the same as resmlp_24 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_24_dino = flowvision.models.resmlp_24_dino(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -239,6 +335,24 @@ def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlp_36(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-36 model.
+
+    .. note::
+        ResMLP-36 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_36 = flowvision.models.resmlp_36(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -254,6 +368,25 @@ def resmlp_36(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-36 model with distillation.
+
+    .. note::
+        ResMLP-36 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that tht model is the same as resmlp_36 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_36_dist = flowvision.models.resmlp_36_dist(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=16,
         embed_dim=384,
@@ -269,6 +402,24 @@ def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlpB_24(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-B-24 model.
+
+    .. note::
+        ResMLP-B-24 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlpB_24 = flowvision.models.resmlpB_24(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=8,
         embed_dim=768,
@@ -284,6 +435,25 @@ def resmlpB_24(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ImageNet22k pretrained ResMLP-B-24 model.
+
+    .. note::
+        ImageNet22k pretrained ResMLP-B-24 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that tht model is the same as resmlpB_24 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlpB_24_in22k = flowvision.models.resmlpB_24_in22k(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=8,
         embed_dim=768,
@@ -299,6 +469,25 @@ def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-B-24 model with distillation.
+
+    .. note::
+        ResMLP-B-24 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that tht model is the same as resmlpB_24 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlpB_24_dist = flowvision.models.resmlpB_24_dist(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         patch_size=8,
         embed_dim=768,

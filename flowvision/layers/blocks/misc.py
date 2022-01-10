@@ -1,4 +1,8 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/ops/misc.py
+"""
 import oneflow as flow
+import oneflow.nn as nn
 from oneflow import Tensor
 from typing import List
 

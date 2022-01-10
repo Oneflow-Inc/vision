@@ -1,6 +1,10 @@
+"""
+Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1.py
+"""
+from math import ceil
+
 import oneflow as flow
 import oneflow.nn as nn
-from math import ceil
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
@@ -224,6 +228,24 @@ def _create_rexnetv1(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def rexnetv1_1_0(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet model with width multiplier of 1.0.
+
+    .. note::
+        ReXNet model with width multiplier of 1.0 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnetv1_1_0 = flowvision.models.rexnetv1_1_0(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(width_mult=1.0, **kwargs)
     return _create_rexnetv1(
         "rexnetv1_1_0", pretrained=pretrained, progress=progress, **model_kwargs
@@ -232,6 +254,24 @@ def rexnetv1_1_0(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnetv1_1_3(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet model with width multiplier of 1.3.
+
+    .. note::
+        ReXNet model with width multiplier of 1.3 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnetv1_1_3 = flowvision.models.rexnetv1_1_3(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(width_mult=1.3, **kwargs)
     return _create_rexnetv1(
         "rexnetv1_1_3", pretrained=pretrained, progress=progress, **model_kwargs
@@ -240,6 +280,24 @@ def rexnetv1_1_3(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnetv1_1_5(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet model with width multiplier of 1.5.
+
+    .. note::
+        ReXNet model with width multiplier of 1.5 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnetv1_1_5 = flowvision.models.rexnetv1_1_5(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(width_mult=1.5, **kwargs)
     return _create_rexnetv1(
         "rexnetv1_1_5", pretrained=pretrained, progress=progress, **model_kwargs
@@ -248,6 +306,24 @@ def rexnetv1_1_5(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnetv1_2_0(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet model with width multiplier of 2.0.
+
+    .. note::
+        ReXNet model with width multiplier of 2.0 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnetv1_2_0 = flowvision.models.rexnetv1_2_0(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(width_mult=2.0, **kwargs)
     return _create_rexnetv1(
         "rexnetv1_2_0", pretrained=pretrained, progress=progress, **model_kwargs
@@ -256,6 +332,24 @@ def rexnetv1_2_0(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnetv1_3_0(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet model with width multiplier of 3.0.
+
+    .. note::
+        ReXNet model with width multiplier of 3.0 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnetv1_3_0 = flowvision.models.rexnetv1_3_0(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(width_mult=3.0, **kwargs)
     return _create_rexnetv1(
         "rexnetv1_3_0", pretrained=pretrained, progress=progress, **model_kwargs
