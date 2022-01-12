@@ -40,6 +40,8 @@ def _check_args_tf(kwargs):
     if "fillcolor" in kwargs and _PIL_VER < (5, 0):
         kwargs.pop("fillcolor")
     kwargs["resample"] = _interpolation(kwargs)
+    if "fillcolor" in kwargs:
+        kwargs["fillcolor"] = tuple(kwargs["fillcolor"])
 
 
 def shear_x(img, factor, **kwargs):
