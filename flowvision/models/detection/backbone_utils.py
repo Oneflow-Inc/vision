@@ -1,13 +1,17 @@
 import warnings
-from oneflow import nn
+from typing import Callable, Dict, Optional, List, Union
+
+from oneflow import nn, Tensor
 from flowvision.layers.blocks.feature_pyramid_network import (
     FeaturePyramidNetwork,
     LastLevelMaxPool,
+    ExtraFPNBlock,
 )
 
 from flowvision.layers.blocks import misc as misc_nn_ops
 from .._utils import IntermediateLayerGetter
 from .. import resnet
+from .. import mobilenet
 
 
 class BackboneWithFPN(nn.Module):
@@ -52,13 +56,13 @@ class BackboneWithFPN(nn.Module):
 
 
 def resnet_fpn_backbone(
-    backbone_name,
-    pretrained,
-    norm_layer=misc_nn_ops.FrozenBatchNorm2d,
-    trainable_layers=3,
-    returned_layers=None,
-    extra_blocks=None,
-):
+    backbone_name: str,
+    pretrained: bool,
+    norm_layer: Callable[..., nn.Module] = misc_nn_ops.FrozenBatchNorm2d,
+    trainable_layers: int = 3,
+    returned_layers: Optional[List[int]] = None,
+    extra_blocks: Optional[ExtraFPNBlock] = None,
+) -> BackboneWithFPN:
     """
     Constructs a specified ResNet backbone with FPN on top. Freezes the specified number of layers in the backbone.
 
@@ -80,6 +84,17 @@ def resnet_fpn_backbone(
     backbone = resnet.__dict__[backbone_name](
         pretrained=pretrained, norm_layer=norm_layer
     )
+    return _resnet_fpn_extractor(
+        backbone, trainable_layers, returned_layers, extra_blocks
+    )
+
+
+def _resnet_fpn_extractor(
+    backbone: resnet.ResNet,
+    trainable_layers: int,
+    returned_layers: Optional[List[int]] = None,
+    extra_blocks: Optional[ExtraFPNBlock] = None,
+) -> BackboneWithFPN:
 
     # select layers that wont be frozen
     assert 0 <= trainable_layers <= 5
@@ -132,3 +147,81 @@ def _validate_trainable_layers(
         trainable_backbone_layers = default_value
     assert 0 <= trainable_backbone_layers <= max_value
     return trainable_backbone_layers
+
+
+def mobilenet_backbone(
+    backbone_name: str,
+    pretrained: bool,
+    fpn: bool,
+    norm_layer: Callable[..., nn.Module] = misc_nn_ops.FrozenBatchNorm2d,
+    trainable_layers: int = 2,
+    returned_layers: Optional[List[int]] = None,
+    extra_blocks: Optional[ExtraFPNBlock] = None,
+) -> nn.Module:
+    backbone = mobilenet.__dict__[backbone_name](
+        pretrained=pretrained, norm_layer=norm_layer
+    )
+    return _mobilenet_extractor(
+        backbone, fpn, trainable_layers, returned_layers, extra_blocks
+    )
+
+
+def _mobilenet_extractor(
+    backbone: Union[mobilenet.MobileNetV2, mobilenet.MobileNetV3],
+    fpn: bool,
+    trainable_layers,
+    returned_layers: Optional[List[int]] = None,
+    extra_blocks: Optional[ExtraFPNBlock] = None,
+) -> nn.Module:
+    backbone = backbone.features
+    # Gather the indices of blocks which are strided. These are the locations of C1, ..., Cn-1 blocks.
+    # The first and last blocks are always included because they are the C0 (conv1) and Cn.
+    stage_indices = (
+        [0]
+        + [i for i, b in enumerate(backbone) if getattr(b, "_is_cn", False)]
+        + [len(backbone) - 1]
+    )
+    num_stages = len(stage_indices)
+
+    # find the index of the layer from which we wont freeze
+    assert 0 <= trainable_layers <= num_stages
+    freeze_before = (
+        len(backbone)
+        if trainable_layers == 0
+        else stage_indices[num_stages - trainable_layers]
+    )
+
+    for b in backbone[:freeze_before]:
+        for parameter in b.parameters():
+            parameter.requires_grad_(False)
+
+    out_channels = 256
+    if fpn:
+        if extra_blocks is None:
+            extra_blocks = LastLevelMaxPool()
+
+        if returned_layers is None:
+            returned_layers = [num_stages - 2, num_stages - 1]
+        assert min(returned_layers) >= 0 and max(returned_layers) < num_stages
+        return_layers = {
+            f"{stage_indices[k]}": str(v) for v, k in enumerate(returned_layers)
+        }
+
+        in_channels_list = [
+            backbone[stage_indices[i]].out_channels for i in returned_layers
+        ]
+        return BackboneWithFPN(
+            backbone,
+            return_layers,
+            in_channels_list,
+            out_channels,
+            extra_blocks=extra_blocks,
+        )
+    else:
+        m = nn.Sequential(
+            backbone,
+            # depthwise linear combination of channels to reduce their size
+            nn.Conv2d(backbone[-1].out_channels, out_channels, 1),
+        )
+        m.out_channels = out_channels  # type: ignore[assignment]
+        return m

@@ -207,11 +207,12 @@ def create_transform(
 
     if tf_preprocessing and use_prefetcher:
         assert not separate, "Separate transforms not supported for TF preprocessing"
-        from timm.data.tf_preprocessing import TfPreprocessTransform
+        # TODO: supported TfPreprocessTransform in flowvision
+        # from flowvision.data.tf_preprocessing import TfPreprocessTransform
 
-        transform = TfPreprocessTransform(
-            is_training=is_training, size=img_size, interpolation=interpolation
-        )
+        # transform = TfPreprocessTransform(
+        #     is_training=is_training, size=img_size, interpolation=interpolation
+        # )
     else:
         if is_training and no_aug:
             assert not separate, "Cannot perform split augmentation with no_aug"

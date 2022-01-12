@@ -9,7 +9,7 @@ from flowvision.models import ModelCreator
 from flowvision.transforms.functional import str_to_interp_mode
 import argparse
 import math
-
+import json
 
 """Model Specific Test
 Swin-T: using interpolation "bicubic" for testing, which corresponds to interpolation=3 in Resize function
@@ -110,6 +110,41 @@ def accuracy(output, target, topk=(1,)):
     return [correct[:k].reshape(-1).float().sum(0) * 100.0 / batch_size for k in topk]
 
 
+# down json from https://github.com/google-research/reassessed-imagenet
+def accuracy_r(output, names, real_reables, topk=(1,)):
+    """
+
+    Args:
+        output:
+        names: batch images names
+        real_reables: list: sorted by images names
+        topk:
+
+    Returns:
+
+    """
+    maxk = max(topk)
+
+    _, pred = output.topk(maxk, 1, True, True)
+    ret = []
+    for k in topk:
+        batch_size = len(names)
+        correct = 0
+        for i, name in enumerate(names):
+            if real_reables[int(name) - 1]:
+                real_targets = real_reables[int(name) - 1]
+                ps = pred[i][:k]
+                for j in ps:
+                    if int(j.item()) in real_targets:
+                        correct += 1
+                        break
+            else:  # dont care this image, so we decrease batch_size
+                batch_size -= 1
+        ret.append(correct / batch_size * 100)
+        ret.append(batch_size)
+    return ret
+
+
 def main(args):
     model = ModelCreator.create_model(args.model, pretrained=True)
     data_dir = args.data_path
@@ -138,6 +173,12 @@ def main(args):
     print("Start Evaluation")
     Top_1_m = AverageMeter()
     Top_5_m = AverageMeter()
+    if args.real_labels:
+        with open("real.json") as f:
+            real_labels = json.load(f)
+        names = [name[-11:-5] for name, cls in data_loader.sampler.data_source.imgs]
+        Top_1r_m = AverageMeter()
+        Top_5r_m = AverageMeter()
     model.eval()
     with flow.no_grad():
         pbar = tqdm(enumerate(data_loader), total=total_batch)
@@ -153,17 +194,45 @@ def main(args):
             else:
                 pred_logits = model(data)
             acc1, acc5 = accuracy(pred_logits, target, topk=(1, 5))
-
             Top_1_m.update(acc1.item(), pred_logits.size(0))
             Top_5_m.update(acc5.item(), pred_logits.size(0))
+            if args.real_labels:
+                acc1_r, bs1, acc5_r, bs2 = accuracy_r(
+                    pred_logits,
+                    names[
+                        args.batch_size * batch_idx : args.batch_size * batch_idx
+                        + len(target)
+                    ],
+                    real_labels,
+                    topk=(1, 5),
+                )
+                Top_1r_m.update(acc1_r, bs1)
+                Top_5r_m.update(acc5_r, bs2)
+                pbar.set_postfix(
+                    acc1=acc1.item(), acc5=acc5.item(), acc1_r=acc1_r, acc5_r=acc5_r
+                )
+            else:
+                pbar.set_postfix(
+                    acc1=acc1.item(), acc5=acc5.item(),
+                )
 
-            pbar.set_postfix(acc1=acc1.item(), acc5=acc5.item())
-
-    print(
-        "Evaluation on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}".format(
-            "ImageNet", Top_1_m.avg, Top_5_m.avg
+    if args.real_labels:
+        print(
+            "Evaluation {:s} on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}, Acc@1_r: {:.4f}, Acc@5_r: {:.4f}".format(
+                args.model,
+                "ImageNet",
+                Top_1_m.avg,
+                Top_5_m.avg,
+                Top_1r_m.avg,
+                Top_5r_m.avg,
+            )
         )
-    )
+    else:
+        print(
+            "Evaluation {:s} on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}, ".format(
+                args.model, "ImageNet", Top_1_m.avg, Top_5_m.avg,
+            )
+        )
 
 
 def _parse_args():
@@ -173,6 +242,9 @@ def _parse_args():
     )
     parser.add_argument(
         "--data_path", type=str, default="./", help="path to imagenet2012"
+    )
+    parser.add_argument(
+        "--real_labels", action="store_true", help="where evaluate real label"
     )
     parser.add_argument("--batch_size", type=int, default=64, help="test batch size")
     parser.add_argument("--img_size", type=int, default=224, help="test batch size")

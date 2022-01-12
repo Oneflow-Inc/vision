@@ -1,5 +1,5 @@
-"""Adaptive Gradient Clipping
-An oneflow impl of AGC, borrowed from timm
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/utils/agc.py
 """
 
 import oneflow as flow

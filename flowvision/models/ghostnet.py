@@ -274,33 +274,23 @@ class GhostNet(nn.Module):
 
 
 @ModelCreator.register_model
-def ghostnet(
-    pretrained: bool = False,
-    progress: bool = True,
-    num_classes: int = 1000,
-    width: float = 1.0,
-    dropout: float = 0.2,
-    **kwargs: Any
-):
+def ghostnet(pretrained: bool = False, progress: bool = True, **kwargs: Any):
     """
     Constructs the GhostNet model.
 
     .. note::
-        `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
+        GhostNet model from `GhostNet: More Features from Cheap Operations <https://arxiv.org/abs/1911.11907>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
-        num_classes (int): The number of classification classes. Default: ``1000``
-        width (float): Convolution output channel expand rate. Default: ``1.0``
-        dropout (float): Dropout rate. Default: ``0.2``
 
     For example:
 
     .. code-block:: python
 
         >>> import flowvision
-        >>> ghostnet = flowvision.models.ghostnet(pretrained=True, progress=True, num_classes=1000, width=1.0, dropout=0.2)
+        >>> ghostnet = flowvision.models.ghostnet(pretrained=True, progress=True)
 
     """
     cfgs = [
@@ -331,9 +321,7 @@ def ghostnet(
             [5, 960, 160, 0.25, 1],
         ],
     ]
-    model = GhostNet(
-        cfgs, num_classes=num_classes, width=width, dropout=dropout, **kwargs
-    )
+    model = GhostNet(cfgs, **kwargs)
     if pretrained:
         arch = "ghostnet"
         if model_urls.get(arch, None) is None:

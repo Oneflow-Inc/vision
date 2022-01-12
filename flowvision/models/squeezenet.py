@@ -1,9 +1,14 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/squeezenet.py
+"""
+from typing import Any
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from typing import Any
 
 __all__ = ["SqueezeNet", "squeezenet1_0", "squeezenet1_1"]
 
@@ -127,13 +132,23 @@ def _squeezenet(
 def squeezenet1_0(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> SqueezeNet:
-    r"""SqueezeNet model architecture from the `"SqueezeNet: AlexNet-level
-    accuracy with 50x fewer parameters and <0.5MB model size"
-    <https://arxiv.org/abs/1602.07360>`_ paper.
+    """
+    Constructs the SqueezeNet model.
+
+    .. note::
+        SqueezeNet model from the `SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size <https://arxiv.org/abs/1602.07360>`_ paper.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> squeezenet1_0 = flowvision.models.squeezenet1_0(pretrained=False, progress=True)
+
     """
     return _squeezenet("1_0", pretrained, progress, **kwargs)
 
@@ -142,13 +157,23 @@ def squeezenet1_0(
 def squeezenet1_1(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> SqueezeNet:
-    r"""SqueezeNet 1.1 model from the `official SqueezeNet repo
-    <https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1>`_.
-    SqueezeNet 1.1 has 2.4x less computation and slightly fewer parameters
-    than SqueezeNet 1.0, without sacrificing accuracy.
+    """
+    Constructs the SqueezeNet 1.1 model.
+
+    .. note::
+        SqueezeNet 1.1 model from the `SqueezeNet: AlexNet-level accuracy with 50x fewer parameters and <0.5MB model size <https://arxiv.org/abs/1602.07360>`_ paper.
+        Note that SqueezeNet 1.1 has 2.4x less computation and slightly fewer parameters than SqueezeNet 1.0, without sacrificing accuracy.
 
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> squeezenet1_1 = flowvision.models.squeezenet1_1(pretrained=False, progress=True)
+
     """
     return _squeezenet("1_1", pretrained, progress, **kwargs)

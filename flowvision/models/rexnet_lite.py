@@ -1,6 +1,10 @@
+"""
+Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1_lite.py
+"""
+import math
+
 import oneflow as flow
 import oneflow.nn as nn
-import math
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
@@ -236,6 +240,24 @@ def _create_rexnet_lite(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def rexnet_lite_1_0(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet-lite model with width multiplier of 1.0.
+
+    .. note::
+        ReXNet-lite model with width multiplier of 1.0 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnet_lite_1_0 = flowvision.models.rexnet_lite_1_0(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(multiplier=1.0, **kwargs)
     return _create_rexnet_lite(
         "rexnet_lite_1_0", pretrained=pretrained, progress=progress, **model_kwargs
@@ -244,6 +266,24 @@ def rexnet_lite_1_0(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnet_lite_1_3(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet-lite model with width multiplier of 1.3.
+
+    .. note::
+        ReXNet-lite model with width multiplier of 1.3 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnet_lite_1_3 = flowvision.models.rexnet_lite_1_3(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(multiplier=1.3, **kwargs)
     return _create_rexnet_lite(
         "rexnet_lite_1_3", pretrained=pretrained, progress=progress, **model_kwargs
@@ -252,6 +292,24 @@ def rexnet_lite_1_3(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnet_lite_1_5(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet-lite model with width multiplier of 1.5.
+
+    .. note::
+        ReXNet-lite model with width multiplier of 1.5 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnet_lite_1_5 = flowvision.models.rexnet_lite_1_5(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(multiplier=1.5, **kwargs)
     return _create_rexnet_lite(
         "rexnet_lite_1_5", pretrained=pretrained, progress=progress, **model_kwargs
@@ -260,6 +318,24 @@ def rexnet_lite_1_5(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def rexnet_lite_2_0(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ReXNet-lite model with width multiplier of 2.0.
+
+    .. note::
+        ReXNet-lite model with width multiplier of 2.0 from the `Rethinking Channel Dimensions for Efficient Model Design <https://arxiv.org/pdf/2007.00992.pdf>`_ paper.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> rexnet_lite_2_0 = flowvision.models.rexnet_lite_2_0(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(multiplier=2.0, **kwargs)
     return _create_rexnet_lite(
         "rexnet_lite_2_0", pretrained=pretrained, progress=progress, **model_kwargs

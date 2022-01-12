@@ -1,11 +1,16 @@
+"""
+Modified from https://github.com/cheerss/CrossFormer/blob/main/models/crossformer.py
+"""
+import numpy as np
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
-from flowvision.layers.regularization.droppath import DropPath, drop_path
-import numpy as np
+
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
+from flowvision.layers.regularization.droppath import DropPath, drop_path
 
 
 model_urls = {
@@ -679,6 +684,24 @@ def _create_cross_former(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def crossformer_tiny_patch4_group7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CrossFormer-T 224x224 model.
+
+    .. note::
+        CrossFormer-T 224x224 model from `"CrossFormer: A Versatile Vision Transformer Based on Cross-scale Attention" <https://arxiv.org/pdf/2108.00154.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> crossformer_tiny_patch4_group7_224 = flowvision.models.crossformer_tiny_patch4_group7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=(4, 8, 16, 32),
@@ -688,6 +711,7 @@ def crossformer_tiny_patch4_group7_224(pretrained=False, progress=True, **kwargs
         group_size=(7, 7, 7, 7),
         merge_size=((2, 4), (2, 4), (2, 4)),
         drop_path_rate=0.1,
+        **kwargs,
     )
     return _create_cross_former(
         "crossformer_tiny_patch4_group7_224",
@@ -699,6 +723,24 @@ def crossformer_tiny_patch4_group7_224(pretrained=False, progress=True, **kwargs
 
 @ModelCreator.register_model
 def crossformer_small_patch4_group7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CrossFormer-S 224x224 model.
+
+    .. note::
+        CrossFormer-S 224x224 model from `"CrossFormer: A Versatile Vision Transformer Based on Cross-scale Attention" <https://arxiv.org/pdf/2108.00154.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> crossformer_small_patch4_group7_224 = flowvision.models.crossformer_small_patch4_group7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=(4, 8, 16, 32),
@@ -708,6 +750,7 @@ def crossformer_small_patch4_group7_224(pretrained=False, progress=True, **kwarg
         group_size=(7, 7, 7, 7),
         merge_size=((2, 4), (2, 4), (2, 4)),
         drop_path_rate=0.2,
+        **kwargs,
     )
     return _create_cross_former(
         "crossformer_small_patch4_group7_224",
@@ -719,6 +762,24 @@ def crossformer_small_patch4_group7_224(pretrained=False, progress=True, **kwarg
 
 @ModelCreator.register_model
 def crossformer_base_patch4_group7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CrossFormer-B 224x224 model.
+
+    .. note::
+        CrossFormer-B 224x224 model from `"CrossFormer: A Versatile Vision Transformer Based on Cross-scale Attention" <https://arxiv.org/pdf/2108.00154.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> crossformer_base_patch4_group7_224 = flowvision.models.crossformer_base_patch4_group7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=(4, 8, 16, 32),
@@ -728,6 +789,7 @@ def crossformer_base_patch4_group7_224(pretrained=False, progress=True, **kwargs
         group_size=(7, 7, 7, 7),
         merge_size=((2, 4), (2, 4), (2, 4)),
         drop_path_rate=0.3,
+        **kwargs,
     )
     return _create_cross_former(
         "crossformer_base_patch4_group7_224",
@@ -739,6 +801,24 @@ def crossformer_base_patch4_group7_224(pretrained=False, progress=True, **kwargs
 
 @ModelCreator.register_model
 def crossformer_large_patch4_group7_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs CrossFormer-L 224x224 model.
+
+    .. note::
+        CrossFormer-L 224x224 model from `"CrossFormer: A Versatile Vision Transformer Based on Cross-scale Attention" <https://arxiv.org/pdf/2108.00154.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> crossformer_large_patch4_group7_224 = flowvision.models.crossformer_large_patch4_group7_224(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         img_size=224,
         patch_size=(4, 8, 16, 32),
@@ -748,6 +828,7 @@ def crossformer_large_patch4_group7_224(pretrained=False, progress=True, **kwarg
         group_size=(7, 7, 7, 7),
         merge_size=((2, 4), (2, 4), (2, 4)),
         drop_path_rate=0.5,
+        **kwargs,
     )
     return _create_cross_former(
         "crossformer_large_patch4_group7_224",

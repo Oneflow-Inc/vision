@@ -1,11 +1,12 @@
+import numpy as np
+from typing import Any
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import numpy as np
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-
-from typing import Any
 
 __all__ = [
     "VisionTransformer",
@@ -285,9 +286,36 @@ class VisionTransformer(nn.Module):
         return logits
 
 
+def _create_vision_transformer(arch, pretrained=False, progress=True, **model_kwargs):
+    model = VisionTransformer(**model_kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        model.load_state_dict(state_dict)
+    return model
+
+
 @ModelCreator.register_model
 def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model = VisionTransformer(
+    """
+    Constructs the ViT-B-16-224 model.
+
+    .. note::
+        ViT-B-16-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_16_224 = flowvision.models.vit_b_16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
         image_size=(224, 224),
         patch_size=(16, 16),
         emb_dim=768,
@@ -298,17 +326,35 @@ def vit_b_16_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_16_224", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_16_224", pretrained=pretrained, progress=progress, **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
 def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model = VisionTransformer(
+    """
+    Constructs the ViT-B-16-384 model.
+
+    .. note::
+        ViT-B-16-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_16_384 = flowvision.models.vit_b_16_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(16, 16),
         emb_dim=768,
@@ -319,17 +365,35 @@ def vit_b_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_16_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_16_384", pretrained=pretrained, progress=progress, **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
 def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model = VisionTransformer(
+    """
+    Constructs the ViT-B-32-224 model.
+
+    .. note::
+        ViT-B-16-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_32_224 = flowvision.models.vit_b_32_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
         image_size=(224, 224),
         patch_size=(32, 32),
         emb_dim=768,
@@ -340,17 +404,35 @@ def vit_b_32_224(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_32_224", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_32_224", pretrained=pretrained, progress=progress, **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
 def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model = VisionTransformer(
+    """
+    Constructs the ViT-B-32-384 model.
+
+    .. note::
+        ViT-B-32-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_b_32_384 = flowvision.models.vit_b_32_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(32, 32),
         emb_dim=768,
@@ -361,17 +443,35 @@ def vit_b_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_b_32_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_b_32_384", pretrained=pretrained, progress=progress, **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
 def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model = VisionTransformer(
+    """
+    Constructs the ViT-L-16-384 model.
+
+    .. note::
+        ViT-L-16-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_l_16_384 = flowvision.models.vit_l_16_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(16, 16),
         emb_dim=1024,
@@ -383,16 +483,33 @@ def vit_l_16_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         dropout_rate=0.1,
         feat_dim=None,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_l_16_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_l_16_384", pretrained=pretrained, progress=progress, **model_kwargs,
+    )
 
 
 @ModelCreator.register_model
 def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    model = VisionTransformer(
+    """
+    Constructs the ViT-L-32-384 model.
+
+    .. note::
+        ViT-L-32-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_l_32_384 = flowvision.models.vit_l_32_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
         image_size=(384, 384),
         patch_size=(32, 32),
         emb_dim=1024,
@@ -403,9 +520,8 @@ def vit_l_32_384(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         attn_dropout_rate=0.0,
         dropout_rate=0.1,
         feat_dim=None,
+        **kwargs,
     )
-    if pretrained:
-        _load_pretrained(
-            "vit_l_32_384", model=model, progress=progress, model_dir="./checkpoints"
-        )
-    return model
+    return _create_vision_transformer(
+        "vit_l_32_384", pretrained=pretrained, progress=progress, **model_kwargs,
+    )

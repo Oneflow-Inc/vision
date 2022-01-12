@@ -1,8 +1,13 @@
-from collections import namedtuple
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/inception.py
+"""
 import warnings
+from collections import namedtuple
+from typing import Callable, Any, Optional, Tuple, List
+
 import oneflow as flow
 from oneflow import nn, Tensor
-from typing import Callable, Any, Optional, Tuple, List
+
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
@@ -24,19 +29,29 @@ _InceptionOutputs = InceptionOutputs
 
 @ModelCreator.register_model
 def inception_v3(pretrained: bool = False, progress: bool = True, **kwargs: Any):
-    r"""Inception v3 model architecture from
-    `"Rethinking the Inception Architecture for Computer Vision" <http://arxiv.org/abs/1512.00567>`_.
-    The required minimum input size of the model is 75x75.
+    """
+    Constructs Inception v3 model.
+
     .. note::
-        **Important**: In contrast to the other models the inception_v3 expects tensors with a size of
+        Inception v3 model from the `Rethinking the Inception Architecture for Computer Vision <http://arxiv.org/abs/1512.00567>`_ paper.
+        In contrast to the other models the inception_v3 expects tensors with a size of
         N x 3 x 299 x 299, so ensure your images are sized accordingly.
+
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
         aux_logits (bool): If True, add an auxiliary branch that can improve training.
             Default: *True*
         transform_input (bool): If True, preprocesses the input according to the method with which it
             was trained on ImageNet. Default: *False*
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> inception_v3 = flowvision.models.inception_v3(pretrained=False, progress=True)
+
     """
     if pretrained:
         if "transform_input" not in kwargs:

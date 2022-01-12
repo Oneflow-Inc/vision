@@ -8,6 +8,73 @@ from typing import List, Tuple
 from flowvision.layers.blocks.misc import FrozenBatchNorm2d
 
 
+class BalancedPositiveNegativeSampler:
+    """
+    This class samples batches, ensuring that they contain a fixed proportion of positives
+    """
+
+    def __init__(self, batch_size_per_image: int, positive_fraction: float) -> None:
+        """
+        Args:
+            batch_size_per_image (int): number of elements to be selected per image
+            positive_fraction (float): percentage of positive elements per batch
+        """
+        self.batch_size_per_image = batch_size_per_image
+        self.positive_fraction = positive_fraction
+
+    def __call__(self, matched_idxs: List[Tensor]) -> Tuple[List[Tensor], List[Tensor]]:
+        """
+        Args:
+            matched idxs: list of tensors containing -1, 0 or positive values.
+                Each tensor corresponds to a specific image.
+                -1 values are ignored, 0 are considered as negatives and > 0 as
+                positives.
+
+        Returns:
+            pos_idx (list[Tensor])
+            neg_idx (list[Tensor])
+
+        Returns two lists of binary masks for each image.
+        The first list contains the positive elements that were selected,
+        and the second list the negative example.
+        """
+        pos_idx = []
+        neg_idx = []
+        for matched_idxs_per_image in matched_idxs:
+            positive = flow.where(matched_idxs_per_image >= 1)[0]
+            negative = flow.where(matched_idxs_per_image == 0)[0]
+
+            num_pos = int(self.batch_size_per_image * self.positive_fraction)
+            # protect against not enough positive examples
+            num_pos = min(positive.numel(), num_pos)
+            num_neg = self.batch_size_per_image - num_pos
+            # protext against not enough negative examples
+            num_neg = min(negative.numel(), num_neg)
+
+            # randomly select positive and negative examples
+            perm1 = flow.randperm(positive.numel(), device=positive.device)[:num_pos]
+            perm2 = flow.randperm(negative.numel(), device=negative.device)[:num_neg]
+
+            pos_idx_per_image = positive[perm1]
+            neg_idx_per_image = negative[perm2]
+
+            # create binary mask from indices
+            pos_idx_per_image_mask = flow.zeros_like(
+                matched_idxs_per_image, dtype=flow.uint8
+            )
+            neg_idx_per_image_mask = flow.zeros_like(
+                matched_idxs_per_image, dtype=flow.uint8
+            )
+
+            pos_idx_per_image_mask[pos_idx_per_image] = 1
+            neg_idx_per_image_mask[neg_idx_per_image] = 1
+
+            pos_idx.append(pos_idx_per_image_mask)
+            neg_idx.append(neg_idx_per_image_mask)
+
+        return pos_idx, neg_idx
+
+
 def encode_boxes(reference_boxes, proposals, weights):
     # type: (flow.Tensor, flow.Tensor, flow.Tensor) -> flow.Tensor
     """
@@ -71,6 +138,15 @@ class BoxCoder:
         self.weights = weights
         self.bbox_xform_clip = bbox_xform_clip
 
+    def encode(
+        self, reference_boxes: List[Tensor], proposals: List[Tensor]
+    ) -> List[Tensor]:
+        boxes_per_image = [len(b) for b in reference_boxes]
+        reference_boxes = flow.cat(reference_boxes, dim=0)
+        proposals = flow.cat(proposals, dim=0)
+        targets = self.encode_single(reference_boxes, proposals)
+        return targets.split(boxes_per_image, 0)
+
     def encode_single(self, reference_boxes, proposals):
         """
         Encode a set of proposals with respect to some
@@ -86,6 +162,21 @@ class BoxCoder:
         targets = encode_boxes(reference_boxes, proposals, weights)
 
         return targets
+
+    def decode(self, rel_codes: Tensor, boxes: List[Tensor]) -> Tensor:
+        assert isinstance(boxes, (list, tuple))
+        assert isinstance(rel_codes, flow.Tensor)
+        boxes_per_image = [b.size(0) for b in boxes]
+        concat_boxes = flow.cat(boxes, dim=0)
+        box_sum = 0
+        for val in boxes_per_image:
+            box_sum += val
+        if box_sum > 0:
+            rel_codes = rel_codes.reshape(box_sum, -1)
+        pred_boxes = self.decode_single(rel_codes, concat_boxes)
+        if box_sum > 0:
+            pred_boxes = pred_boxes.reshape(box_sum, -1, 4)
+        return pred_boxes
 
     def decode_single(self, rel_codes, boxes):
         """
