@@ -214,8 +214,8 @@ def main(args):
 
     model_without_ddp = model
     if args.distributed:
-        model = flow.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
-        model_without_ddp = model.module
+        model = flow.nn.parallel.DistributedDataParallel(model, broadcast_buffers=False)
+        model_without_ddp = model
 
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = flow.optim.SGD(
