@@ -8,6 +8,8 @@ Datasets, Transforms and Models specific to Computer Vision
 python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu102
 ```
 
+Please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow) for the detail of OneFlow installation.
+
 - Then install the latest stable release of `flowvision`
 ```bash
 pip install flowvision==0.0.54
@@ -17,6 +19,9 @@ pip install flowvision==0.0.54
 ```bash
 pip install -i https://test.pypi.org/simple/ flowvision==0.0.54
 ```
+
+## Documentation
+You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
 
 ## Supported Model
 All of the supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
