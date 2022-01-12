@@ -16,7 +16,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-version = "0.0.54"
+version = "0.0.55"
 package_name = "flowvision"
 cwd = os.path.dirname(os.path.abspath(__file__))
 
