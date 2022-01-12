@@ -221,3 +221,11 @@ def _create_convnext_isotropic(arch, pretrained=False, progress=True, **model_kw
     return model
 
 
+@ModelCreator.register_model
+def convnext_tiny_1k_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext model trained on ImageNet2012
+
+    .. note::
+        ConvNext model from `"
+    """
