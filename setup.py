@@ -7,6 +7,7 @@ import distutils.command.clean
 import distutils.spawn
 
 # import oneflow as flow
+from pkg_resources import get_distribution, DistributionNotFound
 from setuptools import find_packages
 from setuptools.command.build_ext import build_ext
 
@@ -15,6 +16,14 @@ try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+
+
+def get_dist(pkgname):
+    try:
+        return get_distribution(pkgname)
+    except DistributionNotFound:
+        return None
+
 
 version = "0.0.54"
 package_name = "flowvision"
@@ -29,6 +38,17 @@ try:
     )
 except Exception:
     pass
+
+
+requirements = [
+    "numpy",
+    "rich",
+    "tabulate",
+    "six"
+]
+pillow_ver = " >= 5.3.0, !=8.3.*"
+pillow_req = "pillow-simd" if get_dist("pillow-simd") is not None else "pillow"
+requirements.append(pillow_req + pillow_ver)
 
 
 def write_version_file():
@@ -283,7 +303,7 @@ if __name__ == "__main__":
         description="oneflow vision codebase",
         license="BSD",
         packages=find_packages(),
-        install_requires=["rich", "tabulate", "six",],
+        install_requires=requirements,
         classifiers=[
             "License :: OSI Approved :: MIT License",
             "Programming Language :: Python :: 3",
