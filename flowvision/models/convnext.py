@@ -6,12 +6,13 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from flowvision.layers import trunc_normal_, DropPath
+from flowvision.layers.weight_init import trunc_normal_
+from flowvision.layers.regularization import DropPath
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
 model_urls = {
-    "convnext_tiny_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224_ema.pth",
+    "convnext_tiny_224_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224_ema.pth",
     "convnext_small_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224_ema.pth",
     "convnext_base_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_1k_224_ema.pth",
     "convnext_large_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_large_1k_224_ema.pth",
@@ -91,6 +92,7 @@ class ConvNext(nn.Module):
         self.downsample_layers.append(stem)
 
         self.stages = nn.ModuleList() # 4 feature resolution stages, each consisting of multiple residual blocks
+        # TODO: fix flow.linspace(0, 0.) error.
         dp_rates=[x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))] 
         cur = 0
         for i in range(4):
@@ -222,10 +224,30 @@ def _create_convnext_isotropic(arch, pretrained=False, progress=True, **model_kw
 
 
 @ModelCreator.register_model
-def convnext_tiny_1k_224(pretrained=False, progress=True, **kwargs):
+def convnext_tiny_224_1k(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ConvNext model trained on ImageNet2012
 
     .. note::
-        ConvNext model from `"
+        ConvNext model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_tiny_224_1k = flowvision.models.convnext_tiny_224_1k(pretrained=False, progress=True)
+
     """
+    model_kwargs = dict(
+        depths=[3, 3, 9, 3],
+        dims=[96, 192, 384, 768],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_tiny_224_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
