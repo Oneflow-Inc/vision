@@ -12,12 +12,12 @@ Please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install
 
 - Then install the latest stable release of `flowvision`
 ```bash
-pip install flowvision==0.0.54
+pip install flowvision==0.0.55
 ```
 
 - Or install the nightly release of `flowvision`
 ```bash
-pip install -i https://test.pypi.org/simple/ flowvision==0.0.54
+pip install -i https://test.pypi.org/simple/ flowvision==0.0.55
 ```
 
 ## Documentation
