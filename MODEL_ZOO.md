@@ -1,5 +1,5 @@
 ## Model Zoo
-Here we provide our test results of pretrained model on ImageNet2012, all tests were done using single TiTanV GPU with batch_size 64.The default `image size` equals to 224. When testing the pretrained weight under default settings, we first enlarge the image according to the `crop-size` and then use `centercrop` method to crop the image to the corresponding size.
+Here we provide our test results of pretrained model on ImageNet2012. The default `image size` equals to 224. When testing the pretrained weight under default settings, we first enlarge the image according to the `crop-size` and then use `centercrop` method to crop the image to the corresponding size.
 
 **example**
 When `crop-size` equals to 0.875, we first resize the image from `224` to `(224 / 0.875) = 256` and then use centercrop operation to get the input 224 image.
@@ -86,6 +86,13 @@ When `crop-size` equals to 0.875, we first resize the image from `224` to `(224 
 | ResmlpB_24_dist        | 83.6800 | 96.6740 | 88.4835 | 97.9653 |      |     | 3165.195ms  | 25.983ms |   224      |  0.9      |   bicubic    |
 
 
-Acc was tested on 12/16/2021. Oneflow=0.6.0.dev20211205+cu102; Flowvision=0.5.1
 
-CPU and GPU latency was tested on I9-9900KF and RTX 2080ti respectively. Oneflow=0.6.0dev20211231+cu102
+| Metrics  | Oneflow | FlowVision |
+|:-:|:-------:|:----------:|
+|Acc|0.6.0.dev20211205+cu102|0.0.51|
+|Latency|0.6.0dev20211231+cu102|0.0.54|
+
+Note:
+- For latency Metrics, CPU and GPU were tested on I9-9900KF with 32G RAM and RTX 2080ti with 11G VRAM respectively.
+- The batchsize is 1 for all speed tests.
+- For a fair comparison, different models may take in different input size. For example, the input size of Swin_tiny_patch4_window7_224 is 224 while it's 384 for Swin_base_patch4_window12_384.
