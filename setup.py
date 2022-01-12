@@ -40,12 +40,7 @@ except Exception:
     pass
 
 
-requirements = [
-    "numpy",
-    "rich",
-    "tabulate",
-    "six"
-]
+requirements = ["numpy", "rich", "tabulate", "six"]
 pillow_ver = " >= 5.3.0, !=8.3.*"
 pillow_req = "pillow-simd" if get_dist("pillow-simd") is not None else "pillow"
 requirements.append(pillow_req + pillow_ver)
