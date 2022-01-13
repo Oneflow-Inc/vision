@@ -1,0 +1,58 @@
+DATA:
+  BATCH_SIZE: 32
+  DATASET: imagenet
+  DATA_PATH: /DATA/disk1/ImageNet/extract
+  IMG_SIZE: 224
+  INTERPOLATION: bicubic
+  ZIP_MODE: False
+  CACHE_MODE: "part"
+  PIN_MEMORY: True
+  NUM_WORKERS: 8
+
+MODEL:
+  PRETRAINED: False
+  RESUME: ""
+
+TRAIN:
+  START_EPOCH: 0
+  EPOCHS: 300
+  WARMUP_EPOCHS: 20
+  WEIGHT_DECAY: 0.005
+  BASE_LR: 5e-4
+  WARMUP_LR: 5e-7
+  MIN_LR: 5e-6
+  CLIP_GRAD: 5.0
+  AUTO_RESUME: True
+  ACCUMULATION_STEPS: 0
+  
+  LR_SCHEDULER:
+    NAME: cosine
+
+  OPTIMIZER:
+    NAME: adamw
+    EPS: 1e-8
+    BETAS: (0.9, 0.999)
+  
+AUG:
+  COLOR_JITTER: 0.4
+  AUTO_AUGMENT: rand-m9-mstd0.5-inc1
+  REPROB: 0.25
+  REMODE: pixel
+  RECOUNT: 1
+  MIXUP: 0.8
+  CUTMIX: 1.0
+  CUTMIX_MINMAX: None
+  MIXUP_PROB: 1.0
+  SWITCH_PROB: 0.5
+  MIXUP_MODE: batch
+
+TEST:
+  CROP: True
+  SEQUENTIAL: False
+
+TAG: default
+SAVE_FREA: 1
+PRINT_FREQ: 10
+SEED: 42
+EVAL_MODEL: False
+THROUGHPUT_MODE: False
