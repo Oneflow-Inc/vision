@@ -2,6 +2,7 @@
 """
 Flowvision training scheduler by flowvision contributors
 """
+
 from typing import List
 
 from flowvision.scheduler.cosine_lr import CosineLRScheduler

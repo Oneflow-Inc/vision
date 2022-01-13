@@ -1,3 +1,7 @@
+"""
+Modified from https://github.com/microsoft/Swin-Transformer/blob/main/utils.py
+"""
+
 import os
 import oneflow as flow
 from flowvision.models.utils import load_state_dict_from_url

@@ -1,9 +1,6 @@
-# --------------------------------------------------------
-# Swin Transformer
-# Copyright (c) 2021 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# Written by Ze Liu
-# --------------------------------------------------------
+"""
+Modified from https://github.com/microsoft/Swin-Transformer/blob/main/data/build.py
+"""
 
 import os
 import numpy as np
