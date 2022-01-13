@@ -335,12 +335,12 @@ def throughput(data_loader, model, logger):
         batch_size = images.shape[0]
         for i in range(50):
             model(images)
-        # flow.cuda.synchronize()
+        # TODO: add flow.cuda.synchronize()
         logger.info(f"throughput averaged with 30 times")
         tic1 = time.time()
         for i in range(30):
             model(images)
-        # flow.cuda.synchronize()
+        
         tic2 = time.time()
         logger.info(
             f"batch_size {batch_size} throughput {30 * batch_size / (tic2 - tic1)}"
