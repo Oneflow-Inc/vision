@@ -46,8 +46,8 @@ _C.MODEL = CN()
 _C.MODEL.ARCH = 'swin_tiny_patch4_window7_224'
 # Pretrained weight from checkpoint
 _C.MODEL.PRETRAINED = False
-# Path to save the pretrained weight which is only used when config.MODEL.PRETRAINED == True.
-_C.MODEL.CHECKPOINTS = "./checkpoints"
+# Path to a specific weights to load, e.g., "./checkpoints/swin_tiny_pretrained_model"
+_C.MODEL.CHECKPOINTS = None
 # Checkpoint to resume, could be overwritten by command line argument
 _C.MODEL.RESUME = ''
 # Number of classes, overwritten in data preparation
@@ -191,8 +191,6 @@ def update_config(config, args):
         config.DATA.ZIP_MODE = True
     if args.cache_mode:
         config.DATA.CACHE_MODE = args.cache_mode
-    if args.pretrained:
-        config.MODEL.PRETRAINED = args.pretrained
     if args.resume:
         config.MODEL.RESUME = args.resume
     if args.accumulation_steps:
@@ -212,7 +210,7 @@ def update_config(config, args):
     config.LOCAL_RANK = args.local_rank
 
     # output folder
-    config.OUTPUT = os.path.join(config.OUTPUT, config.MODEL.NAME, config.TAG)
+    config.OUTPUT = os.path.join(config.OUTPUT, config.MODEL.ARCH, config.TAG)
 
     config.freeze()
 

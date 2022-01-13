@@ -1,9 +1,8 @@
 MODEL:
-  ARCH: swin_tiny_patch4_window7_224
+  ARCH: resnet50
   PRETRAINED: False
-  CHECKPOINTS: ./checkpoints
 
 DATA:
-  BATCH_SIZE: 64
+  BATCH_SIZE: 32
   DATASET: imagenet
   DATA_PATH: /DATA/disk1/ImageNet/extract

@@ -67,14 +67,15 @@ def parse_option():
 def main(config):
     dataset_train, dataset_val, data_loader_train, data_loader_val, mixup_fn = build_loader(config)
 
-    logger.info(f"Creating model:{config.MODEL.TYPE}/{config.MODEL.NAME}")
+    logger.info(f"Creating model:{config.MODEL.ARCH}")
     model = build_model(config)
     model.cuda()
     logger.info(str(model))
 
     optimizer = build_optimizer(config, model)
     model = flow.nn.parallel.DistributedDataParallel(model, broadcast_buffers=False)
-    model_without_ddp = model.module
+    # FIXME: model with DDP wrapper doesn't have model.module
+    model_without_ddp = model
 
     n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
     logger.info(f"number of params: {n_parameters}")
@@ -298,7 +299,7 @@ if __name__ == '__main__':
     config.freeze()
 
     os.makedirs(config.OUTPUT, exist_ok=True)
-    logger = create_logger(output_dir=config.OUTPUT, dist_rank=flow.env.get_rank(), name=f"{config.MODEL.NAME}")
+    logger = create_logger(output_dir=config.OUTPUT, dist_rank=flow.env.get_rank(), name=f"{config.MODEL.ARCH}")
 
     if flow.env.get_rank() == 0:
         path = os.path.join(config.OUTPUT, "config.json")
