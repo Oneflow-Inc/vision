@@ -44,9 +44,10 @@ _C.DATA.NUM_WORKERS = 8
 _C.MODEL = CN()
 # Model arch
 _C.MODEL.ARCH = 'swin_tiny_patch4_window7_224'
-# Pretrained weight from checkpoint, could be imagenet22k pretrained weight
-# could be overwritten by command line argument
-_C.MODEL.PRETRAINED = ''
+# Pretrained weight from checkpoint
+_C.MODEL.PRETRAINED = False
+# Path to save the pretrained weight which is only used when config.MODEL.PRETRAINED == True.
+_C.MODEL.CHECKPOINTS = "./checkpoints"
 # Checkpoint to resume, could be overwritten by command line argument
 _C.MODEL.RESUME = ''
 # Number of classes, overwritten in data preparation
@@ -72,7 +73,7 @@ _C.TRAIN.MIN_LR = 5e-6
 # Clip gradient norm
 _C.TRAIN.CLIP_GRAD = 5.0
 # Auto resume from latest checkpoint
-_C.TRAIN.AUTO_RESUME = False
+_C.TRAIN.AUTO_RESUME = True
 # Gradient accumulation steps
 # could be overwritten by command line argument
 _C.TRAIN.ACCUMULATION_STEPS = 0
@@ -83,7 +84,7 @@ _C.TRAIN.USE_CHECKPOINT = False
 # LR scheduler
 _C.TRAIN.LR_SCHEDULER = CN()
 _C.TRAIN.LR_SCHEDULER.NAME = 'cosine'
-# Epoch interval to decay LR, used in StepLRScheduler
+# Epoch interval to decay LR, used in StepLRScheduler if use MultiStepLRScheduler DECAY_EPOCHS should be a list of indices.
 _C.TRAIN.LR_SCHEDULER.DECAY_EPOCHS = 30
 # LR decay rate, used in StepLRScheduler
 _C.TRAIN.LR_SCHEDULER.DECAY_RATE = 0.1
@@ -139,17 +140,18 @@ _C.TEST.SEQUENTIAL = False
 # -----------------------------------------------------------------------------
 # Mixed precision opt level, if O0, no amp is used ('O0', 'O1', 'O2')
 # overwritten by command line argument
+# TODO: add amp training
 _C.AMP_OPT_LEVEL = ''
 # Path to output folder, overwritten by command line argument
 _C.OUTPUT = ''
 # Tag of experiment, overwritten by command line argument
 _C.TAG = 'default'
 # Frequency to save checkpoint
-_C.SAVE_FREQ = 10
+_C.SAVE_FREQ = 1
 # Frequency to logging info
 _C.PRINT_FREQ = 10
 # Fixed random seed
-_C.SEED = 0
+_C.SEED = 42
 # Perform evaluation only, overwritten by command line argument
 _C.EVAL_MODE = False
 # Test throughput only, overwritten by command line argument
