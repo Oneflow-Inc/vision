@@ -10,7 +10,7 @@ CROP_PCT=0.875
 INTERPOLATION="bicubic"
 NUM_WORKERS=8
 
-python ./projects/classification/benchmark.py --model $MODEL \
+python ./projects/benchmark/classification/benchmark.py --model $MODEL \
                     --data_path $DATA_PATH \
                     --batch_size $BATCH_SIZE \
                     --img_size $IMG_SIZE \
