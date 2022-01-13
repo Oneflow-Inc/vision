@@ -2,36 +2,32 @@
 This folder contains the classification project based on `flowvision`
 
 ## Usage
-<details>
-<summary> <b> Installation </b> </summary>
-
-#### Clone flowvision
+### Installation
+- Clone flowvision
 ```bash
 git clone https://github.com/Oneflow-Inc/vision.git
 cd vision/projects/classification
 ```
 
-#### Create a conda virtual environment and activate it
+- Create a conda virtual environment and activate it
 ```bash
 conda create -n oneflow python=3.7 -y
 conda activate oneflow
 ```
 
-#### Install the latest version of OneFlow
+- Install the latest version of OneFlow
 ```bash
 python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu102
 ```
 
-#### Install other requirements
+- Install other requirements
 ```bash
 pip install opencv-python==4.4.0.46 termcolor==1.1.0 yacs==0.1.8
 ```
 
-</details>
 
-<details>
-<summary> <b> Data preparation </b> </summary>
 
+### Data preparation
 #### ImageNet
 For ImageNet dataset, you can download it from http://image-net.org/. We provide the following two ways to load data:
 
@@ -89,17 +85,17 @@ For ImageNet dataset, you can download it from http://image-net.org/. We provide
   n01440764/n01440764_10042.JPEG	0
   ```
 
-### CIFAR100
+#### CIFAR100
 For CIFAR100, you only need to specify the dataset downloaded path in [config.py](config.py), and set  `DATA.DATASET = 'cifar100'`.
 
-</details>
 
-<details>
-<summary> <b> Training </b> </summary>
-
-#### Specify the training model
-
-#### ddp training with simple bash file
+### Training
+- ddp training with simple bash file
 ```bash
+cd vision/projects/classification/
 bash ddp_training.sh
 ```
+
+
+## Reference
+- [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
