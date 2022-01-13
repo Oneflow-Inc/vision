@@ -10,7 +10,7 @@ from .scheduler import Scheduler
 
 
 class MultiStepLRScheduler(Scheduler):
-    """
+    """ MultiStep LRScheduler
     """
 
     def __init__(
@@ -36,9 +36,7 @@ class MultiStepLRScheduler(Scheduler):
             noise_seed=noise_seed,
             initialize=initialize,
         )
-        assert (
-            type(decay_t) == List[int]
-        ), "decay_t must be a list of epoch indices. Must be increasing. "
+
         self.decay_t = decay_t
         self.decay_rate = decay_rate
         self.warmup_t = warmup_t
