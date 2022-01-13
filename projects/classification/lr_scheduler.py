@@ -6,6 +6,7 @@ Flowvision training scheduler by flowvision contributors
 from flowvision.scheduler.cosine_lr import CosineLRScheduler
 from flowvision.scheduler.linear_lr import LinearLRScheduler
 from flowvision.scheduler.step_lr import StepLRScheduler
+from flowvision.scheduler.multistep_lr import MultiStepLRScheduler
 
 
 def build_scheduler(config, optimizer, n_iter_per_epoch):
@@ -43,5 +44,15 @@ def build_scheduler(config, optimizer, n_iter_per_epoch):
             warmup_t=warmup_steps,
             t_in_epochs=False,
         )
+    elif config.TRAIN.LR_SCHEDULER.NAME == 'multi_step':
+        lr_scheduler = MultiStepLRScheduler(
+            optimizer,
+            decay_t = decay_steps,
+            decay_rate=config.TRAIN.LR_SCHEDULER.DECAY_RATE,
+            warmup_lr_init=config.TRAIN.WARMUP_LR,
+            warmup_t=warmup_steps,
+            t_in_epochs=False,
+        )
+
 
     return lr_scheduler
