@@ -23,7 +23,8 @@ def build_optimizer(config, model):
         optimizer = optim.SGD(
             parameters,
             momentum=config.TRAIN.OPTIMIZER.MOMENTUM,
-            nesterov=True,
+            # TODO: OneFlow support for nesterov args in SGD optimizer
+            # nesterov=True,
             lr=config.TRAIN.BASE_LR,
             weight_decay=config.TRAIN.WEIGHT_DECAY,
         )

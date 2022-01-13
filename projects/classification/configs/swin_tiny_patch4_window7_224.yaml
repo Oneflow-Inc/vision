@@ -1,8 +1,0 @@
-MODEL:
-  ARCH: swin_tiny_patch4_window7_224
-  PRETRAINED: False
-
-DATA:
-  BATCH_SIZE: 32
-  DATASET: imagenet
-  DATA_PATH: /DATA/disk1/ImageNet/extract

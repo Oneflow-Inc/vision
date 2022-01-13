@@ -83,6 +83,8 @@ _C.TRAIN.LR_SCHEDULER = CN()
 _C.TRAIN.LR_SCHEDULER.NAME = "cosine"
 # Epoch interval to decay LR, used in StepLRScheduler if use MultiStepLRScheduler DECAY_EPOCHS should be a list of indices.
 _C.TRAIN.LR_SCHEDULER.DECAY_EPOCHS = 30
+# List of epoch indices used in MultiStepLRScheduler. Must be increasing.
+_C.TRAIN.LR_SCHEDULER.MILESTONES = [150, 225]
 # LR decay rate, used in StepLRScheduler
 _C.TRAIN.LR_SCHEDULER.DECAY_RATE = 0.1
 
@@ -180,6 +182,8 @@ def update_config(config, args):
         config.merge_from_list(args.opts)
 
     # merge from specific arguments
+    if args.model_arch:
+        config.MODEL.ARCH = args.model_arch
     if args.batch_size:
         config.DATA.BATCH_SIZE = args.batch_size
     if args.data_path:
