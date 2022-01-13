@@ -13,13 +13,13 @@ from flowvision.scheduler.multistep_lr import MultiStepLRScheduler
 def build_scheduler(config, optimizer, n_iter_per_epoch):
     num_steps = int(config.TRAIN.EPOCHS * n_iter_per_epoch)
     warmup_steps = int(config.TRAIN.WARMUP_EPOCHS * n_iter_per_epoch)
-    if isinstance(config.TRAIN.LR_SCHEDULER.DECAY_EPOCHS, List):
+    if isinstance(config.TRAIN.LR_SCHEDULER.MILESTONES, List):
         assert (
             config.TRAIN.LR_SCHEDULER.NAME == "multi_step"
         ), "decay_t must be a list of epoch indices which are increasing only when you're using multi-step lr scheduler."
         decay_steps = [
             decay_step * n_iter_per_epoch
-            for decay_step in config.TRAIN.LR_SCHEDULER.DECAY_EPOCHS
+            for decay_step in config.TRAIN.LR_SCHEDULER.MILESTONES
         ]
     else:
         decay_steps = int(config.TRAIN.LR_SCHEDULER.DECAY_EPOCHS * n_iter_per_epoch)
