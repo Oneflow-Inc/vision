@@ -340,7 +340,7 @@ def throughput(data_loader, model, logger):
         tic1 = time.time()
         for i in range(30):
             model(images)
-        
+
         tic2 = time.time()
         logger.info(
             f"batch_size {batch_size} throughput {30 * batch_size / (tic2 - tic1)}"
