@@ -7,11 +7,11 @@ from functools import partial
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import oneflow.nn.init as init
 
 from .helpers import to_2tuple
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from flowvision.layers.weight_init import trunc_normal_
 from flowvision.layers.regularization import DropPath
 
 
@@ -216,11 +216,8 @@ class PyramidVisionTransformer(nn.Module):
         self.depths = depths
         self.num_stages = num_stages
 
-        # TODO: switch to flow.linspace func
         # stochastic depth
-        dpr = [
-            x for x in np.linspace(0, drop_path_rate, sum(depths))
-        ]  # stochastic depth decay rule  # stochastic depth decay rule
+        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
         cur = 0
 
         for i in range(num_stages):
@@ -275,13 +272,13 @@ class PyramidVisionTransformer(nn.Module):
         # init weights
         for i in range(num_stages):
             pos_embed = getattr(self, f"pos_embed{i + 1}")
-            init.trunc_normal_(pos_embed, std=0.02)
-        init.trunc_normal_(self.cls_token, std=0.02)
+            trunc_normal_(pos_embed, std=0.02)
+        trunc_normal_(self.cls_token, std=0.02)
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            init.trunc_normal_(m.weight, std=0.02)
+            trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):

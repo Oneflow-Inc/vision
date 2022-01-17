@@ -1,13 +1,13 @@
 """
 Modified from https://github.com/microsoft/Swin-Transformer/blob/main/models/swin_transformer.py
 """
-import numpy as np
 
 import oneflow as flow
 import oneflow.nn as nn
 
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
+from flowvision.layers.weight_init import trunc_normal_
 
 
 # Note that model with `in22k` means pretrained weight on imagenet22k dataset
@@ -134,11 +134,9 @@ class WindowAttention(nn.Module):
         self.scale = qk_scale or head_dim ** -0.5
 
         # define a parameter table of relative position bias
-        # Author zzk: we add trunc normal here！
         self.relative_position_bias_table = nn.Parameter(
             flow.zeros((2 * window_size[0] - 1) * (2 * window_size[1] - 1), num_heads)
         )  # 2*Wh-1 * 2*Ww-1, nH
-        self.relative_position_bias_table.trunc_normal_(std=0.02)
 
         # get pair-wise relative position index for each token inside the window
         coords_h = flow.arange(self.window_size[0])
@@ -159,6 +157,8 @@ class WindowAttention(nn.Module):
         self.attn_drop = nn.Dropout(attn_drop)
         self.proj = nn.Linear(dim, dim)
         self.proj_drop = nn.Dropout(proj_drop)
+
+        trunc_normal_(self.relative_position_bias_table, std=.02)
         self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, x, mask=None):
@@ -608,17 +608,12 @@ class SwinTransformer(nn.Module):
             self.absolute_pos_embed = nn.Parameter(
                 flow.zeros(1, num_patches, embed_dim)
             )
-            # trunc_normal_(self.absolute_pos_embed, std=.02)
-            self.absolute_pos_embed.trunc_normal_(std=0.02)
+            trunc_normal_(self.absolute_pos_embed, std=.02)
 
         self.pos_drop = nn.Dropout(p=drop_rate)
 
         # stochastic depth
-        # dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
-        # TODO: here we use numpy, may have little difference with torch.linspace
-        dpr = [
-            x for x in np.linspace(0, drop_path_rate, sum(depths))
-        ]  # stochastic depth decay rule
+        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
 
         # build layers
         self.layers = nn.ModuleList()
@@ -656,8 +651,7 @@ class SwinTransformer(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            # trunc_normal_(m.weight, std=.02)
-            m.weight.trunc_normal_(std=0.02)
+            trunc_normal_(m.weight, std=.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):

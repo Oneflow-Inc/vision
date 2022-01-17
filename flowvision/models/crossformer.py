@@ -6,11 +6,11 @@ import numpy as np
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import oneflow.nn.init as init
 
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
-from flowvision.layers.regularization.droppath import DropPath, drop_path
+from flowvision.layers.regularization import DropPath, drop_path
+from flowvision.layers.weight_init import trunc_normal_
 
 
 model_urls = {
@@ -594,14 +594,12 @@ class CrossFormer(nn.Module):
             self.absolute_pos_embed = nn.Parameter(
                 flow.zeros(1, num_patches, embed_dim)
             )
-            init.trunc_normal_(self.absolute_pos_embed, std=0.02)
+            trunc_normal_(self.absolute_pos_embed, std=0.02)
 
         self.pos_drop = nn.Dropout(p=drop_rate)
 
         # stochastic depth
-        dpr = [
-            x for x in np.linspace(0, drop_path_rate, sum(depths))
-        ]  # stochastic depth decay rule
+        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
 
         # build layers
         self.layers = nn.ModuleList()
@@ -647,7 +645,7 @@ class CrossFormer(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            init.trunc_normal_(m.weight, std=0.02)
+            trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
