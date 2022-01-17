@@ -6,13 +6,13 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from flowvision.layers.weight_init import trunc_normal_
-from flowvision.layers.regularization import DropPath
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
+from flowvision.layers.weight_init import trunc_normal_
+from flowvision.layers.regularization import DropPath
 
 model_urls = {
-    "convnext_tiny_224_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224_ema.pth",
+    "convnext_tiny_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_tiny_1k_224_ema.zip",
     "convnext_small_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224_ema.pth",
     "convnext_base_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_1k_224_ema.pth",
     "convnext_large_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_large_1k_224_ema.pth",
@@ -54,7 +54,7 @@ class Block(nn.Module):
         x = self.pwconv2(x)
         if self.gamma is not None:
             x = self.gamma * x
-        x = self.permute(0, 3, 1, 2)  # (N, H, W, C) -> (N, C, H, W)
+        x = x.permute(0, 3, 1, 2)  # (N, H, W, C) -> (N, C, H, W)
 
         x = input + self.drop_path(x)
         return x
@@ -90,9 +90,14 @@ class ConvNext(nn.Module):
             LayerNorm(dims[0], eps=1e-6, data_format="channels_first")
         )
         self.downsample_layers.append(stem)
+        for i in range(3):
+            downsample_layer = nn.Sequential(
+                    LayerNorm(dims[i], eps=1e-6, data_format="channels_first"),
+                    nn.Conv2d(dims[i], dims[i+1], kernel_size=2, stride=2),
+            )
+            self.downsample_layers.append(downsample_layer)
 
         self.stages = nn.ModuleList() # 4 feature resolution stages, each consisting of multiple residual blocks
-        # TODO: fix flow.linspace(0, 0.) error.
         dp_rates=[x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))] 
         cur = 0
         for i in range(4):
@@ -198,7 +203,13 @@ class LayerNorm(nn.Module):
     
     def forward(self, x):
         if self.data_format == "channels_last":
-            return F.layer_norm(x, self.normalized_shape, self.weight, self.bias, self.eps)
+            # FIXME: use F.layer_norm
+            u = x.mean(-1, keepdim=True)
+            s = (x - u).pow(2).mean(-1, keepdim=True)
+            x = (x - u) / flow.sqrt(s + self.eps)
+            x = self.weight[None, None, :] * x + self.bias[None, None, :]
+            return x
+
         elif self.data_format == "channels_first":
             u = x.mean(1, keepdim=True)
             s = (x - u).pow(2).mean(1, keepdim=True)
@@ -224,7 +235,7 @@ def _create_convnext_isotropic(arch, pretrained=False, progress=True, **model_kw
 
 
 @ModelCreator.register_model
-def convnext_tiny_224_1k(pretrained=False, progress=True, **kwargs):
+def convnext_tiny_1k(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ConvNext model trained on ImageNet2012
 
@@ -240,7 +251,7 @@ def convnext_tiny_224_1k(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> convnext_tiny_224_1k = flowvision.models.convnext_tiny_224_1k(pretrained=False, progress=True)
+        >>> convnext_tiny_1k = flowvision.models.convnext_tiny_1k(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -249,5 +260,5 @@ def convnext_tiny_224_1k(pretrained=False, progress=True, **kwargs):
         **kwargs
     )
     return _create_convnext(
-        "convnext_tiny_224_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_tiny_1k", pretrained=pretrained, progress=progress, **model_kwargs
     )

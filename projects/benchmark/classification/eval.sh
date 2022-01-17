@@ -1,7 +1,7 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="resmlp_12"
+MODEL="convnext_tiny_1k"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
