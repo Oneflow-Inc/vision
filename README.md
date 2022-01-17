@@ -1,5 +1,5 @@
 # flowvision
-The flowvision package consists of popular datasets, model architectures, and common image transformations for computer vision.
+The flowvision package consists of popular datasets, augmentation, model layers, loss functions,  model architectures, learning rate schedulers and common image transformations for computer vision.
 
 
 ## Installation
