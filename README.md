@@ -1,44 +1,39 @@
-# vision
-Datasets, Transforms and Models specific to Computer Vision
+# flowvision
+The flowvision package consists of popular datasets, model architectures, and common image transformations for computer vision.
 
 
 ## Installation
-- First install the nightly version of `OneFlow`
-```bash
-python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu102
-```
+1. [Install oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow).
 
-Please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow) for the detail of OneFlow installation.
-
-- Then install the latest stable release of `flowvision`
-```bash
-pip install flowvision==0.0.55
-```
-
-- Or install the nightly release of `flowvision`
-```bash
-pip install -i https://test.pypi.org/simple/ flowvision==0.0.55
-```
+2. Install `flowvision`:
+    - Stable
+      ```bash
+      pip install flowvision==0.0.55
+      ```
+    - Nightly:
+      ```bash
+      pip install -i https://test.pypi.org/simple/ flowvision==0.0.55
+      ```
 
 ## Documentation
-You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
+You can find API documentation on this website: https://flowvision.readthedocs.io/en/latest/index.html.
 
-## Supported Model
-All of the supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
+## Supported Models
+All of the supported models can be found in our [model summary page](MODEL_SUMMARY.md).
 
 
 ## Usage
 <details>
 <summary> <b> Quick Start </b> </summary>
 
-- list supported model
+- List supported models:
 ```python
 from flowvision.models import ModelCreator
 supported_model_table = ModelCreator.model_table()
 print(supported_model_table)
 ```
 
-- search supported model by wildcard
+- Search supported models by wildcard:
 ```python
 from flowvision.models import ModelCreator
 pretrained_vit_model = ModelCreator.model_table("*vit*", pretrained=True)
@@ -51,7 +46,7 @@ print(supported_vit_model)
 print(supported_alexnet_model)
 ```
 
-- create model use `ModelCreator`
+- Create model use `ModelCreator`:
 ```python
 from flowvision.models import ModelCreator
 model = ModelCreator.create_model('alexnet', pretrained=True)
@@ -62,14 +57,13 @@ model = ModelCreator.create_model('alexnet', pretrained=True)
 <details>
 <summary> <b> ModelCreator </b> </summary>
 
-- Create model in a simple way
+- Create model in a simple way:
 ```python
 from flowvision.models import ModelCreator
 model = ModelCreator.create_model('alexnet', pretrained=True)
 ```
-the pretrained weight will be saved to `./checkpoints`
 
-- Supported model table
+- Supported models table:
 ```python
 from flowvision.models import ModelCreator
 supported_model_table = ModelCreator.model_table()
@@ -104,7 +98,7 @@ print(supported_model_table)
 ```
 show all of the supported model in the table manner
 
-- Check the table of the models with pretrained weights.
+- Check the table of the models with pretrained weights:
 ```python
 from flowvision.models import ModelCreator
 pretrained_model_table = ModelCreator.model_table(pretrained=True)
@@ -137,7 +131,7 @@ print(pretrained_model_table)
 │ wide_resnet50_2                            │ true         │
 ╘════════════════════════════════════════════╧══════════════╛
 ```
-- Search for model by Wildcard.
+- Search for model by wildcard:
 ```python
 from flowvision.models import ModelCreator
 supported_vit_model = ModelCreator.model_table('vit*')
@@ -160,7 +154,7 @@ print(supported_vit_model)
 │ vit_l_32_384       │ true         │
 ╘════════════════════╧══════════════╛
 ```
-- Search for model with pretrained weights by Wildcard.
+- Search for model with pretrained weights by wildcard:
 ```python
 from flowvision.models import ModelCreator
 ModelCreator.model_table('vit*', pretrained=True)
@@ -182,7 +176,7 @@ ModelCreator.model_table('vit*', pretrained=True)
 </details>
 
 ## Model Zoo
-We have conducted all the tests under the same setting, please refer to the model page [here](MODEL_ZOO.md) for more details.
+We have conducted all the tests under the same setting, please refer to the [model page](MODEL_ZOO.md) for more details.
 
 ## Disclaimer on Datasets
 This is a utility library that downloads and prepares public datasets. We do not host or distribute these datasets, vouch for their quality or fairness, or claim that you have license to use the dataset. It is your responsibility to determine whether you have permission to use the dataset under the dataset's license.
