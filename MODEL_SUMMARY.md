@@ -1,11 +1,11 @@
-## Model Summaries
+## Model Summary
 The model architectures included come from a wide variety of sources:
-- papers
-- original implementation
+- Papers
+- Original implementation
 
 Most included models have pretrained weights from:
-- original resources
-- trained from scratch using OneFlow
+- Original resources
+- Trained from scratch using OneFlow
 
 ## Included Model
 - [AlexNet](flowvision/models/alexnet.py)
