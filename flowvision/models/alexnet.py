@@ -65,7 +65,7 @@ def alexnet(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> A
         The required minimum input size of this model is 63x63.
 
     Args:
-        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``.
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:

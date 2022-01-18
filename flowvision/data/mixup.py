@@ -42,7 +42,7 @@ def rand_bbox(img_shape, lam, margin=0.0, count=None):
         img_shape (tuple): Image shape as tuple
         lam (float): Cutmix lambda value
         margin (float): Percentage of bbox dimension to enforce as margin (reduce amount of box outside image)
-        count (int): Number of bbox to generate
+        count (int): Number of bbox to generate.
     """
     ratio = np.sqrt(1 - lam)
     img_h, img_w = img_shape[-2:]
@@ -65,7 +65,7 @@ def rand_bbox_minmax(img_shape, minmax, count=None):
     Args:
         img_shape (tuple): Image shape as tuple
         minmax (tuple or list): Min and max bbox ratios (as percent of image size)
-        count (int): Number of bbox to generate
+        count (int): Number of bbox to generate.
     """
     assert len(minmax) == 2
     img_h, img_w = img_shape[-2:]
@@ -109,7 +109,7 @@ class Mixup:
         mode (str): how to apply mixup/cutmix params (per 'batch', 'pair' (pair of elements), 'elem' (element)
         correct_lam (bool): apply lambda correction when cutmix bbox clipped by image borders
         label_smoothing (float): apply label smoothing to the mixed target tensor
-        num_classes (int): number of classes for target
+        num_classes (int): number of classes for target.
     """
 
     def __init__(

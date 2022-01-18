@@ -24,10 +24,10 @@ class RandomErasing:
         This variant of RandomErasing is intended to be applied to either a batch
         or single image tensor after it has been normalized by dataset mean and std.
     Args:
-         probability: Probability that the Random Erasing operation will be performed.
-         min_area: Minimum percentage of erased area wrt input image area.
-         max_area: Maximum percentage of erased area wrt input image area.
-         min_aspect: Minimum aspect ratio of erased area.
+         probability: Probability that the Random Erasing operation will be performed
+         min_area: Minimum percentage of erased area wrt input image area
+         max_area: Maximum percentage of erased area wrt input image area
+         min_aspect: Minimum aspect ratio of erased area
          mode: pixel color mode, one of 'const', 'rand', or 'pixel'
             'const' - erase block is constant color of 0 for all channels
             'rand'  - erase block is same per-channel random (normal) color
