@@ -101,9 +101,9 @@ def cutmix_bbox_and_lam(
 class Mixup:
     """ Mixup/Cutmix that applies different params to each element or whole batch
     Args:
-        mixup_alpha (float): Mixup alpha value, mixup is active if > 0.
-        cutmix_alpha (float): Cutmix alpha value, cutmix is active if > 0.
-        cutmix_minmax (List[float]): Cutmix min/max image ratio, cutmix is active and uses this vs alpha if not None.
+        mixup_alpha (float): Mixup alpha value, mixup is active if > 0
+        cutmix_alpha (float): Cutmix alpha value, cutmix is active if > 0
+        cutmix_minmax (List[float]): Cutmix min/max image ratio, cutmix is active and uses this vs alpha if not None
         prob (float): Probability of applying mixup or cutmix per batch or element
         switch_prob (float): Probability of switching to cutmix instead of mixup when both are active
         mode (str): How to apply mixup/cutmix params (per 'batch', 'pair' (pair of elements), 'elem' (element)
