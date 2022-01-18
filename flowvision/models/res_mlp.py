@@ -175,7 +175,7 @@ def resmlp_12(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -209,7 +209,7 @@ def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -242,7 +242,7 @@ def resmlp_24(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -276,7 +276,7 @@ def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -310,7 +310,7 @@ def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -343,7 +343,7 @@ def resmlp_36(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -377,7 +377,7 @@ def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -410,7 +410,7 @@ def resmlpB_24(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -444,7 +444,7 @@ def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -478,7 +478,7 @@ def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 

@@ -219,7 +219,7 @@ def shufflenet_v2_x0_5(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -251,7 +251,7 @@ def shufflenet_v2_x1_0(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -283,7 +283,7 @@ def shufflenet_v2_x1_5(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -315,7 +315,7 @@ def shufflenet_v2_x2_0(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 

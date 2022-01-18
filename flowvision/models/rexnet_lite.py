@@ -248,7 +248,7 @@ def rexnet_lite_1_0(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -274,7 +274,7 @@ def rexnet_lite_1_3(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -300,7 +300,7 @@ def rexnet_lite_1_5(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -326,7 +326,7 @@ def rexnet_lite_2_0(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 

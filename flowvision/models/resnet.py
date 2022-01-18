@@ -319,7 +319,7 @@ def resnet18(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -342,7 +342,7 @@ def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -365,7 +365,7 @@ def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -388,7 +388,7 @@ def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -413,7 +413,7 @@ def resnet152(pretrained: bool = False, progress: bool = True, **kwargs: Any) ->
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -440,7 +440,7 @@ def resnext50_32x4d(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -469,7 +469,7 @@ def resnext101_32x8d(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -502,7 +502,7 @@ def wide_resnet50_2(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -533,7 +533,7 @@ def wide_resnet101_2(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 

@@ -50,7 +50,7 @@ class SqueezeExcitation(nn.Module):
         input_channels (int): Number of channels in the input image
         squeeze_channels (int): Number of squeeze channels
         activation (Callable[..., flow.nn.Module], optional): ``delta`` activation. Default: ``flow.nn.ReLU``
-        scale_activation (Callable[..., flow.nn.Module]): ``sigma`` activation. Default: ``flow.nn.Sigmoid``
+        scale_activation (Callable[..., flow.nn.Module]): ``sigma`` activation. Default: ``flow.nn.Sigmoid``.
     """
 
     def __init__(
@@ -218,7 +218,7 @@ class EfficientNet(nn.Module):
             stochastic_depth_prob (float): The stochastic depth probability
             num_classes (int): Number of classes
             block (Optional[Callable[..., nn.Module]]): Module specifying inverted residual building block for mobilenet
-            norm_layer (Optional[Callable[..., nn.Module]]): Module specifying the normalization layer to use
+            norm_layer (Optional[Callable[..., nn.Module]]): Module specifying the normalization layer to use.
         """
         super().__init__()
 
@@ -365,7 +365,7 @@ def efficientnet_b0(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -393,7 +393,7 @@ def efficientnet_b1(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -421,7 +421,7 @@ def efficientnet_b2(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -449,7 +449,7 @@ def efficientnet_b3(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -477,7 +477,7 @@ def efficientnet_b4(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -505,7 +505,7 @@ def efficientnet_b5(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -540,7 +540,7 @@ def efficientnet_b6(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -575,7 +575,7 @@ def efficientnet_b7(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 

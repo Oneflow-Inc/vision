@@ -106,13 +106,13 @@ class WindowAttention(nn.Module):
     r""" Window based multi-head self attention (W-MSA) module with relative position bias.
     It supports both of shifted and non-shifted window.
     Args:
-        dim (int): Number of input channels.
-        window_size (tuple[int]): The height and width of the window.
-        num_heads (int): Number of attention heads.
+        dim (int): Number of input channels
+        window_size (tuple[int]): The height and width of the window
+        num_heads (int): Number of attention heads
         qkv_bias (bool, optional):  If True, add a learnable bias to query, key, value. Default: True
         qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
         attn_drop (float, optional): Dropout ratio of attention weight. Default: 0.0
-        proj_drop (float, optional): Dropout ratio of output. Default: 0.0
+        proj_drop (float, optional): Dropout ratio of output. Default: 0.0.
     """
 
     def __init__(
@@ -165,7 +165,7 @@ class WindowAttention(nn.Module):
         """
         Args:
             x: input features with shape of (num_windows*B, N, C)
-            mask: (0/-inf) mask with shape of (num_windows, Wh*Ww, Wh*Ww) or None
+            mask: (0/-inf) mask with shape of (num_windows, Wh*Ww, Wh*Ww) or None.
         """
         B_, N, C = x.shape
         qkv = (
@@ -211,19 +211,19 @@ class WindowAttention(nn.Module):
 class SwinTransformerBlock(nn.Module):
     r""" Swin Transformer Block.
     Args:
-        dim (int): Number of input channels.
-        input_resolution (tuple[int]): Input resulotion.
-        num_heads (int): Number of attention heads.
-        window_size (int): Window size.
-        shift_size (int): Shift size for SW-MSA.
-        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim.
+        dim (int): Number of input channels
+        input_resolution (tuple[int]): Input resulotion
+        num_heads (int): Number of attention heads
+        window_size (int): Window size
+        shift_size (int): Shift size for SW-MSA
+        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim
         qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: True
-        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set.
+        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
         drop (float, optional): Dropout rate. Default: 0.0
         attn_drop (float, optional): Attention dropout rate. Default: 0.0
         drop_path (float, optional): Stochastic depth rate. Default: 0.0
         act_layer (nn.Module, optional): Activation layer. Default: nn.GELU
-        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm
+        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm.
     """
 
     def __init__(
@@ -364,9 +364,9 @@ class SwinTransformerBlock(nn.Module):
 class PatchMerging(nn.Module):
     r""" Patch Merging Layer.
     Args:
-        input_resolution (tuple[int]): Resolution of input feature.
-        dim (int): Number of input channels.
-        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm
+        input_resolution (tuple[int]): Resolution of input feature
+        dim (int): Number of input channels
+        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm.
     """
 
     def __init__(self, input_resolution, dim, norm_layer=nn.LayerNorm):
@@ -403,11 +403,11 @@ class PatchMerging(nn.Module):
 class PatchEmbed(nn.Module):
     r""" Image to Patch Embedding
     Args:
-        img_size (int): Image size.  Default: 224.
-        patch_size (int): Patch token size. Default: 4.
-        in_chans (int): Number of input image channels. Default: 3.
-        embed_dim (int): Number of linear projection output channels. Default: 96.
-        norm_layer (nn.Module, optional): Normalization layer. Default: None
+        img_size (int): Image size.  Default: 224
+        patch_size (int): Patch token size. Default: 4
+        in_chans (int): Number of input image channels. Default: 3
+        embed_dim (int): Number of linear projection output channels. Default: 96
+        norm_layer (nn.Module, optional): Normalization layer. Default: None.
     """
 
     def __init__(
@@ -451,14 +451,14 @@ class PatchEmbed(nn.Module):
 class BasicLayer(nn.Module):
     """ A basic Swin Transformer layer for one stage.
     Args:
-        dim (int): Number of input channels.
-        input_resolution (tuple[int]): Input resolution.
-        depth (int): Number of blocks.
-        num_heads (int): Number of attention heads.
-        window_size (int): Local window size.
-        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim.
+        dim (int): Number of input channels
+        input_resolution (tuple[int]): Input resolution
+        depth (int): Number of blocks
+        num_heads (int): Number of attention heads
+        window_size (int): Local window size
+        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim
         qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: True
-        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set.
+        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
         drop (float, optional): Dropout rate. Default: 0.0
         attn_drop (float, optional): Attention dropout rate. Default: 0.0
         drop_path (float | tuple[float], optional): Stochastic depth rate. Default: 0.0
@@ -544,8 +544,8 @@ class SwinTransformer(nn.Module):
         in_chans (int): Number of input image channels. Default: 3
         num_classes (int): Number of classes for classification head. Default: 1000
         embed_dim (int): Patch embedding dimension. Default: 96
-        depths (tuple(int)): Depth of each Swin Transformer layer.
-        num_heads (tuple(int)): Number of attention heads in different layers.
+        depths (tuple(int)): Depth of each Swin Transformer layer
+        num_heads (tuple(int)): Number of attention heads in different layers
         window_size (int): Window size. Default: 7
         mlp_ratio (float): Ratio of mlp hidden dim to embedding dim. Default: 4
         qkv_bias (bool): If True, add a learnable bias to query, key, value. Default: True
@@ -556,7 +556,7 @@ class SwinTransformer(nn.Module):
         norm_layer (nn.Module): Normalization layer. Default: nn.LayerNorm.
         ape (bool): If True, add absolute position embedding to the patch embedding. Default: False
         patch_norm (bool): If True, add normalization after patch embedding. Default: True
-        use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False
+        use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False.
     """
 
     def __init__(
@@ -702,7 +702,7 @@ def swin_tiny_patch4_window7_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -740,7 +740,7 @@ def swin_small_patch4_window7_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -778,7 +778,7 @@ def swin_base_patch4_window7_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -816,7 +816,7 @@ def swin_base_patch4_window12_384(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -854,7 +854,7 @@ def swin_base_patch4_window7_224_in22k_to_1k(pretrained=False, progress=True, **
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -894,7 +894,7 @@ def swin_base_patch4_window12_384_in22k_to_1k(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -934,7 +934,7 @@ def swin_large_patch4_window7_224_in22k_to_1k(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
@@ -974,7 +974,7 @@ def swin_large_patch4_window12_384_in22k_to_1k(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
 
     For example:
 
