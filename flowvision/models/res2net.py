@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/Res2Net/Res2Net-PretrainedModels/blob/master/res2net.py.
+Modified from https://github.com/Res2Net/Res2Net-PretrainedModels/blob/master/res2net.py
 """
 import math
 

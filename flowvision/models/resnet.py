@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/resnet.py.
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/resnet.py
 """
 from typing import Type, Any, Callable, Union, List, Optional
 

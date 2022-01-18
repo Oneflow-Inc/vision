@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/googlenet.py.
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/googlenet.py
 """
 import warnings
 from collections import namedtuple

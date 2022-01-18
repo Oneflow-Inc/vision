@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/cheerss/CrossFormer/blob/main/models/crossformer.py.
+Modified from https://github.com/cheerss/CrossFormer/blob/main/models/crossformer.py
 """
 import numpy as np
 

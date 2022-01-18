@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/microsoft/CSWin-Transformer/blob/main/models/cswin.py.
+Modified from https://github.com/microsoft/CSWin-Transformer/blob/main/models/cswin.py
 """
 import math
 import numpy as np

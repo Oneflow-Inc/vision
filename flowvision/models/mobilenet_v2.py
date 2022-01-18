@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv2.py.
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv2.py
 """
 import math
 from typing import Callable, Any, Optional, List

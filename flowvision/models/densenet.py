@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/densenet.py.
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/densenet.py
 """
 from collections import OrderedDict
 from typing import Any, List, Tuple

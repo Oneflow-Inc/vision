@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/tmp-iclr/convmixer/blob/main/convmixer.py.
+Modified from https://github.com/tmp-iclr/convmixer/blob/main/convmixer.py
 """
 import oneflow as flow
 import oneflow.nn as nn
