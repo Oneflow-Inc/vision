@@ -42,7 +42,7 @@ def rand_bbox(img_shape, lam, margin=0.0, count=None):
         img_shape (tuple): Image shape as tuple
         lam (float): Cutmix lambda value
         margin (float): Percentage of bbox dimension to enforce as margin (reduce amount of box outside image)
-        count (int): Number of bbox to generate.
+        count (int): Number of bbox to generate
     """
     ratio = np.sqrt(1 - lam)
     img_h, img_w = img_shape[-2:]
@@ -65,7 +65,7 @@ def rand_bbox_minmax(img_shape, minmax, count=None):
     Args:
         img_shape (tuple): Image shape as tuple
         minmax (tuple or list): Min and max bbox ratios (as percent of image size)
-        count (int): Number of bbox to generate.
+        count (int): Number of bbox to generate
     """
     assert len(minmax) == 2
     img_h, img_w = img_shape[-2:]
@@ -101,15 +101,15 @@ def cutmix_bbox_and_lam(
 class Mixup:
     """ Mixup/Cutmix that applies different params to each element or whole batch
     Args:
-        mixup_alpha (float): mixup alpha value, mixup is active if > 0.
-        cutmix_alpha (float): cutmix alpha value, cutmix is active if > 0.
-        cutmix_minmax (List[float]): cutmix min/max image ratio, cutmix is active and uses this vs alpha if not None.
-        prob (float): probability of applying mixup or cutmix per batch or element
-        switch_prob (float): probability of switching to cutmix instead of mixup when both are active
-        mode (str): how to apply mixup/cutmix params (per 'batch', 'pair' (pair of elements), 'elem' (element)
-        correct_lam (bool): apply lambda correction when cutmix bbox clipped by image borders
-        label_smoothing (float): apply label smoothing to the mixed target tensor
-        num_classes (int): number of classes for target.
+        mixup_alpha (float): Mixup alpha value, mixup is active if > 0.
+        cutmix_alpha (float): Cutmix alpha value, cutmix is active if > 0.
+        cutmix_minmax (List[float]): Cutmix min/max image ratio, cutmix is active and uses this vs alpha if not None.
+        prob (float): Probability of applying mixup or cutmix per batch or element
+        switch_prob (float): Probability of switching to cutmix instead of mixup when both are active
+        mode (str): How to apply mixup/cutmix params (per 'batch', 'pair' (pair of elements), 'elem' (element)
+        correct_lam (bool): Apply lambda correction when cutmix bbox clipped by image borders
+        label_smoothing (float): Apply label smoothing to the mixed target tensor
+        num_classes (int): Number of classes for target
     """
 
     def __init__(

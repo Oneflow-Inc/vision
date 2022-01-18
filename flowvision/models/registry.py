@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/registry.py.
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/registry.py
 """
 import sys
 import re

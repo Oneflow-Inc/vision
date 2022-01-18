@@ -28,12 +28,12 @@ class RandomErasing:
          min_area: Minimum percentage of erased area wrt input image area
          max_area: Maximum percentage of erased area wrt input image area
          min_aspect: Minimum aspect ratio of erased area
-         mode: pixel color mode, one of 'const', 'rand', or 'pixel'
+         mode: Pixel color mode, one of 'const', 'rand', or 'pixel'
             'const' - erase block is constant color of 0 for all channels
             'rand'  - erase block is same per-channel random (normal) color
             'pixel' - erase block is per-pixel random (normal) color
-        max_count: maximum number of erasing blocks per image, area per box is scaled by count.
-            per-image count is randomly chosen between 1 and this value.
+        max_count: Maximum number of erasing blocks per image, area per box is scaled by count.
+            per-image count is randomly chosen between 1 and this value
     """
 
     def __init__(
