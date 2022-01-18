@@ -8,7 +8,7 @@ Welcome to flowvision's documentation!
 
 .. toctree::
    :glob:
-   :maxdepth: 1
+   :maxdepth: 2
    :caption: Tutorials
 
    tutorials/*
@@ -26,3 +26,9 @@ Welcome to flowvision's documentation!
    flowvision.transforms
    flowvision.utils
    
+.. toctree::
+   :glob:
+   :maxdepth: 2
+   :caption: Notes
+
+   changelog.md
