@@ -48,9 +48,9 @@ def googlenet(
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
         aux_logits (bool): If True, adds two auxiliary branches that can improve training.
-            Default: *False* when pretrained is True otherwise *True*
+            Default: ``False`` when pretrained is True otherwise ``True``
         transform_input (bool): If True, preprocesses the input according to the method with which it
-            was trained on ImageNet. Default: *False*.
+            was trained on ImageNet. Default: ``False``.
 
     For example:
 
