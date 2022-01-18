@@ -403,7 +403,7 @@ class PatchMerging(nn.Module):
 class PatchEmbed(nn.Module):
     r""" Image to Patch Embedding
     Args:
-        img_size (int): Image size.  Default: ``224``
+        img_size (int): Image size. Default: ``224``
         patch_size (int): Patch token size. Default: ``4``
         in_chans (int): Number of input image channels. Default: ``3``
         embed_dim (int): Number of linear projection output channels. Default: ``96``
