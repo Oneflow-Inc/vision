@@ -80,7 +80,7 @@ def load_state_dict_from_url(
             digits of the SHA256 hash of the contents of the file. The hash is used to
             ensure unique names and to verify the contents of the file.
             Default: False
-        file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set.
+        file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set
 
     """
 

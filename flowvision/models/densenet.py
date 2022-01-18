@@ -154,7 +154,7 @@ class DenseNet(nn.Module):
         bn_size (int) - multiplicative factor for number of bottle neck layers
           (i.e. bn_size * k features in the bottleneck layer)
         drop_rate (float) - dropout rate after each dense layer
-        num_classes (int) - number of classification classes.
+        num_classes (int) - number of classification classes
     """
 
     def __init__(
@@ -283,7 +283,7 @@ def densenet121(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -311,7 +311,7 @@ def densenet161(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -339,7 +339,7 @@ def densenet169(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -367,7 +367,7 @@ def densenet201(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

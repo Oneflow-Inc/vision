@@ -143,7 +143,7 @@ class MobileNetV2(nn.Module):
             round_nearest (int): Round the number of channels in each layer to be a multiple of this number
             Set to 1 to turn off rounding
             block: Module specifying inverted residual building block for mobilenet
-            norm_layer: Module specifying the normalization layer to use.
+            norm_layer: Module specifying the normalization layer to use
         """
         super(MobileNetV2, self).__init__()
 
@@ -254,7 +254,7 @@ def mobilenet_v2(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

@@ -70,7 +70,7 @@ def convmixer_1536_20(pretrained: bool = False, progress: bool = True, **kwargs)
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -101,7 +101,7 @@ def convmixer_768_32_relu(pretrained: bool = False, progress: bool = True, **kwa
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -134,7 +134,7 @@ def convmixer_1024_20(pretrained: bool = False, progress: bool = True, **kwargs)
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

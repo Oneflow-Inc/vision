@@ -95,7 +95,7 @@ class Attention(nn.Module):
         qkv_bias (bool, optional):  If True, add a learnable bias to query, key, value. Default: True
         qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
         attn_drop (float, optional): Dropout ratio of attention weight. Default: 0.0
-        proj_drop (float, optional): Dropout ratio of output. Default: 0.0.
+        proj_drop (float, optional): Dropout ratio of output. Default: 0.0
     """
 
     def __init__(
@@ -161,7 +161,7 @@ class Attention(nn.Module):
         """
         Args:
             x: input features with shape of (num_groups*B, N, C)
-            mask: (0/-inf) mask with shape of (num_groups, Wh*Ww, Wh*Ww) or None.
+            mask: (0/-inf) mask with shape of (num_groups, Wh*Ww, Wh*Ww) or None
         """
         B_, N, C = x.shape
         qkv = (
@@ -223,7 +223,7 @@ class CrossFormerBlock(nn.Module):
         attn_drop (float, optional): Attention dropout rate. Default: 0.0
         drop_path (float, optional): Stochastic depth rate. Default: 0.0
         act_layer (nn.Module, optional): Activation layer. Default: nn.GELU
-        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm.
+        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm
     """
 
     def __init__(
@@ -322,7 +322,7 @@ class PatchMerging(nn.Module):
     Args:
         input_resolution (tuple[int]): Resolution of input feature
         dim (int): Number of input channels
-        norm_layer (nn.Module, optional): Normalization layer. Default: nn.LayerNorm.
+        norm_layer (nn.Module, optional): Normalization layer. Default: nn.LayerNorm
     """
 
     def __init__(
@@ -386,7 +386,7 @@ class Stage(nn.Module):
         attn_drop (float, optional): Attention dropout rate. Default: 0.0
         drop_path (float | tuple[float], optional): Stochastic depth rate. Default: 0.0
         norm_layer (nn.Module, optional): Normalization layer. Default: nn.LayerNorm
-        downsample (nn.Module | None, optional): Downsample layer at the end of the layer. Default: None.
+        downsample (nn.Module | None, optional): Downsample layer at the end of the layer. Default: None
     """
 
     def __init__(
@@ -467,7 +467,7 @@ class PatchEmbed(nn.Module):
         patch_size (int): Patch token size. Default: [4]
         in_chans (int): Number of input image channels. Default: 3
         embed_dim (int): Number of linear projection output channels. Default: 96
-        norm_layer (nn.Module, optional): Normalization layer. Default: None.
+        norm_layer (nn.Module, optional): Normalization layer. Default: None
     """
 
     def __init__(
@@ -541,7 +541,7 @@ class CrossFormer(nn.Module):
         norm_layer (nn.Module): Normalization layer. Default: nn.LayerNorm
         ape (bool): If True, add absolute position embedding to the patch embedding. Default: False
         patch_norm (bool): If True, add normalization after patch embedding. Default: True
-        use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False.
+        use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False
     """
 
     def __init__(
@@ -692,7 +692,7 @@ def crossformer_tiny_patch4_group7_224(pretrained=False, progress=True, **kwargs
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -731,7 +731,7 @@ def crossformer_small_patch4_group7_224(pretrained=False, progress=True, **kwarg
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -770,7 +770,7 @@ def crossformer_base_patch4_group7_224(pretrained=False, progress=True, **kwargs
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -809,7 +809,7 @@ def crossformer_large_patch4_group7_224(pretrained=False, progress=True, **kwarg
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

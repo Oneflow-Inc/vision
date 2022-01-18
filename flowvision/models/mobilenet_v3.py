@@ -207,7 +207,7 @@ class MobileNetV3(nn.Module):
             last_channel (int): The number of channels on the penultimate layer
             num_classes (int): Number of classes
             block (Optional[Callable[..., nn.Module]]): Module specifying inverted residual building block for mobilenet
-            norm_layer (Optional[Callable[..., nn.Module]]): Module specifying the normalization layer to use.
+            norm_layer (Optional[Callable[..., nn.Module]]): Module specifying the normalization layer to use
         """
         super().__init__()
 
@@ -423,7 +423,7 @@ def mobilenet_v3_large(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -452,7 +452,7 @@ def mobilenet_v3_small(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

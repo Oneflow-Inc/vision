@@ -66,7 +66,7 @@ def alexnet(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> A
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``.
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

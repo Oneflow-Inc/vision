@@ -22,7 +22,7 @@ class IntermediateLayerGetter(nn.ModuleDict):
         return_layers (Dict[name, new_name]): a dict containing the names
             of the modules for which the activations will be returned as
             the key of the dict, and the value of the dict is the name
-            of the returned activation (which the user can specify).
+            of the returned activation (which the user can specify)
     """
 
     __annotations__ = {
