@@ -424,7 +424,6 @@ def normalize(
     return flow._C.div(flow._C.sub(tensor, mean), std)
 
 
-
 def resize(
     img: Tensor,
     size: List[int],
