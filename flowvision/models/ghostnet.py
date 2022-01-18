@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/iamhankai/ghostnet.pytorch/blob/master/ghost_net.py
+Modified from https://github.com/iamhankai/ghostnet.pytorch/blob/master/ghost_net.py.
 """
 import math
 from typing import Any

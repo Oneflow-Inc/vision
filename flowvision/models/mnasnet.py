@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mnasnet.py
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mnasnet.py.
 """
 import math
 import warnings

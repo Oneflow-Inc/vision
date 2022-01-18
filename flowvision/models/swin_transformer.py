@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/microsoft/Swin-Transformer/blob/main/models/swin_transformer.py
+Modified from https://github.com/microsoft/Swin-Transformer/blob/main/models/swin_transformer.py.
 """
 import numpy as np
 

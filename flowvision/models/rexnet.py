@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1.py
+Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1.py.
 """
 from math import ceil
 

@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/whai362/PVT/blob/v2/classification/pvt.py
+Modified from https://github.com/whai362/PVT/blob/v2/classification/pvt.py.
 """
 import numpy as np
 from functools import partial

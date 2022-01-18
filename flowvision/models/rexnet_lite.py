@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1_lite.py
+Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1_lite.py.
 """
 import math
 

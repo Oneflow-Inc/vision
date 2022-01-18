@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/vgg.py
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/vgg.py.
 """
 from typing import Union, List, Dict, Any, cast
 

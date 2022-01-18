@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/facebookresearch/deit/blob/main/resmlp_models.py
+Modified from https://github.com/facebookresearch/deit/blob/main/resmlp_models.py.
 """
 import oneflow as flow
 import oneflow.nn as nn

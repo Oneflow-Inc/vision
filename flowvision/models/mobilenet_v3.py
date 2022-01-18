@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv3.py
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/mobilenetv3.py.
 """
 from functools import partial
 from typing import Any, Callable, Dict, List, Optional, Sequence

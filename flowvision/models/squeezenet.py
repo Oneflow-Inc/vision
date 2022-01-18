@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/squeezenet.py
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/squeezenet.py.
 """
 from typing import Any
 

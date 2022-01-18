@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/shufflenetv2.py
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/shufflenetv2.py.
 """
 from typing import Callable, Any, List
 
