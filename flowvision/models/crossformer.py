@@ -160,7 +160,7 @@ class Attention(nn.Module):
     def forward(self, x, mask=None):
         """
         Args:
-            x: input features with shape of (num_groups*B, N, C)
+            x: Input features with shape of (num_groups*B, N, C)
             mask: (0/-inf) mask with shape of (num_groups, Wh*Ww, Wh*Ww) or None
         """
         B_, N, C = x.shape
@@ -215,7 +215,7 @@ class CrossFormerBlock(nn.Module):
         input_resolution (tuple[int]): Input resulotion
         num_heads (int): Number of attention heads
         group_size (int): Group size
-        lsda_flag (int): use SDA or LDA, 0 for SDA and 1 for LDA
+        lsda_flag (int): Use SDA or LDA, 0 for SDA and 1 for LDA
         mlp_ratio (float): Ratio of mlp hidden dim to embedding dim
         qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: ``True``
         qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
@@ -378,7 +378,7 @@ class Stage(nn.Module):
         input_resolution (tuple[int]): Input resolution
         depth (int): Number of blocks
         num_heads (int): Number of attention heads
-        group_size (int): variable G in the paper, one group has GxG embeddings
+        group_size (int): Variable G in the paper, one group has GxG embeddings
         mlp_ratio (float): Ratio of mlp hidden dim to embedding dim
         qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: ``True``
         qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set

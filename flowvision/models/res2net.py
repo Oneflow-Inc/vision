@@ -36,12 +36,12 @@ class Bottle2neck(nn.Module):
     ):
         """ Constructor
         Args:
-            inplanes: input channel dimensionality
-            planes: output channel dimensionality
-            stride: conv stride. Replaces pooling layer
+            inplanes: Input channel dimensionality
+            planes: Output channel dimensionality
+            stride: Conv stride. Replaces pooling layer
             downsample: None when stride = 1
-            baseWidth: basic width of conv3x3
-            scale: number of scale
+            baseWidth: Basic width of conv3x3
+            scale: Number of scale
             type: 'normal': normal set. 'stage': first block of a new stage
         """
         super(Bottle2neck, self).__init__()

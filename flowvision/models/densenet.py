@@ -148,13 +148,13 @@ class DenseNet(nn.Module):
     r"""Densenet-BC model class, based on
     `"Densely Connected Convolutional Networks" <https://arxiv.org/pdf/1608.06993.pdf>`_.
     Args:
-        growth_rate (int) - how many filters to add each layer (`k` in paper)
-        block_config (list of 4 ints) - how many layers in each pooling block
-        num_init_features (int) - the number of filters to learn in the first convolution layer
-        bn_size (int) - multiplicative factor for number of bottle neck layers
+        growth_rate (int) - How many filters to add each layer (`k` in paper)
+        block_config (list of 4 ints) - How many layers in each pooling block
+        num_init_features (int) - The number of filters to learn in the first convolution layer
+        bn_size (int) - Multiplicative factor for number of bottle neck layers
           (i.e. bn_size * k features in the bottleneck layer)
-        drop_rate (float) - dropout rate after each dense layer
-        num_classes (int) - number of classification classes
+        drop_rate (float) - Dropout rate after each dense layer
+        num_classes (int) - Number of classification classes
     """
 
     def __init__(
