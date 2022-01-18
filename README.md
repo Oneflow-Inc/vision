@@ -1,33 +1,24 @@
-# vision
-Datasets, Transforms and Models specific to Computer Vision
+# flowvision
+The flowvision package consists of popular datasets, model architectures, and common image transformations for computer vision.
 
 
 ## Installation
-- First install the nightly version of `OneFlow`
-```bash
-python3 -m pip install oneflow -f https://staging.oneflow.info/branch/master/cu102
-```
+First install OneFlow, please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow) for more details.
 
-Please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow) for the detail of OneFlow installation.
-
-- Then install the latest stable release of `flowvision`
+Then install the latest stable release of `flowvision`
 ```bash
 pip install flowvision==0.0.55
-```
-
-- Or install the nightly release of `flowvision`
-```bash
-pip install -i https://test.pypi.org/simple/ flowvision==0.0.55
 ```
 
 ## Documentation
 You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
 
-## Supported Model
+## Model Zoo
 All of the supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
 
+We have conducted all the tests under the same setting, please refer to the model page [here](MODEL_ZOO.md) for more details.
 
-## Usage
+## Quick Start
 <details>
 <summary> <b> Quick Start </b> </summary>
 
@@ -180,9 +171,6 @@ ModelCreator.model_table('vit*', pretrained=True)
 ```
 
 </details>
-
-## Model Zoo
-We have conducted all the tests under the same setting, please refer to the model page [here](MODEL_ZOO.md) for more details.
 
 ## Disclaimer on Datasets
 This is a utility library that downloads and prepares public datasets. We do not host or distribute these datasets, vouch for their quality or fairness, or claim that you have license to use the dataset. It is your responsibility to determine whether you have permission to use the dataset under the dataset's license.
