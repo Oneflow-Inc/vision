@@ -408,23 +408,21 @@ def normalize(
         tensor = tensor.clone()
 
     dtype = tensor.dtype
-    mean = flow.tensor(mean, dtype=dtype, device=tensor.device)
-    np_std = np.array(std)
-    # TODO: use tensor.any()
-    # if (std == 0).any():
-    if np.count_nonzero(np_std == 0) > 0:
+    mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
+    std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
+    if (std == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
                 dtype
             )
         )
-    std = flow.tensor(np_std, dtype=dtype, device=tensor.device)
     if mean.ndim == 1:
         mean = flow._C.reshape(mean, shape=(-1, 1, 1))
     if std.ndim == 1:
         std = flow._C.reshape(std, shape=(-1, 1, 1))
     # tensor.sub_(mean).div_(std)
     return flow._C.div(flow._C.sub(tensor, mean), std)
+
 
 
 def resize(
