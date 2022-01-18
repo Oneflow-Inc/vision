@@ -36,7 +36,11 @@ def parse_option():
         "Flowvision image classification training and evaluation script", add_help=False
     )
     parser.add_argument(
-        "--model_arch", type=str, required=True, default="swin_tiny_patch4_window7_224", help="model for training"
+        "--model_arch",
+        type=str,
+        required=True,
+        default="swin_tiny_patch4_window7_224",
+        help="model for training",
     )
     parser.add_argument(
         "--cfg", type=str, required=True, metavar="FILE", help="path to config file",
