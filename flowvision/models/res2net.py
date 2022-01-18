@@ -42,7 +42,7 @@ class Bottle2neck(nn.Module):
             downsample: None when stride = 1
             baseWidth: Basic width of conv3x3
             scale: Number of scale
-            type: 'normal': normal set. 'stage': first block of a new stage
+            stype: 'normal': normal set. 'stage': first block of a new stage
         """
         super(Bottle2neck, self).__init__()
 
