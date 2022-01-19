@@ -389,7 +389,8 @@ def normalize(
         Tensor: Normalized Tensor image.
     """
     if isinstance(tensor, Image.Image):
-        im = np.array(tensor).astype("float32")
+        tensor = tensor.convert("RGB")
+        im = np.array(tensor).astype(np.float32)
         im = im / 255.0
         im = (im - mean) / std
         return im
