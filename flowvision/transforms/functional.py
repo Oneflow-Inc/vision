@@ -388,6 +388,12 @@ def normalize(
     Returns:
         Tensor: Normalized Tensor image.
     """
+    if isinstance(tensor, Image.Image):
+        im = np.array(tensor).astype("float32")
+        im = im / 255.0
+        im = (im - mean) / std
+        return np.ascontiguousarray(im, "float32")
+
     if not isinstance(tensor, flow.Tensor):
         raise TypeError(
             "Input tensor should be a oneflow tensor. Got {}.".format(type(tensor))

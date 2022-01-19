@@ -122,7 +122,7 @@ def transforms_imagenet_train(
         # prefetcher and collate will handle tensor conversion and norm
         final_tfl += [transforms.ToNumpy()]
     else:
-        final_tfl += [transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)]
+        final_tfl += [transforms.Normalize(mean=mean, std=std), transforms.ToTensor()]
         if re_prob > 0.0:
             final_tfl.append(
                 RandomErasing(
