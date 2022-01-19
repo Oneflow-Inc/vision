@@ -22,9 +22,10 @@ from .rexnet_lite import *
 from .ghostnet import *
 from .res2net import *
 from .efficientnet import *
-from .neural_style_transfer import *
-from .detection import *
-from .segmentation import *
+
+from . import neural_style_transfer
+from . import detection
+from . import segmentation
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
