@@ -9,6 +9,7 @@ from oneflow import nn, Tensor
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from .helpers import make_divisible
 
 
 __all__ = ["MobileNetV2", "mobilenet_v2"]
@@ -17,22 +18,6 @@ __all__ = ["MobileNetV2", "mobilenet_v2"]
 model_urls = {
     "mobilenet_v2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileNet/mobilenet_v2.zip",
 }
-
-
-def _make_divisible(v: float, divisor: int, min_value: Optional[int] = None) -> int:
-    """
-    This function is taken from the original tf repo.
-    It ensures that all layers have a channel number that is divisible by 8
-    It can be seen here:
-    https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mobilenet.py
-    """
-    if min_value is None:
-        min_value = divisor
-    new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
-    # Make sure that round down does not go down by more than 10%.
-    if new_v < 0.9 * v:
-        new_v += divisor
-    return new_v
 
 
 class ConvBNActivation(nn.Sequential):
@@ -179,8 +164,8 @@ class MobileNetV2(nn.Module):
             )
 
         # building first layer
-        input_channel = _make_divisible(input_channel * width_mult, round_nearest)
-        self.last_channel = _make_divisible(
+        input_channel = make_divisible(input_channel * width_mult, round_nearest)
+        self.last_channel = make_divisible(
             last_channel * max(1.0, width_mult), round_nearest
         )
         features: List[nn.Module] = [
@@ -188,7 +173,7 @@ class MobileNetV2(nn.Module):
         ]
         # building inverted residual blocks
         for t, c, n, s in inverted_residual_setting:
-            output_channel = _make_divisible(c * width_mult, round_nearest)
+            output_channel = make_divisible(c * width_mult, round_nearest)
             for i in range(n):
                 stride = s if i == 0 else 1
                 features.append(

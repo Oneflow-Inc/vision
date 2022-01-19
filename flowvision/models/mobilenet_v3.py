@@ -9,6 +9,7 @@ from oneflow import nn, Tensor
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from .helpers import make_divisible
 
 __all__ = ["MobileNetV3", "mobilenet_v3_large", "mobilenet_v3_small"]
 
@@ -18,21 +19,6 @@ model_urls = {
     "mobilenet_v3_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileNet/mobilenet_v3_small.zip",
 }
 
-
-def _make_divisible(v: float, divisor: int, min_value: Optional[int] = None) -> int:
-    """
-    This function is taken from the original tf repo.
-    It ensures that all layers have a channel number that is divisible by 8
-    It can be seen here:
-    https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mobilenet.py
-    """
-    if min_value is None:
-        min_value = divisor
-    new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
-    # Make sure that round down does not go down by more than 10%.
-    if new_v < 0.9 * v:
-        new_v += divisor
-    return new_v
 
 
 class ConvBNActivation(nn.Sequential):
@@ -73,7 +59,7 @@ class SqueezeExcitation(nn.Module):
     # Implemented as described at Figure 4 of the MobileNetV3 paper
     def __init__(self, input_channels: int, squeeze_factor: int = 4):
         super().__init__()
-        squeeze_channels = _make_divisible(input_channels // squeeze_factor, 8)
+        squeeze_channels = make_divisible(input_channels // squeeze_factor, 8)
         self.fc1 = nn.Conv2d(input_channels, squeeze_channels, 1)
         self.relu = nn.ReLU(inplace=True)
         self.fc2 = nn.Conv2d(squeeze_channels, input_channels, 1)
@@ -117,7 +103,7 @@ class InvertedResidualConfig:
 
     @staticmethod
     def adjust_channels(channels: int, width_mult: float):
-        return _make_divisible(channels * width_mult, 8)
+        return make_divisible(channels * width_mult, 8)
 
 
 class InvertedResidual(nn.Module):
