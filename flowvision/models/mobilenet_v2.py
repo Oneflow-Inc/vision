@@ -9,7 +9,7 @@ from oneflow import nn, Tensor
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from ..utils import _make_divisible
+from .helpers import make_divisible
 
 
 __all__ = ["MobileNetV2", "mobilenet_v2"]
@@ -164,8 +164,8 @@ class MobileNetV2(nn.Module):
             )
 
         # building first layer
-        input_channel = _make_divisible(input_channel * width_mult, round_nearest)
-        self.last_channel = _make_divisible(
+        input_channel = make_divisible(input_channel * width_mult, round_nearest)
+        self.last_channel = make_divisible(
             last_channel * max(1.0, width_mult), round_nearest
         )
         features: List[nn.Module] = [
@@ -173,7 +173,7 @@ class MobileNetV2(nn.Module):
         ]
         # building inverted residual blocks
         for t, c, n, s in inverted_residual_setting:
-            output_channel = _make_divisible(c * width_mult, round_nearest)
+            output_channel = make_divisible(c * width_mult, round_nearest)
             for i in range(n):
                 stride = s if i == 0 else 1
                 features.append(

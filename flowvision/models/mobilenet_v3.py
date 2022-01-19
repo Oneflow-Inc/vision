@@ -9,7 +9,7 @@ from oneflow import nn, Tensor
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from ..utils import _make_divisible
+from .helpers import make_divisible
 
 __all__ = ["MobileNetV3", "mobilenet_v3_large", "mobilenet_v3_small"]
 
@@ -59,7 +59,7 @@ class SqueezeExcitation(nn.Module):
     # Implemented as described at Figure 4 of the MobileNetV3 paper
     def __init__(self, input_channels: int, squeeze_factor: int = 4):
         super().__init__()
-        squeeze_channels = _make_divisible(input_channels // squeeze_factor, 8)
+        squeeze_channels = make_divisible(input_channels // squeeze_factor, 8)
         self.fc1 = nn.Conv2d(input_channels, squeeze_channels, 1)
         self.relu = nn.ReLU(inplace=True)
         self.fc2 = nn.Conv2d(squeeze_channels, input_channels, 1)
@@ -103,7 +103,7 @@ class InvertedResidualConfig:
 
     @staticmethod
     def adjust_channels(channels: int, width_mult: float):
-        return _make_divisible(channels * width_mult, 8)
+        return make_divisible(channels * width_mult, 8)
 
 
 class InvertedResidual(nn.Module):

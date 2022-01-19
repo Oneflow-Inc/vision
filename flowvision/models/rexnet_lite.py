@@ -8,7 +8,7 @@ import oneflow.nn as nn
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from ..utils import _make_divisible
+from .helpers import make_divisible
 
 
 model_urls = {
@@ -139,7 +139,7 @@ class ReXNetV1_lite(nn.Module):
         features = []
         inplanes = input_ch / multiplier if multiplier < 1.0 else input_ch
         first_channel = 32 / multiplier if multiplier < 1.0 or fix_head_stem else 32
-        first_channel = _make_divisible(
+        first_channel = make_divisible(
             int(round(first_channel * multiplier)), divisible_value
         )
 
@@ -158,7 +158,7 @@ class ReXNetV1_lite(nn.Module):
         )
 
         for i in range(self.num_convblocks):
-            inplanes_divisible = _make_divisible(
+            inplanes_divisible = make_divisible(
                 int(round(inplanes * multiplier)), divisible_value
             )
             if i == 0:
@@ -167,7 +167,7 @@ class ReXNetV1_lite(nn.Module):
             else:
                 in_channels_group.append(inplanes_divisible)
                 inplanes += final_ch / (self.num_convblocks - 1 * 1.0)
-                inplanes_divisible = _make_divisible(
+                inplanes_divisible = make_divisible(
                     int(round(inplanes * multiplier)), divisible_value
                 )
                 channels_group.append(inplanes_divisible)
