@@ -20,7 +20,6 @@ model_urls = {
 }
 
 
-
 class ConvBNActivation(nn.Sequential):
     def __init__(
         self,
