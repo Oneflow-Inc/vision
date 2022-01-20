@@ -4,7 +4,7 @@
 
 **New Features**
 
-- Support xxx (#8888)
+- Support `trunc_normal_` in `flowvision.layers.weight_init` (#92)
 - 
 
 **Bug Fixes**
@@ -14,12 +14,12 @@
 
 **Improvements**
 
-- xxx (#6666)
+- Refine `trunc_normal_` and `linspace` usage in `Swin-T`, `CrossFormer`, `PVT` and `CSwin` models. (#100)
 -
 
 **Contributors**
 
 A total of xx developers contributed to this release.
 
-Thanks @rentianhe, @simonJJJ, @kaijieshi7, @lixiang007666, @Ldpe2G
+Thanks @rentainhe, @simonJJJ, @kaijieshi7, @lixiang007666, @Ldpe2G
 
