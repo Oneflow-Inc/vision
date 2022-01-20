@@ -276,7 +276,7 @@ def accimage_loader(path: str) -> Any:
 
 
 def default_loader(path: str) -> Any:
-    from .vision import get_image_backend
+    from flowvision import get_image_backend
 
     if get_image_backend() == "accimage":
         return accimage_loader(path)
