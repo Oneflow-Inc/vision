@@ -1,5 +1,5 @@
-""" Layer/Module Helpers
-Hacked together by / Copyright 2020 Ross Wightman
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/helpers.py
 """
 from itertools import repeat
 import collections.abc

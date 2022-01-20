@@ -22,6 +22,7 @@ from .rexnet_lite import *
 from .ghostnet import *
 from .res2net import *
 from .efficientnet import *
+from .vision_transformer import *
 
 from . import neural_style_transfer
 from . import detection
