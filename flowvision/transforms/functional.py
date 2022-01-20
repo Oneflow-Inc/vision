@@ -155,7 +155,9 @@ def to_tensor(pic):
         if pic.ndim == 2:
             pic = pic[:, :, None]
 
-        img = flow.tensor(np.ascontiguousarray(pic.transpose((2, 0, 1)), dtype=np.float32))
+        img = flow.tensor(
+            np.ascontiguousarray(pic.transpose((2, 0, 1)), dtype=np.float32)
+        )
         # backward compatibility
         if img.dtype == flow.int:
             return flow._C.cast(img, dtype=default_float_dtype).div(255)
