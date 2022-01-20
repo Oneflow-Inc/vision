@@ -25,7 +25,7 @@ def get_dist(pkgname):
         return None
 
 
-version = "0.0.55"
+version = "0.0.56"
 package_name = "flowvision"
 cwd = os.path.dirname(os.path.abspath(__file__))
 
