@@ -20,9 +20,9 @@ from .registry import ModelCreator
 
 model_urls = {
     "vit_tiny_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_tiny_patch16_224.zip",
-    "vit_tiny_patch16_384": None,
-    "vit_small_patch32_224": None,
-    "vit_small_patch32_384": None,
+    "vit_tiny_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_tiny_patch16_384.zip",
+    "vit_small_patch32_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch32_224.zip",
+    "vit_small_patch32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch32_384.zip",
 }
 
 _logger = logging.getLogger(__name__)
@@ -269,6 +269,7 @@ def vit_tiny_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
+        img_size=224,
         patch_size=16,
         embed_dim=192,
         depth=12,
@@ -335,10 +336,10 @@ def vit_small_patch32_224(pretrained=False, progress=True, **kwargs):
     """
     model_kwargs = dict(
         img_size=224,
-        patch_size=16,
-        embed_dim=192,
+        patch_size=32,
+        embed_dim=384,
         depth=12,
-        num_heads=3,
+        num_heads=6,
         **kwargs
     )
     model = _create_vision_transformer("vit_small_patch32_224", pretrained=pretrained, progress=progress, **model_kwargs)
@@ -368,10 +369,10 @@ def vit_small_patch32_384(pretrained=False, progress=True, **kwargs):
     """
     model_kwargs = dict(
         img_size=384,
-        patch_size=16,
-        embed_dim=192,
+        patch_size=32,
+        embed_dim=384,
         depth=12,
-        num_heads=3,
+        num_heads=6,
         **kwargs
     )
     model = _create_vision_transformer("vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
