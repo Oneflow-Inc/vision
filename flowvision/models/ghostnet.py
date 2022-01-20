@@ -10,6 +10,7 @@ import oneflow.nn.functional as F
 
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
+from .helpers import make_divisible
 
 
 __all__ = ["ghostnet"]
@@ -18,22 +19,6 @@ __all__ = ["ghostnet"]
 model_urls = {
     "ghostnet": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/GhostNet/ghostnet.zip",
 }
-
-
-def _make_divisible(v, divisor, min_value=None):
-    """
-    This function is taken from the original tf repo.
-    It ensures that all layers have a channel number that is divisible by 8
-    It can be seen here:
-    https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet/mobilenet.py
-    """
-    if min_value is None:
-        min_value = divisor
-    new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
-    # Make sure that round down does not go down by more than 10%.
-    if new_v < 0.9 * v:
-        new_v += divisor
-    return new_v
 
 
 def hard_sigmoid(x, inplace: bool = False):
@@ -58,7 +43,7 @@ class SqueezeExcite(nn.Module):
     ):
         super(SqueezeExcite, self).__init__()
         self.gate_fn = gate_fn
-        reduced_chs = _make_divisible((reduced_base_chs or in_chs) * se_ratio, divisor)
+        reduced_chs = make_divisible((reduced_base_chs or in_chs) * se_ratio, divisor)
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.conv_reduce = nn.Conv2d(in_chs, reduced_chs, 1, bias=True)
         self.act1 = act_layer(inplace=True)
@@ -218,7 +203,7 @@ class GhostNet(nn.Module):
         self.dropout = dropout
 
         # building first layer
-        output_channel = _make_divisible(16 * width, 4)
+        output_channel = make_divisible(16 * width, 4)
         self.conv_stem = nn.Conv2d(3, output_channel, 3, 2, 1, bias=False)
         self.bn1 = nn.BatchNorm2d(output_channel)
         self.act1 = nn.ReLU(inplace=True)
@@ -230,8 +215,8 @@ class GhostNet(nn.Module):
         for cfg in self.cfgs:
             layers = []
             for k, exp_size, c, se_ratio, s in cfg:
-                output_channel = _make_divisible(c * width, 4)
-                hidden_channel = _make_divisible(exp_size * width, 4)
+                output_channel = make_divisible(c * width, 4)
+                hidden_channel = make_divisible(exp_size * width, 4)
                 layers.append(
                     block(
                         input_channel,
@@ -245,7 +230,7 @@ class GhostNet(nn.Module):
                 input_channel = output_channel
             stages.append(nn.Sequential(*layers))
 
-        output_channel = _make_divisible(exp_size * width, 4)
+        output_channel = make_divisible(exp_size * width, 4)
         stages.append(nn.Sequential(ConvBnAct(input_channel, output_channel, 1)))
         input_channel = output_channel
 
@@ -283,7 +268,7 @@ def ghostnet(pretrained: bool = False, progress: bool = True, **kwargs: Any):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

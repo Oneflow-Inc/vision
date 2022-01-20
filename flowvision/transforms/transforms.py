@@ -227,7 +227,7 @@ class Resize(Module):
             i.e, if height > width, then image will be rescaled to
             (size * height / width, size).
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`. Default is ``InterpolationMode.BILINEAR``.
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.BILINEAR``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` and
             ``InterpolationMode.BICUBIC`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
@@ -714,7 +714,7 @@ class RandomResizedCrop(Module):
         ratio (tuple of float): lower and upper bounds for the random aspect ratio of the crop, before
             resizing.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`. Default is ``InterpolationMode.BILINEAR``.
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.BILINEAR``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` and
             ``InterpolationMode.BICUBIC`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
@@ -1088,7 +1088,7 @@ class RandomRotation(Module):
             If degrees is a number instead of sequence like (min, max), the range of degrees
             will be (-degrees, +degrees).
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
         expand (bool, optional): Optional expansion flag.

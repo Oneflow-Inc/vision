@@ -74,13 +74,13 @@ def load_state_dict_from_url(
         model_dir (string, optional): directory in which to save the object
         map_location (optional): a function or a dict specifying how to remap storage locations (see flow.load)
         progress (bool, optional): whether or not to display a progress bar to stderr.
-            Default: True
+            Default: ``True``
         check_hash(bool, optional): If True, the filename part of the URL should follow the naming convention
             ``filename-<sha256>.ext`` where ``<sha256>`` is the first eight or more
             digits of the SHA256 hash of the contents of the file. The hash is used to
             ensure unique names and to verify the contents of the file.
-            Default: False
-        file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set.
+            Default: ``False``
+        file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set
 
     """
 
@@ -126,9 +126,9 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
         url (string): URL of the object to download
         dst (string): Full path where object will be saved, e.g. `/tmp/temporary_file`
         hash_prefix (string, optional): If not None, the SHA256 downloaded file should start with `hash_prefix`.
-            Default: None
+            Default: ``None``
         progress (bool, optional): whether or not to display a progress bar to stderr
-            Default: True
+            Default: ``True``
     """
     file_size = None
     # We use a different API for python2 since urllib(2) doesn't recognize the CA

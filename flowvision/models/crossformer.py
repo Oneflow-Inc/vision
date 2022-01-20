@@ -6,11 +6,11 @@ import numpy as np
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import oneflow.nn.init as init
 
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
-from flowvision.layers.regularization.droppath import DropPath, drop_path
+from flowvision.layers.regularization import DropPath, drop_path
+from flowvision.layers.weight_init import trunc_normal_
 
 
 model_urls = {
@@ -89,13 +89,13 @@ class DynamicPosBias(nn.Module):
 class Attention(nn.Module):
     r""" Multi-head self attention module with dynamic position bias.
     Args:
-        dim (int): Number of input channels.
-        group_size (tuple[int]): The height and width of the group.
-        num_heads (int): Number of attention heads.
-        qkv_bias (bool, optional):  If True, add a learnable bias to query, key, value. Default: True
+        dim (int): Number of input channels
+        group_size (tuple[int]): The height and width of the group
+        num_heads (int): Number of attention heads
+        qkv_bias (bool, optional):  If True, add a learnable bias to query, key, value. Default: ``True``
         qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
-        attn_drop (float, optional): Dropout ratio of attention weight. Default: 0.0
-        proj_drop (float, optional): Dropout ratio of output. Default: 0.0
+        attn_drop (float, optional): Dropout ratio of attention weight. Default: ``0.0``
+        proj_drop (float, optional): Dropout ratio of output. Default: ``0.0``
     """
 
     def __init__(
@@ -160,7 +160,7 @@ class Attention(nn.Module):
     def forward(self, x, mask=None):
         """
         Args:
-            x: input features with shape of (num_groups*B, N, C)
+            x: Input features with shape of (num_groups*B, N, C)
             mask: (0/-inf) mask with shape of (num_groups, Wh*Ww, Wh*Ww) or None
         """
         B_, N, C = x.shape
@@ -211,19 +211,19 @@ class Attention(nn.Module):
 class CrossFormerBlock(nn.Module):
     r""" CrossFormer Block.
     Args:
-        dim (int): Number of input channels.
-        input_resolution (tuple[int]): Input resulotion.
-        num_heads (int): Number of attention heads.
-        group_size (int): Group size.
-        lsda_flag (int): use SDA or LDA, 0 for SDA and 1 for LDA.
-        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim.
-        qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: True
-        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set.
-        drop (float, optional): Dropout rate. Default: 0.0
-        attn_drop (float, optional): Attention dropout rate. Default: 0.0
-        drop_path (float, optional): Stochastic depth rate. Default: 0.0
-        act_layer (nn.Module, optional): Activation layer. Default: nn.GELU
-        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm
+        dim (int): Number of input channels
+        input_resolution (tuple[int]): Input resulotion
+        num_heads (int): Number of attention heads
+        group_size (int): Group size
+        lsda_flag (int): Use SDA or LDA, 0 for SDA and 1 for LDA
+        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim
+        qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: ``True``
+        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
+        drop (float, optional): Dropout rate. Default: ``0.0``
+        attn_drop (float, optional): Attention dropout rate. Default: ``0.0``
+        drop_path (float, optional): Stochastic depth rate. Default: ``0.0``
+        act_layer (nn.Module, optional): Activation layer. Default: ``nn.GELU``
+        norm_layer (nn.Module, optional): Normalization layer.  Default: ``nn.LayerNorm``
     """
 
     def __init__(
@@ -320,9 +320,9 @@ class CrossFormerBlock(nn.Module):
 class PatchMerging(nn.Module):
     r""" Patch Merging Layer.
     Args:
-        input_resolution (tuple[int]): Resolution of input feature.
-        dim (int): Number of input channels.
-        norm_layer (nn.Module, optional): Normalization layer.  Default: nn.LayerNorm
+        input_resolution (tuple[int]): Resolution of input feature
+        dim (int): Number of input channels
+        norm_layer (nn.Module, optional): Normalization layer. Default: ``nn.LayerNorm``
     """
 
     def __init__(
@@ -374,19 +374,19 @@ class PatchMerging(nn.Module):
 class Stage(nn.Module):
     """ CrossFormer blocks for one stage.
     Args:
-        dim (int): Number of input channels.
-        input_resolution (tuple[int]): Input resolution.
-        depth (int): Number of blocks.
-        num_heads (int): Number of attention heads.
-        group_size (int): variable G in the paper, one group has GxG embeddings
-        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim.
-        qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: True
-        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set.
-        drop (float, optional): Dropout rate. Default: 0.0
-        attn_drop (float, optional): Attention dropout rate. Default: 0.0
-        drop_path (float | tuple[float], optional): Stochastic depth rate. Default: 0.0
-        norm_layer (nn.Module, optional): Normalization layer. Default: nn.LayerNorm
-        downsample (nn.Module | None, optional): Downsample layer at the end of the layer. Default: None
+        dim (int): Number of input channels
+        input_resolution (tuple[int]): Input resolution
+        depth (int): Number of blocks
+        num_heads (int): Number of attention heads
+        group_size (int): Variable G in the paper, one group has GxG embeddings
+        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim
+        qkv_bias (bool, optional): If True, add a learnable bias to query, key, value. Default: ``True``
+        qk_scale (float | None, optional): Override default qk scale of head_dim ** -0.5 if set
+        drop (float, optional): Dropout rate. Default: ``0.0``
+        attn_drop (float, optional): Attention dropout rate. Default: ``0.0``
+        drop_path (float | tuple[float], optional): Stochastic depth rate. Default: ``0.0``
+        norm_layer (nn.Module, optional): Normalization layer. Default: ``nn.LayerNorm``
+        downsample (nn.Module | None, optional): Downsample layer at the end of the layer. Default: ``None``
     """
 
     def __init__(
@@ -463,11 +463,11 @@ class Stage(nn.Module):
 class PatchEmbed(nn.Module):
     r""" Image to Patch Embedding
     Args:
-        img_size (int): Image size.  Default: 224.
-        patch_size (int): Patch token size. Default: [4].
-        in_chans (int): Number of input image channels. Default: 3.
-        embed_dim (int): Number of linear projection output channels. Default: 96.
-        norm_layer (nn.Module, optional): Normalization layer. Default: None
+        img_size (int): Image size.  Default: ``224``
+        patch_size (int): Patch token size. Default: ``[4]``
+        in_chans (int): Number of input image channels. Default: ``3``
+        embed_dim (int): Number of linear projection output channels. Default: ``96``
+        norm_layer (nn.Module, optional): Normalization layer. Default: ``None``
     """
 
     def __init__(
@@ -524,24 +524,24 @@ class CrossFormer(nn.Module):
     r""" CrossFormer
         A OneFlow impl of : `CrossFormer: A Versatile Vision Transformer Based on Cross-scale Attention`  -
     Args:
-        img_size (int | tuple(int)): Input image size. Default 224
-        patch_size (int | tuple(int)): Patch size. Default: 4
-        in_chans (int): Number of input image channels. Default: 3
-        num_classes (int): Number of classes for classification head. Default: 1000
-        embed_dim (int): Patch embedding dimension. Default: 96
-        depths (tuple(int)): Depth of each stage.
-        num_heads (tuple(int)): Number of attention heads in different layers.
-        group_size (int): Group size. Default: 7
-        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim. Default: 4
-        qkv_bias (bool): If True, add a learnable bias to query, key, value. Default: True
-        qk_scale (float): Override default qk scale of head_dim ** -0.5 if set. Default: None
-        drop_rate (float): Dropout rate. Default: 0
-        attn_drop_rate (float): Attention dropout rate. Default: 0
-        drop_path_rate (float): Stochastic depth rate. Default: 0.1
-        norm_layer (nn.Module): Normalization layer. Default: nn.LayerNorm.
-        ape (bool): If True, add absolute position embedding to the patch embedding. Default: False
-        patch_norm (bool): If True, add normalization after patch embedding. Default: True
-        use_checkpoint (bool): Whether to use checkpointing to save memory. Default: False
+        img_size (int | tuple(int)): Input image size. Default: ``224``
+        patch_size (int | tuple(int)): Patch size. Default: ``4``
+        in_chans (int): Number of input image channels. Default: ``3``
+        num_classes (int): Number of classes for classification head. Default: ``1000``
+        embed_dim (int): Patch embedding dimension. Default: ``96``
+        depths (tuple(int)): Depth of each stage
+        num_heads (tuple(int)): Number of attention heads in different layers
+        group_size (int): Group size. Default: ``7``
+        mlp_ratio (float): Ratio of mlp hidden dim to embedding dim. Default: ``4``
+        qkv_bias (bool): If True, add a learnable bias to query, key, value. Default: ``True``
+        qk_scale (float): Override default qk scale of head_dim ** -0.5 if set. Default: ``None``
+        drop_rate (float): Dropout rate. Default: ``0``
+        attn_drop_rate (float): Attention dropout rate. Default: ``0``
+        drop_path_rate (float): Stochastic depth rate. Default: ``0.1``
+        norm_layer (nn.Module): Normalization layer. Default: ``nn.LayerNorm``
+        ape (bool): If True, add absolute position embedding to the patch embedding. Default: ``False``
+        patch_norm (bool): If True, add normalization after patch embedding. Default: ``True``
+        use_checkpoint (bool): Whether to use checkpointing to save memory. Default: ``False``
     """
 
     def __init__(
@@ -594,14 +594,12 @@ class CrossFormer(nn.Module):
             self.absolute_pos_embed = nn.Parameter(
                 flow.zeros(1, num_patches, embed_dim)
             )
-            init.trunc_normal_(self.absolute_pos_embed, std=0.02)
+            trunc_normal_(self.absolute_pos_embed, std=0.02)
 
         self.pos_drop = nn.Dropout(p=drop_rate)
 
         # stochastic depth
-        dpr = [
-            x for x in np.linspace(0, drop_path_rate, sum(depths))
-        ]  # stochastic depth decay rule
+        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
 
         # build layers
         self.layers = nn.ModuleList()
@@ -647,7 +645,7 @@ class CrossFormer(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            init.trunc_normal_(m.weight, std=0.02)
+            trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
@@ -692,7 +690,7 @@ def crossformer_tiny_patch4_group7_224(pretrained=False, progress=True, **kwargs
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -731,7 +729,7 @@ def crossformer_small_patch4_group7_224(pretrained=False, progress=True, **kwarg
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -770,7 +768,7 @@ def crossformer_base_patch4_group7_224(pretrained=False, progress=True, **kwargs
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -809,7 +807,7 @@ def crossformer_large_patch4_group7_224(pretrained=False, progress=True, **kwarg
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
