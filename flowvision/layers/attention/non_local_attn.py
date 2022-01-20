@@ -7,7 +7,7 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
 
-from flowvision.layers.helpers import make_divisible
+from flowvision.models.helpers import make_divisible
 
 
 class NonLocalAttn(nn.Module):

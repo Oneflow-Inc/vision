@@ -1,10 +1,10 @@
-from .layers import *
-from .models import *
-from .datasets import *
-from .transforms import *
-from .loss import *
-from .scheduler import *
-from .data import *
+from flowvision import layers
+from flowvision import models
+from flowvision import datasets
+from flowvision import transforms
+from flowvision import loss
+from flowvision import scheduler
+from flowvision import data
 
 try:
     from .version import __version__  # noqa: F401

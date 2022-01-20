@@ -155,7 +155,9 @@ def to_tensor(pic):
         if pic.ndim == 2:
             pic = pic[:, :, None]
 
-        img = flow.tensor(pic.transpose((2, 0, 1)))
+        img = flow.tensor(
+            np.ascontiguousarray(pic.transpose((2, 0, 1)), dtype=np.float32)
+        )
         # backward compatibility
         if img.dtype == flow.int:
             return flow._C.cast(img, dtype=default_float_dtype).div(255)
@@ -388,6 +390,13 @@ def normalize(
     Returns:
         Tensor: Normalized Tensor image.
     """
+    if isinstance(tensor, Image.Image):
+        tensor = tensor.convert("RGB")
+        im = np.array(tensor).astype(np.float32)
+        im = im / 255.0
+        im = (im - mean) / std
+        return im
+
     if not isinstance(tensor, flow.Tensor):
         raise TypeError(
             "Input tensor should be a oneflow tensor. Got {}.".format(type(tensor))
@@ -408,17 +417,14 @@ def normalize(
         tensor = tensor.clone()
 
     dtype = tensor.dtype
-    mean = flow.tensor(mean, dtype=dtype, device=tensor.device)
-    np_std = np.array(std)
-    # TODO: use tensor.any()
-    # if (std == 0).any():
-    if np.count_nonzero(np_std == 0) > 0:
+    mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
+    std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
+    if (std == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
                 dtype
             )
         )
-    std = flow.tensor(np_std, dtype=dtype, device=tensor.device)
     if mean.ndim == 1:
         mean = flow._C.reshape(mean, shape=(-1, 1, 1))
     if std.ndim == 1:
@@ -444,7 +450,7 @@ def resize(
             the aspect ratio. i.e, if height > width, then image will be rescaled to
             :math:`\left(\text{size} \times \frac{\text{height}}{\text{width}}, \text{size}\right)`.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`.
+            :class:`flowvision.transforms.InterpolationMode`.
             Default is ``InterpolationMode.BILINEAR``. If input is Tensor, only ``InterpolationMode.NEAREST``,
             ``InterpolationMode.BILINEAR`` and ``InterpolationMode.BICUBIC`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
@@ -916,7 +922,7 @@ def rotate(
         img (PIL Image or Tensor): image to be rotated.
         angle (number): rotation angle value in degrees, counter-clockwise.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
         expand (bool, optional): Optional expansion flag.

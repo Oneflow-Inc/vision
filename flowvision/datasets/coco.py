@@ -74,8 +74,8 @@ class CocoCaptions(CocoDetection):
 
         .. code:: python
 
-            import oneflow.utils.vision.datasets as dset
-            import oneflow.utils.vision.transforms as transforms
+            import flowvision.datasets as dset
+            import flowvision.transforms as transforms
             cap = dset.CocoCaptions(root = 'dir where images are',
                                     annFile = 'json annotation file',
                                     transform=transforms.ToTensor())

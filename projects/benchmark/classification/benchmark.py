@@ -1,9 +1,9 @@
 import os
 import oneflow as flow
 from oneflow.utils.data import DataLoader
-from oneflow.utils.vision import transforms
-from oneflow.utils.vision.transforms import InterpolationMode
-from oneflow.utils.vision.datasets import ImageFolder
+from flowvision import transforms
+from flowvision.transforms import InterpolationMode
+from flowvision.datasets import ImageFolder
 from tqdm import tqdm
 from flowvision.models import ModelCreator
 from flowvision.transforms.functional import str_to_interp_mode
