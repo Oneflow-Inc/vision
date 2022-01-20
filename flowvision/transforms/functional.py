@@ -448,7 +448,7 @@ def resize(
             the aspect ratio. i.e, if height > width, then image will be rescaled to
             :math:`\left(\text{size} \times \frac{\text{height}}{\text{width}}, \text{size}\right)`.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`.
+            :class:`flowvision.transforms.InterpolationMode`.
             Default is ``InterpolationMode.BILINEAR``. If input is Tensor, only ``InterpolationMode.NEAREST``,
             ``InterpolationMode.BILINEAR`` and ``InterpolationMode.BICUBIC`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
@@ -920,7 +920,7 @@ def rotate(
         img (PIL Image or Tensor): image to be rotated.
         angle (number): rotation angle value in degrees, counter-clockwise.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`flow.utils.vision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image.NEAREST``) are still acceptable.
         expand (bool, optional): Optional expansion flag.
