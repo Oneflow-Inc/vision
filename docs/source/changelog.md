@@ -14,8 +14,9 @@
 
 **Improvements**
 
-- Refator `trunc_normal_` and `linspace` usage in Swin-T, Cross-Former, PVT and CSWin models. [#100](https://github.com/Oneflow-Inc/vision/pull/100)
+- Refator `trunc_normal_` and `linspace` usage in Swin-T, Cross-Former, PVT and CSWin models [#100](https://github.com/Oneflow-Inc/vision/pull/100)
 - Refator `Vision Transformer` model [#115](https://github.com/Oneflow-Inc/vision/pull/115)
+- Refine `flowvision.models.ModelCreator` to support `ModelCreator.model_list` func [#123](https://github.com/Oneflow-Inc/vision/pull/123)
 
 
 **Docs Update**
