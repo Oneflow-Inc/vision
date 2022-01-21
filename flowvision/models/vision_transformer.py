@@ -34,6 +34,8 @@ model_urls = {
     "vit_large_patch32_384": None,
     "vit_large_patch16_224": None,
     "vit_large_patch16_384": None,
+    "vit_base_patch16_sam_224": None,
+    "vit_base_patch32_sam_224": None,
     "vit_huge_patch14_224": None,  # no pretrained
     "vit_giant_patch14_224": None,  # no pretrained
     "vit_gigantic_patch14_224": None,  # no pretrained
@@ -757,6 +759,76 @@ def vit_large_patch16_384(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
+def vit_base_patch16_sam_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch16-sam-224 model.
+
+    .. note::
+        ViT-Base-patch16-sam-224 model from `"When Vision Transformers Outperform ResNets without Pre-training or Strong Data Augmentations" <https://arxiv.org/pdf/2106.01548.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch16_sam_224 = flowvision.models.vit_base_patch16_sam_224(pretrained=False, progress=True)
+
+    """
+    # NOTE original SAM weights release worked with representation_size=768
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        representation_size=0,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch16_sam_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch32_sam_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch32-sam-224 model.
+
+    .. note::
+        ViT-Base-patch32-sam-224 model from `"When Vision Transformers Outperform ResNets without Pre-training or Strong Data Augmentations" <https://arxiv.org/pdf/2106.01548.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch32_sam_224 = flowvision.models.vit_base_patch32_sam_224(pretrained=False, progress=True)
+
+    """
+    # NOTE original SAM weights release worked with representation_size=768
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=32,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        representation_size=0,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch32_sam_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
 def vit_huge_patch14_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ViT-Huge-patch14-224 model.
@@ -855,3 +927,6 @@ def vit_gigantic_patch14_224(pretrained=False, progress=True, **kwargs):
     )
     model = _create_vision_transformer("vit_gigantic_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
     return model
+
+
+
