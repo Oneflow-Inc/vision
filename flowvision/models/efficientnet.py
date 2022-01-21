@@ -163,7 +163,7 @@ class MBConv(nn.Module):
                 groups=expanded_channels,
                 norm_layer=norm_layer,
                 act_layer=activation_layer,
-                padding=cnf.kernel//2,
+                padding=cnf.kernel // 2,
             )
         )
 
