@@ -8,7 +8,7 @@ trap 'rc=$?' ERR
 # cd $ONEFLOW_MODELS_DIR
 COMPARE_SCRIPT_PATH=./compare_speed_with_pytorch.py
 MODELS_ROOT=../../flowvision/models
-TIMES=10
+TIMES=100
 
 function check_relative_speed {
   awk -F'[:(]' -v threshold=$1 'BEGIN { ret=2 } /Relative speed/{ if ($2 >= threshold) { printf "✔️ "; ret=0 } else { printf "❌ "; ret=1 }} {print $0} END { exit ret }'
@@ -46,8 +46,8 @@ python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $M
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/mobilenet_v3.py mobilenet_v3_large 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/mobilenet_v2.py mobilenet_v2 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/mnasnet.py mnasnet0_5 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
-python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/inception_v3.py inception_v3 16x3x299x299 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
-python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/googlenet.py googlenet 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/inception_v3.py inception_v3 16x3x299x299 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/googlenet.py googlenet 16x3x224x224 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/ghostnet.py ghostnet 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/densenet.py densenet121 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnet.py resnet50 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
