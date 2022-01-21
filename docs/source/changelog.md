@@ -24,7 +24,5 @@
 
 **Contributors**
 
-A total of 5 developers contributed to this release.
-
-Thanks @rentainhe, @simonJJJ, @kaijieshi7, @lixiang007666, @Ldpe2G
+A total of 5 developers contributed to this release. Thanks @rentainhe, @simonJJJ, @kaijieshi7, @lixiang007666, @Ldpe2G
 
