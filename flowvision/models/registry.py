@@ -88,6 +88,6 @@ class ModelCreator(object):
 
     def __repr__(self) -> str:
         all_model_table = ModelCreator.model_table("")
-        return "Registry of models:\n" + all_model_table
+        return "Registry of all models:\n" + all_model_table
 
     __str__ = __repr__
