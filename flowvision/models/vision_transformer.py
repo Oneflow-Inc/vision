@@ -65,7 +65,7 @@ _logger = logging.getLogger(__name__)
 
 
 class Attention(nn.Module):
-    def __init__(self, dim, num_heads=8, qkv_bias=False, attn_drop=0., proj_drop=0.):
+    def __init__(self, dim, num_heads=8, qkv_bias=False, attn_drop=0.0, proj_drop=0.0):
         super().__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
@@ -78,11 +78,14 @@ class Attention(nn.Module):
 
     def forward(self, x):
         B, N, C = x.shape
-        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+        qkv = (
+            self.qkv(x)
+            .reshape(B, N, 3, self.num_heads, C // self.num_heads)
+            .permute(2, 0, 3, 1, 4)
+        )
         # TODO supported tensor.unbind in oneflow
         # q, k, v = qkv.unbind(0)
         q, k, v = qkv[0], qkv[1], qkv[2]
-        
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
         attn = attn.softmax(dim=-1)
@@ -95,17 +98,37 @@ class Attention(nn.Module):
 
 
 class Block(nn.Module):
-
-    def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm):
+    def __init__(
+        self,
+        dim,
+        num_heads,
+        mlp_ratio=4.0,
+        qkv_bias=False,
+        drop=0.0,
+        attn_drop=0.0,
+        drop_path=0.0,
+        act_layer=nn.GELU,
+        norm_layer=nn.LayerNorm,
+    ):
         super().__init__()
         self.norm1 = norm_layer(dim)
-        self.attn = Attention(dim, num_heads=num_heads, qkv_bias=qkv_bias, attn_drop=attn_drop, proj_drop=drop)
+        self.attn = Attention(
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
         # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
-        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         mlp_hidden_dim = int(dim * mlp_ratio)
-        self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
+        self.mlp = Mlp(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
 
     def forward(self, x):
         x = x + self.drop_path(self.attn(self.norm1(x)))
@@ -121,10 +144,27 @@ class VisionTransformer(nn.Module):
         - https://arxiv.org/abs/2012.12877
     """
 
-    def __init__(self, img_size=224, patch_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12,
-                 num_heads=12, mlp_ratio=4., qkv_bias=True, representation_size=None, distilled=False,
-                 drop_rate=0., attn_drop_rate=0., drop_path_rate=0., embed_layer=PatchEmbed, norm_layer=None,
-                 act_layer=None, weight_init=''):
+    def __init__(
+        self,
+        img_size=224,
+        patch_size=16,
+        in_chans=3,
+        num_classes=1000,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4.0,
+        qkv_bias=True,
+        representation_size=None,
+        distilled=False,
+        drop_rate=0.0,
+        attn_drop_rate=0.0,
+        drop_path_rate=0.0,
+        embed_layer=PatchEmbed,
+        norm_layer=None,
+        act_layer=None,
+        weight_init="",
+    ):
         """
         Args:
             img_size (int, tuple): input image size
@@ -147,59 +187,96 @@ class VisionTransformer(nn.Module):
         """
         super().__init__()
         self.num_classes = num_classes
-        self.num_features = self.embed_dim = embed_dim  # num_features for consistency with other models
+        self.num_features = (
+            self.embed_dim
+        ) = embed_dim  # num_features for consistency with other models
         self.num_tokens = 2 if distilled else 1
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
         act_layer = act_layer or nn.GELU
 
         self.patch_embed = embed_layer(
-            img_size=img_size, patch_size=patch_size, in_chans=in_chans, embed_dim=embed_dim)
+            img_size=img_size,
+            patch_size=patch_size,
+            in_chans=in_chans,
+            embed_dim=embed_dim,
+        )
         num_patches = self.patch_embed.num_patches
 
         self.cls_token = nn.Parameter(flow.zeros(1, 1, embed_dim))
-        self.dist_token = nn.Parameter(flow.zeros(1, 1, embed_dim)) if distilled else None
-        self.pos_embed = nn.Parameter(flow.zeros(1, num_patches + self.num_tokens, embed_dim))
+        self.dist_token = (
+            nn.Parameter(flow.zeros(1, 1, embed_dim)) if distilled else None
+        )
+        self.pos_embed = nn.Parameter(
+            flow.zeros(1, num_patches + self.num_tokens, embed_dim)
+        )
         self.pos_drop = nn.Dropout(p=drop_rate)
 
-        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, depth)]  # stochastic depth decay rule
-        self.blocks = nn.Sequential(*[
-            Block(
-                dim=embed_dim, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, drop=drop_rate,
-                attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer, act_layer=act_layer)
-            for i in range(depth)])
+        dpr = [
+            x.item() for x in flow.linspace(0, drop_path_rate, depth)
+        ]  # stochastic depth decay rule
+        self.blocks = nn.Sequential(
+            *[
+                Block(
+                    dim=embed_dim,
+                    num_heads=num_heads,
+                    mlp_ratio=mlp_ratio,
+                    qkv_bias=qkv_bias,
+                    drop=drop_rate,
+                    attn_drop=attn_drop_rate,
+                    drop_path=dpr[i],
+                    norm_layer=norm_layer,
+                    act_layer=act_layer,
+                )
+                for i in range(depth)
+            ]
+        )
         self.norm = norm_layer(embed_dim)
 
         # Representation layer
         if representation_size and not distilled:
             self.num_features = representation_size
-            self.pre_logits = nn.Sequential(OrderedDict([
-                ('fc', nn.Linear(embed_dim, representation_size)),
-                ('act', nn.Tanh())
-            ]))
+            self.pre_logits = nn.Sequential(
+                OrderedDict(
+                    [
+                        ("fc", nn.Linear(embed_dim, representation_size)),
+                        ("act", nn.Tanh()),
+                    ]
+                )
+            )
         else:
             self.pre_logits = nn.Identity()
 
         # Classifier head(s)
-        self.head = nn.Linear(self.num_features, num_classes) if num_classes > 0 else nn.Identity()
+        self.head = (
+            nn.Linear(self.num_features, num_classes)
+            if num_classes > 0
+            else nn.Identity()
+        )
         self.head_dist = None
         if distilled:
-            self.head_dist = nn.Linear(self.embed_dim, self.num_classes) if num_classes > 0 else nn.Identity()
+            self.head_dist = (
+                nn.Linear(self.embed_dim, self.num_classes)
+                if num_classes > 0
+                else nn.Identity()
+            )
 
         self.init_weights(weight_init)
 
-    def init_weights(self, mode=''):
-        assert mode in ('jax', 'jax_nlhb', 'nlhb', '')
-        head_bias = -math.log(self.num_classes) if 'nlhb' in mode else 0.
-        trunc_normal_(self.pos_embed, std=.02)
+    def init_weights(self, mode=""):
+        assert mode in ("jax", "jax_nlhb", "nlhb", "")
+        head_bias = -math.log(self.num_classes) if "nlhb" in mode else 0.0
+        trunc_normal_(self.pos_embed, std=0.02)
         if self.dist_token is not None:
-            trunc_normal_(self.dist_token, std=.02)
-        if mode.startswith('jax'):
+            trunc_normal_(self.dist_token, std=0.02)
+        if mode.startswith("jax"):
             # leave cls token as zeros to match jax impl
-            named_apply(partial(_init_vit_weights, head_bias=head_bias, jax_impl=True), self)
+            named_apply(
+                partial(_init_vit_weights, head_bias=head_bias, jax_impl=True), self
+            )
         else:
-            trunc_normal_(self.cls_token, std=.02)
+            trunc_normal_(self.cls_token, std=0.02)
             self.apply(_init_vit_weights)
-    
+
     def _init_weights(self, m):
         # this fn left here for compat with downstream users
         _init_vit_weights(m)
@@ -208,11 +285,15 @@ class VisionTransformer(nn.Module):
         # position embedding
         x = self.patch_embed(x)
 
-        cls_token = self.cls_token.expand(x.shape[0], -1, -1)  # stole cls_tokens impl from Phil Wang, thanks
+        cls_token = self.cls_token.expand(
+            x.shape[0], -1, -1
+        )  # stole cls_tokens impl from Phil Wang, thanks
         if self.dist_token is None:
             x = flow.cat((cls_token, x), dim=1)
         else:
-            x = flow.cat((cls_token, self.dist_token.expand(x.shape[0], -1, -1), x), dim=1)
+            x = flow.cat(
+                (cls_token, self.dist_token.expand(x.shape[0], -1, -1), x), dim=1
+            )
         x = self.pos_drop(x + self.pos_embed)
         # transformer encoder
         x = self.blocks(x)
@@ -238,29 +319,31 @@ class VisionTransformer(nn.Module):
         return x
 
 
-def _init_vit_weights(module: nn.Module, name: str = '', head_bias: float = 0., jax_impl: bool = False):
+def _init_vit_weights(
+    module: nn.Module, name: str = "", head_bias: float = 0.0, jax_impl: bool = False
+):
     """ ViT weight initialization
     * When called without n, head_bias, jax_impl args it will behave exactly the same
       as my original init for compatibility with prev hparam / downstream use cases (ie DeiT).
     * When called w/ valid n (module name) and jax_impl=True, will (hopefully) match JAX impl
     """
     if isinstance(module, nn.Linear):
-        if name.startswith('head'):
+        if name.startswith("head"):
             nn.init.zeros_(module.weight)
             nn.init.constant_(module.bias, head_bias)
-        elif name.startswith('pre_logits'):
+        elif name.startswith("pre_logits"):
             lecun_normal_(module.weight)
             nn.init.zeros_(module.bias)
         else:
             if jax_impl:
                 nn.init.xavier_uniform_(module.weight)
                 if module.bias is not None:
-                    if 'mlp' in name:
+                    if "mlp" in name:
                         nn.init.normal_(module.bias, std=1e-6)
                     else:
                         nn.init.zeros_(module.bias)
             else:
-                trunc_normal_(module.weight, std=.02)
+                trunc_normal_(module.weight, std=0.02)
                 if module.bias is not None:
                     nn.init.zeros_(module.bias)
     elif jax_impl and isinstance(module, nn.Conv2d):
@@ -275,7 +358,7 @@ def _init_vit_weights(module: nn.Module, name: str = '', head_bias: float = 0., 
 def resize_pos_embed(posemb, posemb_new, num_tokens=1, gs_new=()):
     # Rescale the grid of position embeddings when loading from state_dict. Adapted from
     # https://github.com/google-research/vision_transformer/blob/00883dd691c63a6830751563748663526e811cee/vit_jax/checkpoint.py#L224
-    _logger.info('Resized position embedding: %s to %s', posemb.shape, posemb_new.shape)
+    _logger.info("Resized position embedding: %s to %s", posemb.shape, posemb_new.shape)
     ntok_new = posemb_new.shape[1]
     if num_tokens:
         posemb_tok, posemb_grid = posemb[:, :num_tokens], posemb[0, num_tokens:]
@@ -286,9 +369,11 @@ def resize_pos_embed(posemb, posemb_new, num_tokens=1, gs_new=()):
     if not len(gs_new):  # backwards compatibility
         gs_new = [int(math.sqrt(ntok_new))] * 2
     assert len(gs_new) >= 2
-    _logger.info('Position embedding grid-size from %s to %s', [gs_old, gs_old], gs_new)
+    _logger.info("Position embedding grid-size from %s to %s", [gs_old, gs_old], gs_new)
     posemb_grid = posemb_grid.reshape(1, gs_old, gs_old, -1).permute(0, 3, 1, 2)
-    posemb_grid = F.interpolate(posemb_grid, size=gs_new, mode='bicubic', align_corners=False)
+    posemb_grid = F.interpolate(
+        posemb_grid, size=gs_new, mode="bicubic", align_corners=False
+    )
     posemb_grid = posemb_grid.permute(0, 2, 3, 1).reshape(1, gs_new[0] * gs_new[1], -1)
     posemb = flow.cat([posemb_tok, posemb_grid], dim=1)
     return posemb
@@ -324,14 +409,11 @@ def vit_tiny_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=192,
-        depth=12,
-        num_heads=3,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=192, depth=12, num_heads=3, **kwargs
     )
-    model = _create_vision_transformer("vit_tiny_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_tiny_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -357,14 +439,11 @@ def vit_tiny_patch16_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=16,
-        embed_dim=192,
-        depth=12,
-        num_heads=3,
-        **kwargs
+        img_size=384, patch_size=16, embed_dim=192, depth=12, num_heads=3, **kwargs
     )
-    model = _create_vision_transformer("vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -390,14 +469,14 @@ def vit_small_patch32_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=32,
-        embed_dim=384,
-        depth=12,
-        num_heads=6,
-        **kwargs
+        img_size=224, patch_size=32, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
-    model = _create_vision_transformer("vit_small_patch32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_small_patch32_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -423,14 +502,11 @@ def vit_small_patch32_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=32,
-        embed_dim=384,
-        depth=12,
-        num_heads=6,
-        **kwargs
+        img_size=384, patch_size=32, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
-    model = _create_vision_transformer("vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -456,14 +532,14 @@ def vit_small_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=384,
-        depth=12,
-        num_heads=6,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
-    model = _create_vision_transformer("vit_small_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_small_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -489,14 +565,14 @@ def vit_small_patch16_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=16,
-        embed_dim=384,
-        depth=12,
-        num_heads=6,
-        **kwargs
+        img_size=384, patch_size=16, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
-    model = _create_vision_transformer("vit_small_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_small_patch16_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -522,14 +598,11 @@ def vit_base_patch32_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=32,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=224, patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch32_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -555,14 +628,11 @@ def vit_base_patch32_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=32,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=384, patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch32_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch32_384", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -588,14 +658,11 @@ def vit_base_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -621,14 +688,11 @@ def vit_base_patch16_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=384, patch_size=16, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -654,14 +718,11 @@ def vit_base_patch8_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=8,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=224, patch_size=8, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch8_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch8_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -687,14 +748,14 @@ def vit_large_patch32_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=32,
-        embed_dim=1024,
-        depth=24,
-        num_heads=16,
-        **kwargs
+        img_size=224, patch_size=32, embed_dim=1024, depth=24, num_heads=16, **kwargs
     )
-    model = _create_vision_transformer("vit_large_patch32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_large_patch32_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -720,14 +781,14 @@ def vit_large_patch32_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=32,
-        embed_dim=1024,
-        depth=24,
-        num_heads=16,
-        **kwargs
+        img_size=384, patch_size=32, embed_dim=1024, depth=24, num_heads=16, **kwargs
     )
-    model = _create_vision_transformer("vit_large_patch32_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_large_patch32_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -753,14 +814,14 @@ def vit_large_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=1024,
-        depth=24,
-        num_heads=16,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=1024, depth=24, num_heads=16, **kwargs
     )
-    model = _create_vision_transformer("vit_large_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_large_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -786,14 +847,14 @@ def vit_large_patch16_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=16,
-        embed_dim=1024,
-        depth=24,
-        num_heads=16,
-        **kwargs
+        img_size=384, patch_size=16, embed_dim=1024, depth=24, num_heads=16, **kwargs
     )
-    model = _create_vision_transformer("vit_large_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_large_patch16_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -828,7 +889,12 @@ def vit_base_patch16_sam_224(pretrained=False, progress=True, **kwargs):
         representation_size=0,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch16_sam_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch16_sam_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -863,7 +929,12 @@ def vit_base_patch32_sam_224(pretrained=False, progress=True, **kwargs):
         representation_size=0,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch32_sam_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch32_sam_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -889,14 +960,11 @@ def vit_huge_patch14_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=14,
-        embed_dim=1280,
-        depth=32,
-        num_heads=16,
-        **kwargs
+        img_size=384, patch_size=14, embed_dim=1280, depth=32, num_heads=16, **kwargs
     )
-    model = _create_vision_transformer("vit_huge_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_huge_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
     return model
 
 
@@ -925,12 +993,17 @@ def vit_giant_patch14_224(pretrained=False, progress=True, **kwargs):
         img_size=224,
         patch_size=14,
         embed_dim=1408,
-        mlp_ratio=48/11,
+        mlp_ratio=48 / 11,
         depth=40,
         num_heads=16,
         **kwargs
     )
-    model = _create_vision_transformer("vit_giant_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_giant_patch14_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -959,12 +1032,17 @@ def vit_gigantic_patch14_224(pretrained=False, progress=True, **kwargs):
         img_size=384,
         patch_size=14,
         embed_dim=1664,
-        mlp_ratio=64/13,
+        mlp_ratio=64 / 13,
         depth=48,
         num_heads=16,
         **kwargs
     )
-    model = _create_vision_transformer("vit_gigantic_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_gigantic_patch14_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -998,7 +1076,12 @@ def vit_tiny_patch16_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_tiny_patch16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_tiny_patch16_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1032,7 +1115,12 @@ def vit_small_patch32_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_small_patch32_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_small_patch32_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1066,7 +1154,12 @@ def vit_small_patch16_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_small_patch32_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_small_patch32_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1100,7 +1193,12 @@ def vit_base_patch32_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch32_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch32_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1134,7 +1232,12 @@ def vit_base_patch16_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch16_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1168,7 +1271,12 @@ def vit_base_patch8_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch8_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch8_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1204,7 +1312,12 @@ def vit_large_patch32_224_in21k(pretrained=False, progress=True, **kwargs):
         representation_size=1024,
         **kwargs
     )
-    model = _create_vision_transformer("vit_large_patch32_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_large_patch32_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1238,7 +1351,12 @@ def vit_large_patch16_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_large_patch16_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_large_patch16_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1273,7 +1391,12 @@ def vit_huge_patch14_224_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=21843,
         **kwargs
     )
-    model = _create_vision_transformer("vit_huge_patch14_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_huge_patch14_224_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1299,14 +1422,14 @@ def deit_tiny_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=192,
-        depth=12,
-        num_heads=3,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=192, depth=12, num_heads=3, **kwargs
     )
-    model = _create_vision_transformer("deit_tiny_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_tiny_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1332,14 +1455,14 @@ def deit_small_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=384,
-        depth=12,
-        num_heads=6,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
-    model = _create_vision_transformer("deit_small_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_small_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1365,14 +1488,14 @@ def deit_base_patch16_224(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=224,
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("deit_base_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_base_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1398,14 +1521,14 @@ def deit_base_patch16_384(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        img_size=384,
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        **kwargs
+        img_size=384, patch_size=16, embed_dim=768, depth=12, num_heads=12, **kwargs
     )
-    model = _create_vision_transformer("deit_base_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_base_patch16_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1439,7 +1562,12 @@ def deit_tiny_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
         distilled=True,
         **kwargs
     )
-    model = _create_vision_transformer("deit_tiny_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_tiny_distilled_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1473,7 +1601,12 @@ def deit_small_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
         distilled=True,
         **kwargs
     )
-    model = _create_vision_transformer("deit_small_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_small_distilled_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1507,7 +1640,12 @@ def deit_base_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
         distilled=True,
         **kwargs
     )
-    model = _create_vision_transformer("deit_base_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_base_distilled_patch16_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1541,7 +1679,12 @@ def deit_base_distilled_patch16_384(pretrained=False, progress=True, **kwargs):
         distilled=True,
         **kwargs
     )
-    model = _create_vision_transformer("deit_base_distilled_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "deit_base_distilled_patch16_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1576,7 +1719,12 @@ def vit_base_patch16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
         num_classes=11221,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch16_224_miil_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch16_224_miil_in21k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
 
 
@@ -1610,5 +1758,10 @@ def vit_base_patch16_224_miil(pretrained=False, progress=True, **kwargs):
         qkv_bias=False,
         **kwargs
     )
-    model = _create_vision_transformer("vit_base_patch16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs)
+    model = _create_vision_transformer(
+        "vit_base_patch16_224_miil",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
+    )
     return model
