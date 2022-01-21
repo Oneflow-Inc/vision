@@ -1,14 +1,2 @@
 {% extends "!layout.html" %}
 {% set css_files = css_files + [ "_static/css/hatnotes.css" ] %}
-
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type="text/javascript">
-   $(document).ready(function()
-   {
-	   $("#toc-tree ul li ul li ul").next("li").hide();
-	   $("#toc-tree ul li ul li ul").click(function()
-	   {
-		   $(this).next("li").toggle();
-	   });
-   });
-</script>
