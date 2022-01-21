@@ -12,7 +12,7 @@ import oneflow as flow
 
 
 def _natural_key(string_):
-    return [int(s) if s.isdigit() else s for s in re.split(r'(\d+)', string_.lower())]
+    return [int(s) if s.isdigit() else s for s in re.split(r"(\d+)", string_.lower())]
 
 
 class ModelCreator(object):
@@ -101,7 +101,7 @@ class ModelCreator(object):
                     models = set(models).union(include_models)
         else:
             models = all_models
-        
+
         sorted_model = list(sorted(models))
         if pretrained:
             for model in sorted_model:
@@ -109,7 +109,6 @@ class ModelCreator(object):
                     sorted_model.remove(model)
 
         return sorted_model
-
 
     def __repr__(self) -> str:
         all_model_table = ModelCreator.model_table("")
