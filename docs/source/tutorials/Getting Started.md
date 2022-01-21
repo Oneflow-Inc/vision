@@ -42,7 +42,7 @@ model = ModelCreator.create_model("alexnet", num_classes=100)
 ```
 
 ### Tabulate all models with pretrained weights
-`ModelCreator.model_table()` returns a tabular results of available models in `flowvision`. To check all of pretrained models, pass in `pretrained=True` in `ModelCreator.model_table()`
+`ModelCreator.model_table()` returns a tabular results of available models in `flowvision`. To check all of pretrained models, pass in `pretrained=True` in `ModelCreator.model_table()`.
 ```python
 from flowvision.models import ModelCreator
 all_pretrained_models = ModelCreator.model_table(pretrained=True)
@@ -108,7 +108,7 @@ You can get the results like:
 ```
 
 ### List all models supported in flowvision
-`ModelCreator.model_list` has similar function as `ModelCreator.model_table` but return a list object, which gives the user a more flexible way to check the supported model in flowvision
+`ModelCreator.model_list` has similar function as `ModelCreator.model_table` but return a list object, which gives the user a more flexible way to check the supported model in flowvision.
 - List all models with pretrained weights
 ```python
 from flowvision.models import ModelCreator
