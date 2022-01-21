@@ -58,19 +58,10 @@ exclude_patterns = []
 #
 html_theme = "furo"
 
-# This function reads in a variable and inserts it into JavaScript
-def add_js_variable(app):
-    # This is a configuration that you've specified for users in `conf.py`
-    js_variable = app.config['my_javascript_variable']
-    js_text = "var my_variable = '%s';" % js_variable
-    app.add_js_file(None, body=js_text)
 
 def setup(app):
     app.add_css_file( "css/hatnotes.css" )
-    # Tell Sphinx about this configuration variable
-    app.add_config_value('my_javascript_variable')
-    # Run the function after the builder is initialized
-    app.connect('builder-inited', add_js_variable)
+    app.add_js_file("myjsfile.js", body=js_text)
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
