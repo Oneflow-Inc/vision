@@ -5,8 +5,8 @@
 <script type="text/javascript">
    $(document).ready(function()
    {
-	   $("#toc-tree ul li").next("ul").hide();
-	   $("#toc-tree ul li").click(function()
+	   $("#toc-tree ul li ul li").next("ul").hide();
+	   $("#toc-tree ul li ul li").click(function()
 	   {
 		   $(this).next("ul").toggle();
 	   });
