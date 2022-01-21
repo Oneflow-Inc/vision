@@ -6,6 +6,7 @@ import oneflow.nn as nn
 import oneflow.nn.init as init
 
 from flowvision.layers.regularization import DropPath
+
 # from flowvision.layers.blocks import Mlp, PatchEmbed
 
 from .utils import load_state_dict_from_url
@@ -262,7 +263,7 @@ def resmlp_12(pretrained=False, progress=True, **kwargs):
         depth=12,
         Patch_layer=PatchEmbed,
         init_scale=0.1,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_12", pretrained=pretrained, progress=progress, **model_kwargs
@@ -296,7 +297,7 @@ def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
         depth=12,
         Patch_layer=PatchEmbed,
         init_scale=0.1,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_12_dist", pretrained=pretrained, progress=progress, **model_kwargs
@@ -329,7 +330,7 @@ def resmlp_24(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-5,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_24", pretrained=pretrained, progress=progress, **model_kwargs
@@ -363,7 +364,7 @@ def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-5,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_24_dist", pretrained=pretrained, progress=progress, **model_kwargs
@@ -397,7 +398,7 @@ def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-5,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_24_dino", pretrained=pretrained, progress=progress, **model_kwargs
@@ -430,7 +431,7 @@ def resmlp_36(pretrained=False, progress=True, **kwargs):
         depth=36,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_36", pretrained=pretrained, progress=progress, **model_kwargs
@@ -464,7 +465,7 @@ def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
         depth=36,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlp_36_dist", pretrained=pretrained, progress=progress, **model_kwargs
@@ -497,7 +498,7 @@ def resmlpB_24(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlpB_24", pretrained=pretrained, progress=progress, **model_kwargs
@@ -531,7 +532,7 @@ def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlpB_24_in22k", pretrained=pretrained, progress=progress, **model_kwargs
@@ -565,7 +566,7 @@ def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
         "resmlpB_24_dist", pretrained=pretrained, progress=progress, **model_kwargs

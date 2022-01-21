@@ -14,17 +14,20 @@ import oneflow as flow
 DEFAULT_TIMES = 20
 gpu_memory_used_by_oneflow = 0
 
+
 def import_file(path):
     spec = importlib.util.spec_from_file_location("mod", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
+
 def sync(x):
     if test_oneflow:
         x.numpy()
     else:
         x.cpu()
+
 
 def gpu_memory_used():
     output = subprocess.check_output(
@@ -43,10 +46,12 @@ def gpu_memory_used():
             mem_used_by_me += mem_used
     return mem_used_by_me
 
+
 def print_rank_0(*args, **kwargs):
     rank = int(os.getenv("RANK", "0"))
     if rank == 0:
         print(*args, **kwargs)
+
 
 def test(
     model_path: str,
@@ -68,11 +73,11 @@ def test(
         for i, line in enumerate(lines):
             if "from .registry import ModelCreator" in line:
                 break
-        lines = lines[:i] + lines[i+1:]
+        lines = lines[:i] + lines[i + 1 :]
         for i, line in enumerate(lines):
             if "from .utils import load_state_dict_from_url" in line:
                 break
-        lines = lines[:i] + lines[i+1:]
+        lines = lines[:i] + lines[i + 1 :]
         found = True
         while found:
             found = False
@@ -81,7 +86,7 @@ def test(
                     found = True
                     break
             if found:
-                lines = lines[:i] + lines[i+1:]
+                lines = lines[:i] + lines[i + 1 :]
 
         buf = "\n".join(lines)
         with tempfile.NamedTemporaryFile("w", suffix=".py") as f:
@@ -93,16 +98,16 @@ def test(
     else:
         with open(model_path) as f:
             buf = f.read()
-        
+
         lines = buf.split("\n")
         for i, line in enumerate(lines):
             if "from .registry import ModelCreator" in line:
                 break
-        lines = lines[:i] + lines[i+1:]
+        lines = lines[:i] + lines[i + 1 :]
         for i, line in enumerate(lines):
             if "from .utils import load_state_dict_from_url" in line:
                 break
-        lines = lines[:i] + lines[i+1:]
+        lines = lines[:i] + lines[i + 1 :]
         found = True
         while found:
             found = False
@@ -111,13 +116,13 @@ def test(
                     found = True
                     break
             if found:
-                lines = lines[:i] + lines[i+1:]
+                lines = lines[:i] + lines[i + 1 :]
 
         for i, line in enumerate(lines):
             if "import oneflow" in line or "from oneflow import" in line:
                 line_num = i
         lines = (
-            lines[:line_num+1]
+            lines[: line_num + 1]
             + [
                 "import torch as flow",
                 "import torch.nn as nn",
@@ -126,7 +131,7 @@ def test(
                 "from torch import Tensor",
                 "from torch.nn import Parameter",
             ]
-            + lines[line_num+1:]
+            + lines[line_num + 1 :]
         )
         buf = "\n".join(lines)
         with tempfile.NamedTemporaryFile("w", suffix=".py") as f:
@@ -217,6 +222,7 @@ def test(
         dist.destroy_process_group()
 
     return time_per_run_ms
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
