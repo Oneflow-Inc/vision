@@ -1417,6 +1417,7 @@ def deit_tiny_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
         embed_dim=192,
         depth=12,
         num_heads=3,
+        distilled=True,
         **kwargs
     )
     model = _create_vision_transformer("deit_tiny_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
@@ -1450,6 +1451,7 @@ def deit_small_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
         embed_dim=384,
         depth=12,
         num_heads=6,
+        distilled=True,
         **kwargs
     )
     model = _create_vision_transformer("deit_small_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
@@ -1483,6 +1485,7 @@ def deit_base_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
         embed_dim=768,
         depth=12,
         num_heads=12,
+        distilled=True,
         **kwargs
     )
     model = _create_vision_transformer("deit_base_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
@@ -1516,6 +1519,7 @@ def deit_base_distilled_patch16_384(pretrained=False, progress=True, **kwargs):
         embed_dim=768,
         depth=12,
         num_heads=12,
+        distilled=True,
         **kwargs
     )
     model = _create_vision_transformer("deit_base_distilled_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
@@ -1549,6 +1553,7 @@ def vit_base_patch16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
         embed_dim=768,
         depth=12,
         num_heads=12,
+        qkv_bias=False,
         num_classes=11221,
         **kwargs
     )
@@ -1583,6 +1588,7 @@ def vit_base_patch16_224_miil(pretrained=False, progress=True, **kwargs):
         embed_dim=768,
         depth=12,
         num_heads=12,
+        qkv_bias=False,
         **kwargs
     )
     model = _create_vision_transformer("vit_base_patch16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs)

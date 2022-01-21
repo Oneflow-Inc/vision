@@ -1,6 +1,5 @@
 from .alexnet import *
 from .densenet import *
-from .vit import *
 from .vgg import *
 from .mnasnet import *
 from .resnet import *
