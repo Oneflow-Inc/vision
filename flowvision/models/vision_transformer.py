@@ -16,6 +16,7 @@ from flowvision.layers.regularization import DropPath
 from flowvision.layers.weight_init import trunc_normal_, lecun_normal_
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from .helpers import named_apply
 
 
 model_urls = {
@@ -183,6 +184,25 @@ class VisionTransformer(nn.Module):
         self.head_dist = None
         if distilled:
             self.head_dist = nn.Linear(self.embed_dim, self.num_classes) if num_classes > 0 else nn.Identity()
+
+        self.init_weights(weight_init)
+
+    def init_weights(self, mode=''):
+        assert mode in ('jax', 'jax_nlhb', 'nlhb', '')
+        head_bias = -math.log(self.num_classes) if 'nlhb' in mode else 0.
+        trunc_normal_(self.pos_embed, std=.02)
+        if self.dist_token is not None:
+            trunc_normal_(self.dist_token, std=.02)
+        if mode.startswith('jax'):
+            # leave cls token as zeros to match jax impl
+            named_apply(partial(_init_vit_weights, head_bias=head_bias, jax_impl=True), self)
+        else:
+            trunc_normal_(self.cls_token, std=.02)
+            self.apply(_init_vit_weights)
+    
+    def _init_weights(self, m):
+        # this fn left here for compat with downstream users
+        _init_vit_weights(m)
 
     def forward_features(self, x):
         # position embedding
