@@ -84,3 +84,10 @@ class ModelCreator(object):
             table_items, headers=table_headers, tablefmt="fancy_grid", **kwargs
         )
         return table
+
+
+    def __repr__(self) -> str:
+        all_model_table = ModelCreator.model_table("")
+        return "Registry of models:\n" + all_model_table
+
+    __str__ = __repr__
