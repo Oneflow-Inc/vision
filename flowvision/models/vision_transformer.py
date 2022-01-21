@@ -23,6 +23,12 @@ model_urls = {
     "vit_tiny_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_tiny_patch16_384.zip",
     "vit_small_patch32_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch32_224.zip",
     "vit_small_patch32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch32_384.zip",
+    "vit_small_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch16_224.zip",
+    "vit_small_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch16_384.zip",
+    "vit_base_patch32_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch32_224.zip",
+    "vit_base_patch32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch32_384.zip",
+    "vit_base_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_224.zip",
+    "vit_base_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_384.zip",
 }
 
 _logger = logging.getLogger(__name__)
@@ -376,4 +382,202 @@ def vit_small_patch32_384(pretrained=False, progress=True, **kwargs):
         **kwargs
     )
     model = _create_vision_transformer("vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_small_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Small-patch16-224 model.
+
+    .. note::
+        ViT-Small-patch16-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_small_patch16_224 = flowvision.models.vit_small_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_small_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_small_patch16_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Small-patch16-384 model.
+
+    .. note::
+        ViT-Small-patch16-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_small_patch16_384 = flowvision.models.vit_small_patch16_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_small_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch32_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch32-224 model.
+
+    .. note::
+        ViT-Base-patch32-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch32_224 = flowvision.models.vit_base_patch32_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=32,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch32_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch32_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch32-384 model.
+
+    .. note::
+        ViT-Base-patch32-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch32_384 = flowvision.models.vit_base_patch32_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=32,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch32_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch16-224 model.
+
+    .. note::
+        ViT-Base-patch16-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch16_224 = flowvision.models.vit_base_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch16_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch16-384 model.
+
+    .. note::
+        ViT-Base-patch16-384 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch16_384 = flowvision.models.vit_base_patch16_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
     return model
