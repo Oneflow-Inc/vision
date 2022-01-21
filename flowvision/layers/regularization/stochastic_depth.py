@@ -1,4 +1,5 @@
-"""OneFlow implementation of stochastic depth borrowed from torchvision
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/ops/stochastic_depth.py
 """
 import oneflow as flow
 import oneflow.nn as nn

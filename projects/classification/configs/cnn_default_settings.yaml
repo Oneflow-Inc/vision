@@ -1,0 +1,52 @@
+DATA:
+  BATCH_SIZE: 16
+  DATASET: imagenet
+  DATA_PATH: /DATA/disk1/ImageNet/extract
+  IMG_SIZE: 224
+  INTERPOLATION: bicubic
+  ZIP_MODE: False
+  CACHE_MODE: "part"
+  PIN_MEMORY: True
+  NUM_WORKERS: 8
+
+MODEL:
+  PRETRAINED: False
+  RESUME: ""
+  LABEL_SMOOTHING: 0.1
+
+TRAIN:
+  START_EPOCH: 0
+  EPOCHS: 300
+  WARMUP_EPOCHS: 20
+  WEIGHT_DECAY: 5e-4
+  BASE_LR: 0.01
+  CLIP_GRAD: None
+  AUTO_RESUME: True
+  ACCUMULATION_STEPS: 0
+  
+  LR_SCHEDULER:
+    NAME: multi_step
+    MILESTONES: [150, 225]
+
+  OPTIMIZER:
+    NAME: sgd
+    MOMENTUM: 0.9
+  
+AUG:
+  COLOR_JITTER: 0.
+  AUTO_AUGMENT: rand-m9-mstd0.5-inc1
+  REPROB: 0.
+  MIXUP: 0.
+  CUTMIX: 0.
+  CUTMIX_MINMAX: None
+
+TEST:
+  CROP: True
+  SEQUENTIAL: False
+
+TAG: default
+SAVE_FREQ: 1
+PRINT_FREQ: 10
+SEED: 42
+EVAL_MODE: False
+THROUGHPUT_MODE: False

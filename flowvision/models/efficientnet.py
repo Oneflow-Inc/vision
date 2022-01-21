@@ -163,6 +163,7 @@ class MBConv(nn.Module):
                 groups=expanded_channels,
                 norm_layer=norm_layer,
                 act_layer=activation_layer,
+                padding=cnf.kernel // 2,
             )
         )
 
@@ -250,6 +251,7 @@ class EfficientNet(nn.Module):
                 stride=2,
                 norm_layer=norm_layer,
                 act_layer=nn.SiLU,
+                padding=1,
             )
         )
 
@@ -365,7 +367,7 @@ def efficientnet_b0(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -393,7 +395,7 @@ def efficientnet_b1(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -421,7 +423,7 @@ def efficientnet_b2(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -449,7 +451,7 @@ def efficientnet_b3(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -477,7 +479,7 @@ def efficientnet_b4(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -505,7 +507,7 @@ def efficientnet_b5(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -540,7 +542,7 @@ def efficientnet_b6(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -575,7 +577,7 @@ def efficientnet_b7(
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

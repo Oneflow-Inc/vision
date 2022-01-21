@@ -1,7 +1,9 @@
 from collections import defaultdict, deque
 import datetime
 import errno
+import numpy as np
 import os
+import pickle
 import time
 import oneflow as flow
 
@@ -75,8 +77,36 @@ def all_gather(data):
     world_size = flow.env.get_world_size()
     if world_size == 1:
         return [data]
-    data_list = [None] * world_size
-    flow.comm.all_gather(data_list, data)
+
+    # serialized to a Tensor
+    buffer = pickle.dumps(data)
+    storage = np.frombuffer(buffer, dtype=np.int8)
+    tensor = flow.tensor(storage).to("cuda")
+
+    # obtain Tensor size of each rank
+    local_size = flow.tensor([tensor.numel()], device="cuda")
+    size_list = [flow.tensor([0], device="cuda") for _ in range(world_size)]
+    flow.comm.all_gather(size_list, local_size)
+    size_list = [int(size.item()) for size in size_list]
+    max_size = max(size_list)
+
+    # receiving Tensor from all ranks
+    # we pad the tensor because oneflow all_gather does not support
+    # gathering tensors of different shapes
+    tensor_list = []
+    for _ in size_list:
+        tensor_list.append(flow.zeros((max_size,), dtype=flow.int8, device="cuda"))
+    local_size = int(local_size.item())
+    if local_size != max_size:
+        padding = flow.zeros((max_size - local_size,), dtype=flow.int8, device="cuda")
+        tensor = flow.cat((tensor, padding), dim=0)
+    flow.comm.all_gather(tensor_list, tensor)
+
+    data_list = []
+    for size, tensor in zip(size_list, tensor_list):
+        buffer = tensor.cpu().numpy().tobytes()[:size]
+        data_list.append(pickle.loads(buffer))
+
     return data_list
 
 
@@ -193,6 +223,22 @@ def collate_fn(batch):
     return tuple(zip(*batch))
 
 
+def setup_for_distributed(is_master):
+    """
+    This function disables printing when not in master process
+    """
+    import builtins as __builtin__
+
+    builtin_print = __builtin__.print
+
+    def print(*args, **kwargs):
+        force = kwargs.pop("force", False)
+        if is_master or force:
+            builtin_print(*args, **kwargs)
+
+    __builtin__.print = print
+
+
 def is_main_process():
     return flow.env.get_rank() == 0
 
@@ -228,3 +274,4 @@ def init_distributed_mode(args):
         return
 
     args.distributed = True
+    setup_for_distributed(args.rank == 0)

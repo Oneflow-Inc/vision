@@ -2,7 +2,7 @@ flowvision.datasets
 ##############################
 
 Dataset Utils for Visual Tasks
-=============================
+==============================
 
 .. currentmodule:: flowvision.datasets
 .. automodule:: flowvision.datasets

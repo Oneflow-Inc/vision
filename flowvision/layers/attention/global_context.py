@@ -1,4 +1,5 @@
-"""OneFlow version of Global Context Attention Block borrowed from timm
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/global_context.py
 """
 
 import oneflow as flow
@@ -6,7 +7,7 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
 
-from flowvision.layers.helpers import make_divisible
+from flowvision.models.helpers import make_divisible
 from flowvision.layers.blocks import ConvMlp
 from flowvision.layers.regularization import LayerNorm2d
 

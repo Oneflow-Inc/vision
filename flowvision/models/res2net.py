@@ -36,13 +36,13 @@ class Bottle2neck(nn.Module):
     ):
         """ Constructor
         Args:
-            inplanes: input channel dimensionality
-            planes: output channel dimensionality
-            stride: conv stride. Replaces pooling layer.
+            inplanes: Input channel dimensionality
+            planes: Output channel dimensionality
+            stride: Conv stride. Replaces pooling layer
             downsample: None when stride = 1
-            baseWidth: basic width of conv3x3
-            scale: number of scale.
-            type: 'normal': normal set. 'stage': first block of a new stage.
+            baseWidth: Basic width of conv3x3
+            scale: Number of scale
+            stype: 'normal': normal set. 'stage': first block of a new stage
         """
         super(Bottle2neck, self).__init__()
 
@@ -83,8 +83,8 @@ class Bottle2neck(nn.Module):
         residual = x
 
         out = self.conv1(x)
-        out = self.bn1(x)
-        out = self.relu(x)
+        out = self.bn1(out)
+        out = self.relu(out)
 
         spx = flow.split(out, self.width, 1)
         for i in range(self.nums):
@@ -210,7 +210,7 @@ def res2net50_26w_4s(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -238,7 +238,7 @@ def res2net101_26w_4s(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -266,7 +266,7 @@ def res2net50_26w_6s(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -294,7 +294,7 @@ def res2net50_26w_8s(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -322,7 +322,7 @@ def res2net50_48w_2s(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -350,7 +350,7 @@ def res2net50_14w_8s(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

@@ -1,6 +1,5 @@
 from .alexnet import *
 from .densenet import *
-from .vit import *
 from .vgg import *
 from .mnasnet import *
 from .resnet import *
@@ -22,9 +21,11 @@ from .rexnet_lite import *
 from .ghostnet import *
 from .res2net import *
 from .efficientnet import *
-from .neural_style_transfer import *
-from .detection import *
-from .segmentation import *
+from .vision_transformer import *
+
+from . import neural_style_transfer
+from . import detection
+from . import segmentation
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator

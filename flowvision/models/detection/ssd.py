@@ -539,7 +539,7 @@ class SSDFeatureExtractorVGG(nn.Module):
     def forward(self, x: Tensor) -> Dict[str, Tensor]:
         # L2 regularization + Rescaling of 1st block's feature map
         x = self.features(x)
-        rescaled = self.scale_weight.view(1, -1, 1, 1) * F.l2_normalize(x, dim=1)
+        rescaled = self.scale_weight.view(1, -1, 1, 1) * F.normalize(x)
         output = [rescaled]
 
         # Calculating Feature maps for the rest blocks

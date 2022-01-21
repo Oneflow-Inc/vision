@@ -1,3 +1,7 @@
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/utils/clip_grad.py
+"""
+
 import oneflow as flow
 
 from flowvision.utils.agc import adaptive_clip_grad

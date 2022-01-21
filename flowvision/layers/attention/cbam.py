@@ -1,10 +1,13 @@
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/layers/cbam.py
+"""
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-import math
 
-from ..helpers import make_divisible
-from ..blocks import ConvBnAct
+from flowvision.models.helpers import make_divisible
+from flowvision.layers.blocks import ConvBnAct
 
 
 class ChannelAttn(nn.Module):

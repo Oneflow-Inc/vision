@@ -26,6 +26,7 @@ architectures for image classification:
 -  `EfficientNet`_
 -  `ReXNet`_
 -  `ViT`_
+-  `DeiT`_
 -  `PVT`_
 -  `Swin-Transformer`_
 -  `CSwin-Transformer`_
@@ -52,6 +53,7 @@ architectures for image classification:
 .. _MNASNet: https://arxiv.org/abs/1807.11626
 .. _GhostNet: https://arxiv.org/abs/1911.11907
 .. _ViT: https://arxiv.org/abs/2010.11929
+.. _DeiT: https://arxiv.org/abs/2012.12877
 .. _PVT: https://arxiv.org/abs/2102.12122
 .. _ResMLP: https://arxiv.org/abs/2105.03404
 .. _Swin-Transformer: https://arxiv.org/abs/2103.14030
@@ -101,7 +103,7 @@ GoogLeNet
 
 
 InceptionV3
----------
+-----------
 .. automodule:: flowvision.models
     :members: 
         inception_v3,
@@ -218,12 +220,52 @@ ViT
 ------
 .. automodule:: flowvision.models
     :members: 
-        vit_b_16_224,
-        vit_b_16_384,
-        vit_b_32_224,
-        vit_b_32_384,
-        vit_l_16_384,
-        vit_l_32_384,
+        vit_tiny_patch16_224,
+        vit_tiny_patch16_384,
+        vit_small_patch32_224,
+        vit_small_patch32_384,
+        vit_small_patch16_224,
+        vit_small_patch16_384,
+        vit_base_patch32_224,
+        vit_base_patch32_384,
+        vit_base_patch16_224,
+        vit_base_patch16_384,
+        vit_base_patch8_224,
+        vit_large_patch32_224,
+        vit_large_patch32_384,
+        vit_large_patch16_224,
+        vit_large_patch16_384,
+        vit_base_patch16_sam_224,
+        vit_base_patch32_sam_224,
+        vit_huge_patch14_224,
+        vit_giant_patch14_224,
+        vit_gigantic_patch14_224,
+        vit_tiny_patch16_224_in21k,
+        vit_small_patch32_224_in21k,
+        vit_small_patch16_224_in21k,
+        vit_base_patch32_224_in21k,
+        vit_base_patch16_224_in21k,
+        vit_base_patch8_224_in21k,
+        vit_large_patch32_224_in21k,
+        vit_large_patch16_224_in21k,
+        vit_huge_patch14_224_in21k,
+        vit_base_patch16_224_miil_in21k,
+        vit_base_patch16_224_miil,
+
+
+DeiT
+------
+.. automodule:: flowvision.models
+    :members: 
+        deit_tiny_patch16_224,
+        deit_small_patch16_224,
+        deit_base_patch16_224,
+        deit_base_patch16_384,
+        deit_tiny_distilled_patch16_224,
+        deit_small_distilled_patch16_224,
+        deit_base_distilled_patch16_224,
+        deit_base_distilled_patch16_384,
+
 
 PVT
 ------

@@ -1,14 +1,16 @@
-""" MultiStep LR Scheduler
-Basic multi step LR schedule with warmup, noise.
 """
-import oneflow as flow
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/scheduler/multistep_lr.py
+"""
 import bisect
-from .scheduler import Scheduler
 from typing import List
+
+import oneflow as flow
+
+from .scheduler import Scheduler
 
 
 class MultiStepLRScheduler(Scheduler):
-    """
+    """ MultiStep LRScheduler
     """
 
     def __init__(
@@ -34,9 +36,7 @@ class MultiStepLRScheduler(Scheduler):
             noise_seed=noise_seed,
             initialize=initialize,
         )
-        assert (
-            type(decay_t) == List[int]
-        ), "decay_t must be a list of epoch indices. Must be increasing. "
+
         self.decay_t = decay_t
         self.decay_rate = decay_rate
         self.warmup_t = warmup_t

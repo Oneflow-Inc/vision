@@ -1,18 +1,16 @@
 """
 Modified from https://github.com/microsoft/CSWin-Transformer/blob/main/models/cswin.py
 """
-import math
+
 import numpy as np
 
 import oneflow as flow
 import oneflow.nn as nn
-import oneflow.nn.init as init
-from oneflow import Tensor
-from oneflow.nn.modules.container import ModuleList
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 from flowvision.layers.regularization import DropPath
+from flowvision.layers.weight_init import trunc_normal_
 
 model_urls = {
     "cswin_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_tiny_224.zip",
@@ -357,8 +355,9 @@ class CSWinTransformer(nn.Module):
         )
 
         curr_dim = embed_dim
+        # stochastic depth
         dpr = [
-            x.item() for x in np.linspace(0, drop_path_rate, np.sum(depth))
+            x.item() for x in flow.linspace(0, drop_path_rate, sum(depth))
         ]  # stochastic depth decay rule
         self.stage1 = nn.ModuleList(
             [
@@ -452,12 +451,12 @@ class CSWinTransformer(nn.Module):
             nn.Linear(curr_dim, num_classes) if num_classes > 0 else nn.Identity()
         )
 
-        init.trunc_normal_(self.head.weight, std=0.02)
+        trunc_normal_(self.head.weight, std=0.02)
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            init.trunc_normal_(m.weight, std=0.02)
+            trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, (nn.LayerNorm, nn.BatchNorm2d)):
@@ -477,7 +476,7 @@ class CSWinTransformer(nn.Module):
                 else nn.Identity()
             )
             self.head = self.head.cuda()
-            init.trunc_normal_(self.head.weight, std=0.02)
+            trunc_normal_(self.head.weight, std=0.02)
             if self.head.bias is not None:
                 nn.init.constant_(self.head.bias, 0)
 
@@ -521,7 +520,7 @@ def cswin_tiny_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -555,7 +554,7 @@ def cswin_small_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -589,7 +588,7 @@ def cswin_base_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -623,7 +622,7 @@ def cswin_large_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -657,7 +656,7 @@ def cswin_base_384(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -692,7 +691,7 @@ def cswin_large_384(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 

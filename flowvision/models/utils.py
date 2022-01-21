@@ -11,10 +11,8 @@ import warnings
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from tqdm import tqdm
-from typing import Any, Callable, Optional, Tuple
 
 import oneflow as flow
-import oneflow.nn as nn
 
 HASH_REGEX = re.compile(r"([a-f0-9]*)_")
 
@@ -74,13 +72,13 @@ def load_state_dict_from_url(
         model_dir (string, optional): directory in which to save the object
         map_location (optional): a function or a dict specifying how to remap storage locations (see flow.load)
         progress (bool, optional): whether or not to display a progress bar to stderr.
-            Default: True
+            Default: ``True``
         check_hash(bool, optional): If True, the filename part of the URL should follow the naming convention
             ``filename-<sha256>.ext`` where ``<sha256>`` is the first eight or more
             digits of the SHA256 hash of the contents of the file. The hash is used to
             ensure unique names and to verify the contents of the file.
-            Default: False
-        file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set.
+            Default: ``False``
+        file_name (string, optional): name for the downloaded file. Filename from `url` will be used if not set
 
     """
 
@@ -126,9 +124,9 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
         url (string): URL of the object to download
         dst (string): Full path where object will be saved, e.g. `/tmp/temporary_file`
         hash_prefix (string, optional): If not None, the SHA256 downloaded file should start with `hash_prefix`.
-            Default: None
+            Default: ``None``
         progress (bool, optional): whether or not to display a progress bar to stderr
-            Default: True
+            Default: ``True``
     """
     file_size = None
     # We use a different API for python2 since urllib(2) doesn't recognize the CA
@@ -184,37 +182,3 @@ def download_url_to_file(url, dst, hash_prefix=None, progress=True):
         f.close()
         if os.path.exists(f.name):
             os.remove(f.name)
-
-
-def named_apply(
-    fn: Callable, module: nn.Module, name="", depth_first=True, include_root=False
-) -> nn.Module:
-    if not depth_first and include_root:
-        fn(module=module, name=name)
-    for child_name, child_module in module.named_children():
-        child_name = ".".join((name, child_name)) if name else child_name
-        named_apply(
-            fn=fn,
-            module=child_module,
-            name=child_name,
-            depth_first=depth_first,
-            include_root=True,
-        )
-    if depth_first and include_root:
-        fn(module=module, name=name)
-    return module
-
-
-def named_modules(module: nn.Module, name="", depth_first=True, include_root=False):
-    if not depth_first and include_root:
-        yield name, module
-    for child_name, child_module in module.named_children():
-        child_name = ".".join((name, child_name)) if name else child_name
-        yield from named_modules(
-            module=child_module,
-            name=child_name,
-            depth_first=depth_first,
-            include_root=True,
-        )
-    if depth_first and include_root:
-        yield name, module

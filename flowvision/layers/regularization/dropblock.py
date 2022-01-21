@@ -1,3 +1,7 @@
+"""
+Modified from https://github.com/FrancescoSaverioZuppichini/glasses/blob/master/glasses/nn/regularization/__init__.py
+"""
+
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F

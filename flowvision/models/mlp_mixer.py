@@ -5,12 +5,12 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
 
-from .utils import load_state_dict_from_url, named_apply
-from .registry import ModelCreator
 from flowvision.layers.regularization import DropPath
 from flowvision.layers.blocks import PatchEmbed
 from flowvision.layers.weight_init import lecun_normal_
-
+from .utils import load_state_dict_from_url
+from .helpers import named_apply
+from .registry import ModelCreator
 
 model_urls = {
     "mlp_mixer_s16_224": None,
@@ -332,7 +332,7 @@ def mlp_mixer_s16_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -358,7 +358,7 @@ def mlp_mixer_s32_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -384,7 +384,7 @@ def mlp_mixer_b16_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -410,7 +410,7 @@ def mlp_mixer_b32_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -437,7 +437,7 @@ def mlp_mixer_b16_224_in21k(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -468,7 +468,7 @@ def mlp_mixer_l16_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -494,7 +494,7 @@ def mlp_mixer_l32_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -521,7 +521,7 @@ def mlp_mixer_l16_224_in21k(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -553,7 +553,7 @@ def mlp_mixer_b16_224_miil(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -583,7 +583,7 @@ def mlp_mixer_b16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -614,7 +614,7 @@ def gmlp_ti16_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -648,7 +648,7 @@ def gmlp_s16_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -682,7 +682,7 @@ def gmlp_b16_224(pretrained=False, progress=True, **kwargs):
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
