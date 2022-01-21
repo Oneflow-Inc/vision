@@ -1,14 +1,12 @@
 """
 Modified from https://github.com/clovaai/rexnet/blob/master/rexnetv1_lite.py
 """
-import math
-
 import oneflow as flow
 import oneflow.nn as nn
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from .helpers import make_divisible
+from flowvision.models.helpers import make_divisible
 
 
 model_urls = {
