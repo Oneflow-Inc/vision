@@ -48,17 +48,16 @@ model_urls = {
     "vit_large_patch32_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch32_224_in21k.zip",
     "vit_large_patch16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch16_224_in21k.zip",
     "vit_huge_patch14_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_huge_patch14_224_in21k.zip",
-    # DeiT
-    "deit_tiny_patch16_224": None,
-    "deit_small_patch16_224": None,
-    "deit_base_patch16_224": None,
-    "deit_base_patch16_384": None,
-    "deit_tiny_distilled_patch16_224": None,
-    "deit_small_distilled_patch16_224": None,
-    "deit_base_distilled_patch16_224": None,
-    "deit_base_distilled_patch16_384": None,
-    "vit_base_patch16_224_miil_in21k": None,
-    "vit_base_patch16_224_miil": None,
+    "deit_tiny_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_tiny_patch16_224.zip",
+    "deit_small_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_small_patch16_224.zip",
+    "deit_base_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_base_patch16_224.zip",
+    "deit_base_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_base_patch16_384.zip",
+    "deit_tiny_distilled_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_tiny_distilled_patch16_224.zip",
+    "deit_small_distilled_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_small_distilled_patch16_224.zip",
+    "deit_base_distilled_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_base_distilled_patch16_224.zip",
+    "deit_base_distilled_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/deit_base_distilled_patch16_384.zip",
+    "vit_base_patch16_224_miil_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_224_miil_in21k.zip",
+    "vit_base_patch16_224_miil": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_224_miil.zip",
 }
 
 _logger = logging.getLogger(__name__)
