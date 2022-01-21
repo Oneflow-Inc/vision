@@ -49,7 +49,7 @@ all_pretrained_models = ModelCreator.model_table(pretrained=True)
 print(all_pretrained_models)
 ```
 You can get the results like:
-```
+```python
 ╒════════════════════════════════════════════╤══════════════╕
 │ Supported Models                           │ Pretrained   │
 ╞════════════════════════════════════════════╪══════════════╡
@@ -85,7 +85,7 @@ all_efficientnet_models = ModelCreator.model_table("**efficientnet**")
 print(all_efficientnet_models)
 ```
 You can get the results like:
-```
+```python
 ╒════════════════════╤══════════════╕
 │ Supported Models   │ Pretrained   │
 ╞════════════════════╪══════════════╡
@@ -107,3 +107,37 @@ You can get the results like:
 ╘════════════════════╧══════════════╛
 ```
 
+### List all models supported in flowvision
+`ModelCreator.model_list` has similar function as `ModelCreator.model_table` but return a list object, which gives the user a more flexible way to check the supported model in flowvision
+- List all models with pretrained weights
+```python
+from flowvision.models import ModelCreator
+all_pretrained_models = ModelCreator.model_list(pretrained=True)
+print(all_pretrained_models[:5])
+```
+You can get the results like:
+```python
+['alexnet', 
+ 'convmixer_1024_20', 
+ 'convmixer_1536_20', 
+ 'convmixer_768_32_relu', 
+ 'crossformer_base_patch4_group7_224']
+```
+
+- Support wildcard search
+```python
+from flowvision.models import ModelCreator
+all_efficientnet_models = ModelCreator.model_list("**efficientnet**")
+print(all_efficientnet_models)
+```
+You can get the results like:
+```python
+['efficientnet_b0', 
+ 'efficientnet_b1', 
+ 'efficientnet_b2', 
+ 'efficientnet_b3', 
+ 'efficientnet_b4', 
+ 'efficientnet_b5', 
+ 'efficientnet_b6', 
+ 'efficientnet_b7']
+```
