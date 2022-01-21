@@ -9,11 +9,8 @@
 
 **Bug Fixes**
 
-<<<<<<< HEAD
 - Fix `F.normalize` usage in SSD [#116](https://github.com/Oneflow-Inc/vision/pull/116)
-=======
-- Fix `EfficientNet` and `Res2Net`(#122)
->>>>>>> c816a5580a14723e349a125f111b2dd27e93aac2
+- Fix bug in `EfficientNet` and `Res2Net` [#122](https://github.com/Oneflow-Inc/vision/pull/122)
 - 
 
 **Improvements**

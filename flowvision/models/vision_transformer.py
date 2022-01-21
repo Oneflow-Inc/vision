@@ -39,17 +39,15 @@ model_urls = {
     "vit_huge_patch14_224": None,
     "vit_giant_patch14_224": None,
     "vit_gigantic_patch14_224": None,
-    ## 
     "vit_tiny_patch16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_tiny_patch16_224_in21k.zip",
-    "vit_small_patch32_224_in21k": None,
-    "vit_small_patch16_224_in21k": None,
-    "vit_base_patch32_224_in21k": None,
-    "vit_base_patch16_224_in21k": None,
-    "vit_base_patch8_224_in21k": None,
-    # TODO
-    "vit_large_patch32_224_in21k": None,
-    "vit_large_patch16_224_in21k": None,
-    "vit_huge_patch14_224_in21k": None,
+    "vit_small_patch32_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch32_224_in21k.zip",
+    "vit_small_patch16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_small_patch16_224_in21k.zip",
+    "vit_base_patch32_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch32_224_in21k.zip",
+    "vit_base_patch16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_224_in21k.zip",
+    "vit_base_patch8_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch8_224_in21k.zip",
+    "vit_large_patch32_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch32_224_in21k.zip",
+    "vit_large_patch16_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch16_224_in21k.zip",
+    "vit_huge_patch14_224_in21k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_huge_patch14_224_in21k.zip",
     # DeiT
     "deit_tiny_patch16_224": None,
     "deit_small_patch16_224": None,
@@ -1259,3 +1257,333 @@ def vit_huge_patch14_224_in21k(pretrained=False, progress=True, **kwargs):
     model = _create_vision_transformer("vit_huge_patch14_224_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
     return model
 
+
+@ModelCreator.register_model
+def deit_tiny_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Tiny-patch16-224 model.
+
+    .. note::
+        DeiT-Tiny-patch16-224 model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_tiny_patch16_224 = flowvision.models.deit_tiny_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=192,
+        depth=12,
+        num_heads=3,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_tiny_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_small_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Small-patch16-224 model.
+
+    .. note::
+        DeiT-Small-patch16-224 model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_small_patch16_224 = flowvision.models.deit_small_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_small_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_base_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Base-patch16-224 model.
+
+    .. note::
+        DeiT-Base-patch16-224 model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_base_patch16_224 = flowvision.models.deit_base_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_base_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_base_patch16_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Base-patch16-384 model.
+
+    .. note::
+        DeiT-Base-patch16-384 model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_base_patch16_384 = flowvision.models.deit_base_patch16_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_base_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_tiny_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Tiny-patch16-224 distilled model.
+
+    .. note::
+        DeiT-Tiny-patch16-224 distilled model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_tiny_distilled_patch16_224 = flowvision.models.deit_tiny_distilled_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=192,
+        depth=12,
+        num_heads=3,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_tiny_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_small_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Small-patch16-224 distilled model.
+
+    .. note::
+        DeiT-Small-patch16-224 distilled model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_small_distilled_patch16_224 = flowvision.models.deit_small_distilled_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_small_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_base_distilled_patch16_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Base-patch16-224 distilled model.
+
+    .. note::
+        DeiT-Base-patch16-224 distilled model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_base_distilled_patch16_224 = flowvision.models.deit_base_distilled_patch16_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_base_distilled_patch16_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def deit_base_distilled_patch16_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the DeiT-Base-patch16-384 distilled model.
+
+    .. note::
+        DeiT-Base-patch16-384 distilled model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deit_base_distilled_patch16_384 = flowvision.models.deit_base_distilled_patch16_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("deit_base_distilled_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch16_224_miil_in21k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch16-224-miil ImageNet21k pretrained model.
+
+    .. note::
+        ViT-Base-patch16-224-miil ImageNet21k pretrained model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch16_224_miil_in21k = flowvision.models.vit_base_patch16_224_miil_in21k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        num_classes=11221,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch16_224_miil_in21k", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_base_patch16_224_miil(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Base-patch16-224-miil model.
+
+    .. note::
+        ViT-Base-patch16-224-miil model from `"Training data-efficient image transformers & distillation through attention" <https://arxiv.org/pdf/2012.12877.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_base_patch16_224_miil = flowvision.models.vit_base_patch16_224_miil(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_base_patch16_224_miil", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
