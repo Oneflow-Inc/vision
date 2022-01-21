@@ -163,6 +163,7 @@ class MBConv(nn.Module):
                 groups=expanded_channels,
                 norm_layer=norm_layer,
                 act_layer=activation_layer,
+                padding=cnf.kernel//2,
             )
         )
 
@@ -250,6 +251,7 @@ class EfficientNet(nn.Module):
                 stride=2,
                 norm_layer=norm_layer,
                 act_layer=nn.SiLU,
+                padding=1,
             )
         )
 
