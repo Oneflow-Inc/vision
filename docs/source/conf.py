@@ -66,7 +66,7 @@ def add_js_variable(app):
     app.add_js_file(None, body=js_text)
 
 def setup(app):
-    app.add_stylesheet( "css/hatnotes.css" )
+    app.add_css_file( "css/hatnotes.css" )
     # Tell Sphinx about this configuration variable
     app.add_config_value('my_javascript_variable')
     # Run the function after the builder is initialized
