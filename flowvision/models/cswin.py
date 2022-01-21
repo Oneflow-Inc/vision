@@ -356,7 +356,9 @@ class CSWinTransformer(nn.Module):
 
         curr_dim = embed_dim
         # stochastic depth
-        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depth))]  # stochastic depth decay rule
+        dpr = [
+            x.item() for x in flow.linspace(0, drop_path_rate, sum(depth))
+        ]  # stochastic depth decay rule
         self.stage1 = nn.ModuleList(
             [
                 CSWinBlock(

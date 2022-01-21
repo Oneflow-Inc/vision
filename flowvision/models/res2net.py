@@ -83,8 +83,8 @@ class Bottle2neck(nn.Module):
         residual = x
 
         out = self.conv1(x)
-        out = self.bn1(x)
-        out = self.relu(x)
+        out = self.bn1(out)
+        out = self.relu(out)
 
         spx = flow.split(out, self.width, 1)
         for i in range(self.nums):

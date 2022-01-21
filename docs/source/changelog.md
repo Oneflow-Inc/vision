@@ -9,7 +9,7 @@
 
 **Bug Fixes**
 
-- Fix xxx (#9999)
+- Fix `EfficientNet` and `Res2Net`(#122)
 - 
 
 **Improvements**

@@ -217,7 +217,9 @@ class PyramidVisionTransformer(nn.Module):
         self.num_stages = num_stages
 
         # stochastic depth
-        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
+        dpr = [
+            x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))
+        ]  # stochastic depth decay rule
         cur = 0
 
         for i in range(num_stages):
