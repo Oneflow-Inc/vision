@@ -754,3 +754,104 @@ def vit_large_patch16_384(pretrained=False, progress=True, **kwargs):
     )
     model = _create_vision_transformer("vit_large_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs)
     return model
+
+
+@ModelCreator.register_model
+def vit_huge_patch14_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Huge-patch14-224 model.
+
+    .. note::
+        ViT-Huge-patch14-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_huge_patch14_224 = flowvision.models.vit_huge_patch14_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=14,
+        embed_dim=1280,
+        depth=32,
+        num_heads=16,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_huge_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_giant_patch14_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Giant-patch14-224 model.
+
+    .. note::
+        ViT-Giant-patch14-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_giant_patch14_224 = flowvision.models.vit_giant_patch14_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=224,
+        patch_size=14,
+        embed_dim=1408,
+        mlp_ratio=48/11,
+        depth=40,
+        num_heads=16,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_giant_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
+
+
+@ModelCreator.register_model
+def vit_gigantic_patch14_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ViT-Gigantic-patch14-224 model.
+
+    .. note::
+        ViT-Giant-patch14-224 model from `"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale" <https://arxiv.org/pdf/2010.11929.pdf>`_.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> vit_gigantic_patch14_224 = flowvision.models.vit_gigantic_patch14_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        img_size=384,
+        patch_size=14,
+        embed_dim=1664,
+        mlp_ratio=64/13,
+        depth=48,
+        num_heads=16,
+        **kwargs
+    )
+    model = _create_vision_transformer("vit_gigantic_patch14_224", pretrained=pretrained, progress=progress, **model_kwargs)
+    return model
