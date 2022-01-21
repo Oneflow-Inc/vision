@@ -58,10 +58,9 @@ exclude_patterns = []
 #
 html_theme = "furo"
 
-
 def setup(app):
-    app.add_css_file( "css/hatnotes.css" )
-    app.add_js_file("myjsfile.js")
+    app.add_css_file( "css/sidebar.css" )
+    app.add_js_file("collapse.js")
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
