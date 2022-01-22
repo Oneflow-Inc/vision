@@ -15,10 +15,10 @@ pip install flowvision==0.0.56
   <tbody>
     <tr align="center" valign="bottom">
       <td>
-        <b>Architectures</b>
+        <b>Vision Models</b>
       </td>
       <td>
-        <b>Backbones</b>
+        <b>Layers</b>
       </td>
       <td>
         <b>Components</b>
@@ -30,28 +30,34 @@ pip install flowvision==0.0.56
     <tr valign="top">
       <td>
         <ul>
-          <li><b>Object Detection</b></li>
+          <li><b>Classification</b></li>
           <ul>
-            <li>Faster RCNN</li>
-            <li>FPN</li>
-            <li>Cascade-RCNN</li>
-            <li>Libra RCNN</li>
-            <li>Hybrid Task RCNN</li>
-            <li>PSS-Det</li>
-            <li>RetinaNet</li>
-            <li>YOLOv3</li>
-            <li>YOLOv4</li>  
-            <li>PP-YOLOv1/v2</li>
-            <li>PP-YOLO-Tiny</li>
-            <li>SSD</li>
-            <li>CornerNet-Squeeze</li>
-            <li>FCOS</li>  
-            <li>TTFNet</li>
-            <li>PP-PicoDet</li>
-            <li>DETR</li>
-            <li>Deformable DETR</li>
+            <li>AlexNet</li>
+            <li>SqueezeNet</li>
+            <li>VGG</li>
+            <li>GoogleNet</li>
+            <li>InceptionV3</li>
+            <li>ResNet</li>
+            <li>ResNeXt</li>
+            <li>DenseNet</li>
+            <li>ShuffleNetV2</li>  
+            <li>MobileNetV2</li>
+            <li>MobileNetV3</li>
+            <li>MNASNet</li>
+            <li>Res2Net</li>
+            <li>EfficientNet</li>  
+            <li>GhostNet</li>
+            <li>ReXNet</li>
+            <li>Vision Transformer</li>
+            <li>DeiT</li>
+            <li>PVT</li>
             <li>Swin Transformer</li>
-            <li>Sparse RCNN</li>
+            <li>CSwin Transformer</li>
+            <li>CrossFormer</li>
+            <li>Mlp Mixer</li>
+            <li>ResMLP</li>
+            <li>gMLP</li>
+            <li>ConvMixer</li>
         </ul>
         <li><b>Instance Segmentation</b></li>
         <ul>
