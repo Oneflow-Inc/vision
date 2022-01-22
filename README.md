@@ -18,9 +18,6 @@ pip install flowvision==0.0.56
         <b>Vision Models</b>
       </td>
       <td>
-        <b>Layers</b>
-      </td>
-      <td>
         <b>Components</b>
       </td>
       <td>
@@ -71,6 +68,10 @@ pip install flowvision==0.0.56
             <li>FCN</li>
             <li>DeepLabV3</li>
         </ul>
+        <li><b>Neural Style Transfer</b></li>
+        <ul>
+            <li>StyleNet</li>
+        </ul>
       </ul>
       </td>
       <td>
@@ -113,10 +114,8 @@ pip install flowvision==0.0.56
             <li>Lecun Normal</li>
           </ul>  
         </ul>
-      </td>
-      <td>
-        <ul><li><b>LR Scheduler</b></li>
-          <ul>
+      <ul><li><b>LR Scheduler</b></li>
+        <ul>
             <li>StepLRScheduler</li>
             <li>MultiStepLRScheduler</li>
             <li>CosineLRScheduler</li>
