@@ -108,6 +108,7 @@ def test(
             if "from .utils import load_state_dict_from_url" in line:
                 break
         lines = lines[:i] + lines[i + 1 :]
+
         found = True
         while found:
             found = False
@@ -133,6 +134,52 @@ def test(
             ]
             + lines[line_num + 1 :]
         )
+
+        # for swin transformer
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.weight_init import trunc_normal_" in line:
+                lines = (
+                    lines[: i]
+                    + [
+                        "from timm.models.layers import trunc_normal_",
+                    ]
+                    + lines[i + 1 :]
+                )
+                break
+        
+        # for vision transformer
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.weight_init import trunc_normal_, lecun_normal_" in line:
+                lines = (
+                    lines[: i]
+                    + [
+                        "from timm.models.layers import lecun_normal_, trunc_normal_",
+                    ]
+                    + lines[i + 1 :]
+                )
+                break
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.regularization import DropPath" in line:
+                lines = (
+                    lines[: i]
+                    + [
+                        "from timm.models.layers import DropPath",
+                    ]
+                    + lines[i + 1 :]
+                )
+                break
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.blocks import PatchEmbed, Mlp" in line:
+                lines = (
+                    lines[: i]
+                    + [
+                        "from timm.models.layers import PatchEmbed, Mlp",
+                    ]
+                    + lines[i + 1 :]
+                )
+                break
+
+
         buf = "\n".join(lines)
         with tempfile.NamedTemporaryFile("w", suffix=".py") as f:
             f.write(buf)

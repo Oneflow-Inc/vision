@@ -38,8 +38,9 @@ def stochastic_depth(
         size = [1] * input.ndim
     # noise = flow.empty(size, dtype=input.dtype, device=input.device)
     # TODO: add tensor.bernoulli_() method
-    noise = flow.ones(size, dtype=input.dtype, device=input.device) * survival_rate
-    noise = flow.bernoulli(noise)
+    noise = flow.ones(size, dtype=input.dtype) * survival_rate
+    # TODO: for now bernoulli only has cpu implementation in oneflow
+    noise = flow.bernoulli(noise).to(input.device)
     if survival_rate > 0.0:
         noise.div(survival_rate)
     return input * noise
