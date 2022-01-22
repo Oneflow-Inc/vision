@@ -184,89 +184,43 @@ All of the supported models can be found in our model summary page [here](MODEL_
 We have conducted all the tests under the same setting, please refer to the model page [here](MODEL_ZOO.md) for more details.
 
 ## Quick Start
-<details>
-<summary> <b> Quick Start </b> </summary>
+### Create a model
+In flowvision we support two ways to create a model.
 
-- list supported model
+- First, import the target model from `flowvision.models`, e.g., create `alexnet` from flowvision
+
+```python
+from flowvision.models.alexnet import alexnet
+model = alexnet()
+```
+
+- Second, create model in an easier way by using `ModelCreator`, e.g., create `alexnet` model by `ModelCreator`
 ```python
 from flowvision.models import ModelCreator
-supported_model_table = ModelCreator.model_table()
-print(supported_model_table)
+alexnet = ModelCreator.create_model("alexnet")
 ```
 
-- search supported model by wildcard
+- To create a pretrained model, simply pass `pretrained=True` into `ModelCreator.create_model` function
 ```python
 from flowvision.models import ModelCreator
-pretrained_vit_model = ModelCreator.model_table("*vit*", pretrained=True)
-supported_vit_model = ModelCreator.model_table("*vit*", pretrained=False)
-supported_alexnet_model = ModelCreator.model_table('alexnet')
-
-# check the model table
-print(pretrained_vit_model)
-print(supported_vit_model)
-print(supported_alexnet_model)
+alexnet = ModelCreator.create_model("alexnet", pretrained=True)
 ```
 
-- create model use `ModelCreator`
+- To create a custom model to fit different number of classes, simply pass `num_classes=<number of class>` into `ModelCreator.create_model` function
 ```python
 from flowvision.models import ModelCreator
-model = ModelCreator.create_model('alexnet', pretrained=True)
+model = ModelCreator.create_model("alexnet", num_classes=100)
 ```
 
-</details>
-
-<details>
-<summary> <b> ModelCreator </b> </summary>
-
-- Create model in a simple way
+### Tabulate all models with pretrained weights
+`ModelCreator.model_table()` returns a tabular results of available models in `flowvision`. To check all of pretrained models, pass in `pretrained=True` in `ModelCreator.model_table()`.
 ```python
 from flowvision.models import ModelCreator
-model = ModelCreator.create_model('alexnet', pretrained=True)
+all_pretrained_models = ModelCreator.model_table(pretrained=True)
+print(all_pretrained_models)
 ```
-the pretrained weight will be saved to `./checkpoints`
-
-- Supported model table
+You can get the results like:
 ```python
-from flowvision.models import ModelCreator
-supported_model_table = ModelCreator.model_table()
-print(supported_model_table)
-```
-```
-╒════════════════════════════════════════════╤══════════════╕
-│ Supported Models                           │ Pretrained   │
-╞════════════════════════════════════════════╪══════════════╡
-│ alexnet                                    │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ convmixer_1024_20                          │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ convmixer_1536_20                          │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ convmixer_768_32_relu                      │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ shufflenet_v2_x0_5                         │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ shufflenet_v2_x1_0                         │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ shufflenet_v2_x1_5                         │ false        │
-├────────────────────────────────────────────┼──────────────┤
-│ shufflenet_v2_x2_0                         │ false        │
-├────────────────────────────────────────────┼──────────────┤
-│                    ...                     │     ...      │
-├────────────────────────────────────────────┼──────────────┤
-│ wide_resnet101_2                           │ true         │
-├────────────────────────────────────────────┼──────────────┤
-│ wide_resnet50_2                            │ true         │
-╘════════════════════════════════════════════╧══════════════╛
-```
-show all of the supported model in the table manner
-
-- Check the table of the models with pretrained weights.
-```python
-from flowvision.models import ModelCreator
-pretrained_model_table = ModelCreator.model_table(pretrained=True)
-print(pretrained_model_table)
-```
-```
 ╒════════════════════════════════════════════╤══════════════╕
 │ Supported Models                           │ Pretrained   │
 ╞════════════════════════════════════════════╪══════════════╡
@@ -286,53 +240,77 @@ print(pretrained_model_table)
 ├────────────────────────────────────────────┼──────────────┤
 │ crossformer_tiny_patch4_group7_224         │ true         │
 ├────────────────────────────────────────────┼──────────────┤
-│                    ...                     │     ...      │
+│                    ...                     │ ...          │
 ├────────────────────────────────────────────┼──────────────┤
 │ wide_resnet101_2                           │ true         │
 ├────────────────────────────────────────────┼──────────────┤
 │ wide_resnet50_2                            │ true         │
 ╘════════════════════════════════════════════╧══════════════╛
 ```
-- Search for model by Wildcard.
+
+### Search for supported model by Wildcard
+It is easy to search for model architectures by using Wildcard as below:
 ```python
 from flowvision.models import ModelCreator
-supported_vit_model = ModelCreator.model_table('vit*')
-print(supported_vit_model)
+all_efficientnet_models = ModelCreator.model_table("**efficientnet**")
+print(all_efficientnet_models)
 ```
-```
+You can get the results like:
+```python
 ╒════════════════════╤══════════════╕
 │ Supported Models   │ Pretrained   │
 ╞════════════════════╪══════════════╡
-│ vit_b_16_224       │ false        │
+│ efficientnet_b0    │ true         │
 ├────────────────────┼──────────────┤
-│ vit_b_16_384       │ true         │
+│ efficientnet_b1    │ true         │
 ├────────────────────┼──────────────┤
-│ vit_b_32_224       │ false        │
+│ efficientnet_b2    │ true         │
 ├────────────────────┼──────────────┤
-│ vit_b_32_384       │ true         │
+│ efficientnet_b3    │ true         │
 ├────────────────────┼──────────────┤
-│ vit_l_16_384       │ true         │
+│ efficientnet_b4    │ true         │
 ├────────────────────┼──────────────┤
-│ vit_l_32_384       │ true         │
+│ efficientnet_b5    │ true         │
+├────────────────────┼──────────────┤
+│ efficientnet_b6    │ true         │
+├────────────────────┼──────────────┤
+│ efficientnet_b7    │ true         │
 ╘════════════════════╧══════════════╛
 ```
-- Search for model with pretrained weights by Wildcard.
+
+### List all models supported in flowvision
+`ModelCreator.model_list` has similar function as `ModelCreator.model_table` but return a list object, which gives the user a more flexible way to check the supported model in flowvision.
+- List all models with pretrained weights
 ```python
 from flowvision.models import ModelCreator
-ModelCreator.model_table('vit*', pretrained=True)
+all_pretrained_models = ModelCreator.model_list(pretrained=True)
+print(all_pretrained_models[:5])
 ```
+You can get the results like:
+```python
+['alexnet', 
+ 'convmixer_1024_20', 
+ 'convmixer_1536_20', 
+ 'convmixer_768_32_relu', 
+ 'crossformer_base_patch4_group7_224']
 ```
-╒════════════════════╤══════════════╕
-│ Supported Models   │ Pretrained   │
-╞════════════════════╪══════════════╡
-│ vit_b_16_384       │ true         │
-├────────────────────┼──────────────┤
-│ vit_b_32_384       │ true         │
-├────────────────────┼──────────────┤
-│ vit_l_16_384       │ true         │
-├────────────────────┼──────────────┤
-│ vit_l_32_384       │ true         │
-╘════════════════════╧══════════════╛
+
+- Support wildcard search
+```python
+from flowvision.models import ModelCreator
+all_efficientnet_models = ModelCreator.model_list("**efficientnet**")
+print(all_efficientnet_models)
+```
+You can get the results like:
+```python
+['efficientnet_b0', 
+ 'efficientnet_b1', 
+ 'efficientnet_b2', 
+ 'efficientnet_b3', 
+ 'efficientnet_b4', 
+ 'efficientnet_b5', 
+ 'efficientnet_b6', 
+ 'efficientnet_b7']
 ```
 
 </details>
