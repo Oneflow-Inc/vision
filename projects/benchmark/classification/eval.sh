@@ -1,11 +1,11 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="swin_tiny_patch4_window7_224"
+MODEL="vit_tiny_patch16_224"
 BATCH_SIZE=64
 DATA_PATH="/DATA/disk1/ImageNet/extract"
 IMG_SIZE=224
-NORMALIZE_MODE="imagenet_default_mean_std"
+NORMALIZE_MODE="vit_mean_std"
 CROP_PCT=0.875
 INTERPOLATION="bicubic"
 NUM_WORKERS=8
