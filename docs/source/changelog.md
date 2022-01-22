@@ -6,6 +6,7 @@
 
 - Support `trunc_normal_` in `flowvision.layers.weight_init` [#92](https://github.com/Oneflow-Inc/vision/pull/92)
 - Support [DeiT](https://arxiv.org/abs/2012.12877) model [#115](https://github.com/Oneflow-Inc/vision/pull/115)
+- Support `PolyLRScheduler` and `TanhLRScheduler` in `flowvision.scheduler` [#85](https://github.com/Oneflow-Inc/vision/pull/85)
 
 **Bug Fixes**
 
