@@ -11,6 +11,10 @@ from tabulate import tabulate
 import oneflow as flow
 
 
+def _natural_key(string_):
+    return [int(s) if s.isdigit() else s for s in re.split(r"(\d+)", string_.lower())]
+
+
 class ModelCreator(object):
     _model_list = defaultdict(
         set
@@ -84,3 +88,30 @@ class ModelCreator(object):
             table_items, headers=table_headers, tablefmt="fancy_grid", **kwargs
         )
         return table
+
+    @staticmethod
+    def model_list(filter="", pretrained=False, **kwargs):
+        all_models = ModelCreator._model_entrypoints.keys()
+        if filter:
+            models = []
+            include_filters = filter if isinstance(filter, (tuple, list)) else [filter]
+            for f in include_filters:
+                include_models = fnmatch.filter(all_models, f)
+                if len(include_models):
+                    models = set(models).union(include_models)
+        else:
+            models = all_models
+
+        sorted_model = list(sorted(models))
+        if pretrained:
+            for model in sorted_model:
+                if not ModelCreator._model_list[model]:
+                    sorted_model.remove(model)
+
+        return sorted_model
+
+    def __repr__(self) -> str:
+        all_model_table = ModelCreator.model_table("")
+        return "Registry of all models:\n" + all_model_table
+
+    __str__ = __repr__
