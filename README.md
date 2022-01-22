@@ -91,6 +91,7 @@ pip install flowvision==0.0.56
             <li>Drop Block</li>
             <li>Drop Path</li>
             <li>Stochastic Depth</li>
+            <li>LayerNorm2D</li>
           </ul>  
         </ul>
       <ul><li><b>Basic Layer</b></li>
@@ -114,46 +115,22 @@ pip install flowvision==0.0.56
         </ul>
       </td>
       <td>
-        <ul><li><b>Common</b></li>
+        <ul><li><b>LR Scheduler</b></li>
           <ul>
-            <li>Sync-BN</li>
-            <li>Group Norm</li>
-            <li>DCNv2</li>
-            <li>Non-local</li>
+            <li>StepLRScheduler</li>
+            <li>MultiStepLRScheduler</li>
+            <li>CosineLRScheduler</li>
+            <li>LinearLRScheduler</li>
+            <li>PolyLRScheduler</li>
+            <li>TanhLRScheduler</li>
           </ul>  
         </ul>
-        <ul><li><b>KeyPoint</b></li>
-          <ul>
-            <li>DarkPose</li>
-          </ul>  
-        </ul>
-        <ul><li><b>FPN</b></li>
-          <ul>
-            <li>BiFPN</li>
-            <li>BFP</li>  
-            <li>HRFPN</li>
-            <li>ACFPN</li>
-          </ul>  
-        </ul>  
         <ul><li><b>Loss</b></li>
           <ul>
-            <li>Smooth-L1</li>
-            <li>GIoU/DIoU/CIoU</li>  
-            <li>IoUAware</li>
-          </ul>  
-        </ul>  
-        <ul><li><b>Post-processing</b></li>
-          <ul>
-            <li>SoftNMS</li>
-            <li>MatrixNMS</li>  
+            <li>LabelSmoothingCrossEntropy</li>
+            <li>SoftTargetCrossEntropy</li>
           </ul>  
         </ul>
-        <ul><li><b>Speed</b></li>
-          <ul>
-            <li>FP16 training</li>
-            <li>Multi-machine training </li>  
-          </ul>  
-        </ul>  
       </td>
       <td>
         <ul>
