@@ -30,7 +30,7 @@ pip install flowvision==0.0.56
     <tr valign="top">
       <td>
         <ul>
-          <li><b>Classification</b></li>
+          <li><b>Image Classification</b></li>
           <ul>
             <li>AlexNet</li>
             <li>SqueezeNet</li>
@@ -59,27 +59,17 @@ pip install flowvision==0.0.56
             <li>gMLP</li>
             <li>ConvMixer</li>
         </ul>
-        <li><b>Instance Segmentation</b></li>
+        <li><b>Object Detection</b></li>
         <ul>
-            <li>Mask RCNN</li>
-            <li>SOLOv2</li>
+            <li>SSD</li>
+            <li>SSDLite</li>
+            <li>Faster RCNN</li>
+            <li>RetinaNet</li>
         </ul>
-        <li><b>Face Detection</b></li>
+        <li><b>Semantic Segmentation</b></li>
         <ul>
-            <li>FaceBoxes</li>
-            <li>BlazeFace</li>
-            <li>BlazeFace-NAS</li>
-        </ul>
-        <li><b>Multi-Object-Tracking</b></li>
-        <ul>
-            <li>JDE</li>
-            <li>FairMOT</li>
-            <li>DeepSort</li>
-        </ul>
-        <li><b>KeyPoint-Detection</b></li>
-        <ul>
-            <li>HRNet</li>
-            <li>HigherHRNet</li>
+            <li>FCN</li>
+            <li>DeepLabV3</li>
         </ul>
       </ul>
       </td>
