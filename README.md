@@ -24,7 +24,7 @@ pip install flowvision==0.0.56
         <b>Components</b>
       </td>
       <td>
-        <b>Data Augmentation</b>
+        <b>Augmentation and Dataset</b>
       </td>
     </tr>
     <tr valign="top">
@@ -133,21 +133,38 @@ pip install flowvision==0.0.56
         </ul>
       </td>
       <td>
-        <ul>
-          <li>Resize</li>  
-          <li>Lighting</li>  
-          <li>Flipping</li>  
-          <li>Expand</li>
-          <li>Crop</li>
-          <li>Color Distort</li>  
-          <li>Random Erasing</li>  
-          <li>Mixup </li>
-          <li>Mosaic</li>
-          <li>Cutmix </li>
-          <li>Grid Mask</li>
-          <li>Auto Augment</li>  
-          <li>Random Perspective</li>  
-        </ul>  
+        <ul><li><b>Basic Augmentation</b></li>
+          <ul>
+            <li>CenterCrop</li>
+            <li>RandomCrop</li>
+            <li>RandomResizedCrop</li>
+            <li>FiveCrop</li>
+            <li>TenCrop</li>
+            <li>RandomVerticalFlip</li>
+            <li>RandomHorizontalFlip</li>
+            <li>Resize</li>
+          </ul>  
+        </ul>
+        <ul><li><b>Advanced Augmentation</b></li>
+          <ul>
+            <li>Mixup</li>
+            <li>CutMix</li>
+            <li>AugMix</li>
+            <li>RandomErasing</li>
+            <li>Rand Augmentation</li>
+            <li>Auto Augmentation</li>
+          </ul>  
+        </ul>
+        <ul><li><b>Dataset</b></li>
+          <ul>
+            <li>CIFAR10</li>
+            <li>CIFAR100</li>
+            <li>COCO</li>
+            <li>FashionMNIST</li>
+            <li>ImageNet</li>
+            <li>VOC</li>
+          </ul>  
+        </ul>
       </td>  
     </tr>
 
