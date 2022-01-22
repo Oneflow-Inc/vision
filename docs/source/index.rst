@@ -11,7 +11,7 @@ Welcome to flowvision's documentation!
    :maxdepth: 2
    :caption: Tutorials
 
-   tutorials/*
+   tutorials/Getting Started.md
 
 .. toctree::
    :maxdepth: 2
