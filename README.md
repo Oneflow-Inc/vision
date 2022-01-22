@@ -30,7 +30,7 @@ pip install flowvision==0.0.56
     <tr valign="top">
       <td>
         <ul>
-          <li><b>Image Classification</b></li>
+          <li><b>Classification</b></li>
           <ul>
             <li>AlexNet</li>
             <li>SqueezeNet</li>
@@ -59,14 +59,14 @@ pip install flowvision==0.0.56
             <li>gMLP</li>
             <li>ConvMixer</li>
         </ul>
-        <li><b>Object Detection</b></li>
+        <li><b>Detection</b></li>
         <ul>
             <li>SSD</li>
             <li>SSDLite</li>
             <li>Faster RCNN</li>
             <li>RetinaNet</li>
         </ul>
-        <li><b>Semantic Segmentation</b></li>
+        <li><b>Segmentation</b></li>
         <ul>
             <li>FCN</li>
             <li>DeepLabV3</li>
@@ -74,22 +74,43 @@ pip install flowvision==0.0.56
       </ul>
       </td>
       <td>
-        <ul>
-          <li>ResNet(&vd)</li>
-          <li>ResNeXt(&vd)</li>
-          <li>SENet</li>
-          <li>Res2Net</li>
-          <li>HRNet</li>
-          <li>Hourglass</li>
-          <li>CBNet</li>
-          <li>GCNet</li>
-          <li>DarkNet</li>
-          <li>CSPDarkNet</li>
-          <li>VGG</li>
-          <li>MobileNetv1/v3</li>  
-          <li>GhostNet</li>
-          <li>Efficientnet</li>  
-          <li>BlazeNet</li>  
+      <ul><li><b>Attention Layer</b></li>
+          <ul>
+            <li>SE</li>
+            <li>BAM</li>
+            <li>CBAM</li>
+            <li>ECA</li>
+            <li>Non Local Attention</li>
+            <li>Global Context</li>
+            <li>Gated Channel Transform</li>
+            <li>Coordinate Attention</li>
+          </ul>  
+        </ul>
+      <ul><li><b>Regularization Layer</b></li>
+          <ul>
+            <li>Drop Block</li>
+            <li>Drop Path</li>
+            <li>Stochastic Depth</li>
+          </ul>  
+        </ul>
+      <ul><li><b>Basic Layer</b></li>
+          <ul>
+            <li>Patch Embedding</li>
+            <li>Mlp Block</li>
+            <li>FPN</li>
+          </ul>  
+        </ul>
+      <ul><li><b>Activation Layer</b></li>
+          <ul>
+            <li>Hard Sigmoid</li>
+            <li>Hard Swish</li>
+          </ul>  
+        </ul>
+      <ul><li><b>Initialization Function</b></li>
+          <ul>
+            <li>Truncated Normal</li>
+            <li>Lecun Normal</li>
+          </ul>  
         </ul>
       </td>
       <td>
