@@ -179,8 +179,6 @@ pip install flowvision==0.0.56
 You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
 
 ## Model Zoo
-All of the supported models can be found in our model summary page [here](MODEL_SUMMARY.md).
-
 We have conducted all the tests under the same setting, please refer to the model page [here](MODEL_ZOO.md) for more details.
 
 ## Quick Start
