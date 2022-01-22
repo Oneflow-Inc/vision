@@ -1,5 +1,5 @@
 # flowvision
-The flowvision package consists of popular datasets, model architectures, and common image transformations for computer vision.
+The flowvision package consists of popular datasets, SOTA computer vision models, layers, utilities, schedulers, advanced data augmentations and common image transformations based on OneFlow.
 
 
 ## Installation
@@ -9,6 +9,160 @@ Then install the latest stable release of `flowvision`
 ```bash
 pip install flowvision==0.0.56
 ```
+
+## Overview of flowvision structure
+<table align="center">
+  <tbody>
+    <tr align="center" valign="bottom">
+      <td>
+        <b>Architectures</b>
+      </td>
+      <td>
+        <b>Backbones</b>
+      </td>
+      <td>
+        <b>Components</b>
+      </td>
+      <td>
+        <b>Data Augmentation</b>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td>
+        <ul>
+          <li><b>Object Detection</b></li>
+          <ul>
+            <li>Faster RCNN</li>
+            <li>FPN</li>
+            <li>Cascade-RCNN</li>
+            <li>Libra RCNN</li>
+            <li>Hybrid Task RCNN</li>
+            <li>PSS-Det</li>
+            <li>RetinaNet</li>
+            <li>YOLOv3</li>
+            <li>YOLOv4</li>  
+            <li>PP-YOLOv1/v2</li>
+            <li>PP-YOLO-Tiny</li>
+            <li>SSD</li>
+            <li>CornerNet-Squeeze</li>
+            <li>FCOS</li>  
+            <li>TTFNet</li>
+            <li>PP-PicoDet</li>
+            <li>DETR</li>
+            <li>Deformable DETR</li>
+            <li>Swin Transformer</li>
+            <li>Sparse RCNN</li>
+        </ul>
+        <li><b>Instance Segmentation</b></li>
+        <ul>
+            <li>Mask RCNN</li>
+            <li>SOLOv2</li>
+        </ul>
+        <li><b>Face Detection</b></li>
+        <ul>
+            <li>FaceBoxes</li>
+            <li>BlazeFace</li>
+            <li>BlazeFace-NAS</li>
+        </ul>
+        <li><b>Multi-Object-Tracking</b></li>
+        <ul>
+            <li>JDE</li>
+            <li>FairMOT</li>
+            <li>DeepSort</li>
+        </ul>
+        <li><b>KeyPoint-Detection</b></li>
+        <ul>
+            <li>HRNet</li>
+            <li>HigherHRNet</li>
+        </ul>
+      </ul>
+      </td>
+      <td>
+        <ul>
+          <li>ResNet(&vd)</li>
+          <li>ResNeXt(&vd)</li>
+          <li>SENet</li>
+          <li>Res2Net</li>
+          <li>HRNet</li>
+          <li>Hourglass</li>
+          <li>CBNet</li>
+          <li>GCNet</li>
+          <li>DarkNet</li>
+          <li>CSPDarkNet</li>
+          <li>VGG</li>
+          <li>MobileNetv1/v3</li>  
+          <li>GhostNet</li>
+          <li>Efficientnet</li>  
+          <li>BlazeNet</li>  
+        </ul>
+      </td>
+      <td>
+        <ul><li><b>Common</b></li>
+          <ul>
+            <li>Sync-BN</li>
+            <li>Group Norm</li>
+            <li>DCNv2</li>
+            <li>Non-local</li>
+          </ul>  
+        </ul>
+        <ul><li><b>KeyPoint</b></li>
+          <ul>
+            <li>DarkPose</li>
+          </ul>  
+        </ul>
+        <ul><li><b>FPN</b></li>
+          <ul>
+            <li>BiFPN</li>
+            <li>BFP</li>  
+            <li>HRFPN</li>
+            <li>ACFPN</li>
+          </ul>  
+        </ul>  
+        <ul><li><b>Loss</b></li>
+          <ul>
+            <li>Smooth-L1</li>
+            <li>GIoU/DIoU/CIoU</li>  
+            <li>IoUAware</li>
+          </ul>  
+        </ul>  
+        <ul><li><b>Post-processing</b></li>
+          <ul>
+            <li>SoftNMS</li>
+            <li>MatrixNMS</li>  
+          </ul>  
+        </ul>
+        <ul><li><b>Speed</b></li>
+          <ul>
+            <li>FP16 training</li>
+            <li>Multi-machine training </li>  
+          </ul>  
+        </ul>  
+      </td>
+      <td>
+        <ul>
+          <li>Resize</li>  
+          <li>Lighting</li>  
+          <li>Flipping</li>  
+          <li>Expand</li>
+          <li>Crop</li>
+          <li>Color Distort</li>  
+          <li>Random Erasing</li>  
+          <li>Mixup </li>
+          <li>Mosaic</li>
+          <li>Cutmix </li>
+          <li>Grid Mask</li>
+          <li>Auto Augment</li>  
+          <li>Random Perspective</li>  
+        </ul>  
+      </td>  
+    </tr>
+
+
+</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## Documentation
 You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
