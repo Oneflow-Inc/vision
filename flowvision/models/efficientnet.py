@@ -11,8 +11,8 @@ import oneflow.nn as nn
 from oneflow import Tensor
 
 from .registry import ModelCreator
+from .helpers import make_divisible
 from .utils import load_state_dict_from_url
-from flowvision.models.helpers import make_divisible
 from flowvision.layers.regularization import StochasticDepth
 from flowvision.layers.blocks import ConvBnAct
 
