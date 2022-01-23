@@ -1,15 +1,12 @@
 """
 Modified from https://github.com/cheerss/CrossFormer/blob/main/models/crossformer.py
 """
-import numpy as np
-
 import oneflow as flow
 import oneflow.nn as nn
-import oneflow.nn.functional as F
 
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
-from flowvision.layers.regularization import DropPath, drop_path
+from flowvision.layers.regularization import DropPath
 from flowvision.layers.weight_init import trunc_normal_
 
 

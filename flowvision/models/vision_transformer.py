@@ -14,9 +14,9 @@ import oneflow.nn.functional as F
 from flowvision.layers.blocks import PatchEmbed, Mlp
 from flowvision.layers.regularization import DropPath
 from flowvision.layers.weight_init import trunc_normal_, lecun_normal_
+from flowvision.models.helpers import named_apply
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from .helpers import named_apply
 
 
 model_urls = {

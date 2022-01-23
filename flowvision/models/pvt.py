@@ -8,9 +8,9 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from .helpers import to_2tuple
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from flowvision.models.helpers import to_2tuple
 from flowvision.layers.weight_init import trunc_normal_
 from flowvision.layers.regularization import DropPath
 
