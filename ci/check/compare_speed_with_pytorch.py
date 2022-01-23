@@ -135,7 +135,6 @@ def test(
             + lines[line_num + 1 :]
         )
 
-        # for swin transformer
         for i, line in enumerate(lines):
             if "from flowvision.layers.weight_init import trunc_normal_" in line:
                 lines = (
@@ -145,7 +144,15 @@ def test(
                 )
                 break
 
-        # for vision transformer
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.weight_init import lecun_normal_" in line:
+                lines = (
+                    lines[:i]
+                    + ["from timm.models.layers import lecun_normal_",]
+                    + lines[i + 1 :]
+                )
+                break
+
         for i, line in enumerate(lines):
             if (
                 "from flowvision.layers.weight_init import trunc_normal_, lecun_normal_"
@@ -162,6 +169,14 @@ def test(
                 lines = (
                     lines[:i]
                     + ["from timm.models.layers import DropPath",]
+                    + lines[i + 1 :]
+                )
+                break
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.blocks import PatchEmbed" in line:
+                lines = (
+                    lines[:i]
+                    + ["from timm.models.layers import PatchEmbed",]
                     + lines[i + 1 :]
                 )
                 break
