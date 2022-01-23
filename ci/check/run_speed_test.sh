@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# dependencies 
-# flowvision, timm, torch
+# Dependencies for running this script: flowvision, timm, torch
 set -uxo pipefail
 
 rc=0

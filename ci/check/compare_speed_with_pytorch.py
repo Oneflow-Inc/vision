@@ -134,25 +134,6 @@ def test(
             ]
             + lines[line_num + 1 :]
         )
-
-        for i, line in enumerate(lines):
-            if "from flowvision.layers.weight_init import trunc_normal_" in line:
-                lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import trunc_normal_",]
-                    + lines[i + 1 :]
-                )
-                break
-
-        for i, line in enumerate(lines):
-            if "from flowvision.layers.weight_init import lecun_normal_" in line:
-                lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import lecun_normal_",]
-                    + lines[i + 1 :]
-                )
-                break
-
         for i, line in enumerate(lines):
             if (
                 "from flowvision.layers.weight_init import trunc_normal_, lecun_normal_"
@@ -165,6 +146,22 @@ def test(
                 )
                 break
         for i, line in enumerate(lines):
+            if "from flowvision.layers.weight_init import trunc_normal_" in line:
+                lines = (
+                    lines[:i]
+                    + ["from timm.models.layers import trunc_normal_",]
+                    + lines[i + 1 :]
+                )
+                break
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.weight_init import lecun_normal_" in line:
+                lines = (
+                    lines[:i]
+                    + ["from timm.models.layers import lecun_normal_",]
+                    + lines[i + 1 :]
+                )
+                break
+        for i, line in enumerate(lines):
             if "from flowvision.layers.regularization import DropPath" in line:
                 lines = (
                     lines[:i]
@@ -173,18 +170,18 @@ def test(
                 )
                 break
         for i, line in enumerate(lines):
-            if "from flowvision.layers.blocks import PatchEmbed" in line:
-                lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import PatchEmbed",]
-                    + lines[i + 1 :]
-                )
-                break
-        for i, line in enumerate(lines):
             if "from flowvision.layers.blocks import PatchEmbed, Mlp" in line:
                 lines = (
                     lines[:i]
                     + ["from timm.models.layers import PatchEmbed, Mlp",]
+                    + lines[i + 1 :]
+                )
+                break
+        for i, line in enumerate(lines):
+            if "from flowvision.layers.blocks import PatchEmbed" in line:
+                lines = (
+                    lines[:i]
+                    + ["from timm.models.layers import PatchEmbed",]
                     + lines[i + 1 :]
                 )
                 break
