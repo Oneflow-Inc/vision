@@ -285,7 +285,7 @@ class clean(distutils.command.clean.clean):
 if __name__ == "__main__":
     print(f"Building wheel {package_name}-{version}")
 
-    with open("README.md", "r") as fh:
+    with open("README.md", "r", encoding="utf-8") as fh:
         long_description = fh.read()
 
     write_version_file()
