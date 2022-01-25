@@ -19,6 +19,7 @@
 - Refator `Vision Transformer` model [#115](https://github.com/Oneflow-Inc/vision/pull/115)
 - Refine `flowvision.models.ModelCreator` to support `ModelCreator.model_list` func [#123](https://github.com/Oneflow-Inc/vision/pull/123)
 - Refator README [#124](https://github.com/Oneflow-Inc/vision/pull/124)
+- Refine `load_state_dict_from_url` in `flowvision.models.utils` to support downloading pretrained weights to cache dir `~/.oneflow/flowvision_cache` [#127](https://github.com/Oneflow-Inc/vision/pull/127)
 
 
 **Docs Update**
