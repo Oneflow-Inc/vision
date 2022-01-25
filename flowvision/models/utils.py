@@ -8,14 +8,40 @@ import tempfile
 import zipfile
 import tarfile
 import warnings
+import logging
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 from tqdm import tqdm
+from typing import Optional
 
 import oneflow as flow
 
 HASH_REGEX = re.compile(r"([a-f0-9]*)_")
 
+def get_cache_dir(cache_dir: Optional[str] = None) -> str:
+    """
+    Modified from https://github.com/facebookresearch/iopath/blob/main/iopath/common/file_io.py
+    Returns a default directory to cache static files
+    (usually downloaded from Internet), if None is provided.
+    Args:
+        cache_dir (None or str): if not None, will be returned as is.
+            If None, returns the default cache directory as:
+        1) $FLOWVISION_CACHE, if set
+        2) otherwise ~/.oneflow/flowvision_cache
+    """
+    if cache_dir is None:
+        cache_dir = os.path.expanduser(
+            os.getenv("FLOWVISION_CACHE", "~/.oneflow/flowvision_cache")
+        )
+    try:
+        os.makedirs(cache_dir, exist_ok=True)
+        assert os.access(cache_dir, os.W_OK)
+    except (OSError, AssertionError):
+        tmp_dir = os.path.join(tempfile.gettempdir(), "flowvision_cache")
+        logger = logging.getLogger(__name__)
+        logger.warning(f"{cache_dir} is not accessible! Using {tmp_dir} instead!")
+        cache_dir = tmp_dir
+    return cache_dir
 
 def _is_legacy_tar_format(filename):
     return tarfile.is_tarfile(filename)
@@ -53,7 +79,7 @@ def _legacy_zip_load(filename, model_dir, map_location):
 
 def load_state_dict_from_url(
     url,
-    model_dir="./checkpoints",
+    model_dir=None,
     map_location=None,
     progress=True,
     check_hash=False,
@@ -86,7 +112,7 @@ def load_state_dict_from_url(
         warnings.warn("Map location is not supported yet.")
 
     try:
-        os.makedirs(model_dir)
+        model_dir = get_cache_dir(model_dir)
     except OSError as e:
         if e.errno == errno.EEXIST:
             # Directory already exists, ignore.
