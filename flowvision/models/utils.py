@@ -18,6 +18,7 @@ import oneflow as flow
 
 HASH_REGEX = re.compile(r"([a-f0-9]*)_")
 
+
 def get_cache_dir(cache_dir: Optional[str] = None) -> str:
     """
     Modified from https://github.com/facebookresearch/iopath/blob/main/iopath/common/file_io.py
@@ -42,6 +43,7 @@ def get_cache_dir(cache_dir: Optional[str] = None) -> str:
         logger.warning(f"{cache_dir} is not accessible! Using {tmp_dir} instead!")
         cache_dir = tmp_dir
     return cache_dir
+
 
 def _is_legacy_tar_format(filename):
     return tarfile.is_tarfile(filename)
