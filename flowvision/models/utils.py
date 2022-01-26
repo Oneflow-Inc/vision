@@ -81,7 +81,7 @@ def _legacy_zip_load(filename, model_dir, map_location, delete_zip_file=True):
 
 def load_state_dict_from_url(
     url,
-    model_dir=None,
+    model_dir="./checkpoints",
     map_location=None,
     progress=True,
     check_hash=False,
@@ -125,6 +125,12 @@ def load_state_dict_from_url(
     filename = os.path.basename(parts.path)
     if file_name is not None:
         filename = file_name
+    # if already download the weight, directly return loaded state_dict
+    pretrained_weight_dir = os.path.join(model_dir, filename.split(".")[0])
+    if os.path.exists(pretrained_weight_dir):
+        state_dict = flow.load(pretrained_weight_dir)
+        return state_dict
+
     cached_file = os.path.join(model_dir, filename)
     if not os.path.exists(cached_file):
         sys.stderr.write('Downloading: "{}" to {}\n'.format(url, cached_file))
