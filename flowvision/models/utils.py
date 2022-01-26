@@ -81,7 +81,7 @@ def _legacy_zip_load(filename, model_dir, map_location, delete_zip_file=True):
 
 def load_state_dict_from_url(
     url,
-    model_dir="./checkpoints",
+    model_dir=None,
     map_location=None,
     progress=True,
     check_hash=False,
