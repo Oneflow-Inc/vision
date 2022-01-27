@@ -1,13 +1,13 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="inception_v3"
+MODEL="rexnet_lite_1_0"
 BATCH_SIZE=64
 DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
 NORMALIZE_MODE="imagenet_default_mean_std"
 CROP_PCT=0.875
-INTERPOLATION="bilinear"
+INTERPOLATION="bicubic"
 NUM_WORKERS=8
 DEVICE=$1
 
