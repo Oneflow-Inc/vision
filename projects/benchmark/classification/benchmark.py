@@ -233,8 +233,8 @@ def main(args):
         )
     else:
         print(
-            "Evaluation {:s} on dataset {:s}, Acc@1: {:.3f}, Acc@5: {:.3f}, Acc@1-Error: {:.3f}, Acc@5-Error: {:.3f}".format(
-                args.model, "ImageNet", Top_1_m.avg, Top_5_m.avg, (100-Top_1_m.avg), (100-Top_5_m.avg)
+            "Evaluation {:s} on dataset {:s}, Acc@1: {:.3f}, Acc@1-Error: {:.3f}, Acc@5: {:.3f}, Acc@5-Error: {:.3f}".format(
+                args.model, "ImageNet", Top_1_m.avg, (100-Top_1_m.avg), Top_5_m.avg, (100-Top_5_m.avg)
             )
         )
 

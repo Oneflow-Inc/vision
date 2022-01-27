@@ -1,7 +1,7 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="alexnet"
+MODEL="inception_v3"
 BATCH_SIZE=64
 DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
@@ -9,8 +9,9 @@ NORMALIZE_MODE="imagenet_default_mean_std"
 CROP_PCT=0.875
 INTERPOLATION="bilinear"
 NUM_WORKERS=8
+DEVICE=$1
 
-python ./projects/benchmark/classification/benchmark.py --model $MODEL \
+CUDA_VISIBLE_DEVICES=$DEVICE python ./projects/benchmark/classification/benchmark.py --model $MODEL \
                     --data_path $DATA_PATH \
                     --batch_size $BATCH_SIZE \
                     --img_size $IMG_SIZE \

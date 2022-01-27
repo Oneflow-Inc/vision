@@ -240,7 +240,7 @@ def _load_pretrained(
     model_name: str,
     model: nn.Module,
     progress: bool,
-    model_dir: str = "./checkpoints",
+    model_dir: str = None,
     check_hash: bool = False,
 ) -> None:
     if model_name not in model_urls or model_urls[model_name] is None:
