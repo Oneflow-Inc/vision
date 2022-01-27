@@ -17,6 +17,8 @@ ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
 CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
+def param_count(model):
+    return sum([m.numel() for m in model.parameters()]) / 1000000
 
 def get_mean_std(mode="imagenet_default_mean_std"):
     if mode == "imagenet_default_mean_std":
@@ -147,6 +149,7 @@ def accuracy_r(output, names, real_reables, topk=(1,)):
 
 def main(args):
     model = ModelCreator.create_model(args.model, pretrained=True)
+    params = param_count(model)
     data_dir = args.data_path
     img_size = args.img_size
     img_mean, img_std = get_mean_std(args.normalize_mode)
@@ -170,6 +173,7 @@ def main(args):
     )
     total_batch = len(data_loader)
 
+    print(f"{args.model} created, param count:{params}M")
     print("Start Evaluation")
     Top_1_m = AverageMeter()
     Top_5_m = AverageMeter()
@@ -230,7 +234,7 @@ def main(args):
     else:
         print(
             "Evaluation {:s} on dataset {:s}, Acc@1: {:.3f}, Acc@5: {:.3f}, Acc@1-Error: {:.3f}, Acc@5-Error: {:.3f}".format(
-                args.model, "ImageNet", Top_1_m.avg, Top_5_m.avg, (1-Top_1_m.avg), (1-Top_5_m.avg)
+                args.model, "ImageNet", Top_1_m.avg, Top_5_m.avg, (100-Top_1_m.avg), (100-Top_5_m.avg)
             )
         )
 

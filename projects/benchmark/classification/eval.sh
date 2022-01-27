@@ -1,13 +1,13 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="vit_tiny_patch16_224"
+MODEL="alexnet"
 BATCH_SIZE=64
-DATA_PATH="/DATA/disk1/ImageNet/extract"
+DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
-NORMALIZE_MODE="vit_mean_std"
+NORMALIZE_MODE="imagenet_default_mean_std"
 CROP_PCT=0.875
-INTERPOLATION="bicubic"
+INTERPOLATION="bilinear"
 NUM_WORKERS=8
 
 python ./projects/benchmark/classification/benchmark.py --model $MODEL \
