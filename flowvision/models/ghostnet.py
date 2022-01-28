@@ -10,7 +10,7 @@ import oneflow.nn.functional as F
 
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
-from .helpers import make_divisible
+from flowvision.models.helpers import make_divisible
 
 
 __all__ = ["ghostnet"]

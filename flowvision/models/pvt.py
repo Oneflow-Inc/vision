@@ -8,9 +8,9 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from .helpers import to_2tuple
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
+from flowvision.models.helpers import to_2tuple
 from flowvision.layers.weight_init import trunc_normal_
 from flowvision.layers.regularization import DropPath
 
@@ -217,7 +217,9 @@ class PyramidVisionTransformer(nn.Module):
         self.num_stages = num_stages
 
         # stochastic depth
-        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
+        dpr = [
+            x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))
+        ]  # stochastic depth decay rule
         cur = 0
 
         for i in range(num_stages):

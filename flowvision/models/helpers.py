@@ -1,8 +1,11 @@
-""" Layer/Module Helpers
-Hacked together by / Copyright 2020 Ross Wightman
+"""
+Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/helpers.py
 """
 from itertools import repeat
 import collections.abc
+from typing import Any, Callable, Optional, Tuple
+
+import oneflow.nn as nn
 
 
 # From PyTorch internals
@@ -29,3 +32,37 @@ def make_divisible(v, divisor=8, min_value=None, round_limit=0.9):
     if new_v < round_limit * v:
         new_v += divisor
     return new_v
+
+
+def named_apply(
+    fn: Callable, module: nn.Module, name="", depth_first=True, include_root=False
+) -> nn.Module:
+    if not depth_first and include_root:
+        fn(module=module, name=name)
+    for child_name, child_module in module.named_children():
+        child_name = ".".join((name, child_name)) if name else child_name
+        named_apply(
+            fn=fn,
+            module=child_module,
+            name=child_name,
+            depth_first=depth_first,
+            include_root=True,
+        )
+    if depth_first and include_root:
+        fn(module=module, name=name)
+    return module
+
+
+def named_modules(module: nn.Module, name="", depth_first=True, include_root=False):
+    if not depth_first and include_root:
+        yield name, module
+    for child_name, child_module in module.named_children():
+        child_name = ".".join((name, child_name)) if name else child_name
+        yield from named_modules(
+            module=child_module,
+            name=child_name,
+            depth_first=depth_first,
+            include_root=True,
+        )
+    if depth_first and include_root:
+        yield name, module

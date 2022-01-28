@@ -9,7 +9,7 @@ from oneflow import nn, Tensor
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from .helpers import make_divisible
+from flowvision.models.helpers import make_divisible
 
 __all__ = ["MobileNetV3", "mobilenet_v3_large", "mobilenet_v3_small"]
 

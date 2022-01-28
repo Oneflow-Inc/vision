@@ -18,13 +18,20 @@ CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
 
+def param_count(model):
+    return sum([m.numel() for m in model.parameters()]) / 1000000
+
+
 def get_mean_std(mode="imagenet_default_mean_std"):
-    if mode == "imagenet_default_mean_std":
+    if mode == "IMAGENET_DEFAULT_MEAN_STD":
         mean = (0.485, 0.456, 0.406)
         std = (0.229, 0.224, 0.225)
-    elif mode == "vit_mean_std":
+    elif mode == "IMAGENET_INCEPTION_MEAN_STD":
         mean = (0.5, 0.5, 0.5)
         std = (0.5, 0.5, 0.5)
+    elif mode == "VIT_MIIL":
+        mean = (0.0, 0.0, 0.0)
+        std = (1.0, 1.0, 1.0)
     else:
         raise NotImplementedError(f"Unkown mode: {mode}")
     return mean, std
@@ -59,9 +66,7 @@ class ImageNetDataLoader(DataLoader):
                 [
                     transforms.Resize(
                         scale_size, interpolation=str_to_interp_mode(interpolation)
-                    )  # 3: bibubic
-                    if image_size == 224
-                    else transforms.Resize(image_size, interpolation=3),
+                    ),  # 3: bibubic
                     transforms.CenterCrop(image_size),
                     transforms.ToTensor(),
                     transforms.Normalize(img_mean, img_std),
@@ -147,6 +152,7 @@ def accuracy_r(output, names, real_reables, topk=(1,)):
 
 def main(args):
     model = ModelCreator.create_model(args.model, pretrained=True)
+    params = param_count(model)
     data_dir = args.data_path
     img_size = args.img_size
     img_mean, img_std = get_mean_std(args.normalize_mode)
@@ -170,6 +176,7 @@ def main(args):
     )
     total_batch = len(data_loader)
 
+    print(f"{args.model} created, param count:{params}M")
     print("Start Evaluation")
     Top_1_m = AverageMeter()
     Top_5_m = AverageMeter()
@@ -229,8 +236,13 @@ def main(args):
         )
     else:
         print(
-            "Evaluation {:s} on dataset {:s}, Acc@1: {:.4f}, Acc@5: {:.4f}, ".format(
-                args.model, "ImageNet", Top_1_m.avg, Top_5_m.avg,
+            "Evaluation {:s} on dataset {:s}, Acc@1: {:.3f}, Acc@1-Error: {:.3f}, Acc@5: {:.3f}, Acc@5-Error: {:.3f}".format(
+                args.model,
+                "ImageNet",
+                Top_1_m.avg,
+                (100 - Top_1_m.avg),
+                Top_5_m.avg,
+                (100 - Top_5_m.avg),
             )
         )
 
@@ -255,7 +267,11 @@ def _parse_args():
         "--normalize_mode",
         type=str,
         default="imagenet_default_mean_std",
-        choices=["imagenet_default_mean_std", "vit_mean_std"],
+        choices=[
+            "VIT_MIIL",
+            "IMAGENET_DEFAULT_MEAN_STD",
+            "IMAGENET_INCEPTION_MEAN_STD",
+        ],
         help="the normalization mode",
     )
     parser.add_argument(

@@ -26,6 +26,7 @@ architectures for image classification:
 -  `EfficientNet`_
 -  `ReXNet`_
 -  `ViT`_
+-  `DeiT`_
 -  `PVT`_
 -  `Swin-Transformer`_
 -  `CSwin-Transformer`_
@@ -52,6 +53,7 @@ architectures for image classification:
 .. _MNASNet: https://arxiv.org/abs/1807.11626
 .. _GhostNet: https://arxiv.org/abs/1911.11907
 .. _ViT: https://arxiv.org/abs/2010.11929
+.. _DeiT: https://arxiv.org/abs/2012.12877
 .. _PVT: https://arxiv.org/abs/2102.12122
 .. _ResMLP: https://arxiv.org/abs/2105.03404
 .. _Swin-Transformer: https://arxiv.org/abs/2103.14030
@@ -86,7 +88,7 @@ VGG
         vgg11,
         vgg11_bn,
         vgg13,
-        vgg13_bn
+        vgg13_bn,
         vgg16,
         vgg16_bn,
         vgg19,
@@ -218,12 +220,52 @@ ViT
 ------
 .. automodule:: flowvision.models
     :members: 
-        vit_b_16_224,
-        vit_b_16_384,
-        vit_b_32_224,
-        vit_b_32_384,
-        vit_l_16_384,
-        vit_l_32_384,
+        vit_tiny_patch16_224,
+        vit_tiny_patch16_384,
+        vit_small_patch32_224,
+        vit_small_patch32_384,
+        vit_small_patch16_224,
+        vit_small_patch16_384,
+        vit_base_patch32_224,
+        vit_base_patch32_384,
+        vit_base_patch16_224,
+        vit_base_patch16_384,
+        vit_base_patch8_224,
+        vit_large_patch32_224,
+        vit_large_patch32_384,
+        vit_large_patch16_224,
+        vit_large_patch16_384,
+        vit_base_patch16_224_sam,
+        vit_base_patch32_224_sam,
+        vit_huge_patch14_224,
+        vit_giant_patch14_224,
+        vit_gigantic_patch14_224,
+        vit_tiny_patch16_224_in21k,
+        vit_small_patch32_224_in21k,
+        vit_small_patch16_224_in21k,
+        vit_base_patch32_224_in21k,
+        vit_base_patch16_224_in21k,
+        vit_base_patch8_224_in21k,
+        vit_large_patch32_224_in21k,
+        vit_large_patch16_224_in21k,
+        vit_huge_patch14_224_in21k,
+        vit_base_patch16_224_miil_in21k,
+        vit_base_patch16_224_miil,
+
+
+DeiT
+------
+.. automodule:: flowvision.models
+    :members: 
+        deit_tiny_patch16_224,
+        deit_small_patch16_224,
+        deit_base_patch16_224,
+        deit_base_patch16_384,
+        deit_tiny_distilled_patch16_224,
+        deit_small_distilled_patch16_224,
+        deit_base_distilled_patch16_224,
+        deit_base_distilled_patch16_384,
+
 
 PVT
 ------
@@ -292,16 +334,17 @@ ResMLP
 
 .. automodule:: flowvision.models
     :members: 
-        resmlp_12,
-        resmlp_12_dist,
-        resmlp_24,
-        resmlp_24_dist,
-        resmlp_24_dino,
-        resmlp_36,
-        resmlp_36_dist,
-        resmlpB_24,
-        resmlpB_24_in22k,
-        resmlpB_24_dist,
+        resmlp_12_224,
+        resmlp_12_distilled_224,
+        resmlp_12_224_dino,
+        resmlp_24_224,
+        resmlp_24_distilled_224,
+        resmlp_24_224_dino,
+        resmlp_36_224,
+        resmlp_36_distilled_224,
+        resmlp_big_24_224,
+        resmlp_big_24_224_in22k_to_1k,
+        resmlp_big_24_distilled_224,
 
 
 gMLP

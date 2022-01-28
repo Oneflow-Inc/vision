@@ -63,7 +63,9 @@ class DropPath(nn.Module):
 def window_partition(x, window_size):
     B, H, W, C = x.shape
     x = x.view(B, H // window_size, window_size, W // window_size, window_size, C)
-    windows = x.permute(0, 1, 3, 2, 4, 5).view(-1, window_size, window_size, C)
+    windows = (
+        x.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, window_size, window_size, C)
+    )
     return windows
 
 
@@ -72,7 +74,7 @@ def window_reverse(windows, window_size, H, W):
     x = windows.view(
         B, H // window_size, W // window_size, window_size, window_size, -1
     )
-    x = x.permute(0, 1, 3, 2, 4, 5).view(B, H, W, -1)
+    x = x.permute(0, 1, 3, 2, 4, 5).contiguous().view(B, H, W, -1)
     return x
 
 
@@ -158,7 +160,7 @@ class WindowAttention(nn.Module):
         self.proj = nn.Linear(dim, dim)
         self.proj_drop = nn.Dropout(proj_drop)
 
-        trunc_normal_(self.relative_position_bias_table, std=.02)
+        trunc_normal_(self.relative_position_bias_table, std=0.02)
         self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, x, mask=None):
@@ -608,12 +610,14 @@ class SwinTransformer(nn.Module):
             self.absolute_pos_embed = nn.Parameter(
                 flow.zeros(1, num_patches, embed_dim)
             )
-            trunc_normal_(self.absolute_pos_embed, std=.02)
+            trunc_normal_(self.absolute_pos_embed, std=0.02)
 
         self.pos_drop = nn.Dropout(p=drop_rate)
 
         # stochastic depth
-        dpr = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
+        dpr = [
+            x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))
+        ]  # stochastic depth decay rule
 
         # build layers
         self.layers = nn.ModuleList()
@@ -651,7 +655,7 @@ class SwinTransformer(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=.02)
+            trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):

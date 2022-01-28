@@ -9,7 +9,7 @@ from flowvision.layers.blocks.feature_pyramid_network import (
 )
 
 from flowvision.layers.blocks import misc as misc_nn_ops
-from .._utils import IntermediateLayerGetter
+from ..layer_getter import IntermediateLayerGetter
 from .. import resnet
 from .. import mobilenet
 
@@ -17,7 +17,7 @@ from .. import mobilenet
 class BackboneWithFPN(nn.Module):
     """
     Adds a FPN on top of a model.
-    Internally, it uses flowvision.models._utils.IntermediateLayerGetter to
+    Internally, it uses flowvision.models.layer_getter.IntermediateLayerGetter to
     extract a submodel that returns the feature maps specified in return_layers.
     The same limitations of IntermediateLayerGetter apply here.
     Args:

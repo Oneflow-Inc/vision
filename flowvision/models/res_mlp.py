@@ -4,26 +4,25 @@ Modified from https://github.com/facebookresearch/deit/blob/main/resmlp_models.p
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
-from functools import partial
 
 from flowvision.layers.regularization import DropPath
-from flowvision.layers.blocks import Mlp, PatchEmbed
-
+from flowvision.layers.blocks import PatchEmbed, Mlp
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
 
 model_urls = {
-    "resmlp_12": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12.zip",
-    "resmlp_12_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_dist.zip",
-    "resmlp_24": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24.zip",
-    "resmlp_24_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dist.zip",
-    "resmlp_24_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dino.zip",
-    "resmlp_36": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36.zip",
-    "resmlp_36_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36_dist.zip",
-    "resmlpB_24": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24.zip",
-    "resmlpB_24_in22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24_in22k.zip",
-    "resmlpB_24_dist": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24_dist.zip",
+    "resmlp_12_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12.zip",
+    "resmlp_12_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_dist.zip",
+    "resmlp_12_224_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_224_dino.zip",
+    "resmlp_24_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24.zip",
+    "resmlp_24_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dist.zip",
+    "resmlp_24_224_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_224_dino.zip",
+    "resmlp_36_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36.zip",
+    "resmlp_36_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36_dist.zip",
+    "resmlp_big_24_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24.zip",
+    "resmlp_big_24_224_in22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24_in22k.zip",
+    "resmlp_big_24_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24_dist.zip",
 }
 
 
@@ -166,7 +165,7 @@ def _create_resmlp(arch, pretrained=False, progress=True, **model_kwargs):
 
 
 @ModelCreator.register_model
-def resmlp_12(pretrained=False, progress=True, **kwargs):
+def resmlp_12_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-12 model.
 
@@ -182,7 +181,7 @@ def resmlp_12(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_12 = flowvision.models.resmlp_12(pretrained=False, progress=True)
+        >>> resmlp_12_224 = flowvision.models.resmlp_12_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -191,15 +190,15 @@ def resmlp_12(pretrained=False, progress=True, **kwargs):
         depth=12,
         Patch_layer=PatchEmbed,
         init_scale=0.1,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_12", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_12_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
 @ModelCreator.register_model
-def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
+def resmlp_12_distilled_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-12 model with distillation.
 
@@ -216,7 +215,7 @@ def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_12_dist = flowvision.models.resmlp_12_dist(pretrained=False, progress=True)
+        >>> resmlp_12_distilled_224 = flowvision.models.resmlp_12_distilled_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -225,15 +224,52 @@ def resmlp_12_dist(pretrained=False, progress=True, **kwargs):
         depth=12,
         Patch_layer=PatchEmbed,
         init_scale=0.1,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_12_dist", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_12_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
 @ModelCreator.register_model
-def resmlp_24(pretrained=False, progress=True, **kwargs):
+def resmlp_12_224_dino(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-12 model trained under DINO proposed in `"Emerging Properties in Self-Supervised Vision Transformers" <https://arxiv.org/abs/2104.14294>`_.
+
+    .. note::
+        ResMLP-12 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that this model is the same as resmlp_12 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_12_224_dino = flowvision.models.resmlp_12_224_dino(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        Patch_layer=PatchEmbed,
+        init_scale=0.1,
+        **kwargs,
+    )
+    return _create_resmlp(
+        "resmlp_12_224_dino", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def resmlp_24_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-24 model.
 
@@ -249,7 +285,7 @@ def resmlp_24(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_24 = flowvision.models.resmlp_24(pretrained=False, progress=True)
+        >>> resmlp_24_224 = flowvision.models.resmlp_24_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -258,15 +294,15 @@ def resmlp_24(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-5,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_24", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_24_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
 @ModelCreator.register_model
-def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
+def resmlp_24_distilled_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-24 model with distillation.
 
@@ -283,7 +319,7 @@ def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_24_dist = flowvision.models.resmlp_24_dist(pretrained=False, progress=True)
+        >>> resmlp_24_distilled_224 = flowvision.models.resmlp_24_distilled_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -292,15 +328,18 @@ def resmlp_24_dist(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-5,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_24_dist", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_24_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
 @ModelCreator.register_model
-def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
+def resmlp_24_224_dino(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-24 model trained under DINO proposed in `"Emerging Properties in Self-Supervised Vision Transformers" <https://arxiv.org/abs/2104.14294>`_.
 
@@ -317,7 +356,7 @@ def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_24_dino = flowvision.models.resmlp_24_dino(pretrained=False, progress=True)
+        >>> resmlp_24_224_dino = flowvision.models.resmlp_24_224_dino(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -326,15 +365,15 @@ def resmlp_24_dino(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-5,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_24_dino", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_24_dino_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
 @ModelCreator.register_model
-def resmlp_36(pretrained=False, progress=True, **kwargs):
+def resmlp_36_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-36 model.
 
@@ -350,7 +389,7 @@ def resmlp_36(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_36 = flowvision.models.resmlp_36(pretrained=False, progress=True)
+        >>> resmlp_36_224 = flowvision.models.resmlp_36_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -359,15 +398,15 @@ def resmlp_36(pretrained=False, progress=True, **kwargs):
         depth=36,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_36", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_36_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
 @ModelCreator.register_model
-def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
+def resmlp_36_distilled_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-36 model with distillation.
 
@@ -384,7 +423,7 @@ def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlp_36_dist = flowvision.models.resmlp_36_dist(pretrained=False, progress=True)
+        >>> resmlp_36_distilled_224 = flowvision.models.resmlp_36_distilled_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -393,20 +432,23 @@ def resmlp_36_dist(pretrained=False, progress=True, **kwargs):
         depth=36,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlp_36_dist", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_36_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
 @ModelCreator.register_model
-def resmlpB_24(pretrained=False, progress=True, **kwargs):
+def resmlp_big_24_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResMLP-B-24 model.
+    Constructs the ResMLP-Big-24 model.
 
     .. note::
-        ResMLP-B-24 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        ResMLP-Big-24 model from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -417,7 +459,7 @@ def resmlpB_24(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlpB_24 = flowvision.models.resmlpB_24(pretrained=False, progress=True)
+        >>> resmlp_big_24_224 = flowvision.models.resmlp_big_24_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -426,15 +468,15 @@ def resmlpB_24(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlpB_24", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_big_24_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
 @ModelCreator.register_model
-def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
+def resmlp_big_24_224_in22k_to_1k(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ImageNet22k pretrained ResMLP-B-24 model.
 
@@ -451,7 +493,7 @@ def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlpB_24_in22k = flowvision.models.resmlpB_24_in22k(pretrained=False, progress=True)
+        >>> resmlp_big_24_224_in22k_to_1k = flowvision.models.resmlp_big_24_224_in22k_to_1k(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -460,15 +502,18 @@ def resmlpB_24_in22k(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlpB_24_in22k", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_big_24_224_in22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
 @ModelCreator.register_model
-def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
+def resmlp_big_24_distilled_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ResMLP-B-24 model with distillation.
 
@@ -485,7 +530,7 @@ def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resmlpB_24_dist = flowvision.models.resmlpB_24_dist(pretrained=False, progress=True)
+        >>> resmlp_big_24_distilled_224 = flowvision.models.resmlp_big_24_distilled_224(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -494,8 +539,11 @@ def resmlpB_24_dist(pretrained=False, progress=True, **kwargs):
         depth=24,
         Patch_layer=PatchEmbed,
         init_scale=1e-6,
-        **kwargs
+        **kwargs,
     )
     return _create_resmlp(
-        "resmlpB_24_dist", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_big_24_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
