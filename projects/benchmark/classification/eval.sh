@@ -1,16 +1,17 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="vit_tiny_patch16_224"
+MODEL="resmlp_12_224_dino"
 BATCH_SIZE=64
-DATA_PATH="/DATA/disk1/ImageNet/extract"
+DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
-NORMALIZE_MODE="vit_mean_std"
+NORMALIZE_MODE="IMAGENET_DEFAULT_MEAN_STD" # IMAGENET_INCEPTION_MEAN_STD or IMAGENET_DEFAULT_MEAN_STD or VIT_MIIL
 CROP_PCT=0.875
 INTERPOLATION="bicubic"
 NUM_WORKERS=8
+DEVICE=$1
 
-python ./projects/benchmark/classification/benchmark.py --model $MODEL \
+CUDA_VISIBLE_DEVICES=$DEVICE python ./projects/benchmark/classification/benchmark.py --model $MODEL \
                     --data_path $DATA_PATH \
                     --batch_size $BATCH_SIZE \
                     --img_size $IMG_SIZE \

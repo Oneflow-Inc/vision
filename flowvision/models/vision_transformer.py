@@ -35,8 +35,8 @@ model_urls = {
     "vit_large_patch32_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch32_384.zip",
     "vit_large_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch16_224.zip",
     "vit_large_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_large_patch16_384.zip",
-    "vit_base_patch16_sam_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_sam_224.zip",
-    "vit_base_patch32_sam_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch32_sam_224.zip",
+    "vit_base_patch16_224_sam": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch16_sam_224.zip",
+    "vit_base_patch32_224_sam": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VisionTransformer/vit_base_patch32_sam_224.zip",
     "vit_huge_patch14_224": None,
     "vit_giant_patch14_224": None,
     "vit_gigantic_patch14_224": None,
@@ -505,7 +505,10 @@ def vit_small_patch32_384(pretrained=False, progress=True, **kwargs):
         img_size=384, patch_size=32, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
     model = _create_vision_transformer(
-        "vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs
+        "vit_small_patch32_384",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
     return model
 
@@ -859,12 +862,12 @@ def vit_large_patch16_384(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
-def vit_base_patch16_sam_224(pretrained=False, progress=True, **kwargs):
+def vit_base_patch16_224_sam(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ViT-Base-patch16-sam-224 model.
+    Constructs the ViT-Base-patch16-224-sam model.
 
     .. note::
-        ViT-Base-patch16-sam-224 model from `"When Vision Transformers Outperform ResNets without Pre-training or Strong Data Augmentations" <https://arxiv.org/pdf/2106.01548.pdf>`_.
+        ViT-Base-patch16-224-sam model from `"When Vision Transformers Outperform ResNets without Pre-training or Strong Data Augmentations" <https://arxiv.org/pdf/2106.01548.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -876,7 +879,7 @@ def vit_base_patch16_sam_224(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_base_patch16_sam_224 = flowvision.models.vit_base_patch16_sam_224(pretrained=False, progress=True)
+        >>> vit_base_patch16_224_sam = flowvision.models.vit_base_patch16_224_sam(pretrained=False, progress=True)
 
     """
     # NOTE original SAM weights release worked with representation_size=768
@@ -890,7 +893,7 @@ def vit_base_patch16_sam_224(pretrained=False, progress=True, **kwargs):
         **kwargs
     )
     model = _create_vision_transformer(
-        "vit_base_patch16_sam_224",
+        "vit_base_patch16_224_sam",
         pretrained=pretrained,
         progress=progress,
         **model_kwargs
@@ -899,12 +902,12 @@ def vit_base_patch16_sam_224(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
-def vit_base_patch32_sam_224(pretrained=False, progress=True, **kwargs):
+def vit_base_patch32_224_sam(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ViT-Base-patch32-sam-224 model.
+    Constructs the ViT-Base-patch32-224-sam model.
 
     .. note::
-        ViT-Base-patch32-sam-224 model from `"When Vision Transformers Outperform ResNets without Pre-training or Strong Data Augmentations" <https://arxiv.org/pdf/2106.01548.pdf>`_.
+        ViT-Base-patch32-224-sam model from `"When Vision Transformers Outperform ResNets without Pre-training or Strong Data Augmentations" <https://arxiv.org/pdf/2106.01548.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -916,7 +919,7 @@ def vit_base_patch32_sam_224(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> vit_base_patch32_sam_224 = flowvision.models.vit_base_patch32_sam_224(pretrained=False, progress=True)
+        >>> vit_base_patch32_224_sam = flowvision.models.vit_base_patch32_224_sam(pretrained=False, progress=True)
 
     """
     # NOTE original SAM weights release worked with representation_size=768
@@ -930,7 +933,7 @@ def vit_base_patch32_sam_224(pretrained=False, progress=True, **kwargs):
         **kwargs
     )
     model = _create_vision_transformer(
-        "vit_base_patch32_sam_224",
+        "vit_base_patch32_224_sam",
         pretrained=pretrained,
         progress=progress,
         **model_kwargs

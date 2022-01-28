@@ -18,8 +18,8 @@ __all__ = [
     "vgg13_bn",
     "vgg16",
     "vgg16_bn",
-    "vgg19_bn",
     "vgg19",
+    "vgg19_bn",
 ]
 
 

@@ -336,7 +336,7 @@ def res2net50_48w_2s(pretrained=False, progress=True, **kwargs):
         block=Bottle2neck, layers=[3, 4, 6, 3], baseWidth=48, scale=2, **kwargs
     )
     return _create_res2net(
-        "res2net50_26w_4s", pretrained=pretrained, progress=progress, **model_kwargs
+        "res2net50_48w_2s", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
