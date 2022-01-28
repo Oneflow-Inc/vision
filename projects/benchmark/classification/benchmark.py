@@ -17,8 +17,10 @@ ViT: use mean=[0.5, 0.5, 0.5] and std=[0.5, 0.5, 0.5] for testing
 CSWin: using DEFAULT_CROP_SIZE = 0.9
 """
 
+
 def param_count(model):
     return sum([m.numel() for m in model.parameters()]) / 1000000
+
 
 def get_mean_std(mode="imagenet_default_mean_std"):
     if mode == "IMAGENET_DEFAULT_MEAN_STD":
@@ -235,7 +237,12 @@ def main(args):
     else:
         print(
             "Evaluation {:s} on dataset {:s}, Acc@1: {:.3f}, Acc@1-Error: {:.3f}, Acc@5: {:.3f}, Acc@5-Error: {:.3f}".format(
-                args.model, "ImageNet", Top_1_m.avg, (100-Top_1_m.avg), Top_5_m.avg, (100-Top_5_m.avg)
+                args.model,
+                "ImageNet",
+                Top_1_m.avg,
+                (100 - Top_1_m.avg),
+                Top_5_m.avg,
+                (100 - Top_5_m.avg),
             )
         )
 
@@ -260,7 +267,11 @@ def _parse_args():
         "--normalize_mode",
         type=str,
         default="imagenet_default_mean_std",
-        choices=["VIT_MIIL", "IMAGENET_DEFAULT_MEAN_STD", "IMAGENET_INCEPTION_MEAN_STD"],
+        choices=[
+            "VIT_MIIL",
+            "IMAGENET_DEFAULT_MEAN_STD",
+            "IMAGENET_INCEPTION_MEAN_STD",
+        ],
         help="the normalization mode",
     )
     parser.add_argument(

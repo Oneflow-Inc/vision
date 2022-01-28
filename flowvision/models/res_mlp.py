@@ -227,7 +227,10 @@ def resmlp_12_distilled_224(pretrained=False, progress=True, **kwargs):
         **kwargs,
     )
     return _create_resmlp(
-        "resmlp_12_distilled_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_12_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
@@ -328,7 +331,10 @@ def resmlp_24_distilled_224(pretrained=False, progress=True, **kwargs):
         **kwargs,
     )
     return _create_resmlp(
-        "resmlp_24_distilled_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_24_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
@@ -429,7 +435,10 @@ def resmlp_36_distilled_224(pretrained=False, progress=True, **kwargs):
         **kwargs,
     )
     return _create_resmlp(
-        "resmlp_36_distilled_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_36_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
@@ -496,7 +505,10 @@ def resmlp_big_24_224_in22k_to_1k(pretrained=False, progress=True, **kwargs):
         **kwargs,
     )
     return _create_resmlp(
-        "resmlp_big_24_224_in22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_big_24_224_in22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
 
 
@@ -530,5 +542,8 @@ def resmlp_big_24_distilled_224(pretrained=False, progress=True, **kwargs):
         **kwargs,
     )
     return _create_resmlp(
-        "resmlp_big_24_distilled_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "resmlp_big_24_distilled_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs,
     )
