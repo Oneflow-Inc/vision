@@ -47,6 +47,23 @@
 | vit_small_patch16_384 | 83.790 | 16.210 | 97.106 | 2.894 | 22.2M | 384 | 1.000 | bicubic |
 | vit_base_patch32_224  | 80.720 | 19.280 | 95.566 | 4.434 | 88.2M | 224 | 0.900 | bicubic |
 | vit_base_patch32_384  | 83.350 | 16.650 | 96.842 | 3.158 | 88.3M | 384 | 1.000 | bicubic |
+| vit_base_patch16_224  | 84.528 | 15.472 | 97.294 | 2.706 | 86.6M | 224 | 0.900 | bicubic |
+| vit_base_patch16_384  | 85.992 | 14.008 | 98.002 | 1.998 | 86.9M | 384 | 1.000 | bicubic |
+| vit_base_patch8_224   | 85.800 | 14.200 | 97.790 | 2.210 | 86.6M | 224 | 0.900 | bicubic |
+| vit_large_patch16_224 | 85.840 | 14.160 | 97.818 | 2.182 | 304.3M | 224 | 0.900 | bicubic |
+| vit_large_patch16_384 | 87.084 | 12.916 | 98.302 | 1.698 | 304.7M | 384 | 1.000 | bicubic |
+| vit_large_patch32_384 | 81.512 | 18.488 | 96.090 | 3.910 | 306.6M | 384 | 1.000 | bicubic |
+| vit_base_patch16_224_miil | 84.266 | 15.734 | 96.804 | 3.196 | 86.6M | 224 | 0.875 | bilinear |
+| vit_base_patch16_224_sam  | 80.240 | 19.760 | 94.758 | 5.242 | 86.5M | 224 | 0.900 | bicubic  |
+| vit_base_patch32_224_sam  | 73.696 | 26.304 | 91.016 | 8.984 | 88.2M | 224 | 0.900 | bicubic  |
+| deit_tiny_patch16_224  | 72.176 | 27.824 | 91.114 | 8.886 | 5.7M | 224 | 0.900 | bicubic |
+| deit_small_patch16_224 | 79.852 | 20.148 | 95.044 | 4.956 | 22.1M | 224 | 0.900 | bicubic |
+| deit_base_patch16_224  | 81.990 | 18.010 | 95.736 | 4.264 | 86.6M | 224 | 0.900 | bicubic |
+| deit_base_patch16_384  | 83.102 | 16.898 | 96.368 | 3.632 | 86.9M | 384 | 1.000 | bicubic |
+| deit_tiny_distilled_patch16_224  | 74.504 | 25.496 | 91.890 | 8.110 | 5.9M  | 224 | 0.900 | bicubic |
+| deit_small_distilled_patch16_224 | 81.216 | 18.784 | 95.386 | 4.614 | 22.4M | 224 | 0.900 | bicubic |
+| deit_base_distilled_patch16_224  | 83.386 | 16.614 | 96.488 | 3.512 | 87.3M | 224 | 0.900 | bicubic |
+| deit_base_distilled_patch16_384  | 85.426 | 14.574 | 97.332 | 2.668 | 87.6M | 384 | 1.000 | bicubic |
 | pvt_tiny   | 75.096 | 24.904 | 92.420 | 7.580 | 13.2M | 224 | 0.875 | bicubic |
 | pvt_small  | 79.762 | 20.238 | 94.942 | 5.058 | 24.5M | 224 | 0.875 | bicubic |
 | pvt_medium | 81.196 | 18.804 | 95.642 | 4.358 | 44.2M | 224 | 0.875 | bicubic |
@@ -61,3 +78,6 @@
 | swin_large_patch4_window12_384_in22k_to_1k | 87.134 | 12.866 | 98.232 | 1.768 | 196.7M | 384 | 1.000 | bicubic |
 
 
+#### Spetial Normalized Case
+- `vit` based model: test images normalized using `mean=(0.5, 0.5, 0.5)` and `std=(0.5, 0.5, 0.5)`
+- `vit_base_patch16_224_miil`: test images normalized using `mean=(0, 0, 0)` and `std=(1, 1, 1)`

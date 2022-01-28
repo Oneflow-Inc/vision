@@ -1,12 +1,12 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="pvt_large"
+MODEL="deit_base_distilled_patch16_384"
 BATCH_SIZE=64
 DATA_PATH="/dataset/imagenet/extract"
-IMG_SIZE=224
-NORMALIZE_MODE="imagenet_default_mean_std" # vit_mean_std or imagenet_default_mean_std
-CROP_PCT=0.875
+IMG_SIZE=384
+NORMALIZE_MODE="IMAGENET_DEFAULT_MEAN_STD" # IMAGENET_INCEPTION_MEAN_STD or IMAGENET_DEFAULT_MEAN_STD
+CROP_PCT=0.900
 INTERPOLATION="bicubic"
 NUM_WORKERS=8
 DEVICE=$1

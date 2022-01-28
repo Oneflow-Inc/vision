@@ -21,12 +21,15 @@ def param_count(model):
     return sum([m.numel() for m in model.parameters()]) / 1000000
 
 def get_mean_std(mode="imagenet_default_mean_std"):
-    if mode == "imagenet_default_mean_std":
+    if mode == "IMAGENET_DEFAULT_MEAN_STD":
         mean = (0.485, 0.456, 0.406)
         std = (0.229, 0.224, 0.225)
-    elif mode == "vit_mean_std":
+    elif mode == "IMAGENET_INCEPTION_MEAN_STD":
         mean = (0.5, 0.5, 0.5)
         std = (0.5, 0.5, 0.5)
+    elif mode == "VIT_MIIL":
+        mean = (0.0, 0.0, 0.0)
+        std = (1.0, 1.0, 1.0)
     else:
         raise NotImplementedError(f"Unkown mode: {mode}")
     return mean, std
@@ -259,7 +262,7 @@ def _parse_args():
         "--normalize_mode",
         type=str,
         default="imagenet_default_mean_std",
-        choices=["imagenet_default_mean_std", "vit_mean_std"],
+        choices=["VIT_MIIL", "IMAGENET_DEFAULT_MEAN_STD", "IMAGENET_INCEPTION_MEAN_STD"],
         help="the normalization mode",
     )
     parser.add_argument(
