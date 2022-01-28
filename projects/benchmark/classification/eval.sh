@@ -1,11 +1,11 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="rexnet_lite_1_0"
+MODEL="pvt_large"
 BATCH_SIZE=64
 DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
-NORMALIZE_MODE="imagenet_default_mean_std"
+NORMALIZE_MODE="imagenet_default_mean_std" # vit_mean_std or imagenet_default_mean_std
 CROP_PCT=0.875
 INTERPOLATION="bicubic"
 NUM_WORKERS=8

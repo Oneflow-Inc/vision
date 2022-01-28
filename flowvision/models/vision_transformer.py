@@ -505,7 +505,7 @@ def vit_small_patch32_384(pretrained=False, progress=True, **kwargs):
         img_size=384, patch_size=32, embed_dim=384, depth=12, num_heads=6, **kwargs
     )
     model = _create_vision_transformer(
-        "vit_tiny_patch16_384", pretrained=pretrained, progress=progress, **model_kwargs
+        "vit_small_patch32_384", pretrained=pretrained, progress=progress, **model_kwargs
     )
     return model
 
