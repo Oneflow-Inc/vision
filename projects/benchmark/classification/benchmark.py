@@ -64,9 +64,7 @@ class ImageNetDataLoader(DataLoader):
                 [
                     transforms.Resize(
                         scale_size, interpolation=str_to_interp_mode(interpolation)
-                    )  # 3: bibubic
-                    if image_size == 224
-                    else transforms.Resize(image_size, interpolation=3),
+                    ),  # 3: bibubic
                     transforms.CenterCrop(image_size),
                     transforms.ToTensor(),
                     transforms.Normalize(img_mean, img_std),
