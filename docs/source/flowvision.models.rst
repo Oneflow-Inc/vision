@@ -88,7 +88,7 @@ VGG
         vgg11,
         vgg11_bn,
         vgg13,
-        vgg13_bn
+        vgg13_bn,
         vgg16,
         vgg16_bn,
         vgg19,
@@ -235,8 +235,8 @@ ViT
         vit_large_patch32_384,
         vit_large_patch16_224,
         vit_large_patch16_384,
-        vit_base_patch16_sam_224,
-        vit_base_patch32_sam_224,
+        vit_base_patch16_224_sam,
+        vit_base_patch32_224_sam,
         vit_huge_patch14_224,
         vit_giant_patch14_224,
         vit_gigantic_patch14_224,
@@ -334,16 +334,17 @@ ResMLP
 
 .. automodule:: flowvision.models
     :members: 
-        resmlp_12,
-        resmlp_12_dist,
-        resmlp_24,
-        resmlp_24_dist,
-        resmlp_24_dino,
-        resmlp_36,
-        resmlp_36_dist,
-        resmlpB_24,
-        resmlpB_24_in22k,
-        resmlpB_24_dist,
+        resmlp_12_224,
+        resmlp_12_distilled_224,
+        resmlp_12_224_dino,
+        resmlp_24_224,
+        resmlp_24_distilled_224,
+        resmlp_24_224_dino,
+        resmlp_36_224,
+        resmlp_36_distilled_224,
+        resmlp_big_24_224,
+        resmlp_big_24_224_in22k_to_1k,
+        resmlp_big_24_distilled_224,
 
 
 gMLP

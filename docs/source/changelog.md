@@ -29,6 +29,7 @@
 - Update `Vision Transformer` docs [#115](https://github.com/Oneflow-Inc/vision/pull/115)
 - Add `Getting Started` docs [#124](https://github.com/Oneflow-Inc/vision/pull/124)
 - Add `resmlp_12_224_dino` docs [#128](https://github.com/Oneflow-Inc/vision/pull/128)
+- Fix `VGG` docs bug [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 
 
 **Contributors**
