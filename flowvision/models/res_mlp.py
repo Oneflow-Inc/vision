@@ -14,10 +14,10 @@ from .registry import ModelCreator
 model_urls = {
     "resmlp_12_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12.zip",
     "resmlp_12_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_dist.zip",
-    "resmlp_12_224_dino": None,
+    "resmlp_12_224_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_12_224_dino.zip",
     "resmlp_24_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24.zip",
     "resmlp_24_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dist.zip",
-    "resmlp_24_224_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_dino.zip",
+    "resmlp_24_224_dino": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_24_224_dino.zip",
     "resmlp_36_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36.zip",
     "resmlp_36_distilled_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlp_36_dist.zip",
     "resmlp_big_24_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/resmlpB_24.zip",
@@ -228,6 +228,40 @@ def resmlp_12_distilled_224(pretrained=False, progress=True, **kwargs):
     )
     return _create_resmlp(
         "resmlp_12_distilled_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def resmlp_12_224_dino(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ResMLP-12 model trained under DINO proposed in `"Emerging Properties in Self-Supervised Vision Transformers" <https://arxiv.org/abs/2104.14294>`_.
+
+    .. note::
+        ResMLP-12 model with distillation from `"ResMLP: Feedforward networks for image classification with data-efficient training" <https://arxiv.org/pdf/2105.03404.pdf>`_.
+        Note that this model is the same as resmlp_12 but the pretrained weight is different.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resmlp_12_224_dino = flowvision.models.resmlp_12_224_dino(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        Patch_layer=PatchEmbed,
+        init_scale=0.1,
+        **kwargs,
+    )
+    return _create_resmlp(
+        "resmlp_12_224_dino", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 

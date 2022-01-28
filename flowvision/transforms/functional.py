@@ -419,13 +419,12 @@ def normalize(
     dtype = tensor.dtype
     mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
     std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
-    # TODO: fix bug
-    # if (std == 0).any():
-    #     raise ValueError(
-    #         "std evaluated to zero after conversion to {}, leading to division by zero.".format(
-    #             dtype
-    #         )
-    #     )
+    if (std == 0).any():
+        raise ValueError(
+            "std evaluated to zero after conversion to {}, leading to division by zero.".format(
+                dtype
+            )
+        )
     if mean.ndim == 1:
         mean = flow._C.reshape(mean, shape=(-1, 1, 1))
     if std.ndim == 1:
