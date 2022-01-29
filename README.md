@@ -154,7 +154,7 @@ pip install flowvision==0.0.6
             <li>Auto Augmentation</li>
           </ul>  
         </ul>
-        <ul><li><b>Dataset</b></li>
+        <ul><li><b>Datasets</b></li>
           <ul>
             <li>CIFAR10</li>
             <li>CIFAR100</li>
