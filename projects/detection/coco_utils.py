@@ -20,9 +20,7 @@ def convert_coco_poly_to_mask(segmentations, height, width):
         if len(mask.shape) < 3:
             mask = mask[..., None]
         mask = flow.as_tensor(mask, dtype=flow.uint8)
-        # TODO (shijie wang): use tensor.any()
-        # mask = mask.any(dim=2)
-        mask = mask.sum(dim=2) > 0
+        mask = mask.any(dim=2).to(dtype=flow.uint8)
         masks.append(mask)
     if masks:
         masks = flow.stack(masks, dim=0)
