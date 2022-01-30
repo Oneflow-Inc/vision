@@ -3,5 +3,5 @@ recommonmark==0.6.0
 furo==2021.4.11b34
 pillow==6.2.0
 --pre
--f https://staging.oneflow.info/branch/master/cu102
+-f https://staging.oneflow.info/branch/master/cpu
 oneflow
