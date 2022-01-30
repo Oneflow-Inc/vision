@@ -21,7 +21,7 @@ pip install flowvision==0.0.6
         <b>Components</b>
       </td>
       <td>
-        <b>Augmentation and Dataset</b>
+        <b>Augmentation and Datasets</b>
       </td>
     </tr>
     <tr valign="top">
