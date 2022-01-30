@@ -75,7 +75,7 @@ pip install flowvision==0.0.6
       </ul>
       </td>
       <td>
-      <ul><li><b>Attention Layer</b></li>
+      <ul><li><b>Attention Layers</b></li>
           <ul>
             <li>SE</li>
             <li>BAM</li>
@@ -87,7 +87,7 @@ pip install flowvision==0.0.6
             <li>Coordinate Attention</li>
           </ul>  
         </ul>
-      <ul><li><b>Regularization Layer</b></li>
+      <ul><li><b>Regularization Layers</b></li>
           <ul>
             <li>Drop Block</li>
             <li>Drop Path</li>
@@ -95,14 +95,14 @@ pip install flowvision==0.0.6
             <li>LayerNorm2D</li>
           </ul>  
         </ul>
-      <ul><li><b>Basic Layer</b></li>
+      <ul><li><b>Basic Layers</b></li>
           <ul>
             <li>Patch Embedding</li>
             <li>Mlp Block</li>
             <li>FPN</li>
           </ul>  
         </ul>
-      <ul><li><b>Activation Layer</b></li>
+      <ul><li><b>Activation Layers</b></li>
           <ul>
             <li>Hard Sigmoid</li>
             <li>Hard Swish</li>
