@@ -5,3 +5,4 @@ git+https://github.com/Oneflow-Inc/vision.git
 pillow==6.2.0
 --pre
 -f https://staging.oneflow.info/branch/master/cpu
+oneflow
