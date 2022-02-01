@@ -6,8 +6,36 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from flowvision.models.helpers import make_divisible
-from flowvision.layers.blocks import ConvBnAct
+# from flowvision.layers import ConvBnAct
+
+class ConvBnAct(nn.Sequential):
+    def __init__(
+        self,
+        in_features: int,
+        out_features: int,
+        act_layer: nn.Module = nn.ReLU,
+        conv: nn.Module = nn.Conv2d,
+        norm_layer: nn.Module = nn.BatchNorm2d,
+        bias: bool = False,
+        inplace: bool = True,
+        **kwargs
+    ):
+        layers = [conv(in_features, out_features, **kwargs, bias=bias)]
+        if norm_layer:
+            layers.append(norm_layer(out_features))
+        if act_layer:
+            layers.append(act_layer(inplace=inplace))
+        super().__init__(*layers)
+        self.out_features = out_features
+
+
+def make_divisible(v, divisor=8, min_value=None, round_limit=0.9):
+    min_value = min_value or divisor
+    new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
+    # Make sure that round down does not go down by more than 10%.
+    if new_v < round_limit * v:
+        new_v += divisor
+    return new_v
 
 
 class ChannelAttn(nn.Module):
