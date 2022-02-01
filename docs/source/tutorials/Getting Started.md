@@ -3,7 +3,7 @@
 ## Installation
 - To install latest stable release of flowvision:
 ```bash
-pip install flowvision==0.0.56
+pip install flowvision==0.0.6
 ```
 - For an editable install
 ```bash

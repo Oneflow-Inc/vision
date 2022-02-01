@@ -1,14 +1,14 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="convnext_iso_large_224"
+MODEL="rexnet_lite_1_5"
 BATCH_SIZE=64
 DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
 NORMALIZE_MODE="IMAGENET_DEFAULT_MEAN_STD" # IMAGENET_INCEPTION_MEAN_STD or IMAGENET_DEFAULT_MEAN_STD or VIT_MIIL
 CROP_PCT=0.875
 INTERPOLATION="bicubic"
-NUM_WORKERS=8
+NUM_WORKERS=0
 DEVICE=$1
 
 CUDA_VISIBLE_DEVICES=$DEVICE python ./projects/benchmark/classification/benchmark.py --model $MODEL \
