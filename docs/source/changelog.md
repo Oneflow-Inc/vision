@@ -1,6 +1,6 @@
 ## Changelog
 
-### v0.1.0 (xx/01/2022)
+### v0.1.0 (10/02/2022)
 
 **New Features**
 
@@ -8,6 +8,7 @@
 - Support [DeiT](https://arxiv.org/abs/2012.12877) model [#115](https://github.com/Oneflow-Inc/vision/pull/115)
 - Support `PolyLRScheduler` and `TanhLRScheduler` in `flowvision.scheduler` [#85](https://github.com/Oneflow-Inc/vision/pull/85)
 - Add `resmlp_12_224_dino` model and pretrained weight [#128](https://github.com/Oneflow-Inc/vision/pull/128)
+- Support [ConvNeXt](https://arxiv.org/abs/2201.03545) model [#93](https://github.com/Oneflow-Inc/vision/pull/93)
 
 **Bug Fixes**
 
@@ -30,6 +31,7 @@
 - Add `Getting Started` docs [#124](https://github.com/Oneflow-Inc/vision/pull/124)
 - Add `resmlp_12_224_dino` docs [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 - Fix `VGG` docs bug [#128](https://github.com/Oneflow-Inc/vision/pull/128)
+- Add `ConvNeXt` docs [#93](https://github.com/Oneflow-Inc/vision/pull/93)
 
 
 **Contributors**

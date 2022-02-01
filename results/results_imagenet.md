@@ -125,15 +125,15 @@
 | convnext_base_384             | 84.896 | 15.104 | 97.272 | 2.728 | 88.6M  | 384 | 1.000 | bicubic |
 | convnext_large_224            | 84.292 | 15.708 | 96.894 | 3.106 | 197.8M | 224 | 1.000 | bicubic |
 | convnext_large_384            | 84.162 | 15.838 | 96.968 | 3.032 | 197.8M | 384 | 1.000 | bicubic |
-| convnext_base_224_22k_to_1k   | 85.820 | 14.180 | 97.868 | 2.132 | 88.6M | 224 | 0.875 | bicubic |
-| convnext_base_384_22k_to_1k   | 86.558 | 13.442 | 98.194 | 1.806 | 88.6M | 384 | 1.000 | bicubic |
+| convnext_base_224_22k_to_1k   | 85.820 | 14.180 | 97.868 | 2.132 | 88.6M  | 224 | 0.875 | bicubic |
+| convnext_base_384_22k_to_1k   | 86.558 | 13.442 | 98.194 | 1.806 | 88.6M  | 384 | 1.000 | bicubic |
 | convnext_large_224_22k_to_1k  | 86.636 | 13.364 | 98.032 | 1.968 | 197.8M | 224 | 0.875 | bicubic |
-| convnext_large_384_22k_to_1k  | | | | | 197.8M | 384 | 1.000 | bicubic |
+| convnext_large_384_22k_to_1k  | 87.390 | 12.610 | 98.364 | 1.636 | 197.8M | 384 | 1.000 | bicubic |
 | convnext_xlarge_224_22k_to_1k | 87.006 | 12.994 | 98.204 | 1.796 | 350.2M | 224 | 0.875 | bicubic |
 | convnext_xlarge_384_22k_to_1k | 87.548 | 12.452 | 98.486 | 1.514 | 350.2M | 384 | 1.000 | bicubic |
-| convnext_iso_small_224        | 79.742 | 20.258 | 94.798 | 5.208 | 22.3M | 224 | 0.875 | bicubic |
-| convnext_iso_base_224         | 81.818 | 18.182 | 95.674 | 4.326 | 87.1M | 224 | 0.875 | bicubic |
-| convnext_iso_large_224        | | | | |
+| convnext_iso_small_224        | 79.742 | 20.258 | 94.798 | 5.208 | 22.3M  | 224 | 0.875 | bicubic |
+| convnext_iso_base_224         | 81.818 | 18.182 | 95.674 | 4.326 | 87.1M  | 224 | 0.875 | bicubic |
+| convnext_iso_large_224        | 82.576 | 17.424 | 95.956 | 4.044 | 306.0M | 224 | 0.875 | bicubic |
 
 
 
