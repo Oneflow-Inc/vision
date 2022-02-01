@@ -14,12 +14,13 @@ from .utils import load_state_dict_from_url
 
 model_urls = {
     "convnext_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_tiny_1k_224_ema.zip",
-    "convnext_small_224": "https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224_ema.pth",
-    "convnext_base_224": "https://dl.fbaipublicfiles.com/convnext/convnext_base_1k_224_ema.pth",
-    "convnext_base_384": "https://dl.fbaipublicfiles.com/convnext/convnext_base_1k_384.pth",
-    "convnext_large_224": "https://dl.fbaipublicfiles.com/convnext/convnext_large_1k_224_ema.pth",
-    "convnext_large_384": "https://dl.fbaipublicfiles.com/convnext/convnext_large_1k_384.pth",
-    "convnext_base_224_22k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_224.pth",
+    "convnext_small_224": "https://dl.fbaipublicfiles.com/convnext/convnext_small_224.pth",
+    "convnext_base_224": "https://dl.fbaipublicfiles.com/convnext/convnext_base_224.pth",
+    "convnext_base_384": "https://dl.fbaipublicfiles.com/convnext/convnext_base_384.pth",
+    "convnext_large_224": "https://dl.fbaipublicfiles.com/convnext/convnext_large_224.pth",
+    "convnext_large_384": "https://dl.fbaipublicfiles.com/convnext/convnext_large_384.pth",
+    "convnext_base_224_22k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_224_22k.pth",
+    # TODO
     "convnext_base_224_22k_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_1k_224.pth",
     "convnext_base_384_22k_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_1k_384.pth",
     "convnext_large_224_22k": "https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_224.pth",
@@ -337,6 +338,36 @@ def convnext_base_224(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
+def convnext_base_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Base model trained on ImageNet2012
+
+    .. note::
+        ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_base_384 = flowvision.models.convnext_base_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[128, 256, 512, 1024],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_base_384", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
 def convnext_large_224(pretrained=False, progress=True, **kwargs):
     """
     Constructs the ConvNext-Large model trained on ImageNet2012
@@ -364,3 +395,65 @@ def convnext_large_224(pretrained=False, progress=True, **kwargs):
     return _create_convnext(
         "convnext_large_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
+
+
+@ModelCreator.register_model
+def convnext_large_384(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Large model trained on ImageNet2012
+
+    .. note::
+        ConvNext-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_large_384 = flowvision.models.convnext_large_384(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[192, 384, 768, 1536],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_large_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_base_224_22k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Base model trained on ImageNet22k
+
+    .. note::
+        ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_base_224_22k = flowvision.models.convnext_base_224_22k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[128, 256, 512, 1024],
+        num_classes=21841,
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_base_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
