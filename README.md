@@ -55,6 +55,7 @@ pip install flowvision==0.0.6
             <li>ResMLP</li>
             <li>gMLP</li>
             <li>ConvMixer</li>
+            <li>ConvNeXt</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>
