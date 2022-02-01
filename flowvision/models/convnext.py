@@ -14,24 +14,23 @@ from .utils import load_state_dict_from_url
 
 model_urls = {
     "convnext_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_tiny_1k_224_ema.zip",
-    "convnext_small_224": "https://dl.fbaipublicfiles.com/convnext/convnext_small_224.pth",
-    "convnext_base_224": "https://dl.fbaipublicfiles.com/convnext/convnext_base_224.pth",
-    "convnext_base_384": "https://dl.fbaipublicfiles.com/convnext/convnext_base_384.pth",
-    "convnext_large_224": "https://dl.fbaipublicfiles.com/convnext/convnext_large_224.pth",
-    "convnext_large_384": "https://dl.fbaipublicfiles.com/convnext/convnext_large_384.pth",
-    "convnext_base_224_22k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_224_22k.pth",
-    # TODO
-    "convnext_base_224_22k_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_1k_224.pth",
-    "convnext_base_384_22k_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_1k_384.pth",
-    "convnext_large_224_22k": "https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_224.pth",
-    "convnext_large_224_22k_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_1k_224.pth",
-    "convnext_large_384_22k_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_1k_384.pth",
-    "convnext_xlarge_224_22k": "https://dl.fbaipublicfiles.com/convnext/convnext_xlarge_22k_224.pth",
-    "convnext_xlarge_224_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_xlarge_22k_1k_224_ema.pth",
-    "convnext_xlarge_384_to_1k": "https://dl.fbaipublicfiles.com/convnext/convnext_xlarge_22k_1k_384_ema.pth",
-    "convnext_iso_small_224": "https://dl.fbaipublicfiles.com/convnext/convnext_iso_small_1k_224_ema.pth",
-    "convnext_iso_base_224": "https://dl.fbaipublicfiles.com/convnext/convnext_iso_base_1k_224_ema.pth",
-    "convnext_iso_large_224": "https://dl.fbaipublicfiles.com/convnext/convnext_iso_large_1k_224_ema.pth",
+    "convnext_small_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_small_224.zip",
+    "convnext_base_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_base_224.zip",
+    "convnext_base_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_base_384.zip",
+    "convnext_large_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_large_224.zip",
+    "convnext_large_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_large_384.zip",
+    "convnext_base_224_22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_base_224_22k.zip",
+    "convnext_base_224_22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_base_224_22k_to_1k.zip",
+    "convnext_base_384_22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_base_384_22k_to_1k.zip",
+    "convnext_large_224_22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_large_224_22k.zip",
+    "convnext_large_224_22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_large_224_22k_to_1k.zip",
+    "convnext_large_384_22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_large_384_22k_to_1k.zip",
+    "convnext_xlarge_224_22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_xlarge_224_22k.zip",
+    "convnext_xlarge_224_22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_xlarge_224_22k_to_1k.zip",
+    "convnext_xlarge_384_22k_to_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_xlarge_384_22k_to_1k.zip",
+    "convnext_iso_small_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_iso_small_224.zip",
+    "convnext_iso_base_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_iso_base_224.zip",
+    "convnext_iso_large_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConvNeXt/convnext_iso_large_224.zip",
 }
 
 
@@ -73,7 +72,7 @@ class Block(nn.Module):
         return x
 
 
-class ConvNext(nn.Module):
+class ConvNeXt(nn.Module):
     r""" ConvNeXt
         The OneFlow impl of : `A ConvNet for the 2020s`  -
           https://arxiv.org/pdf/2201.03545.pdf
@@ -145,12 +144,11 @@ class ConvNext(nn.Module):
         return x
 
 
-class ConvNextIsotropic(nn.Module):
+class ConvNeXtIsotropic(nn.Module):
     r""" ConvNeXt
         A PyTorch impl of : `A ConvNet for the 2020s`  -
         https://arxiv.org/pdf/2201.03545.pdf
         Isotropic ConvNeXts (Section 3.3 in paper)
-
     Args:
         in_chans (int): Number of input image channels. Default: 3
         num_classes (int): Number of classes for classification head. Default: 1000
@@ -160,14 +158,10 @@ class ConvNextIsotropic(nn.Module):
         layer_scale_init_value (float): Init value for Layer Scale. Default: 0.
         head_init_scale (float): Init scaling value for classifier weights and biases. Default: 1.
     """
-    def __init__(self,
-                 in_chans=3, 
-                 num_classes=1000,
-                 depth=18,
-                 dim=384,
-                 drop_path_rate=0.,
-                 layer_scale_init_value=0,
-                 head_init_scale=1.):
+    def __init__(self, in_chans=3, num_classes=1000, 
+                 depth=18, dim=384, drop_path_rate=0., 
+                 layer_scale_init_value=0, head_init_scale=1.,
+                 ):
         super().__init__()
 
         self.stem = nn.Conv2d(in_chans, dim, kernel_size=16, stride=16)
@@ -176,13 +170,13 @@ class ConvNextIsotropic(nn.Module):
                                     layer_scale_init_value=layer_scale_init_value)
                                     for i in range(depth)])
 
-        self.norm = LayerNorm(dim, eps=1e-6) # final norm layer
+        self.norm = nn.LayerNorm(dim, eps=1e-6) # final norm layer
         self.head = nn.Linear(dim, num_classes)
 
         self.apply(self._init_weights)
         self.head.weight.data.mul_(head_init_scale)
         self.head.bias.data.mul_(head_init_scale)
-    
+
     def _init_weights(self, m):
         if isinstance(m, (nn.Conv2d, nn.Linear)):
             trunc_normal_(m.weight, std=.02)
@@ -191,7 +185,8 @@ class ConvNextIsotropic(nn.Module):
     def forward_features(self, x):
         x = self.stem(x)
         x = self.blocks(x)
-    
+        return self.norm(x.mean([-2, -1])) # global average pooling, (N, C, H, W) -> (N, C)
+
     def forward(self, x):
         x = self.forward_features(x)
         x = self.head(x)
@@ -216,7 +211,7 @@ class LayerNorm(nn.Module):
     
     def forward(self, x):
         if self.data_format == "channels_last":
-            # FIXME: use F.layer_norm
+            # TODO: use F.layer_norm
             u = x.mean(-1, keepdim=True)
             s = (x - u).pow(2).mean(-1, keepdim=True)
             x = (x - u) / flow.sqrt(s + self.eps)
@@ -232,7 +227,7 @@ class LayerNorm(nn.Module):
 
 
 def _create_convnext(arch, pretrained=False, progress=True, **model_kwargs):
-    model = ConvNext(**model_kwargs)
+    model = ConvNeXt(**model_kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
@@ -240,7 +235,7 @@ def _create_convnext(arch, pretrained=False, progress=True, **model_kwargs):
 
 
 def _create_convnext_isotropic(arch, pretrained=False, progress=True, **model_kwargs):
-    model = ConvNextIsotropic(**model_kwargs)
+    model = ConvNeXtIsotropic(**model_kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
@@ -250,10 +245,11 @@ def _create_convnext_isotropic(arch, pretrained=False, progress=True, **model_kw
 @ModelCreator.register_model
 def convnext_tiny_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Tiny model trained on ImageNet2012
+    Constructs the ConvNext-Tiny model trained on ImageNet2012.
 
     .. note::
         ConvNext-Tiny model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -280,10 +276,11 @@ def convnext_tiny_224(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def convnext_small_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Small model trained on ImageNet2012
+    Constructs the ConvNext-Small model trained on ImageNet2012.
 
     .. note::
         ConvNext-Small model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -310,10 +307,11 @@ def convnext_small_224(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def convnext_base_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Base model trained on ImageNet2012
+    Constructs the ConvNext-Base model trained on ImageNet2012.
 
     .. note::
         ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -340,10 +338,11 @@ def convnext_base_224(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def convnext_base_384(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Base model trained on ImageNet2012
+    Constructs the ConvNext-Base model trained on ImageNet2012.
 
     .. note::
         ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 384x384.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -370,10 +369,11 @@ def convnext_base_384(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def convnext_large_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Large model trained on ImageNet2012
+    Constructs the ConvNext-Large model trained on ImageNet2012.
 
     .. note::
         ConvNext-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -400,10 +400,11 @@ def convnext_large_224(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def convnext_large_384(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Large model trained on ImageNet2012
+    Constructs the ConvNext-Large model trained on ImageNet2012.
 
     .. note::
         ConvNext-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 384x384.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -430,10 +431,11 @@ def convnext_large_384(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def convnext_base_224_22k(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ConvNext-Base model trained on ImageNet22k
+    Constructs the ConvNext-Base model pretrained on ImageNet22k.
 
     .. note::
         ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -457,3 +459,345 @@ def convnext_base_224_22k(pretrained=False, progress=True, **kwargs):
         "convnext_base_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
+@ModelCreator.register_model
+def convnext_base_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Base model pretrained on ImageNet22k and finetuned on ImageNet2012.
+
+    .. note::
+        ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_base_224_22k_to_1k = flowvision.models.convnext_base_224_22k_to_1k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[128, 256, 512, 1024],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_base_224_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_base_384_22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Base model pretrained on ImageNet22k and finetuned on ImageNet2012.
+
+    .. note::
+        ConvNext-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_base_384_22k_to_1k = flowvision.models.convnext_base_384_22k_to_1k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[128, 256, 512, 1024],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_base_384_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_large_224_22k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Large model trained on ImageNet22k.
+
+    .. note::
+        ConvNext-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_large_224_22k = flowvision.models.convnext_large_224_22k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[192, 384, 768, 1536],
+        num_classes=21841,
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_large_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_large_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Large model pretrained on ImageNet22k and finetuned on ImageNet2012.
+
+    .. note::
+        ConvNext-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_large_224_22k_to_1k = flowvision.models.convnext_large_224_22k_to_1k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[192, 384, 768, 1536],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_large_224_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_large_384_22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Large model pretrained on ImageNet22k and finetuned on ImageNet2012.
+
+    .. note::
+        ConvNext-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_large_384_22k_to_1k = flowvision.models.convnext_large_384_22k_to_1k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[192, 384, 768, 1536],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_large_384_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_xlarge_224_22k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-xLarge model pretrained on ImageNet22k.
+
+    .. note::
+        ConvNext-xLarge model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_xlarge_224_22k = flowvision.models.convnext_xlarge_224_22k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[256, 512, 1024, 2048],
+        num_classes=21841,
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_xlarge_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_xlarge_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-xLarge model pretrained on ImageNet22k and finetuned on ImageNet2012.
+
+    .. note::
+        ConvNext-xLarge model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_xlarge_224_22k_to_1k = flowvision.models.convnext_xlarge_224_22k_to_1k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[256, 512, 1024, 2048],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_xlarge_224_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_xlarge_384_22k_to_1k(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-xLarge model pretrained on ImageNet22k and finetuned on ImageNet2012.
+
+    .. note::
+        ConvNext-xLarge model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 384x384.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_xlarge_384_22k_to_1k = flowvision.models.convnext_xlarge_384_22k_to_1k(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depths=[3, 3, 27, 3],
+        dims=[256, 512, 1024, 2048],
+        **kwargs
+    )
+    return _create_convnext(
+        "convnext_xlarge_384_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_iso_small_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Isotropic-Small model trained on ImageNet2012.
+
+    .. note::
+        ConvNext-Isotropic-Small model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_iso_small_224 = flowvision.models.convnext_iso_small_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depth=18,
+        dim=384,
+        **kwargs
+    )
+    return _create_convnext_isotropic(
+        "convnext_iso_small_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_iso_base_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Isotropic-Base model trained on ImageNet2012.
+
+    .. note::
+        ConvNext-Isotropic-Base model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_iso_base_224 = flowvision.models.convnext_iso_base_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depth=18,
+        dim=768,
+        **kwargs
+    )
+    return _create_convnext_isotropic(
+        "convnext_iso_base_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
+
+
+@ModelCreator.register_model
+def convnext_iso_large_224(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the ConvNext-Isotropic-Large model trained on ImageNet2012.
+
+    .. note::
+        ConvNext-Isotropic-Large model from `"A ConvNet for the 2020s" <https://arxiv.org/abs/2201.03545>` _.
+        The required input size of the model is 224x224.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> convnext_iso_large_224 = flowvision.models.convnext_iso_large_224(pretrained=False, progress=True)
+
+    """
+    model_kwargs = dict(
+        depth=36,
+        dim=1024,
+        layer_scale_init_value=1e-6,
+        **kwargs
+    )
+    return _create_convnext_isotropic(
+        "convnext_iso_large_224", pretrained=pretrained, progress=progress, **model_kwargs
+    )
