@@ -22,6 +22,11 @@ from .blocks import (
     PatchEmbed,
     Conv2dSame,
     MultiScaleRoIAlign,
+    FrozenBatchNorm2d,
+    FeaturePyramidNetwork,
+    LastLevelP6P7,
+    LastLevelMaxPool,
+    ExtraFPNBlock,
 )
 from .regularization import (
     drop_path, 
