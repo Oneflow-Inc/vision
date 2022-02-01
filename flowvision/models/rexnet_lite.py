@@ -11,9 +11,9 @@ from flowvision.models.helpers import make_divisible
 
 model_urls = {
     "rexnet_lite_1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnet_lite_1_0.zip",
-    "rexnet_lite_1_3": None,
-    "rexnet_lite_1_5": None,
-    "rexnet_lite_2_0": None,
+    "rexnet_lite_1_3": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnet_lite_1_3.zip",
+    "rexnet_lite_1_5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnet_lite_1_5.zip",
+    "rexnet_lite_2_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RexNet/rexnet_lite_2_0.zip",
 }
 
 
