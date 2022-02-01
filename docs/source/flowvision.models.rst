@@ -35,6 +35,7 @@ architectures for image classification:
 -  `ResMLP`_
 -  `gMLP`_
 -  `ConvMixer`_
+-  `ConvNeXt`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -64,6 +65,7 @@ architectures for image classification:
 .. _gMLP: https://arxiv.org/abs/2105.08050
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
+.. _ConvNeXt: https://arxiv.org/abs/2201.03545
 
 .. currentmodule:: flowvision.models
 
@@ -364,6 +366,29 @@ ConvMixer
         convmixer_768_32_relu,
         convmixer_1024_20,
 
+
+ConvNeXt
+--------
+.. automodule:: flowvision.models
+    :members:
+        convnext_tiny_224,
+        convnext_small_224,
+        convnext_base_224,
+        convnext_base_384,
+        convnext_large_224,
+        convnext_large_384,
+        convnext_base_224_22k,
+        convnext_base_224_22k_to_1k,
+        convnext_base_384_22k_to_1k,
+        convnext_large_224_22k,
+        convnext_large_224_22k_to_1k,
+        convnext_large_384_22k_to_1k,
+        convnext_xlarge_224_22k,
+        convnext_xlarge_224_22k_to_1k,
+        convnext_xlarge_384_22k_to_1k,
+        convnext_iso_small_224,
+        convnext_iso_base_224,
+        convnext_iso_large_224,
 
 
 Neural Style
