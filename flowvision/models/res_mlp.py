@@ -5,8 +5,7 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
 
-from flowvision.layers.regularization import DropPath
-from flowvision.layers.blocks import PatchEmbed, Mlp
+from flowvision.layers import DropPath, PatchEmbed, Mlp
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 

@@ -5,9 +5,9 @@ Modified from https://github.com/microsoft/Swin-Transformer/blob/main/models/swi
 import oneflow as flow
 import oneflow.nn as nn
 
+from flowvision.layers import trunc_normal_
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
-from flowvision.layers.weight_init import trunc_normal_
 
 
 # Note that model with `in22k` means pretrained weight on imagenet22k dataset
