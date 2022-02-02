@@ -7,10 +7,10 @@ import numpy as np
 import oneflow as flow
 import oneflow.nn as nn
 
+from flowvision.layers import DropPath, trunc_normal_
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
-from flowvision.layers.regularization import DropPath
-from flowvision.layers.weight_init import trunc_normal_
+
 
 model_urls = {
     "cswin_tiny_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/CSWin_Transformer/cswin_tiny_224.zip",

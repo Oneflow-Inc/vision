@@ -7,9 +7,9 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 import oneflow.nn.init as init
 
-from flowvision.models.helpers import make_divisible
 from flowvision.layers.blocks import ConvMlp
 from flowvision.layers.regularization import LayerNorm2d
+from flowvision.layers.helpers import make_divisible
 
 
 class GlobalContext(nn.Module):

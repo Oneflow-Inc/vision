@@ -5,10 +5,8 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.init as init
 
-from flowvision.layers.regularization import DropPath
-from flowvision.layers.blocks import PatchEmbed
-from flowvision.layers.weight_init import lecun_normal_
-from flowvision.models.helpers import named_apply
+from flowvision.layers import lecun_normal_, DropPath, PatchEmbed
+from .helpers import named_apply
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 

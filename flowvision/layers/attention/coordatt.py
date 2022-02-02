@@ -6,8 +6,8 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from flowvision.models.helpers import make_divisible
 from flowvision.layers.activation import hard_swish
+from flowvision.layers.helpers import make_divisible
 
 
 class CoordAttModule(nn.Module):

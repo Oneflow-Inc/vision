@@ -10,11 +10,10 @@ import oneflow as flow
 import oneflow.nn as nn
 from oneflow import Tensor
 
+from flowvision.layers import StochasticDepth, ConvBnAct
 from .registry import ModelCreator
 from .helpers import make_divisible
 from .utils import load_state_dict_from_url
-from flowvision.layers.regularization import StochasticDepth
-from flowvision.layers.blocks import ConvBnAct
 
 
 __all__ = [

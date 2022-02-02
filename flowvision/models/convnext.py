@@ -6,8 +6,7 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from flowvision.layers.weight_init import trunc_normal_
-from flowvision.layers.regularization import DropPath
+from flowvision.layers import trunc_normal_, DropPath
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 

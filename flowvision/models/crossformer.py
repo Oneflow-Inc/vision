@@ -4,10 +4,9 @@ Modified from https://github.com/cheerss/CrossFormer/blob/main/models/crossforme
 import oneflow as flow
 import oneflow.nn as nn
 
+from flowvision.layers import DropPath, trunc_normal_
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
-from flowvision.layers.regularization import DropPath
-from flowvision.layers.weight_init import trunc_normal_
 
 
 model_urls = {
