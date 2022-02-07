@@ -88,11 +88,12 @@ def test(
             if found:
                 lines = lines[:i] + lines[i + 1 :]
 
-        
         for i, line in enumerate(lines):
-            if "from .helpers import to_2tuple" in line or \
-                "from .helpers import make_divisible" in line or \
-                "from .helpers import named_apply" in line:
+            if (
+                "from .helpers import to_2tuple" in line
+                or "from .helpers import make_divisible" in line
+                or "from .helpers import named_apply" in line
+            ):
                 lines = (
                     lines[:i]
                     + ["from flowvision.models.helpers import *",]
@@ -110,7 +111,7 @@ def test(
     else:
         with open(model_path) as f:
             buf = f.read()
-        
+
         # remote ModelCreator.register_model and load_state_dict_from_url
         lines = buf.split("\n")
         for i, line in enumerate(lines):
@@ -151,51 +152,41 @@ def test(
 
         import_strs = [
             "from typing import Callable",
-            "def named_apply(fn: Callable, module: nn.Module, name=\"\", depth_first=True, include_root=False) -> nn.Module:",
+            'def named_apply(fn: Callable, module: nn.Module, name="", depth_first=True, include_root=False) -> nn.Module:',
             "    if not depth_first and include_root:",
             "        fn(module=module, name=name)",
             "    for child_name, child_module in module.named_children():",
-            "        child_name = \".\".join((name, child_name)) if name else child_name",
+            '        child_name = ".".join((name, child_name)) if name else child_name',
             "        named_apply(fn=fn,module=child_module,name=child_name,depth_first=depth_first,include_root=True,)",
             "    if depth_first and include_root:",
             "        fn(module=module, name=name)",
-            "    return module"
+            "    return module",
         ]
 
         for i, line in enumerate(lines):
             if "from flowvision.layers import" in line:
                 lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import *",]
-                    + lines[i + 1 :]
+                    lines[:i] + ["from timm.models.layers import *",] + lines[i + 1 :]
                 )
                 break
-        
+
         for i, line in enumerate(lines):
             if "from .helpers import to_2tuple" in line:
                 lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import *",]
-                    + lines[i + 1 :]
+                    lines[:i] + ["from timm.models.layers import *",] + lines[i + 1 :]
                 )
                 break
 
         for i, line in enumerate(lines):
             if "from .helpers import make_divisible" in line:
                 lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import *",]
-                    + lines[i + 1 :]
+                    lines[:i] + ["from timm.models.layers import *",] + lines[i + 1 :]
                 )
                 break
 
         for i, line in enumerate(lines):
             if "from .helpers import named_apply" in line:
-                lines = (
-                    lines[:i]
-                    + import_strs
-                    + lines[i + 1 :]
-                )
+                lines = lines[:i] + import_strs + lines[i + 1 :]
                 break
 
         buf = "\n".join(lines)

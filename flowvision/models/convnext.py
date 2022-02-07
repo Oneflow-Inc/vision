@@ -44,17 +44,25 @@ class Block(nn.Module):
         drop_path (float): Stochastic depth rate. Default: 0.0
         layer_scale_init_value (float): Init value for Layer Scale. Default: 1e-6.
     """
-    def __init__(self, dim, drop_path=0., layer_scale_init_value=1e-6):
+
+    def __init__(self, dim, drop_path=0.0, layer_scale_init_value=1e-6):
         super().__init__()
-        self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim)  # depthwise conv
+        self.dwconv = nn.Conv2d(
+            dim, dim, kernel_size=7, padding=3, groups=dim
+        )  # depthwise conv
         self.norm = LayerNorm(dim, eps=1e-6)
-        self.pwconv1 = nn.Linear(dim, 4 * dim)  # pointwise/1x1 convs, implemented with linear layers
+        self.pwconv1 = nn.Linear(
+            dim, 4 * dim
+        )  # pointwise/1x1 convs, implemented with linear layers
         self.act = nn.GELU()
         self.pwconv2 = nn.Linear(4 * dim, dim)
-        self.gamma = nn.Parameter(layer_scale_init_value * flow.ones((dim)), 
-                                    requires_grad=True) if layer_scale_init_value > 0 else None
-        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
-    
+        self.gamma = (
+            nn.Parameter(layer_scale_init_value * flow.ones((dim)), requires_grad=True)
+            if layer_scale_init_value > 0
+            else None
+        )
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
+
     def forward(self, x):
         input = x
         x = self.dwconv(x)
@@ -85,40 +93,51 @@ class ConvNeXt(nn.Module):
         layer_scale_init_value (float): Init value for Layer Scale. Default: 1e-6.
         head_init_scale (float): Init scaling value for classifier weights and biases. Default: 1.
     """
-    def __init__(self, 
-                 in_chans=3, 
-                 num_classes=1000, 
-                 depths=[3, 3, 9, 3], 
-                 dims=[96, 192, 384, 768],
-                 drop_path_rate=0.,
-                 layer_scale_init_value=1e-6,
-                 head_init_scale=1.,):
+
+    def __init__(
+        self,
+        in_chans=3,
+        num_classes=1000,
+        depths=[3, 3, 9, 3],
+        dims=[96, 192, 384, 768],
+        drop_path_rate=0.0,
+        layer_scale_init_value=1e-6,
+        head_init_scale=1.0,
+    ):
         super().__init__()
 
         self.downsample_layers = nn.ModuleList()
         stem = nn.Sequential(
             nn.Conv2d(in_chans, dims[0], kernel_size=4, stride=4),
-            LayerNorm(dims[0], eps=1e-6, data_format="channels_first")
+            LayerNorm(dims[0], eps=1e-6, data_format="channels_first"),
         )
         self.downsample_layers.append(stem)
         for i in range(3):
             downsample_layer = nn.Sequential(
-                    LayerNorm(dims[i], eps=1e-6, data_format="channels_first"),
-                    nn.Conv2d(dims[i], dims[i+1], kernel_size=2, stride=2),
+                LayerNorm(dims[i], eps=1e-6, data_format="channels_first"),
+                nn.Conv2d(dims[i], dims[i + 1], kernel_size=2, stride=2),
             )
             self.downsample_layers.append(downsample_layer)
 
-        self.stages = nn.ModuleList() # 4 feature resolution stages, each consisting of multiple residual blocks
-        dp_rates=[x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))] 
+        self.stages = (
+            nn.ModuleList()
+        )  # 4 feature resolution stages, each consisting of multiple residual blocks
+        dp_rates = [x.item() for x in flow.linspace(0, drop_path_rate, sum(depths))]
         cur = 0
         for i in range(4):
             stage = nn.Sequential(
-                *[Block(dim=dims[i], drop_path=dp_rates[cur + j], 
-                layer_scale_init_value=layer_scale_init_value) for j in range(depths[i])]
+                *[
+                    Block(
+                        dim=dims[i],
+                        drop_path=dp_rates[cur + j],
+                        layer_scale_init_value=layer_scale_init_value,
+                    )
+                    for j in range(depths[i])
+                ]
             )
             self.stages.append(stage)
             cur += depths[i]
-        
+
         self.norm = nn.LayerNorm(dims[-1], eps=1e-6)
         self.head = nn.Linear(dims[-1], num_classes)
 
@@ -128,15 +147,17 @@ class ConvNeXt(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, (nn.Conv2d, nn.Linear)):
-            trunc_normal_(m.weight, std=.02)
+            trunc_normal_(m.weight, std=0.02)
             nn.init.constant_(m.bias, 0)
-    
+
     def forward_features(self, x):
         for i in range(4):
             x = self.downsample_layers[i](x)
             x = self.stages[i](x)
-        return self.norm(x.mean([-2, -1])) # global average pooling, (N, C, H, W) -> (N, C)
-    
+        return self.norm(
+            x.mean([-2, -1])
+        )  # global average pooling, (N, C, H, W) -> (N, C)
+
     def forward(self, x):
         x = self.forward_features(x)
         x = self.head(x)
@@ -157,19 +178,33 @@ class ConvNeXtIsotropic(nn.Module):
         layer_scale_init_value (float): Init value for Layer Scale. Default: 0.
         head_init_scale (float): Init scaling value for classifier weights and biases. Default: 1.
     """
-    def __init__(self, in_chans=3, num_classes=1000, 
-                 depth=18, dim=384, drop_path_rate=0., 
-                 layer_scale_init_value=0, head_init_scale=1.,
-                 ):
+
+    def __init__(
+        self,
+        in_chans=3,
+        num_classes=1000,
+        depth=18,
+        dim=384,
+        drop_path_rate=0.0,
+        layer_scale_init_value=0,
+        head_init_scale=1.0,
+    ):
         super().__init__()
 
         self.stem = nn.Conv2d(in_chans, dim, kernel_size=16, stride=16)
-        dp_rates=[x.item() for x in flow.linspace(0, drop_path_rate, depth)] 
-        self.blocks = nn.Sequential(*[Block(dim=dim, drop_path=dp_rates[i], 
-                                    layer_scale_init_value=layer_scale_init_value)
-                                    for i in range(depth)])
+        dp_rates = [x.item() for x in flow.linspace(0, drop_path_rate, depth)]
+        self.blocks = nn.Sequential(
+            *[
+                Block(
+                    dim=dim,
+                    drop_path=dp_rates[i],
+                    layer_scale_init_value=layer_scale_init_value,
+                )
+                for i in range(depth)
+            ]
+        )
 
-        self.norm = nn.LayerNorm(dim, eps=1e-6) # final norm layer
+        self.norm = nn.LayerNorm(dim, eps=1e-6)  # final norm layer
         self.head = nn.Linear(dim, num_classes)
 
         self.apply(self._init_weights)
@@ -178,13 +213,15 @@ class ConvNeXtIsotropic(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, (nn.Conv2d, nn.Linear)):
-            trunc_normal_(m.weight, std=.02)
+            trunc_normal_(m.weight, std=0.02)
             nn.init.constant_(m.bias, 0)
 
     def forward_features(self, x):
         x = self.stem(x)
         x = self.blocks(x)
-        return self.norm(x.mean([-2, -1])) # global average pooling, (N, C, H, W) -> (N, C)
+        return self.norm(
+            x.mean([-2, -1])
+        )  # global average pooling, (N, C, H, W) -> (N, C)
 
     def forward(self, x):
         x = self.forward_features(x)
@@ -198,6 +235,7 @@ class LayerNorm(nn.Module):
     shape (batch_size, height, width, channels) while channels_first corresponds to inputs 
     with shape (batch_size, channels, height, width).
     """
+
     def __init__(self, normalized_shape, eps=1e-6, data_format="channels_last"):
         super().__init__()
         self.weight = nn.Parameter(flow.ones(normalized_shape))
@@ -205,9 +243,9 @@ class LayerNorm(nn.Module):
         self.eps = eps
         self.data_format = data_format
         if self.data_format not in ["channels_last", "channels_first"]:
-            raise NotImplementedError 
-        self.normalized_shape = (normalized_shape, )
-    
+            raise NotImplementedError
+        self.normalized_shape = (normalized_shape,)
+
     def forward(self, x):
         if self.data_format == "channels_last":
             # TODO: use F.layer_norm
@@ -262,11 +300,7 @@ def convnext_tiny_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_tiny_224 = flowvision.models.convnext_tiny_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 9, 3],
-        dims=[96, 192, 384, 768],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 9, 3], dims=[96, 192, 384, 768], **kwargs)
     return _create_convnext(
         "convnext_tiny_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
@@ -293,11 +327,7 @@ def convnext_small_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_small_224 = flowvision.models.convnext_small_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[96, 192, 384, 768],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[96, 192, 384, 768], **kwargs)
     return _create_convnext(
         "convnext_small_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
@@ -324,11 +354,7 @@ def convnext_base_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_base_224 = flowvision.models.convnext_base_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[128, 256, 512, 1024],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
     return _create_convnext(
         "convnext_base_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
@@ -355,11 +381,7 @@ def convnext_base_384(pretrained=False, progress=True, **kwargs):
         >>> convnext_base_384 = flowvision.models.convnext_base_384(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[128, 256, 512, 1024],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
     return _create_convnext(
         "convnext_base_384", pretrained=pretrained, progress=progress, **model_kwargs
     )
@@ -386,11 +408,7 @@ def convnext_large_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_large_224 = flowvision.models.convnext_large_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[192, 384, 768, 1536],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
     return _create_convnext(
         "convnext_large_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
@@ -417,11 +435,7 @@ def convnext_large_384(pretrained=False, progress=True, **kwargs):
         >>> convnext_large_384 = flowvision.models.convnext_large_384(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[192, 384, 768, 1536],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
     return _create_convnext(
         "convnext_large_224", pretrained=pretrained, progress=progress, **model_kwargs
     )
@@ -449,14 +463,15 @@ def convnext_base_224_22k(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[128, 256, 512, 1024],
-        num_classes=21841,
-        **kwargs
+        depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], num_classes=21841, **kwargs
     )
     return _create_convnext(
-        "convnext_base_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_base_224_22k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
+
 
 @ModelCreator.register_model
 def convnext_base_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
@@ -479,13 +494,12 @@ def convnext_base_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
         >>> convnext_base_224_22k_to_1k = flowvision.models.convnext_base_224_22k_to_1k(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[128, 256, 512, 1024],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
     return _create_convnext(
-        "convnext_base_224_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_base_224_22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -510,13 +524,12 @@ def convnext_base_384_22k_to_1k(pretrained=False, progress=True, **kwargs):
         >>> convnext_base_384_22k_to_1k = flowvision.models.convnext_base_384_22k_to_1k(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[128, 256, 512, 1024],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[128, 256, 512, 1024], **kwargs)
     return _create_convnext(
-        "convnext_base_384_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_base_384_22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -542,13 +555,13 @@ def convnext_large_224_22k(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[192, 384, 768, 1536],
-        num_classes=21841,
-        **kwargs
+        depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], num_classes=21841, **kwargs
     )
     return _create_convnext(
-        "convnext_large_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_large_224_22k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -573,13 +586,12 @@ def convnext_large_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
         >>> convnext_large_224_22k_to_1k = flowvision.models.convnext_large_224_22k_to_1k(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[192, 384, 768, 1536],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
     return _create_convnext(
-        "convnext_large_224_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_large_224_22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -604,13 +616,12 @@ def convnext_large_384_22k_to_1k(pretrained=False, progress=True, **kwargs):
         >>> convnext_large_384_22k_to_1k = flowvision.models.convnext_large_384_22k_to_1k(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[192, 384, 768, 1536],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[192, 384, 768, 1536], **kwargs)
     return _create_convnext(
-        "convnext_large_384_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_large_384_22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -636,13 +647,13 @@ def convnext_xlarge_224_22k(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[256, 512, 1024, 2048],
-        num_classes=21841,
-        **kwargs
+        depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], num_classes=21841, **kwargs
     )
     return _create_convnext(
-        "convnext_xlarge_224_22k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_xlarge_224_22k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -667,13 +678,12 @@ def convnext_xlarge_224_22k_to_1k(pretrained=False, progress=True, **kwargs):
         >>> convnext_xlarge_224_22k_to_1k = flowvision.models.convnext_xlarge_224_22k_to_1k(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[256, 512, 1024, 2048],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], **kwargs)
     return _create_convnext(
-        "convnext_xlarge_224_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_xlarge_224_22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -698,13 +708,12 @@ def convnext_xlarge_384_22k_to_1k(pretrained=False, progress=True, **kwargs):
         >>> convnext_xlarge_384_22k_to_1k = flowvision.models.convnext_xlarge_384_22k_to_1k(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depths=[3, 3, 27, 3],
-        dims=[256, 512, 1024, 2048],
-        **kwargs
-    )
+    model_kwargs = dict(depths=[3, 3, 27, 3], dims=[256, 512, 1024, 2048], **kwargs)
     return _create_convnext(
-        "convnext_xlarge_384_22k_to_1k", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_xlarge_384_22k_to_1k",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -729,13 +738,12 @@ def convnext_iso_small_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_iso_small_224 = flowvision.models.convnext_iso_small_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depth=18,
-        dim=384,
-        **kwargs
-    )
+    model_kwargs = dict(depth=18, dim=384, **kwargs)
     return _create_convnext_isotropic(
-        "convnext_iso_small_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_iso_small_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -760,13 +768,12 @@ def convnext_iso_base_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_iso_base_224 = flowvision.models.convnext_iso_base_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depth=18,
-        dim=768,
-        **kwargs
-    )
+    model_kwargs = dict(depth=18, dim=768, **kwargs)
     return _create_convnext_isotropic(
-        "convnext_iso_base_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_iso_base_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
 
 
@@ -791,12 +798,10 @@ def convnext_iso_large_224(pretrained=False, progress=True, **kwargs):
         >>> convnext_iso_large_224 = flowvision.models.convnext_iso_large_224(pretrained=False, progress=True)
 
     """
-    model_kwargs = dict(
-        depth=36,
-        dim=1024,
-        layer_scale_init_value=1e-6,
-        **kwargs
-    )
+    model_kwargs = dict(depth=36, dim=1024, layer_scale_init_value=1e-6, **kwargs)
     return _create_convnext_isotropic(
-        "convnext_iso_large_224", pretrained=pretrained, progress=progress, **model_kwargs
+        "convnext_iso_large_224",
+        pretrained=pretrained,
+        progress=progress,
+        **model_kwargs
     )
