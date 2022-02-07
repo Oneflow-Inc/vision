@@ -1,28 +1,20 @@
-# Copyright 2021 Garena Online Private Limited
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+""" Transforms Factory
+modified from https://github.com/sail-sg/poolformer/blob/main/models/poolformer.py
 """
-PoolFormer implementation
-"""
+
 import os
 import copy
-import torch
-import torch.nn as nn
+import oneflow as flow
+import oneflow.nn as nn
 
-from timm.data import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from timm.models.layers import DropPath, trunc_normal_
-from timm.models.registry import register_model
-from timm.models.layers.helpers import to_2tuple
+from flowvision.data.constants import (
+    IMAGENET_DEFAULT_MEAN,
+    IMAGENET_DEFAULT_STD,
+)
+from flowvision.layers import DropPath, trunc_normal_
+from .utils import load_state_dict_from_url
+from .registry import ModelCreator
+from .helpers import to_2tuple
 
 
 try:
@@ -42,6 +34,15 @@ try:
 except ImportError:
     print("If for detection, please install mmdetection first")
     has_mmdet = False
+
+
+model_urls = {
+    "poolformer_s12": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_s12.pth.tar",
+    "poolformer_s24": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_s24.pth.tar",
+    "poolformer_s36": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_s36.pth.tar",
+    "poolformer_m36": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_m36.pth.tar",
+    "poolformer_m48": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_m48.pth.tar",
+}
 
 
 def _cfg(url='', **kwargs):
@@ -336,42 +337,6 @@ class PoolFormer(nn.Module):
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
 
-    # init for mmdetection or mmsegmentation by loading 
-    # imagenet pre-trained weights
-    def init_weights(self, pretrained=None):
-        logger = get_root_logger()
-        if self.init_cfg is None and pretrained is None:
-            logger.warn(f'No pre-trained weights for '
-                        f'{self.__class__.__name__}, '
-                        f'training start from scratch')
-            pass
-        else:
-            assert 'checkpoint' in self.init_cfg, f'Only support ' \
-                                                  f'specify `Pretrained` in ' \
-                                                  f'`init_cfg` in ' \
-                                                  f'{self.__class__.__name__} '
-            if self.init_cfg is not None:
-                ckpt_path = self.init_cfg['checkpoint']
-            elif pretrained is not None:
-                ckpt_path = pretrained
-
-            ckpt = _load_checkpoint(
-                ckpt_path, logger=logger, map_location='cpu')
-            if 'state_dict' in ckpt:
-                _state_dict = ckpt['state_dict']
-            elif 'model' in ckpt:
-                _state_dict = ckpt['model']
-            else:
-                _state_dict = ckpt
-
-            state_dict = _state_dict
-            missing_keys, unexpected_keys = \
-                self.load_state_dict(state_dict, False)
-            
-            # show for debug
-            # print('missing_keys: ', missing_keys)
-            # print('unexpected_keys: ', unexpected_keys)
-
     def get_classifier(self):
         return self.head
 
@@ -412,8 +377,18 @@ class PoolFormer(nn.Module):
         return cls_out
 
 
-@register_model
-def poolformer_s12(pretrained=False, **kwargs):
+def _create_poolformer(arch, pretrained=False, progress=True, **model_kwargs):
+    model = PoolFormer(**model_kwargs)
+    default_cfgs_name = arch.split("_")[0] + arch.split("_")[1][1]
+    model.default_cfg = default_cfgs[default_cfgs_name]
+    if pretrained:
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        model.load_state_dict(state_dict)
+    return model
+
+
+@ModelCreator.register_model
+def poolformer_s12(pretrained=False, progress=True, **kwargs):
     """
     PoolFormer-S12 model, Params: 12M
     --layers: [x,x,x,x], numbers of layers for the four stages
@@ -421,88 +396,78 @@ def poolformer_s12(pretrained=False, **kwargs):
         embedding dims and mlp ratios for the four stages
     --downsamples: flags to apply downsampling or not in four blocks
     """
-    layers = [2, 2, 6, 2]
-    embed_dims = [64, 128, 320, 512]
-    mlp_ratios = [4, 4, 4, 4]
-    downsamples = [True, True, True, True]
-    model = PoolFormer(
-        layers, embed_dims=embed_dims, 
-        mlp_ratios=mlp_ratios, downsamples=downsamples, 
-        **kwargs)
-    model.default_cfg = default_cfgs['poolformer_s']
-    return model
+    model_kwargs = dict(
+        layers = [2, 2, 6, 2],
+        embed_dims = [64, 128, 320, 512],
+        mlp_ratios = [4, 4, 4, 4],
+        downsamples = [True, True, True, True],
+    )
+    return _create_poolformer(
+        "poolformer_s12", pretrained=pretrained, progress=progress, **model_kwargs
+    )
 
 
-@register_model
-def poolformer_s24(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def poolformer_s24(pretrained=False, progress=True, **kwargs):
     """
     PoolFormer-S24 model, Params: 21M
     """
-    layers = [4, 4, 12, 4]
-    embed_dims = [64, 128, 320, 512]
-    mlp_ratios = [4, 4, 4, 4]
-    downsamples = [True, True, True, True]
-    model = PoolFormer(
-        layers, embed_dims=embed_dims, 
-        mlp_ratios=mlp_ratios, downsamples=downsamples, 
-        **kwargs)
-    model.default_cfg = default_cfgs['poolformer_s']
-    return model
+    model_kwargs = dict(
+        layers = [4, 4, 12, 4],
+        embed_dims = [64, 128, 320, 512],
+        mlp_ratios = [4, 4, 4, 4],
+        downsamples = [True, True, True, True],
+    )
+    return _create_poolformer(
+        "poolformer_s24", pretrained=pretrained, progress=progress, **model_kwargs
+    )
 
 
-@register_model
-def poolformer_s36(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def poolformer_s36(pretrained=False, progress=True, **kwargs):
     """
     PoolFormer-S36 model, Params: 31M
     """
-    layers = [6, 6, 18, 6]
-    embed_dims = [64, 128, 320, 512]
-    mlp_ratios = [4, 4, 4, 4]
-    downsamples = [True, True, True, True]
-    model = PoolFormer(
-        layers, embed_dims=embed_dims, 
-        mlp_ratios=mlp_ratios, downsamples=downsamples, 
-        layer_scale_init_value=1e-6, 
-        **kwargs)
-    model.default_cfg = default_cfgs['poolformer_s']
-    return model
+    model_kwargs = dict(
+    layers = [6, 6, 18, 6],
+    embed_dims = [64, 128, 320, 512],
+    mlp_ratios = [4, 4, 4, 4],
+    downsamples = [True, True, True, True],
+    )
+    return _create_poolformer(
+        "poolformer_s36", pretrained=pretrained, progress=progress, **model_kwargs
+    )
 
-
-@register_model
-def poolformer_m36(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def poolformer_m36(pretrained=False, progress=True, **kwargs):
     """
     PoolFormer-M36 model, Params: 56M
     """
-    layers = [6, 6, 18, 6]
-    embed_dims = [96, 192, 384, 768]
-    mlp_ratios = [4, 4, 4, 4]
-    downsamples = [True, True, True, True]
-    model = PoolFormer(
-        layers, embed_dims=embed_dims, 
-        mlp_ratios=mlp_ratios, downsamples=downsamples, 
-        layer_scale_init_value=1e-6, 
-        **kwargs)
-    model.default_cfg = default_cfgs['poolformer_m']
-    return model
+    model_kwargs = dict(
+        layers = [6, 6, 18, 6],
+        embed_dims = [96, 192, 384, 768],
+        mlp_ratios = [4, 4, 4, 4],
+        downsamples = [True, True, True, True],
+    )
+    return _create_poolformer(
+        "poolformer_m36", pretrained=pretrained, progress=progress, **model_kwargs
+    )
 
 
-@register_model
-def poolformer_m48(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def poolformer_m48(pretrained=False, progress=True, **kwargs):
     """
     PoolFormer-M48 model, Params: 73M
     """
-    layers = [8, 8, 24, 8]
-    embed_dims = [96, 192, 384, 768]
-    mlp_ratios = [4, 4, 4, 4]
-    downsamples = [True, True, True, True]
-    model = PoolFormer(
-        layers, embed_dims=embed_dims, 
-        mlp_ratios=mlp_ratios, downsamples=downsamples, 
-        layer_scale_init_value=1e-6, 
-        **kwargs)
-    model.default_cfg = default_cfgs['poolformer_m']
-    return model
-
+    model_kwargs = dict(
+        layers = [8, 8, 24, 8],
+        embed_dims = [96, 192, 384, 768],
+        mlp_ratios = [4, 4, 4, 4],
+        downsamples = [True, True, True, True],
+    )
+    return _create_poolformer(
+        "poolformer_m48", pretrained=pretrained, progress=progress, **model_kwargs
+    )
 
 if has_mmseg and has_mmdet:
     """
