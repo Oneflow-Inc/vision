@@ -29,10 +29,10 @@ from .blocks import (
     ExtraFPNBlock,
 )
 from .regularization import (
-    drop_path, 
-    dropblock, 
-    DropBlock, 
-    DropPath, 
+    drop_path,
+    dropblock,
+    DropBlock,
+    DropPath,
     LayerNorm2d,
     StochasticDepth,
 )

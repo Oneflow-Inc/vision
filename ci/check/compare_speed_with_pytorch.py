@@ -88,6 +88,19 @@ def test(
             if found:
                 lines = lines[:i] + lines[i + 1 :]
 
+        for i, line in enumerate(lines):
+            if (
+                "from .helpers import to_2tuple" in line
+                or "from .helpers import make_divisible" in line
+                or "from .helpers import named_apply" in line
+            ):
+                lines = (
+                    lines[:i]
+                    + ["from flowvision.models.helpers import *",]
+                    + lines[i + 1 :]
+                )
+                break
+
         buf = "\n".join(lines)
         with tempfile.NamedTemporaryFile("w", suffix=".py") as f:
             f.write(buf)
@@ -99,6 +112,7 @@ def test(
         with open(model_path) as f:
             buf = f.read()
 
+        # remote ModelCreator.register_model and load_state_dict_from_url
         lines = buf.split("\n")
         for i, line in enumerate(lines):
             if "from .registry import ModelCreator" in line:
@@ -119,6 +133,7 @@ def test(
             if found:
                 lines = lines[:i] + lines[i + 1 :]
 
+        # replace oneflow with torch
         for i, line in enumerate(lines):
             if "import oneflow" in line or "from oneflow import" in line:
                 line_num = i
@@ -134,56 +149,44 @@ def test(
             ]
             + lines[line_num + 1 :]
         )
+
+        import_strs = [
+            "from typing import Callable",
+            'def named_apply(fn: Callable, module: nn.Module, name="", depth_first=True, include_root=False) -> nn.Module:',
+            "    if not depth_first and include_root:",
+            "        fn(module=module, name=name)",
+            "    for child_name, child_module in module.named_children():",
+            '        child_name = ".".join((name, child_name)) if name else child_name',
+            "        named_apply(fn=fn,module=child_module,name=child_name,depth_first=depth_first,include_root=True,)",
+            "    if depth_first and include_root:",
+            "        fn(module=module, name=name)",
+            "    return module",
+        ]
+
         for i, line in enumerate(lines):
-            if (
-                "from flowvision.layers.weight_init import trunc_normal_, lecun_normal_"
-                in line
-            ):
+            if "from flowvision.layers import" in line:
                 lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import lecun_normal_, trunc_normal_",]
-                    + lines[i + 1 :]
+                    lines[:i] + ["from timm.models.layers import *",] + lines[i + 1 :]
                 )
                 break
+
         for i, line in enumerate(lines):
-            if "from flowvision.layers.weight_init import trunc_normal_" in line:
+            if "from .helpers import to_2tuple" in line:
                 lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import trunc_normal_",]
-                    + lines[i + 1 :]
+                    lines[:i] + ["from timm.models.layers import *",] + lines[i + 1 :]
                 )
                 break
+
         for i, line in enumerate(lines):
-            if "from flowvision.layers.weight_init import lecun_normal_" in line:
+            if "from .helpers import make_divisible" in line:
                 lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import lecun_normal_",]
-                    + lines[i + 1 :]
+                    lines[:i] + ["from timm.models.layers import *",] + lines[i + 1 :]
                 )
                 break
+
         for i, line in enumerate(lines):
-            if "from flowvision.layers.regularization import DropPath" in line:
-                lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import DropPath",]
-                    + lines[i + 1 :]
-                )
-                break
-        for i, line in enumerate(lines):
-            if "from flowvision.layers.blocks import PatchEmbed, Mlp" in line:
-                lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import PatchEmbed, Mlp",]
-                    + lines[i + 1 :]
-                )
-                break
-        for i, line in enumerate(lines):
-            if "from flowvision.layers.blocks import PatchEmbed" in line:
-                lines = (
-                    lines[:i]
-                    + ["from timm.models.layers import PatchEmbed",]
-                    + lines[i + 1 :]
-                )
+            if "from .helpers import named_apply" in line:
+                lines = lines[:i] + import_strs + lines[i + 1 :]
                 break
 
         buf = "\n".join(lines)
