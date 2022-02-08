@@ -8,6 +8,8 @@ import sys
 import tempfile
 import time
 from typing import Sequence
+import multiprocessing
+from multiprocessing import Process, Queue
 
 import oneflow as flow
 
@@ -22,7 +24,7 @@ def import_file(path):
     return mod
 
 
-def sync(x):
+def sync(x, test_oneflow):
     if test_oneflow:
         x.numpy()
     else:
@@ -54,6 +56,8 @@ def print_rank_0(*args, **kwargs):
 
 
 def test(
+    queue: Queue,
+    test_oneflow: bool,
     model_path: str,
     module_name: str,
     input_shape: Sequence[int],
@@ -237,7 +241,7 @@ def test(
 
     # input tensor of OneFlow should set requires_grad=False due to a bug
     x = torch.tensor(
-        np.ones(input_shape).astype(np.float32), requires_grad=not test_oneflow
+        np.ones(input_shape).astype(np.float32), requires_grad=False
     ).to("cuda")
     for i in range(warmup_times + times):
         if i == warmup_times:
@@ -250,7 +254,7 @@ def test(
             y.backward()
             optimizer.zero_grad()
             optimizer.step()
-        sync(y)
+        sync(y, test_oneflow)
     end = time.time()
     total_time_ms = (end - start) * 1000
     time_per_run_ms = total_time_ms / times
@@ -276,11 +280,12 @@ def test(
         import torch.distributed as dist
 
         dist.destroy_process_group()
-
-    return time_per_run_ms
+    queue.put(time_per_run_ms)
+    # return time_per_run_ms
 
 
 if __name__ == "__main__":
+    multiprocessing.set_start_method("spawn")
     parser = argparse.ArgumentParser()
     parser.add_argument("model_path", type=str)
     parser.add_argument("module_name", type=str)
@@ -297,36 +302,46 @@ if __name__ == "__main__":
     args = parser.parse_args()
     input_shape = list(map(int, args.input_shape.split("x")))
 
-    global test_oneflow
+    queue = Queue()
 
     if not args.only_pytorch:
         # NOTE: PyTorch must run after OneFlow for correct memory usage
         test_oneflow = True
-        oneflow_time = test(
-            args.model_path,
-            args.module_name,
-            input_shape,
-            disable_backward=args.disable_backward,
-            times=args.times,
-            no_verbose=args.no_verbose,
-            ddp=args.ddp,
-            ddp_broadcast_buffers=not args.ddp_no_broadcast_buffers,
-            show_memory=not args.no_show_memory,
-        )
+        # oneflow_time = test(
+        #     queue,
+        #     args.model_path,
+        #     args.module_name,
+        #     input_shape,
+        #     disable_backward=args.disable_backward,
+        #     times=args.times,
+        #     no_verbose=args.no_verbose,
+        #     ddp=args.ddp,
+        #     ddp_broadcast_buffers=not args.ddp_no_broadcast_buffers,
+        #     show_memory=not args.no_show_memory,
+        # )
+        p = Process(target=test, args=(queue, test_oneflow, args.model_path, args.module_name, input_shape, args.disable_backward, args.times, args.no_verbose, args.ddp, not args.ddp_no_broadcast_buffers, not args.no_show_memory))
+        p.start()
+        p.join() # this blocks until the process terminates
+        oneflow_time = queue.get()
 
     if not args.only_oneflow:
         test_oneflow = False
-        pytorch_time = test(
-            args.model_path,
-            args.module_name,
-            input_shape,
-            disable_backward=args.disable_backward,
-            times=args.times,
-            no_verbose=args.no_verbose,
-            ddp=args.ddp,
-            ddp_broadcast_buffers=not args.ddp_no_broadcast_buffers,
-            show_memory=not args.no_show_memory,
-        )
+        # pytorch_time = test(
+        #     queue,
+        #     args.model_path,
+        #     args.module_name,
+        #     input_shape,
+        #     disable_backward=args.disable_backward,
+        #     times=args.times,
+        #     no_verbose=args.no_verbose,
+        #     ddp=args.ddp,
+        #     ddp_broadcast_buffers=not args.ddp_no_broadcast_buffers,
+        #     show_memory=not args.no_show_memory,
+        # )
+        p = Process(target=test, args=(queue, test_oneflow, args.model_path, args.module_name, input_shape, args.disable_backward, args.times, args.no_verbose, args.ddp, not args.ddp_no_broadcast_buffers, not args.no_show_memory))
+        p.start()
+        p.join() # this blocks until the process terminates
+        pytorch_time = queue.get()
 
     if not args.only_pytorch and not args.only_oneflow:
         relative_speed = pytorch_time / oneflow_time
