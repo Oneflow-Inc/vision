@@ -240,9 +240,9 @@ def test(
     optimizer = torch.optim.SGD(m.parameters(), lr=learning_rate, momentum=mom)
 
     # input tensor of OneFlow should set requires_grad=False due to a bug
-    x = torch.tensor(
-        np.ones(input_shape).astype(np.float32), requires_grad=False
-    ).to("cuda")
+    x = torch.tensor(np.ones(input_shape).astype(np.float32), requires_grad=False).to(
+        "cuda"
+    )
     for i in range(warmup_times + times):
         if i == warmup_times:
             start = time.time()
@@ -319,9 +319,24 @@ if __name__ == "__main__":
         #     ddp_broadcast_buffers=not args.ddp_no_broadcast_buffers,
         #     show_memory=not args.no_show_memory,
         # )
-        p = Process(target=test, args=(queue, test_oneflow, args.model_path, args.module_name, input_shape, args.disable_backward, args.times, args.no_verbose, args.ddp, not args.ddp_no_broadcast_buffers, not args.no_show_memory))
+        p = Process(
+            target=test,
+            args=(
+                queue,
+                test_oneflow,
+                args.model_path,
+                args.module_name,
+                input_shape,
+                args.disable_backward,
+                args.times,
+                args.no_verbose,
+                args.ddp,
+                not args.ddp_no_broadcast_buffers,
+                not args.no_show_memory,
+            ),
+        )
         p.start()
-        p.join() # this blocks until the process terminates
+        p.join()  # this blocks until the process terminates
         oneflow_time = queue.get()
 
     if not args.only_oneflow:
@@ -338,9 +353,24 @@ if __name__ == "__main__":
         #     ddp_broadcast_buffers=not args.ddp_no_broadcast_buffers,
         #     show_memory=not args.no_show_memory,
         # )
-        p = Process(target=test, args=(queue, test_oneflow, args.model_path, args.module_name, input_shape, args.disable_backward, args.times, args.no_verbose, args.ddp, not args.ddp_no_broadcast_buffers, not args.no_show_memory))
+        p = Process(
+            target=test,
+            args=(
+                queue,
+                test_oneflow,
+                args.model_path,
+                args.module_name,
+                input_shape,
+                args.disable_backward,
+                args.times,
+                args.no_verbose,
+                args.ddp,
+                not args.ddp_no_broadcast_buffers,
+                not args.no_show_memory,
+            ),
+        )
         p.start()
-        p.join() # this blocks until the process terminates
+        p.join()  # this blocks until the process terminates
         pytorch_time = queue.get()
 
     if not args.only_pytorch and not args.only_oneflow:
