@@ -18,11 +18,11 @@ from .helpers import to_2tuple
 
 
 model_urls = {
-    "poolformer_s12": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_s12.pth.tar",
-    "poolformer_s24": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_s24.pth.tar",
-    "poolformer_s36": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_s36.pth.tar",
-    "poolformer_m36": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_m36.pth.tar",
-    "poolformer_m48": "https://github.com/sail-sg/poolformer/releases/download/v1.0/poolformer_m48.pth.tar",
+    "poolformer_s12": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PoolFormer/poolformer_s12.pth.tar",
+    "poolformer_s24": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PoolFormer/poolformer_s24.pth.tar",
+    "poolformer_s36": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PoolFormer/poolformer_s36.pth.tar",
+    "poolformer_m36": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PoolFormer/poolformer_m36.pth.tar",
+    "poolformer_m48": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/PoolFormer/poolformer_m48.pth.tar",
 }
 
 
