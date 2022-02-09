@@ -4,7 +4,8 @@ log/
 *.py[cod]
 *$py.class
 weights/
-convert_torch_to_flow.py
+tmp/
+convert_*.py
 
 # C extensions
 *.so
