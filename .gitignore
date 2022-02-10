@@ -3,9 +3,6 @@ __pycache__/
 log/
 *.py[cod]
 *$py.class
-weights/
-tmp/
-convert_*.py
 
 # C extensions
 *.so
