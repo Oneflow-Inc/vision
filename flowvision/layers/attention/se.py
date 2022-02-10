@@ -4,16 +4,16 @@ import oneflow.nn as nn
 
 class SEModule(nn.Module):
     """
-    A "Squeeze-and-Excitation" block that adaptively recalibrates channel-wise feature responses. This is based on
+    "Squeeze-and-Excitation" block adaptively recalibrates channel-wise feature responses. This is based on
     `"Squeeze-and-Excitation Networks" <https://arxiv.org/abs/1709.01507>`_. This unit is designed to improve the representational capacity of a network by enabling it to perform dynamic channel-wise feature recalibration.
 
     Args:
-        channels (int): Size of each input sample 
+        channels (int): The input channel size
         reduction (int): Ratio that allows us tovary the capacity and computational cost of the SE model. Default: 16
         rd_channels (int or None): Number of reduced channels. If none, uses reduction to calculate
-        act_layer (flow.nn.Module): A simple acting mechanism is achieved by using a relu activation 
-        gate_layer (flow.nn.Module): A simple gating mechanism is achieved by using a sigmoid activation 
-        mlp_bias (bool): If True, adds a learnable bias to the output. Default: False
+        act_layer (flow.nn.Module): An activation layer used between two FC layers of Excitation. Default: flow.nn.ReLU
+        gate_layer (flow.nn.Module): An activation layer used after two FC layers of Excitation. Default: flow.nn.Sigmoid
+        mlp_bias (bool): If True, add learnable bias to the linear layers. Default: False
     """
 
     def __init__(
