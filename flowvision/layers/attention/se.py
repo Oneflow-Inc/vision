@@ -8,12 +8,12 @@ class SEModule(nn.Module):
     `"Squeeze-and-Excitation Networks" <https://arxiv.org/abs/1709.01507>`_. This unit is designed to improve the representational capacity of a network by enabling it to perform dynamic channel-wise feature recalibration.
 
     Args:
-        channels (int): size of each input sample 
-        reduction (int): ratio that allows us tovary the capacity and computational cost of the SE model. Default: 16
-        rd_channels (int or None): number of reduced channels. If none, uses reduction to calculate
-        act_layer (flow.nn.Module): a simple acting mechanism is achieved by using a relu activation 
-        gate_layer (flow.nn.Module): a simple gating mechanism is achieved by using a sigmoid activation 
-        mlp_bias (bool): if True, adds a learnable bias to the output. Default: False
+        channels (int): Size of each input sample 
+        reduction (int): Ratio that allows us tovary the capacity and computational cost of the SE model. Default: 16
+        rd_channels (int or None): Number of reduced channels. If none, uses reduction to calculate
+        act_layer (flow.nn.Module): A simple acting mechanism is achieved by using a relu activation 
+        gate_layer (flow.nn.Module): A simple gating mechanism is achieved by using a sigmoid activation 
+        mlp_bias (bool): If True, adds a learnable bias to the output. Default: False
     """
 
     def __init__(
