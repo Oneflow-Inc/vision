@@ -9,7 +9,7 @@ class SEModule(nn.Module):
 
     Args:
         channels (int): The input channel size
-        reduction (int): Ratio that allows us tovary the capacity and computational cost of the SE model. Default: 16
+        reduction (int): Ratio that allows us to vary the capacity and computational cost of the SE SEModule. Default: 16
         rd_channels (int or None): Number of reduced channels. If none, uses reduction to calculate
         act_layer (flow.nn.Module): An activation layer used between two FC layers. Default: flow.nn.ReLU
         gate_layer (flow.nn.Module): An activation layer used after two FC layers. Default: flow.nn.Sigmoid
