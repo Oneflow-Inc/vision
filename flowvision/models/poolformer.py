@@ -1,9 +1,10 @@
-""" Transforms Factory
+"""
 modified from https://github.com/sail-sg/poolformer/blob/main/models/poolformer.py
 """
 
 import os
 import copy
+
 import oneflow as flow
 import oneflow.nn as nn
 
@@ -91,7 +92,7 @@ class GroupNorm(nn.GroupNorm):
 
 class Pooling(nn.Module):
     """
-    Implementation of pooling for PoolFormer
+    Implementation of pooling for PoolFormer.
     --pool_size: pooling size
     """
     def __init__(self, pool_size=3):
@@ -192,7 +193,7 @@ def basic_blocks(dim, index, layers,
                  drop_rate=.0, drop_path_rate=0., 
                  use_layer_scale=True, layer_scale_init_value=1e-5):
     """
-    generate PoolFormer blocks for a stage
+    Generate PoolFormer blocks for a stage.
     return: PoolFormer blocks 
     """
     blocks = []
@@ -213,7 +214,7 @@ def basic_blocks(dim, index, layers,
 
 class PoolFormer(nn.Module):
     """ PoolFormer
-        The OneFlow impl of : `A ConvNet for the 2020s`  -
+        The OneFlow impl of : `MetaFormer is Actually What You Need for Vision`  -
           https://arxiv.org/abs/2111.11418
 
     Args:
@@ -227,7 +228,7 @@ class PoolFormer(nn.Module):
         --in_patch_size, --in_stride, --in_pad: Specify the patch embedding for the input image
         --down_patch_size --down_stride --down_pad: Specify the downsample (patch embed.)
         --fork_feat: Whether output features of the 4 stages, for dense prediction
-        --init_cfg，--pretrained: Load pretrianed weights
+        --init_cfg, --pretrained: Load pretrianed weights
     """
     def __init__(self, layers, embed_dims=None, 
                  mlp_ratios=None, downsamples=None, 
@@ -346,7 +347,7 @@ class PoolFormer(nn.Module):
         # through backbone
         x = self.forward_tokens(x)
         if self.fork_feat:
-            # otuput features of four stages for dense prediction
+            # output features of four stages for dense prediction
             return x
         x = self.norm(x)
         cls_out = self.head(x.mean([-2, -1]))
@@ -365,7 +366,7 @@ def _create_poolformer(arch, pretrained=False, progress=True, **model_kwargs):
 @ModelCreator.register_model
 def poolformer_s12(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the PoolFormer model.
+    Constructs the PoolFormer-S12 model.
 
     .. note::
         PoolFormer-S12 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
@@ -396,7 +397,7 @@ def poolformer_s12(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def poolformer_s24(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the PoolFormer model.
+    Constructs the PoolFormer-S24 model.
 
     .. note::
         PoolFormer-S24 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
@@ -427,7 +428,7 @@ def poolformer_s24(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def poolformer_s36(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the PoolFormer model.
+    Constructs the PoolFormer-S36 model.
 
     .. note::
         PoolFormer-S36 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
@@ -457,10 +458,10 @@ def poolformer_s36(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def poolformer_m36(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the PoolFormer model.
+    Constructs the PoolFormer-M36 model.
 
     .. note::
-        PoolFormer-m36 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-M36 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -488,10 +489,10 @@ def poolformer_m36(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def poolformer_m48(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the PoolFormer model.
+    Constructs the PoolFormer-M48 model.
 
     .. note::
-        PoolFormer-m48 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-M48 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
