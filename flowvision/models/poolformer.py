@@ -38,7 +38,7 @@ class PatchEmbed(nn.Module):
         padding (int): controls the amount of padding applied to the input. Default: 0
         in_chans (int): nums of input channels. Default: 3
         embed_dim (int): nums of out channels. Default: 768
-        norm_layer : Default: 768
+        norm_layer : Default: None
     """
     def __init__(self, patch_size=16, stride=16, padding=0, 
                  in_chans=3, embed_dim=768, norm_layer=None):
@@ -226,8 +226,8 @@ class PoolFormer(nn.Module):
         --num_classes: Number of classes for the image classification
         --in_patch_size, --in_stride, --in_pad: Specify the patch embedding for the input image
         --down_patch_size --down_stride --down_pad: Specify the downsample (patch embed.)
-        --fork_faat: Whetehr output features of the 4 stages, for dense prediction
-        --init_cfg，--pretrained: For mmdetection and mmsegmentation to load pretrianfed weights
+        --fork_feat: Whether output features of the 4 stages, for dense prediction
+        --init_cfg，--pretrained: Load pretrianed weights
     """
     def __init__(self, layers, embed_dims=None, 
                  mlp_ratios=None, downsamples=None, 
