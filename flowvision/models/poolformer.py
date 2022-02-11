@@ -223,12 +223,12 @@ class PoolFormer(nn.Module):
         --mlp_ratios: The mlp ratios
         --pool_size:  Pooling size
         --downsamples: Flags to apply downsampling or not
-        --norm_layer, --act_layer: Define the types of normalizaiotn and activation
+        --norm_layer, --act_layer: Define the types of normalization and activation
         --num_classes: Number of classes for the image classification
         --in_patch_size, --in_stride, --in_pad: Specify the patch embedding for the input image
         --down_patch_size --down_stride --down_pad: Specify the downsample (patch embed.)
         --fork_feat: Whether output features of the 4 stages, for dense prediction
-        --init_cfg, --pretrained: Load pretrianed weights
+        --init_cfg, --pretrained: Load pretrained weights
     """
     def __init__(self, layers, embed_dims=None, 
                  mlp_ratios=None, downsamples=None, 
@@ -286,7 +286,7 @@ class PoolFormer(nn.Module):
                 if i_emb == 0 and os.environ.get('FORK_LAST3', None):
                     # TODO: more elegant way
                     """For RetinaNet, `start_level=1`. The first norm layer will not used.
-                    cmd: `FORK_LAST3=1 python -m flow.distributed.launch ...`
+                    cmd: `FORK_LAST3=1 python -m oneflow.distributed.launch ...`
                     """
                     layer = nn.Identity()
                 else:
