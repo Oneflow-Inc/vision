@@ -10,5 +10,6 @@ Plug and Play Modules or Functions that are specific for Computer Vision Tasks
         batched_nms,
         box_iou,
         FeaturePyramidNetwork,
-        MultiScaleRoIAlign
+        MultiScaleRoIAlign,
+        SEModule
   
