@@ -11,8 +11,8 @@ class SEModule(nn.Module):
         channels (int): The input channel size
         reduction (int): Ratio that allows us to vary the capacity and computational cost of the SE Module. Default: 16
         rd_channels (int or None): Number of reduced channels. If none, uses reduction to calculate
-        act_layer (flow.nn.Module): An activation layer used between two FC layers. Default: flow.nn.ReLU
-        gate_layer (flow.nn.Module): An activation layer used after two FC layers. Default: flow.nn.Sigmoid
+        act_layer (flow.nn.Module): An activation layer used after the first FC layer. Default: flow.nn.ReLU
+        gate_layer (flow.nn.Module): An activation layer used after the second FC layer. Default: flow.nn.Sigmoid
         mlp_bias (bool): If True, add learnable bias to the linear layers. Default: False
     """
 
