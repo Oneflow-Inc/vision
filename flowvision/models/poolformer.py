@@ -368,7 +368,7 @@ def poolformer_s12(pretrained=False, progress=True, **kwargs):
     Constructs the PoolFormer model.
 
     .. note::
-        PoolFormer-S12 model, Params: 12M. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-S12 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -399,7 +399,7 @@ def poolformer_s24(pretrained=False, progress=True, **kwargs):
     Constructs the PoolFormer model.
 
     .. note::
-        PoolFormer-S24 model, Params: 21M. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-S24 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -430,7 +430,7 @@ def poolformer_s36(pretrained=False, progress=True, **kwargs):
     Constructs the PoolFormer model.
 
     .. note::
-        PoolFormer-S36 model, Params: 31M. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-S36 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -460,7 +460,7 @@ def poolformer_m36(pretrained=False, progress=True, **kwargs):
     Constructs the PoolFormer model.
 
     .. note::
-        PoolFormer-m36 model, Params: 56M. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-m36 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
@@ -491,7 +491,7 @@ def poolformer_m48(pretrained=False, progress=True, **kwargs):
     Constructs the PoolFormer model.
 
     .. note::
-        PoolFormer-m48 model, Params: 73M. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
+        PoolFormer-m48 model. From `"MetaFormer is Actually What You Need for Vision" <https://arxiv.org/abs/2111.11418>` _.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``

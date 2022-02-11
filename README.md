@@ -51,6 +51,7 @@ pip install flowvision==0.0.6
             <li>Swin Transformer</li>
             <li>CSwin Transformer</li>
             <li>CrossFormer</li>
+            <li>PoolFormer</li>
             <li>Mlp Mixer</li>
             <li>ResMLP</li>
             <li>gMLP</li>
