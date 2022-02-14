@@ -250,7 +250,7 @@ def convert_to_flatten_layout(cls_tokens, patch_tokens, ws):
 
     B, C, H, W = patch_tokens.shape
     kernel_size = (H // H_ks, W // W_ks)
-    tmp = F.unfold(patch_tokens, kernel_size=kernel_size, stride=kernel_size, padding=(0, 0))  # Nx(Cxksxks)x(H/sxK/s)
+    tmp = nn.Unfold(kernel_size=kernel_size, stride=kernel_size, padding=(0, 0))(patch_tokens)  # Nx(Cxksxks)x(H/sxK/s)
     patch_tokens = tmp.transpose(1, 2).reshape(-1, C, kernel_size[0] * kernel_size[1]).transpose(-2, -1)  # (NxH/sxK/s)x(ksxks)xC
 
     if need_mask:
@@ -299,7 +299,7 @@ def convert_to_spatial_layout(out, output_channels, B, H, W, kernel_size, mask, 
     # reorganize data, need to convert back to cls_tokens: BxCxH/sxW/s, patch_tokens: BxCxHxW
     cls_tokens = cls_tokens.reshape(B, -1, C).transpose(-2, -1).reshape(B, C, H_ks, W_ks)
     patch_tokens = patch_tokens.transpose(1, 2).reshape((B, -1, kernel_size[0] * kernel_size[1] * C)).transpose(1, 2)
-    patch_tokens = F.fold(patch_tokens, (H, W), kernel_size=kernel_size, stride=kernel_size, padding=(0, 0))
+    patch_tokens = nn.Fold(output_size=(H, W), kernel_size=kernel_size, stride=kernel_size, padding=(0, 0))(patch_tokens)
 
     if mask is not None:
         if p_b > 0:
