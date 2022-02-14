@@ -6,11 +6,10 @@ import copy
 from functools import partial
 
 import numpy as np
-
 import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
-from torch import float32
+
 from ..layers import LayerNorm2d, DropPath, Mlp, trunc_normal_
 from .helpers import to_2tuple
 from .utils import load_state_dict_from_url
