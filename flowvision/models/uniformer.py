@@ -1,7 +1,6 @@
 """
 Modified from https://github.com/Sense-X/UniFormer/blob/main/image_classification/models/uniformer.py
 """
-
 from functools import partial
 from collections import OrderedDict
 import math
@@ -11,23 +10,17 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 
 from flowvision.data import IMAGENET_INCEPTION_MEAN, IMAGENET_INCEPTION_STD
-from flowvision.layers import trunc_normal_, DropPath, to_2tuple
+from flowvision.layers import trunc_normal_, DropPath
+from .helpers import to_2tuple
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
-model_urls={
-
+model_urls = {
+    "uniformer_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_oneflow.zip",
+    "uniformer_base_ls": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_ls_oneflow.zip",
+    "uniformer_base_ls": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_oneflow.zip",
+    "uniformer_base_ls": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_plus_oneflow.zip",
 }
-
-def _cfg(url='', **kwargs):
-    return {
-        'url': url,
-        'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': None,
-        'crop_pct': .9, 'interpolation': 'bicubic', 'fixed_input_size': True,
-        'mean': IMAGENET_INCEPTION_MEAN, 'std': IMAGENET_INCEPTION_STD,
-        'first_conv': 'patch_embed.proj', 'classifier': 'head',
-        **kwargs
-    }
 
 
 layer_scale = False
@@ -157,7 +150,7 @@ class SABlock(nn.Module):
             x = x + self.drop_path(self.mlp(self.norm2(x)))
         x = x.transpose(1, 2).reshape(B, N, H, W)
         return x        
-   
+
 
 class head_embedding(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -218,9 +211,9 @@ class PatchEmbed(nn.Module):
     
     
 class UniFormer(nn.Module):
-    """ Vision Transformer
+    """ UniFormer
     A oneflow impl of : `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
-        https://arxiv.org/abs/2010.11929
+        https://arxiv.org/abs/2201.04676
     """
     def __init__(self, depth=[3, 4, 8, 3], img_size=224, in_chans=3, num_classes=1000, embed_dim=[64, 128, 320, 512],
                  head_dim=64, mlp_ratio=4., qkv_bias=True, qk_scale=None, representation_size=None,
@@ -311,7 +304,7 @@ class UniFormer(nn.Module):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    @flow.jit.ignore
+    # @torch.jit.ignore
     def no_weight_decay(self):
         return {'pos_embed', 'cls_token'}
 
@@ -357,6 +350,25 @@ def _create_uniformer(arch, pretrained=False, progress=True, **model_kwargs):
 
 @ModelCreator.register_model
 def uniformer_small(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the UniFormer-small model.
+
+    .. note::
+        UniFormer-small model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+            https://arxiv.org/abs/2201.04676
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_tiny = flowvision.models.uniformer_small(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         depth=[3, 4, 8, 3],
         embed_dim=[64, 128, 320, 512], head_dim=64, mlp_ratio=4, qkv_bias=True,
@@ -366,6 +378,25 @@ def uniformer_small(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the UniFormer-small-plus model.
+
+    .. note::
+        UniFormer-small model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+            https://arxiv.org/abs/2201.04676
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_tiny = flowvision.models.uniformer_small_plus(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         depth=[3, 5, 9, 3], conv_stem=True,
         embed_dim=[64, 128, 320, 512], head_dim=64, mlp_ratio=4, qkv_bias=True,
@@ -375,6 +406,25 @@ def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def uniformer_base(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs the UniFormer-base model.
+
+    .. note::
+        UniFormer-base model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+            https://arxiv.org/abs/2201.04676
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_tiny = flowvision.models.uniformer_base(pretrained=False, progress=True)
+
+    """
     model_kwargs = dict(
         depth=[5, 8, 20, 7],
         embed_dim=[64, 128, 320, 512], head_dim=64, mlp_ratio=4, qkv_bias=True,
@@ -384,6 +434,25 @@ def uniformer_base(pretrained=False, progress=True, **kwargs):
 
 @ModelCreator.register_model
 def uniformer_base_ls(pretrained=True, progress=True, **kwargs):
+    """
+    Constructs the UniFormer-base-ls model.
+
+    .. note::
+        UniFormer-base-ls model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+            https://arxiv.org/abs/2201.04676
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> pvt_tiny = flowvision.models.uniformer_base_ls(pretrained=False, progress=True)
+
+    """
     global layer_scale
     layer_scale = True
     model_kwargs = dict(
