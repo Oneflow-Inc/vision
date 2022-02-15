@@ -1,7 +1,6 @@
 """
 Modified from https://github.com/IBM/RegionViT
 """
-import math
 import copy
 from functools import partial
 
@@ -87,7 +86,6 @@ class AttentionWithRelPos(nn.Module):
         super().__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
-        # NOTE scale factor was wrong in my original version, can set manually to be compat with prev weights
         self.scale = qk_scale or head_dim ** -0.5
 
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
@@ -117,17 +115,17 @@ class AttentionWithRelPos(nn.Module):
     def forward(self, x, patch_attn=False, mask=None):
         B, N, C = x.shape
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
+        q, k, v = qkv[0], qkv[1], qkv[2]
 
         attn = flow.matmul(q, k.transpose(-2, -1)) * self.scale
 
         if self.rel_pos is not None and patch_attn:
-            # use for the indicating patch + cls:
+            # Use for the indicating patch + cls.
             rel_pos = self.rel_pos[:, self.rel_pos_index.to(attn.device)].reshape(self.num_heads, N - self.num_cls_tokens, N - self.num_cls_tokens)
             attn[:, :, self.num_cls_tokens:, self.num_cls_tokens:] = attn[:, :, self.num_cls_tokens:, self.num_cls_tokens:] + rel_pos
 
         if mask is not None:
-            ## mask is only (BH_sW_s)(ksks)(ksks), need to expand it
+            # The mask is only (BH_sW_s)(ksks)(ksks), need to expand it.
             mask = mask.unsqueeze(1).expand(-1, self.num_heads, -1, -1)
             attn = attn.masked_fill(mask == 0, flow.tensor(np.finfo(attn.dtype).min))
 
@@ -160,7 +158,6 @@ class R2LAttentionPlusFFN(nn.Module):
         self.attn = AttentionWithRelPos(
             input_channels, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop,
             attn_map_dim=(kernel_size[0][0], kernel_size[0][1]), num_cls_tokens=1)
-        # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
         self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
         self.norm2 = norm_layer(input_channels)
         self.mlp = Mlp(in_features=input_channels, hidden_features=int(output_channels * mlp_ratio), out_features=output_channels, act_layer=act_layer, drop=drop)
@@ -183,7 +180,6 @@ class R2LAttentionPlusFFN(nn.Module):
         if self.norm0 is not None:
             cls_tokens = cls_tokens + self.drop_path(self.attn(self.norm0(cls_tokens)))  # (N)x(H/sxK/s)xC
 
-        # ks, stride, padding = self.kernel_size
         cls_tokens = cls_tokens.reshape(-1, 1, C)  # (NxH/sxK/s)x1xC
 
         out = flow.cat((cls_tokens, out[:, 1:, ...]), dim=1)
@@ -232,11 +228,9 @@ class Projection(nn.Module):
 
 def convert_to_flatten_layout(cls_tokens, patch_tokens, ws):
     """
-    Convert the token layer in a flatten form, it will speed up the model.
-
+    Converts the token layer in a flatten form, it will speed up the model.
     Furthermore, it also handle the case that if the size between regional tokens and local tokens are not consistent.
     """
-    # padding if needed, and all paddings are happened at bottom and right.
     B, C, H, W = patch_tokens.shape
     _, _, H_ks, W_ks = cls_tokens.shape
     need_mask = False
@@ -286,7 +280,7 @@ def convert_to_flatten_layout(cls_tokens, patch_tokens, ws):
 
 def convert_to_spatial_layout(out, output_channels, B, H, W, kernel_size, mask, p_l, p_r, p_t, p_b):
     """
-    Convert the token layer from flatten into 2-D, will be used to downsample the spatial dimension.
+    Converts the token layer from flatten into 2-D, will be used to downsample the spatial dimension.
     """
     cls_tokens = out[:, 0:1, ...]
     patch_tokens = out[:, 1:, ...]
@@ -295,7 +289,7 @@ def convert_to_spatial_layout(out, output_channels, B, H, W, kernel_size, mask, 
     kernel_size = kernel_size[0]
     H_ks = H // kernel_size[0]
     W_ks = W // kernel_size[1]
-    # reorganize data, need to convert back to cls_tokens: BxCxH/sxW/s, patch_tokens: BxCxHxW
+    # Reorganize data, needed to convert back to cls_tokens: BxCxH/sxW/s, patch_tokens: BxCxHxW.
     cls_tokens = cls_tokens.reshape(B, -1, C).transpose(-2, -1).reshape(B, C, H_ks, W_ks)
     patch_tokens = patch_tokens.transpose(1, 2).reshape((B, -1, kernel_size[0] * kernel_size[1] * C)).transpose(1, 2)
     patch_tokens = nn.Fold(output_size=(H, W), kernel_size=kernel_size, stride=kernel_size, padding=(0, 0))(patch_tokens)
@@ -412,7 +406,6 @@ class RegionViT(nn.Module):
 
         self.det_norm = det_norm
         if self.det_norm:
-            # add a norm layer for the outputs at each stage, for detection
             for i in range(4):
                 layer = LayerNorm2d(embed_dim[1 + i])
                 layer_name = f'norm{i}'
@@ -568,15 +561,6 @@ _model_cfg = {
 
 }
 
-def _cfg(url='', **kwargs):
-    return {
-        'url': url,
-        'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': None,
-        'crop_pct': .9, 'interpolation': 'bicubic', 'fixed_input_size': True,
-        'mean': IMAGENET_INCEPTION_MEAN, 'std': IMAGENET_INCEPTION_STD,
-        'first_conv': 'patch_embed.proj', 'classifier': 'head',
-        **kwargs
-    }
 
 def _regionvit(arch:str, pretrained:bool, progress:bool, **kwargs)->RegionViT:
     model_cfg = _model_cfg[arch]
