@@ -16,15 +16,15 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "tiny_w14": "",
+    "tiny_w14": None,
     "tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_tiny_224.zip",
     "small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_small_224.zip",
-    "small_w14": "",
-    "small_w14_peg": "",
+    "small_w14": None,
+    "small_w14_peg": None,
     "medium": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_medium_224.zip",
     "base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_base_224.zip",
-    "base_w14": "",
-    "base_w14_peg": "",
+    "base_w14": None,
+    "base_w14_peg": None,
 }
 
 
