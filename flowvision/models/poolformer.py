@@ -1,5 +1,5 @@
 """
-modified from https://github.com/sail-sg/poolformer/blob/main/models/poolformer.py
+Modified from https://github.com/sail-sg/poolformer/blob/main/models/poolformer.py
 """
 
 import os
@@ -8,10 +8,6 @@ import copy
 import oneflow as flow
 import oneflow.nn as nn
 
-from flowvision.data.constants import (
-    IMAGENET_DEFAULT_MEAN,
-    IMAGENET_DEFAULT_STD,
-)
 from flowvision.layers import DropPath, trunc_normal_
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
@@ -388,6 +384,7 @@ def poolformer_s12(pretrained=False, progress=True, **kwargs):
         embed_dims = [64, 128, 320, 512],
         mlp_ratios = [4, 4, 4, 4],
         downsamples = [True, True, True, True],
+        **kwargs
     )
     return _create_poolformer(
         "poolformer_s12", pretrained=pretrained, progress=progress, **model_kwargs
@@ -419,6 +416,7 @@ def poolformer_s24(pretrained=False, progress=True, **kwargs):
         embed_dims = [64, 128, 320, 512],
         mlp_ratios = [4, 4, 4, 4],
         downsamples = [True, True, True, True],
+        **kwargs
     )
     return _create_poolformer(
         "poolformer_s24", pretrained=pretrained, progress=progress, **model_kwargs
@@ -446,10 +444,11 @@ def poolformer_s36(pretrained=False, progress=True, **kwargs):
 
     """
     model_kwargs = dict(
-    layers = [6, 6, 18, 6],
-    embed_dims = [64, 128, 320, 512],
-    mlp_ratios = [4, 4, 4, 4],
-    downsamples = [True, True, True, True],
+        layers = [6, 6, 18, 6],
+        embed_dims = [64, 128, 320, 512],
+        mlp_ratios = [4, 4, 4, 4],
+        downsamples = [True, True, True, True],
+        **kwargs
     )
     return _create_poolformer(
         "poolformer_s36", pretrained=pretrained, progress=progress, **model_kwargs
@@ -480,6 +479,7 @@ def poolformer_m36(pretrained=False, progress=True, **kwargs):
         embed_dims = [96, 192, 384, 768],
         mlp_ratios = [4, 4, 4, 4],
         downsamples = [True, True, True, True],
+        **kwargs
     )
     return _create_poolformer(
         "poolformer_m36", pretrained=pretrained, progress=progress, **model_kwargs
@@ -511,6 +511,7 @@ def poolformer_m48(pretrained=False, progress=True, **kwargs):
         embed_dims = [96, 192, 384, 768],
         mlp_ratios = [4, 4, 4, 4],
         downsamples = [True, True, True, True],
+        **kwargs
     )
     return _create_poolformer(
         "poolformer_m48", pretrained=pretrained, progress=progress, **model_kwargs
