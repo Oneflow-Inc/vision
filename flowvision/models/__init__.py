@@ -23,6 +23,7 @@ from .res2net import *
 from .efficientnet import *
 from .vision_transformer import *
 from .convnext import *
+from .uniformer import *
 
 from . import neural_style_transfer
 from . import detection
