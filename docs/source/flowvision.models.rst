@@ -36,6 +36,7 @@ architectures for image classification:
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
+-  `SENet`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -66,6 +67,7 @@ architectures for image classification:
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
+.. _SENet: https://arxiv.org/abs/1709.01507
 
 .. currentmodule:: flowvision.models
 
@@ -389,6 +391,18 @@ ConvNeXt
         convnext_iso_small_224,
         convnext_iso_base_224,
         convnext_iso_large_224,
+
+
+SENet
+--------
+.. automodule:: flowvision.models
+    :members:
+        senet154,
+        se_resent50,
+        se_resnet101,
+        se_resnet152,
+        se_resnext50_32x4d,
+        se_resnext101_32x4d,
 
 
 Neural Style
