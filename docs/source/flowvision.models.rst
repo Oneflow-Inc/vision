@@ -397,7 +397,6 @@ RegionViT
 .. automodule:: flowvision.models
     :members:
         regionvit_tiny_224,
-        regionvit_tiny_w14_224,
         regionvit_small_224,
         regionvit_small_w14_224,
         regionvit_small_w14_peg_224,

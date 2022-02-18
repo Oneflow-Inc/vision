@@ -9,14 +9,13 @@ import oneflow as flow
 import oneflow.nn as nn
 import oneflow.nn.functional as F
 
-from ..layers import LayerNorm2d, DropPath, Mlp, trunc_normal_
+from flowvision.layers import LayerNorm2d, DropPath, Mlp, trunc_normal_
 from .helpers import to_2tuple
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
 
 model_urls = {
-    "tiny_w14": None,
     "tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_tiny_224.zip",
     "small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_small_224.zip",
     "small_w14": None,
@@ -569,30 +568,6 @@ def _regionvit(arch:str, pretrained:bool, progress:bool, **kwargs)->RegionViT:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
-
-
-@ModelCreator.register_model
-def regionvit_tiny_w14_224(pretrained=False, progress=True, **kwargs):
-    """
-    Constructs the Regionvit-tiny-w14-224 model.
-
-    .. note::
-        Regionvit-tiny-w14-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
-        The required input size of the model is 224x224.
-
-    Args:
-        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
-
-    For example:
-
-    .. code-block:: python
-
-        >>> import flowvision
-        >>> regionvit_tiny_w14_224 = flowvision.models.regionvit_tiny_w14_224(pretrained=False, progress=True)
-
-    """
-    return _regionvit('tiny_w14', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
