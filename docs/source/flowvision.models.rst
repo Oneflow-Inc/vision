@@ -36,6 +36,7 @@ architectures for image classification:
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
+-  `RegionViT`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -66,6 +67,7 @@ architectures for image classification:
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
+.. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -389,6 +391,21 @@ ConvNeXt
         convnext_iso_small_224,
         convnext_iso_base_224,
         convnext_iso_large_224,
+
+RegionViT
+--------
+.. automodule:: flowvision.models
+    :members:
+        regionvit_tiny_224,
+        regionvit_tiny_w14_224,
+        regionvit_small_224,
+        regionvit_small_w14_224,
+        regionvit_small_w14_peg_224,
+        regionvit_medium_224,
+        regionvit_base_224,
+        regionvit_base_w14_224,
+        regionvit_base_w14_peg_224,
+        
 
 
 Neural Style
