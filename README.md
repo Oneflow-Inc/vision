@@ -1,6 +1,25 @@
-# flowvision
-The flowvision package consists of popular datasets, SOTA computer vision models, layers, utilities, schedulers, advanced data augmentations and common image transformations based on OneFlow.
+<h2 align="center">flowvision</h2>
+<p align="center">
+    <a href="https://pypi.org/project/flowvision/">
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/flowvision">
+    </a>
+    <a href="https://libai.readthedocs.io/en/latest/index.html">
+        <img alt="docs" src="https://img.shields.io/badge/docs-latest-blue">
+    </a>
+    <a href="https://github.com/Oneflow-Inc/vision/blob/master/LICENSE">
+        <img alt="GitHub" src="https://img.shields.io/github/license/Oneflow-Inc/vision.svg?color=blue">
+    </a>
+    <a href="https://github.com/Oneflow-Inc/vision/releases">
+        <img alt="GitHub release" src="https://img.shields.io/github/release/Oneflow-Inc/vision.svg">
+    </a>
+    <a href="https://github.com/Oneflow-Inc/vision/issues">
+        <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-pink.svg">
+    </a>
+</p>
 
+
+## Introduction
+The flowvision package consists of popular datasets, SOTA computer vision models, layers, utilities, schedulers, advanced data augmentations and common image transformations based on OneFlow.
 
 ## Installation
 First install OneFlow, please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow) for more details.
