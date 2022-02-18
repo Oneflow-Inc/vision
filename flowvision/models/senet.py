@@ -16,7 +16,7 @@ from .utils import load_state_dict_from_url
 
 model_urls = {
     "senet154": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/senet154.zip",
-    "se_resent50": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/se_resnet50.zip",
+    "se_resnet50": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/se_resnet50.zip",
     "se_resnet101": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/se_resnet101.zip",
     "se_resnet152": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/se_resnet152.zip",
     "se_resnext50_32x4d": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/se_resnext50_32x4d.zip",
@@ -323,7 +323,7 @@ def senet154(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
-def se_resent50(pretrained=False, progress=True, **kwargs):
+def se_resnet50(pretrained=False, progress=True, **kwargs):
     """
     Constructs the SE-ResNet50 model trained on ImageNet2012.
 
@@ -340,14 +340,14 @@ def se_resent50(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> se_resent50 = flowvision.models.se_resent50(pretrained=False, progress=True)
+        >>> se_resnet50 = flowvision.models.se_resnet50(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(block=SEResNetBottleneck, layers=[3, 4, 6, 3], groups=1, 
             reduction=16, dropout_p=None, inplanes=64, input_3x3=False, 
             downsample_kernel_size=1, downsample_padding=0, num_classes=1000,  **kwargs)        
     return _create_se_resnet(
-        "se_resent50", pretrained=pretrained, progress=progress, **model_kwargs
+        "se_resnet50", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
 
