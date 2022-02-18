@@ -195,7 +195,12 @@ pip install flowvision==0.1.0
 
 
 ## Documentation
-You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
+Please refer to [docs](https://flowvision.readthedocs.io/en/latest/index.html) for full API documentation and tutorials
+
+
+## ChangeLog
+Please refer to [ChangeLog](https://flowvision.readthedocs.io/en/latest/changelog.html) for details and release history
+
 
 ## Model Zoo
 We have conducted all the tests under the same setting, please refer to the model page [here](./results/results_imagenet.md) for more details.
