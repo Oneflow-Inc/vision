@@ -16,14 +16,14 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_tiny_224.zip",
-    "small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_small_224.zip",
-    "small_w14": None,
-    "small_w14_peg": None,
-    "medium": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_medium_224.zip",
-    "base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_base_224.zip",
-    "base_w14": None,
-    "base_w14_peg": None,
+    "regionvit_tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_tiny_224.zip",
+    "regionvit_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_small_224.zip",
+    "regionvit_small_w14": None,
+    "regionvit_small_w14_peg": None,
+    "regionvit_medium": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_medium_224.zip",
+    "regionvit_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegionViT/regionvit_base_224.zip",
+    "regionvit_base_w14": None,
+    "regionvit_base_w14_peg": None,
 }
 
 
@@ -467,7 +467,7 @@ class RegionViT(nn.Module):
 
 
 _model_cfg = {
-    'tiny': {
+    'regionvit_tiny': {
         'img_size': 224,
         'patch_conv_type': '3conv',
         'patch_size': 4,
@@ -478,7 +478,7 @@ _model_cfg = {
         'kernel_sizes': [7, 7, 7, 7],  # 8x8, 4x4, 2x2, 1x1,
         'downsampling': ['c', 'sc', 'sc', 'sc'],
     },
-    'small': {
+    'regionvit_small': {
         'img_size': 224,
         'patch_conv_type': '3conv',
         'patch_size': 4,
@@ -489,7 +489,7 @@ _model_cfg = {
         'kernel_sizes': [7, 7, 7, 7],  # 8x8, 4x4, 2x2, 1x1,
         'downsampling': ['c', 'sc', 'sc', 'sc'],
     },
-    'medium': {
+    'regionvit_medium': {
         'img_size': 224,
         'patch_conv_type': '1conv',
         'patch_size': 4,
@@ -500,7 +500,7 @@ _model_cfg = {
         'kernel_sizes': [7, 7, 7, 7],  # 8x8, 4x4, 2x2, 1x1,
         'downsampling': ['c', 'sc', 'sc', 'sc'],
     },
-    'base': {
+    'regionvit_base': {
         'img_size': 224,
         'patch_conv_type': '1conv',
         'patch_size': 4,
@@ -511,7 +511,7 @@ _model_cfg = {
         'kernel_sizes': [7, 7, 7, 7],  # 8x8, 4x4, 2x2, 1x1,
         'downsampling': ['c', 'sc', 'sc', 'sc'],
     },
-    'small_w14': {
+    'regionvit_small_w14': {
         'img_size': 224,
         'patch_conv_type': '3conv',
         'patch_size': 4,
@@ -522,7 +522,7 @@ _model_cfg = {
         'kernel_sizes': [14, 14, 14, 14],  # 8x8, 4x4, 2x2, 1x1,
         'downsampling': ['c', 'sc', 'sc', 'sc'],
     },
-    'small_w14_peg': {
+    'regionvit_small_w14_peg': {
         'img_size': 224,
         'patch_conv_type': '3conv',
         'patch_size': 4,
@@ -534,7 +534,7 @@ _model_cfg = {
         'downsampling': ['c', 'sc', 'sc', 'sc'],
         'peg': True
     },
-    'base_w14': {
+    'regionvit_base_w14': {
         'img_size': 224,
         'patch_conv_type': '1conv',
         'patch_size': 4,
@@ -545,7 +545,7 @@ _model_cfg = {
         'kernel_sizes': [14, 14, 14, 14],  # 8x8, 4x4, 2x2, 1x1,
         'downsampling': ['c', 'sc', 'sc', 'sc'],
     },
-    'base_w14_peg': {
+    'regionvit_base_w14_peg': {
         'img_size': 224,
         'patch_conv_type': '1conv',
         'patch_size': 4,
@@ -573,10 +573,10 @@ def _regionvit(arch:str, pretrained:bool, progress:bool, **kwargs)->RegionViT:
 @ModelCreator.register_model
 def regionvit_tiny_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-tiny-224 model.
+    Constructs the RegionViT-Tiny-224 model.
 
     .. note::
-        Regionvit-tiny-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Tiny-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -591,16 +591,16 @@ def regionvit_tiny_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_tiny_224 = flowvision.models.regionvit_tiny_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('tiny', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_tiny', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_small_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-small-224 model.
+    Constructs the RegionViT-Small-224 model.
 
     .. note::
-        Regionvit-small-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Small-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -615,16 +615,16 @@ def regionvit_small_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_small_224 = flowvision.models.regionvit_small_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('small', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_small', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_small_w14_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-small-w14-224 model.
+    Constructs the RegionViT-Small-w14-224 model.
 
     .. note::
-        Regionvit-small-w14-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Small-w14-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -639,16 +639,16 @@ def regionvit_small_w14_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_small_w14_224 = flowvision.models.regionvit_small_w14_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('small_w14', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_small_w14', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_small_w14_peg_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-small-w14-peg-224 model.
+    Constructs the RegionViT-Small-w14-peg-224 model.
 
     .. note::
-        Regionvit-small-w14-peg-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Small-w14-peg-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -663,16 +663,16 @@ def regionvit_small_w14_peg_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_small_w14_peg_224 = flowvision.models.regionvit_small_w14_peg_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('small_w14_peg', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_small_w14_peg', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_medium_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-medium-224 model.
+    Constructs the RegionViT-Medium-224 model.
 
     .. note::
-        Regionvit-medium-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Medium-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -687,16 +687,16 @@ def regionvit_medium_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_medium_224 = flowvision.models.regionvit_medium_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('medium', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_medium', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_base_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-base-224 model.
+    Constructs the RegionViT-Base-224 model.
 
     .. note::
-        Regionvit-base-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Base-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -711,16 +711,16 @@ def regionvit_base_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_base_224 = flowvision.models.regionvit_base_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('base', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_base', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_base_w14_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-base-w14-224 model.
+    Constructs the RegionViT-Base-w14-224 model.
 
     .. note::
-        Regionvit-base-w14-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Base-w14-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -735,16 +735,16 @@ def regionvit_base_w14_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_base_w14_224 = flowvision.models.regionvit_base_w14_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('base_w14', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_base_w14', pretrained, progress, **kwargs)
 
 
 @ModelCreator.register_model
 def regionvit_base_w14_peg_224(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the Regionvit-base-w14-peg-224 model.
+    Constructs the RegionViT-Base-w14-peg-224 model.
 
     .. note::
-        Regionvit-base-w14-peg-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
+        RegionViT-Base-w14-peg-224 model from `"RegionViT: Regional-to-Local Attention for Vision Transformers" <https://arxiv.org/pdf/2106.02689.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -759,4 +759,4 @@ def regionvit_base_w14_peg_224(pretrained=False, progress=True, **kwargs):
         >>> regionvit_base_w14_peg_224 = flowvision.models.regionvit_base_w14_peg_224(pretrained=False, progress=True)
 
     """
-    return _regionvit('base_w14_peg', pretrained, progress, **kwargs)
+    return _regionvit('regionvit_base_w14_peg', pretrained, progress, **kwargs)
