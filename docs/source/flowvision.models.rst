@@ -220,6 +220,18 @@ ReXNet
         rexnet_lite_2_0,
 
 
+SENet
+--------
+.. automodule:: flowvision.models
+    :members:
+        senet154,
+        se_resnet50,
+        se_resnet101,
+        se_resnet152,
+        se_resnext50_32x4d,
+        se_resnext101_32x4d,
+
+
 ViT
 ------
 .. automodule:: flowvision.models
@@ -391,18 +403,6 @@ ConvNeXt
         convnext_iso_small_224,
         convnext_iso_base_224,
         convnext_iso_large_224,
-
-
-SENet
---------
-.. automodule:: flowvision.models
-    :members:
-        senet154,
-        se_resent50,
-        se_resnet101,
-        se_resnet152,
-        se_resnext50_32x4d,
-        se_resnext101_32x4d,
 
 
 Neural Style
