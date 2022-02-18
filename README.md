@@ -3,7 +3,7 @@
     <a href="https://pypi.org/project/flowvision/">
         <img alt="PyPI" src="https://img.shields.io/pypi/v/flowvision">
     </a>
-    <a href="https://libai.readthedocs.io/en/latest/index.html">
+    <a href="https://flowvision.readthedocs.io/en/latest/index.html">
         <img alt="docs" src="https://img.shields.io/badge/docs-latest-blue">
     </a>
     <a href="https://github.com/Oneflow-Inc/vision/blob/master/LICENSE">
