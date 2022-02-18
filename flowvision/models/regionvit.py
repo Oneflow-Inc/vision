@@ -126,7 +126,7 @@ class AttentionWithRelPos(nn.Module):
         if mask is not None:
             # The mask is only (BH_sW_s)(ksks)(ksks), need to expand it.
             mask = mask.unsqueeze(1).expand(-1, self.num_heads, -1, -1)
-            attn = attn.masked_fill(mask == 0, flow.tensor(np.finfo(attn.dtype).min))
+            attn = attn.masked_fill(mask == 0, float(np.finfo(attn.numpy().dtype).min))
 
         attn = attn.softmax(dim=-1)
         attn = self.attn_drop(attn)
