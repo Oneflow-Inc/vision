@@ -297,10 +297,10 @@ def _create_se_resnet(arch, pretrained=False, progress=True, **model_kwargs):
 @ModelCreator.register_model
 def senet154(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the senet154 model trained on ImageNet2012.
+    Constructs the SENet-154 model trained on ImageNet2012.
 
     .. note::
-        senet154 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
+        seneSENet-154t154 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -325,10 +325,10 @@ def senet154(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def se_resent50(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the se-resent50 model trained on ImageNet2012.
+    Constructs the SE-ResNet50 model trained on ImageNet2012.
 
     .. note::
-        se-resent50 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
+        SE-ResNet50 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -354,10 +354,10 @@ def se_resent50(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def se_resnet101(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the se-resnet101 model trained on ImageNet2012.
+    Constructs the SE-ResNet101 model trained on ImageNet2012.
 
     .. note::
-        se-resnet101 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
+        SE-ResNet101 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -383,10 +383,10 @@ def se_resnet101(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def se_resnet152(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the se-resnet152 model trained on ImageNet2012.
+    Constructs the SE-ResNet152 model trained on ImageNet2012.
 
     .. note::
-        se-resnet152 model `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
+        SE-ResNet152 model `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -412,10 +412,10 @@ def se_resnet152(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def se_resnext50_32x4d(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the se-resnext50 model trained on ImageNet2012.
+    Constructs the SE-ResNeXt50-32x4d model trained on ImageNet2012.
 
     .. note::
-        se-resnext50 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
+        SE-ResNeXt50-32x4d model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -441,10 +441,10 @@ def se_resnext50_32x4d(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def se_resnext101_32x4d(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the se-resnext101 model trained on ImageNet2012.
+    Constructs the SE-ResNeXt101-32x4d model trained on ImageNet2012.
 
     .. note::
-        se-resnext101 model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
+        SE-ResNeXt101-32x4d model from `Squeeze-and-Excitation Networks <https://arxiv.org/abs/1709.01507>`_.
         The required input size of the model is 224x224.
 
     Args:

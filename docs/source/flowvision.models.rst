@@ -16,6 +16,7 @@ architectures for image classification:
 -  `InceptionV3`_
 -  `ResNet`_
 -  `ResNeXt`_
+-  `SENet`_
 -  `DenseNet`_
 -  `ShuffleNetV2`_
 -  `MobileNetV2`_
@@ -36,7 +37,6 @@ architectures for image classification:
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
--  `SENet`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -50,6 +50,7 @@ architectures for image classification:
 .. _MobileNetV2: https://arxiv.org/abs/1801.04381
 .. _MobileNetV3: https://arxiv.org/abs/1905.02244
 .. _ResNeXt: https://arxiv.org/abs/1611.05431
+.. _SENet: https://arxiv.org/abs/1709.01507
 .. _Res2Net: https://arxiv.org/abs/1904.01169
 .. _ReXNet: https://arxiv.org/abs/2007.00992
 .. _MNASNet: https://arxiv.org/abs/1807.11626
@@ -67,7 +68,6 @@ architectures for image classification:
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
-.. _SENet: https://arxiv.org/abs/1709.01507
 
 .. currentmodule:: flowvision.models
 
