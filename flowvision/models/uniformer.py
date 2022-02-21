@@ -81,7 +81,7 @@ class Attention(nn.Module):
     def forward(self, x):
         B, N, C = x.shape
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]   # make flowscript happy (cannot use tensor as tuple)
+        q, k, v = qkv[0], qkv[1], qkv[2]
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
         attn = attn.softmax(dim=-1)
@@ -366,7 +366,7 @@ def uniformer_small(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> pvt_tiny = flowvision.models.uniformer_small(pretrained=False, progress=True)
+        >>> uniformer_small = flowvision.models.uniformer_small(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -394,7 +394,7 @@ def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> pvt_tiny = flowvision.models.uniformer_small_plus(pretrained=False, progress=True)
+        >>> uniformer_small_plus = flowvision.models.uniformer_small_plus(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -422,7 +422,7 @@ def uniformer_base(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> pvt_tiny = flowvision.models.uniformer_base(pretrained=False, progress=True)
+        >>> uniformer_base= flowvision.models.uniformer_base(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(
@@ -450,7 +450,7 @@ def uniformer_base_ls(pretrained=True, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> pvt_tiny = flowvision.models.uniformer_base_ls(pretrained=False, progress=True)
+        >>> uniformer_base_ls = flowvision.models.uniformer_base_ls(pretrained=False, progress=True)
 
     """
     global layer_scale
