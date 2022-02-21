@@ -4,11 +4,6 @@ log/
 *.py[cod]
 *$py.class
 
-.vscode/*
-
-projects/benchmark/classification/eval.sh
-
-
 # C extensions
 *.so
 
