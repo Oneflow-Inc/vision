@@ -212,7 +212,7 @@ class PatchEmbed(nn.Module):
     
 class UniFormer(nn.Module):
     """ UniFormer
-    A oneflow impl of : `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+    A oneflow impl of : `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
         https://arxiv.org/abs/2201.04676
     """
     def __init__(self, depth=[3, 4, 8, 3], img_size=224, in_chans=3, num_classes=1000, embed_dim=[64, 128, 320, 512],
@@ -354,7 +354,7 @@ def uniformer_small(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-small model.
 
     .. note::
-        UniFormer-small model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+        UniFormer-small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
@@ -382,7 +382,7 @@ def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-small-plus model.
 
     .. note::
-        UniFormer-small model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+        UniFormer-small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
@@ -410,7 +410,7 @@ def uniformer_base(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-base model.
 
     .. note::
-        UniFormer-base model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+        UniFormer-base model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
@@ -438,7 +438,7 @@ def uniformer_base_ls(pretrained=True, progress=True, **kwargs):
     Constructs the UniFormer-base-ls model.
 
     .. note::
-        UniFormer-base-ls model from `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+        UniFormer-base-ls model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
