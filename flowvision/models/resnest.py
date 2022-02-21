@@ -88,6 +88,7 @@ class SplAtConv2d(nn.Module):
             out = atten * x
         return out.contiguous()
 
+
 class rSoftMax(nn.Module):
     def __init__(self, radix, cardinality):
         super().__init__()
@@ -112,6 +113,7 @@ class GlobalAvgPool2d(nn.Module):
 
     def forward(self, inputs):
         return nn.functional.adaptive_avg_pool2d(inputs, 1).view(inputs.size(0), -1)
+
 
 class ResNestBottleneck(nn.Module):
     """ResNest Bottleneck
@@ -186,6 +188,7 @@ class ResNestBottleneck(nn.Module):
         out = self.relu(out)
 
         return out
+
 
 class ResNest(nn.Module):
     """ResNest: 
@@ -336,13 +339,14 @@ def _create_resnest(arch, pretrained=False, progress=True, **model_kwargs):
         model.load_state_dict(state_dict)
     return model
 
+
 @ModelCreator.register_model
 def resnest50(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResNest50 model trained on ImageNet2012.
+    Constructs the ResNest-50 model trained on ImageNet2012.
 
     .. note::
-        ResNest50 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        ResNest-50 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
         The required input size of the model is 224x224.
 
     Args:
@@ -366,14 +370,13 @@ def resnest50(pretrained=False, progress=True, **kwargs):
     )
 
 
-
 @ModelCreator.register_model
 def resnest101(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResNest101 model trained on ImageNet2012.
+    Constructs the ResNest-101 model trained on ImageNet2012.
 
     .. note::
-        ResNest101 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        ResNest-101 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
         The required input size of the model is 224x224.
 
     Args:
@@ -385,7 +388,7 @@ def resnest101(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> ResNest101 = flowvision.models.ResNest101(pretrained=False, progress=True)
+        >>> resnest101 = flowvision.models.resnest101(pretrained=False, progress=True)
 
     """
     model_kwargs = dict(block=ResNestBottleneck, layers=[3, 4, 23, 3], 
@@ -400,10 +403,10 @@ def resnest101(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def resnest200(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the resnest200 model trained on ImageNet2012.
+    Constructs the ResNest-200 model trained on ImageNet2012.
 
     .. note::
-        resnest200 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        ResNest-200 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
         The required input size of the model is 224x224.
 
     Args:
@@ -426,13 +429,14 @@ def resnest200(pretrained=False, progress=True, **kwargs):
         "resnest200", pretrained=pretrained, progress=progress, **model_kwargs
     )
 
+
 @ModelCreator.register_model
 def resnest269(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the resnest269 model trained on ImageNet2012.
+    Constructs the ResNest-269 model trained on ImageNet2012.
 
     .. note::
-        resnest269 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        ResNest-269 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
         The required input size of the model is 224x224.
 
     Args:
