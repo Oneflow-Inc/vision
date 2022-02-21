@@ -137,10 +137,14 @@
 | convnext_iso_small_224        | 79.742 | 20.258 | 94.798 | 5.208 | 22.3M  | 224 | 0.875 | bicubic |
 | convnext_iso_base_224         | 81.818 | 18.182 | 95.674 | 4.326 | 87.1M  | 224 | 0.875 | bicubic |
 | convnext_iso_large_224        | 82.576 | 17.424 | 95.956 | 4.044 | 306.0M | 224 | 0.875 | bicubic |
-| uniformer_base   | 83.814 | 16.186 | 96.738 | 3.262 | 50.0M | 224 | 0.900 | bicubic |
-| uniformer_base_ls  | 83.952 | 16.048 | 96.728 | 3.272 | 50.0M | 224 | 0.900 | bicubic |
-| uniformer_small  | 82.958 | 17.042 | 96.290 | 3.710 | 22.0M | 224 | 0.900 | bicubic |
-| uniformer_small_plus  | 66.342 | 33.658 | 87.784 | 12.216 | 24.0M | 224 | 0.900 | bicubic |
+| uniformer_base                | 83.814 | 16.186 | 96.738 | 3.262 | 50.0M | 224 | 0.900 | bicubic |
+| uniformer_base_ls             | 83.952 | 16.048 | 96.728 | 3.272 | 50.0M | 224 | 0.900 | bicubic |
+| uniformer_small               | 82.958 | 17.042 | 96.290 | 3.710 | 22.0M | 224 | 0.900 | bicubic |
+| uniformer_small_plus          | 66.342 | 33.658 | 87.784 | 12.216 | 24.0M | 224 | 0.900 | bicubic |
+| regionvit_tiny_224            | 80.100 | 19.900 | 95.174 | 4.826 | 13.8M  | 224 | 0.875   | bicubic |
+| regionvit_small_224           | 82.558 | 17.442 | 96.112 | 3.888 | 30.6M  | 224 | 0.875   | bicubic |
+| regionvit_medium_224          | 83.002 | 16.998 | 96.220 | 3.780 | 41.2M  | 224 | 0.875   | bicubic |
+| regionvit_base_224            | 83.116 | 16.884 | 96.096 | 3.904 | 72.7M  | 224 | 0.875   | bicubic |
 
 
 
