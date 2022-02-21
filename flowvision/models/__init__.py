@@ -15,6 +15,7 @@ from .crossformer import *
 from .pvt import *
 from .cswin import *
 from .res_mlp import *
+from .regionvit import *
 from .mlp_mixer import *
 from .rexnet import *
 from .rexnet_lite import *

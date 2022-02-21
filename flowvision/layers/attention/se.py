@@ -4,6 +4,7 @@ import oneflow as flow
 import oneflow.nn as nn
 from oneflow.nn import ReLU, Sigmoid
 
+
 class SEModule(nn.Module):
     """
     "Squeeze-and-Excitation" block adaptively recalibrates channel-wise feature responses. This is based on
