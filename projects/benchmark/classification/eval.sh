@@ -1,15 +1,15 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-MODEL="crossformer_tiny_patch4_group7_224"
+MODEL="resnest50"
 BATCH_SIZE=64
 DATA_PATH="/dataset/imagenet/extract"
 IMG_SIZE=224
 NORMALIZE_MODE="IMAGENET_DEFAULT_MEAN_STD" # IMAGENET_INCEPTION_MEAN_STD or IMAGENET_DEFAULT_MEAN_STD or VIT_MIIL
 CROP_PCT=0.875
-INTERPOLATION="bicubic"
+INTERPOLATION="bilinear"
 NUM_WORKERS=0
-DEVICE=$1
+DEVICE=0
 
 CUDA_VISIBLE_DEVICES=$DEVICE python ./projects/benchmark/classification/benchmark.py --model $MODEL \
                     --data_path $DATA_PATH \
