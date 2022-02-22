@@ -26,12 +26,12 @@ class SplAtConv2d(nn.Module):
     
     Args:
         in_channels (int): Number of input channels.
-        channels (int): Number of channels in each split whin a cardinal group.
+        channels (int): Number of channels in each split within a cardinal group.
         kernel_size (int): Size of convolutional kernel. 
         stride (tuple(int)): Stride of convolution. Default: (1, 1)
         padding (tuple(int)): Padding of convolution. Default: (0, 0)
         dilation (tuple(int)): Dilation of convolution. Default: (1, 1)
-        groups (int): Number of featuremap cardinal groups. Default: 1
+        groups (int): Number of feature map cardinal groups. Default: 1
         bias (bool): Default: True
         radix (int): Number of splits within a cardinal group. Default: 2
         reduction_factor (int): Reduction factor. Default: 4
@@ -199,7 +199,7 @@ class ResNest(nn.Module):
         block: Class for the residual block. Default: ResNestBottleneck
         layers (list(int)) : Numbers of layers in each block.
         radix (int): Number of splits within a cardinal group. Default: 2
-        groups (int): Number of featuremap cardinal groups. Default: 1
+        groups (int): Number of feature map cardinal groups. Default: 1
     """
     def __init__(self, block, layers, radix=2, groups=1, bottleneck_width=64,
                  num_classes=1000, dilated=False, dilation=1,
@@ -343,15 +343,15 @@ def _create_resnest(arch, pretrained=False, progress=True, **model_kwargs):
 @ModelCreator.register_model
 def resnest50(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResNest-50 model trained on ImageNet2012.
+    Constructs the ResNeSt-50 model trained on ImageNet2012.
 
     .. note::
-        ResNest-50 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        ResNeSt-50 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
         The required input size of the model is 224x224.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -373,15 +373,15 @@ def resnest50(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def resnest101(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResNest-101 model trained on ImageNet2012.
+    Constructs the ResNeSt-101 model trained on ImageNet2012.
 
     .. note::
-        ResNest-101 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
-        The required input size of the model is 224x224.
+        ResNeSt-101 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        The required input size of the model is 256x256.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -403,15 +403,15 @@ def resnest101(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def resnest200(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResNest-200 model trained on ImageNet2012.
+    Constructs the ResNeSt-200 model trained on ImageNet2012.
 
     .. note::
-        ResNest-200 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
-        The required input size of the model is 224x224.
+        ResNeSt-200 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        The required input size of the model is 320x320.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
@@ -433,15 +433,15 @@ def resnest200(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def resnest269(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the ResNest-269 model trained on ImageNet2012.
+    Constructs the ResNeSt-269 model trained on ImageNet2012.
 
     .. note::
-        ResNest-269 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
-        The required input size of the model is 224x224.
+        ResNeSt-269 model from `"ResNeSt: Split-Attention Networks" <https://arxiv.org/abs/2004.08955>` _.
+        The required input size of the model is 416x416.
 
     Args:
         pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
-        progress (bool): If True, displays a progress bar of the download to stderrt. Default: ``True``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
 
