@@ -38,6 +38,7 @@ architectures for image classification:
 -  `ConvMixer`_
 -  `ConvNeXt`_
 -  `RegionViT`_
+-  `HRNet`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -70,6 +71,8 @@ architectures for image classification:
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
 .. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
+.. _HRNet: https://arxiv.org/abs/1908.07919v1
+
 
 .. currentmodule:: flowvision.models
 
@@ -418,7 +421,20 @@ RegionViT
         regionvit_base_224,
         regionvit_base_w14_224,
         regionvit_base_w14_peg_224,
-        
+
+HRNet
+--------
+.. automodule:: flowvision.models
+    :members:
+        hrnet_w18_small_v1,
+        hrnet_w18_small_v2,
+        hrnet_w18,
+        hrnet_w30,
+        hrnet_w32,
+        hrnet_w40,
+        hrnet_w44,
+        hrnet_w48,
+        hrnet_w64,
 
 
 Neural Style

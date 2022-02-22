@@ -10,6 +10,8 @@
 - Add `resmlp_12_224_dino` model and pretrained weight [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 - Support [ConvNeXt](https://arxiv.org/abs/2201.03545) model [#93](https://github.com/Oneflow-Inc/vision/pull/93)
 - Add [ReXNet](https://arxiv.org/abs/2007.00992) weights [#132](https://github.com/Oneflow-Inc/vision/pull/132)
+- Support [SENet](https://arxiv.org/abs/2007.00992) model [#149](https://github.com/Oneflow-Inc/vision/pull/149)
+- Support [HRNet](https://arxiv.org/abs/2007.00992) model [#159](https://github.com/Oneflow-Inc/vision/pull/159)
 
 **Bug Fixes**
 
@@ -33,6 +35,9 @@
 - Add `resmlp_12_224_dino` docs [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 - Fix `VGG` docs bug [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 - Add `ConvNeXt` docs [#93](https://github.com/Oneflow-Inc/vision/pull/93)
+- Add `SENet` docs [#149](https://github.com/Oneflow-Inc/vision/pull/149)
+- Add `HRNet` docs [#159](https://github.com/Oneflow-Inc/vision/pull/159)
+
 
 
 **Contributors**

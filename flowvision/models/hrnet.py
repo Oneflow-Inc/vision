@@ -760,8 +760,7 @@ def hrnet_w18_small_v1(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W18-Small-V1 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W18-Small-V1 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W18-Small-V1 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -787,8 +786,7 @@ def hrnet_w18_small_v2(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W18-Small-V2 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W18-Small-V2 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W18-Small-V2 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -815,8 +813,7 @@ def hrnet_w18(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W18 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W18 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W18 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -843,8 +840,7 @@ def hrnet_w30(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W30 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W30 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W30 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -871,8 +867,7 @@ def hrnet_w32(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W30 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W30 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W30 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -899,8 +894,7 @@ def hrnet_w40(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W40 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W40 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W40 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -927,8 +921,7 @@ def hrnet_w44(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W44 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W44 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W44 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -955,8 +948,7 @@ def hrnet_w48(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W48 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W48 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W48 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -983,8 +975,7 @@ def hrnet_w64(pretrained=False, progress=True, **kwargs):
     Constructs the HRNet-W64 model trained on ImageNet2012.
 
     .. note::
-        HRNet-W64 model from `"Deep High-Resolution Representation Learning for Visual Recognition
-" <https://arxiv.org/abs/1908.07919v1>` _.
+        HRNet-W64 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
         The required input size of the model is 224x224.
 
     Args:
