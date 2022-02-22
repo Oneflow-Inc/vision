@@ -55,6 +55,7 @@ pip install flowvision==0.1.0
             <li>InceptionV3</li>
             <li>ResNet</li>
             <li>ResNeXt</li>
+            <li>ResNeSt</li>
             <li>SENet</li>
             <li>DenseNet</li>
             <li>ShuffleNetV2</li>  
