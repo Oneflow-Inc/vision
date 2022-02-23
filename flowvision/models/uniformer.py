@@ -19,7 +19,6 @@ model_urls = {
     "uniformer_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_oneflow.zip",
     "uniformer_base_ls": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_ls_oneflow.zip",
     "uniformer_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_oneflow.zip",
-    # "uniformer_small_plus": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_plus_oneflow.zip",
     "uniformer_small_plus": None,
 }
 
@@ -305,7 +304,6 @@ class UniFormer(nn.Module):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    # @torch.jit.ignore
     def no_weight_decay(self):
         return {'pos_embed', 'cls_token'}
 
@@ -352,7 +350,7 @@ def _create_uniformer(arch, pretrained=False, progress=True, **model_kwargs):
 @ModelCreator.register_model
 def uniformer_small(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the UniFormer-small model.
+    Constructs the UniFormer-Small model.
 
     .. note::
         UniFormer-small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
@@ -380,7 +378,7 @@ def uniformer_small(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the UniFormer-small-plus model.
+    Constructs the UniFormer-Small-Plus model.
 
     .. note::
         UniFormer-small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
@@ -408,7 +406,7 @@ def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def uniformer_base(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the UniFormer-base model.
+    Constructs the UniFormer-Base model.
 
     .. note::
         UniFormer-base model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
@@ -436,7 +434,7 @@ def uniformer_base(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def uniformer_base_ls(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the UniFormer-base-ls model.
+    Constructs the UniFormer-Base-Ls model.
 
     .. note::
         UniFormer-base-ls model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
