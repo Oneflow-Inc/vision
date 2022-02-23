@@ -140,7 +140,6 @@
 | uniformer_base   | 83.814 | 16.186 | 96.738 | 3.262 | 50.0M | 224 | 0.900 | bicubic |
 | uniformer_base_ls  | 83.952 | 16.048 | 96.728 | 3.272 | 50.0M | 224 | 0.900 | bicubic |
 | uniformer_small  | 82.958 | 17.042 | 96.290 | 3.710 | 22.0M | 224 | 0.900 | bicubic |
-| uniformer_small_plus  | 66.342 | 33.658 | 87.784 | 12.216 | 24.0M | 224 | 0.900 | bicubic |
 
 
 

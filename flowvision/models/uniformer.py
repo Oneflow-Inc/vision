@@ -19,7 +19,8 @@ model_urls = {
     "uniformer_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_oneflow.zip",
     "uniformer_base_ls": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_ls_oneflow.zip",
     "uniformer_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_oneflow.zip",
-    "uniformer_small_plus": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_plus_oneflow.zip",
+    # "uniformer_small_plus": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_plus_oneflow.zip",
+    "uniformer_small_plus": None,
 }
 
 
@@ -433,7 +434,7 @@ def uniformer_base(pretrained=False, progress=True, **kwargs):
 
 
 @ModelCreator.register_model
-def uniformer_base_ls(pretrained=True, progress=True, **kwargs):
+def uniformer_base_ls(pretrained=False, progress=True, **kwargs):
     """
     Constructs the UniFormer-base-ls model.
 
