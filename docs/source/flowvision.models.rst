@@ -22,6 +22,7 @@ architectures for image classification:
 -  `MobileNetV2`_
 -  `MobileNetV3`_
 -  `MNASNet`_
+-  `HRNet`_
 -  `GhostNet`_
 -  `Res2Net`_
 -  `EfficientNet`_
@@ -38,7 +39,6 @@ architectures for image classification:
 -  `ConvMixer`_
 -  `ConvNeXt`_
 -  `RegionViT`_
--  `HRNet`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
