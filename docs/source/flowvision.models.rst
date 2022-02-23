@@ -16,6 +16,7 @@ architectures for image classification:
 -  `InceptionV3`_
 -  `ResNet`_
 -  `ResNeXt`_
+-  `SENet`_
 -  `DenseNet`_
 -  `ShuffleNetV2`_
 -  `MobileNetV2`_
@@ -50,6 +51,7 @@ architectures for image classification:
 .. _MobileNetV2: https://arxiv.org/abs/1801.04381
 .. _MobileNetV3: https://arxiv.org/abs/1905.02244
 .. _ResNeXt: https://arxiv.org/abs/1611.05431
+.. _SENet: https://arxiv.org/abs/1709.01507
 .. _Res2Net: https://arxiv.org/abs/1904.01169
 .. _ReXNet: https://arxiv.org/abs/2007.00992
 .. _MNASNet: https://arxiv.org/abs/1807.11626
@@ -218,6 +220,18 @@ ReXNet
         rexnet_lite_1_3,
         rexnet_lite_1_5,
         rexnet_lite_2_0,
+
+
+SENet
+--------
+.. automodule:: flowvision.models
+    :members:
+        senet154,
+        se_resnet50,
+        se_resnet101,
+        se_resnet152,
+        se_resnext50_32x4d,
+        se_resnext101_32x4d,
 
 
 ViT
