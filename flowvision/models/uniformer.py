@@ -353,7 +353,7 @@ def uniformer_small(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-Small model.
 
     .. note::
-        UniFormer-small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
+        UniFormer-Small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
@@ -381,7 +381,7 @@ def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-Small-Plus model.
 
     .. note::
-        UniFormer-small model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
+        UniFormer-Small-Plus model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
@@ -409,7 +409,7 @@ def uniformer_base(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-Base model.
 
     .. note::
-        UniFormer-base model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
+        UniFormer-Base model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
@@ -437,7 +437,7 @@ def uniformer_base_ls(pretrained=False, progress=True, **kwargs):
     Constructs the UniFormer-Base-Ls model.
 
     .. note::
-        UniFormer-base-ls model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
+        UniFormer-Base-Ls model from `UniFormer: Unified Transformer for Efficient Spatiotemporal Representation Learning`  -
             https://arxiv.org/abs/2201.04676
 
     Args:
