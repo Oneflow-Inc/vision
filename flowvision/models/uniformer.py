@@ -19,7 +19,7 @@ model_urls = {
     "uniformer_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_oneflow.zip",
     "uniformer_base_ls": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_base_ls_oneflow.zip",
     "uniformer_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_oneflow.zip",
-    "uniformer_small_plus": None,
+    "uniformer_small_plus": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/UniFormer/uniformer_small_plus_oneflow.zip",
 }
 
 
@@ -234,7 +234,7 @@ class UniFormer(nn.Module):
             attn_drop_rate (float): attention dropout rate
             drop_path_rate (float): stochastic depth rate
             norm_layer (nn.Module): normalization layer
-            conv_stem (bool): whether use overlapped patch stem
+            conv_stem (bool): whether to use overlapped patch stem
         """
         super().__init__()
         self.num_classes = num_classes
@@ -398,7 +398,7 @@ def uniformer_small_plus(pretrained=False, progress=True, **kwargs):
     """
     model_kwargs = dict(
         depth=[3, 5, 9, 3], conv_stem=True,
-        embed_dim=[64, 128, 320, 512], head_dim=64, mlp_ratio=4, qkv_bias=True,
+        embed_dim=[64, 128, 320, 512], head_dim=32, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
     return _create_uniformer("uniformer_small_plus", pretrained=pretrained, progress=progress, **model_kwargs)
 
