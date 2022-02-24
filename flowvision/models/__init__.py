@@ -24,6 +24,7 @@ from .res2net import *
 from .efficientnet import *
 from .vision_transformer import *
 from .convnext import *
+from .resnest import *
 from .uniformer import *
 from .senet import *
 
