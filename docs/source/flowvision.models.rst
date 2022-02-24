@@ -331,6 +331,16 @@ CrossFormer
         crossformer_large_patch4_group7_224,
 
 
+UniFormer
+-----------
+.. automodule:: flowvision.models
+    :members: 
+        uniformer_small
+        uniformer_small_plus
+        uniformer_base
+        uniformer_base_ls
+
+
 Mlp-Mixer
 ---------
 .. automodule:: flowvision.models

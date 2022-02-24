@@ -77,6 +77,7 @@ pip install flowvision==0.1.0
             <li>ConvMixer</li>
             <li>ConvNeXt</li>
             <li>RegionViT</li>
+            <li>UniFormer<li>
         </ul>
         <li><b>Detection</b></li>
         <ul>
