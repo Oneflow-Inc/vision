@@ -3,6 +3,7 @@ from .densenet import *
 from .vgg import *
 from .mnasnet import *
 from .resnet import *
+from .ir_resnet import *
 from .inception_v3 import *
 from .googlenet import *
 from .shufflenet_v2 import *
