@@ -1,6 +1,7 @@
 """
-Modified from https://github.com/zhanghang1989/ResNeSt/blob/master/resnest/torch/models/resnest.py
+Modified from https://github.com/deepinsight/insightface/blob/master/recognition/arcface_torch/backbones/iresnet.py
 """
+
 
 from typing import Type, Any, Callable, Union, List, Optional
 import oneflow as flow

@@ -1,5 +1,5 @@
 """
-Modified from https://github.com/deepinsight/insightface/blob/master/recognition/arcface_torch/backbones/iresnet.py
+Modified from https://github.com/zhanghang1989/ResNeSt/blob/master/resnest/torch/models/resnest.py
 """
 import math
 
@@ -11,13 +11,14 @@ from .utils import load_state_dict_from_url
 from .registry import ModelCreator
 
 
-__all__ = ['resnest50', 'resnest101']
+__all__ = ['resnest50', 'resnest101', 'resnest200', 'resnest269']
 
 model_urls = {
     "resnest50" : "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNeSt/ResNeSt_50.zip",
     "resnest101": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNeSt/ResNeSt_101.zip",
+    "resnest200": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNeSt/ResNeSt_200.zip",
+    "resnest269": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNeSt/ResNeSt_269.zip",
 }
-
 
 class SplAtConv2d(nn.Module):
     r""" Split-Attention Conv2d. 
