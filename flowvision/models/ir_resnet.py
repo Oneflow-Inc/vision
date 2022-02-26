@@ -3,13 +3,12 @@ Modified from https://github.com/zhanghang1989/ResNeSt/blob/master/resnest/torch
 """
 
 from typing import Type, Any, Callable, Union, List, Optional
-from matplotlib.pyplot import prism
 import oneflow as flow
 import oneflow.nn as nn
 
 
-from utils import load_state_dict_from_url
-from registry import ModelCreator
+from .utils import load_state_dict_from_url
+from .registry import ModelCreator
 
 __all__ = ["iresnet50", "iresnet101", ]
 
