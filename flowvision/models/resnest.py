@@ -19,6 +19,8 @@ model_urls = {
     "resnest200": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNeSt/ResNeSt_200.zip",
     "resnest269": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResNeSt/ResNeSt_269.zip",
 }
+
+
 class SplAtConv2d(nn.Module):
     r""" Split-Attention Conv2d. 
     
