@@ -268,8 +268,3 @@ def iresnet101(pretrained=False, progress=True, **kwargs):
         "iresnet101", IBasicBlock, [3, 13, 30, 3], pretrained, progress, **kwargs
     )
 
-
-
-model = iresnet50(pretrained=True).cuda()
-input=flow.rand(1,3,112,112).cuda()
-print(model(input))
