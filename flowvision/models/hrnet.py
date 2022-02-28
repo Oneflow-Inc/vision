@@ -1,11 +1,6 @@
 """
-Modified from https://github.com/Cadene/pretrained-models.pytorch/blob/master/pretrainedmodels/models/senet.py
+Modified from https://github.com/HRNet/HRNet-Image-Classification/blob/master/lib/models/cls_hrnet.py
 """
-
-import os
-import logging
-import functools
-import numpy as np
 
 import oneflow as flow
 import oneflow.nn as nn
@@ -1047,7 +1042,7 @@ def hrnet_w30(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def hrnet_w32(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the HRNet-W30 model trained on ImageNet2012.
+    Constructs the HRNet-W32 model trained on ImageNet2012.
 
     .. note::
         HRNet-W30 model from `Deep High-Resolution Representation Learning for Visual Recognition <https://arxiv.org/abs/1908.07919v1>`_.
