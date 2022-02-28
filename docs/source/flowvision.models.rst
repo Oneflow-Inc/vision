@@ -33,6 +33,7 @@ architectures for image classification:
 -  `Swin-Transformer`_
 -  `CSwin-Transformer`_
 -  `CrossFormer`_
+-  `PoolFormer`_
 -  `Mlp_Mixer`_
 -  `ResMLP`_
 -  `gMLP`_
@@ -65,6 +66,7 @@ architectures for image classification:
 .. _Swin-Transformer: https://arxiv.org/abs/2103.14030
 .. _CSwin-Transformer: https://arxiv.org/abs/2107.00652
 .. _CrossFormer: https://arxiv.org/abs/2108.00154
+.. _PoolFormer: https://arxiv.org/abs/2111.11418
 .. _Mlp_Mixer: https://arxiv.org/abs/2105.01601
 .. _ResMLP: https://arxiv.org/abs/2105.03404
 .. _gMLP: https://arxiv.org/abs/2105.08050
@@ -340,6 +342,17 @@ CrossFormer
         crossformer_small_patch4_group7_224,
         crossformer_base_patch4_group7_224,
         crossformer_large_patch4_group7_224,
+
+
+PoolFormer
+-----------
+.. automodule:: flowvision.models
+    :members:
+        poolformer_s12,
+        poolformer_s24,
+        poolformer_s36,
+        poolformer_m36,
+        poolformer_m48,
 
 
 UniFormer
