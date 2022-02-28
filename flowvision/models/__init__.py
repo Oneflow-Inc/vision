@@ -28,6 +28,7 @@ from .poolformer import *
 from .resnest import *
 from .uniformer import *
 from .senet import *
+from .hrformer import *
 
 from . import neural_style_transfer
 from . import detection
