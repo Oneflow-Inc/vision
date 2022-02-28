@@ -1,5 +1,25 @@
 ## Changelog
 
+### V0.2.0 
+
+**New Features**
+- Support [SENet](https://arxiv.org/abs/1709.01507) model and pretrained weight [#149](https://github.com/Oneflow-Inc/vision/pull/149)
+- Support [ResNeSt](https://arxiv.org/abs/2004.08955) model and pretrained weight [#156](https://github.com/Oneflow-Inc/vision/pull/156)
+- Support [PoolFormer](https://arxiv.org/abs/2111.11418) model and pretrained weight [#137](https://github.com/Oneflow-Inc/vision/pull/137)
+- Support [RegionViT](https://arxiv.org/abs/2106.02689) model and pretrained weight [#144](https://github.com/Oneflow-Inc/vision/pull/144)
+- Support [UniFormer](https://arxiv.org/abs/2201.04676) model and pretrained weight [#147](https://github.com/Oneflow-Inc/vision/pull/147)
+
+**Bug Fixes**
+- Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
+
+**Improvements**
+
+**Docs Update**
+- Add `SEModule` Docs [#143](https://github.com/Oneflow-Inc/vision/pull/143)
+
+**Contributors**
+A total of x developers contributed to this release.
+
 ### v0.1.0 (10/02/2022)
 
 **New Features**
