@@ -21,6 +21,10 @@ function write_to_file_and_print {
 
 
 # single device tests
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest50 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest101 16x3x256x256 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest200 16x3x320x320 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest269 16x3x416x416 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/convnext.py convnext_tiny_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/mlp_mixer.py mlp_mixer_b16_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/cswin.py cswin_tiny_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
@@ -31,7 +35,11 @@ python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/poolformer.py poolformer_s36 16x3x224x
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/poolformer.py poolformer_m36 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/poolformer.py poolformer_m48 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/res_mlp.py resmlp_12_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
-python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/res_mlp.py resmlp_24_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_base 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_base_ls 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_small 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_small_plus 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
+python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/res_mlp.py resmlp_12_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print 
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/pvt.py pvt_tiny 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/pvt.py pvt_small 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
 python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/vision_transformer.py vit_tiny_patch16_224 16x3x224x224 --no-show-memory --times $TIMES | check_relative_speed 1.01 | write_to_file_and_print
@@ -59,6 +67,10 @@ python3 $COMPARE_SCRIPT_PATH $MODELS_ROOT/alexnet.py alexnet 16x3x224x224 --no-s
 
 
 # ddp speed tests
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest50 16x3x224x224 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest101 16x3x256x256 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest200 16x3x320x320 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/resnest.py resnest269 16x3x416x416 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/convnext.py convnext_tiny_224 16x3x224x224 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/mlp_mixer.py mlp_mixer_b16_224 16x3x224x224 --no-show-memory --times $TIMES --ddp --disable-backward | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/cswin.py cswin_tiny_224 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
@@ -68,8 +80,11 @@ python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $M
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/poolformer.py poolformer_s36 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/poolformer.py poolformer_m36 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/poolformer.py poolformer_m48 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_base 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_base_ls 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_small 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
+python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/uniformer.py uniformer_small_plus 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/res_mlp.py resmlp_12_224 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
-python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/res_mlp.py resmlp_24_224 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/pvt.py pvt_tiny 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/pvt.py pvt_small 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print
 python3 -m oneflow.distributed.launch --nproc_per_node 2 $COMPARE_SCRIPT_PATH $MODELS_ROOT/vision_transformer.py vit_tiny_patch16_224 16x3x224x224 --no-show-memory --times $TIMES --ddp | check_relative_speed 0.99 | write_to_file_and_print

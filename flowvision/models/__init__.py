@@ -15,6 +15,7 @@ from .crossformer import *
 from .pvt import *
 from .cswin import *
 from .res_mlp import *
+from .regionvit import *
 from .mlp_mixer import *
 from .rexnet import *
 from .rexnet_lite import *
@@ -24,6 +25,9 @@ from .efficientnet import *
 from .vision_transformer import *
 from .convnext import *
 from .poolformer import *
+from .resnest import *
+from .uniformer import *
+from .senet import *
 
 from . import neural_style_transfer
 from . import detection
