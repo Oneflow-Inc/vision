@@ -451,3 +451,12 @@ Neural Style
         neural_style_transfer,
 
 
+Face Recognition
+============
+
+.. currentmodule:: flowvision.models
+.. automodule:: flowvision.models
+    :members:
+        face_recognition,
+
+

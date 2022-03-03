@@ -8,8 +8,8 @@ import oneflow as flow
 import oneflow.nn as nn
 
 
-from .utils import load_state_dict_from_url
-from .registry import ModelCreator
+from ..utils import load_state_dict_from_url
+from ..registry import ModelCreator
 
 __all__ = ["iresnet50", "iresnet101", ]
 
