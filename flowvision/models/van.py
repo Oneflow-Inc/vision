@@ -7,7 +7,6 @@ from functools import partial
 
 import oneflow as flow
 import oneflow.nn as nn
-import oneflow.nn.functional as F
 
 from flowvision.layers import DropPath, trunc_normal_
 from flowvision.models.helpers import to_2tuple
@@ -16,10 +15,10 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "van_tiny": None,
-    "van_small": None,
-    "van_base": None,
-    "van_large": None,
+    "van_tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VAN/van_tiny.zip",
+    "van_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VAN/van_small.zip",
+    "van_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VAN/van_base.zip",
+    "van_large": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/VAN/van_large.zip",
 }
 
 class Mlp(nn.Module):
@@ -300,7 +299,7 @@ def van_tiny(pretrained: bool = False, progress: bool = True, **kwargs):
         norm_layer=partial(nn.LayerNorm, eps=1e-6), depths=[3, 3, 5, 2],
         **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[van_tiny], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
@@ -331,7 +330,7 @@ def van_small(pretrained: bool = False, progress: bool = True, **kwargs):
         norm_layer=partial(nn.LayerNorm, eps=1e-6), depths=[2, 2, 4, 2],
         **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[van_small], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
@@ -361,7 +360,7 @@ def van_base(pretrained: bool = False, progress: bool = True, **kwargs):
         norm_layer=partial(nn.LayerNorm, eps=1e-6), depths=[3, 3, 12, 3], 
         **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[van_base], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
@@ -391,6 +390,6 @@ def van_large(pretrained: bool = False, progress: bool = True, **kwargs):
         norm_layer=partial(nn.LayerNorm, eps=1e-6), depths=[3, 5, 27, 3], 
         **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[van_large], progress=progress)
         model.load_state_dict(state_dict)
     return model
