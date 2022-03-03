@@ -10,7 +10,6 @@ import oneflow.nn as nn
 import oneflow.nn.functional as F
 
 from flowvision.layers import DropPath, trunc_normal_
-from flowvision.models.vision_transformer import _cfg
 from flowvision.models.helpers import to_2tuple
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
