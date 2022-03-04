@@ -32,6 +32,7 @@ from .senet import *
 from . import neural_style_transfer
 from . import detection
 from . import segmentation
+from . import face_recognition
 
 from .utils import load_state_dict_from_url
 from .registry import ModelCreator
