@@ -2,11 +2,10 @@
 Modified from https://github.com/deepinsight/insightface/blob/master/recognition/arcface_torch/backbones/iresnet.py
 """
 
-
 from typing import Type, Any, Callable, Union, List, Optional
+
 import oneflow as flow
 import oneflow.nn as nn
-
 
 from ..utils import load_state_dict_from_url
 from ..registry import ModelCreator
@@ -204,7 +203,6 @@ class IResNet(nn.Module):
         return x
 
 
-
 def _iresnet(
     arch: str,
     block: Type[IBasicBlock],
@@ -219,6 +217,7 @@ def _iresnet(
             model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
+
 
 @ModelCreator.register_model
 def iresnet50(pretrained=False, progress=True, **kwargs):
@@ -244,10 +243,11 @@ def iresnet50(pretrained=False, progress=True, **kwargs):
         "iresnet50", IBasicBlock, [3, 4, 14, 3], pretrained, progress, **kwargs
     )
 
+
 @ModelCreator.register_model
 def iresnet101(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the IResNeSt-50 model trained on Glint360K(https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc#4-download).
+    Constructs the IResNeSt-101 model trained on Glint360K(https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc#4-download).
 
     .. note::
         The required input size of the model is 112x112.
@@ -267,4 +267,3 @@ def iresnet101(pretrained=False, progress=True, **kwargs):
     return _iresnet(
         "iresnet101", IBasicBlock, [3, 13, 30, 3], pretrained, progress, **kwargs
     )
-
