@@ -40,6 +40,7 @@ architectures for image classification:
 -  `ConvMixer`_
 -  `ConvNeXt`_
 -  `RegionViT`_
+-  `VAN`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -74,6 +75,7 @@ architectures for image classification:
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
 .. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
+.. _VAN: https://arxiv.org/pdf/2202.09741.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -453,7 +455,15 @@ RegionViT
         regionvit_base_w14_224,
         regionvit_base_w14_peg_224,
         
-
+VAN
+--------
+.. automodule:: flowvision.models
+    :members:
+        van_tiny,
+        van_small,
+        van_base,
+        van_large,
+        
 
 Neural Style
 ============

@@ -160,6 +160,10 @@
 | regionvit_small_224           | 82.558 | 17.442 | 96.112 | 3.888 | 30.6M  | 224 | 0.875   | bicubic |
 | regionvit_medium_224          | 83.002 | 16.998 | 96.220 | 3.780 | 41.2M  | 224 | 0.875   | bicubic |
 | regionvit_base_224            | 83.116 | 16.884 | 96.096 | 3.904 | 72.7M  | 224 | 0.875   | bicubic |
+| van_tiny  | 75.408 | 24.592 | 93.030 | 6.970 | 4.1M  | 224 | 0.9 | bicubic |
+| van_small | 81.012 | 18.988 | 95.626 | 4.374 | 13.9M | 224 | 0.9 | bicubic |
+| van_base  | 82.806 | 17.194 | 96.206 | 3.794 | 26.6M | 224 | 0.9 | bicubic |
+| van_large | 83.860 | 16.140 | 96.728 | 3.272 | 44.8M | 224 | 0.9 | bicubic |
 
 #### Spetial Normalized Case
 - `vit`, `mlp-mixer`, `gmlp` based model: test images normalized using `mean=(0.5, 0.5, 0.5)` and `std=(0.5, 0.5, 0.5)`
