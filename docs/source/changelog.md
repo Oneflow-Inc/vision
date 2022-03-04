@@ -10,7 +10,7 @@
 - Add `resmlp_12_224_dino` model and pretrained weight [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 - Support [ConvNeXt](https://arxiv.org/abs/2201.03545) model [#93](https://github.com/Oneflow-Inc/vision/pull/93)
 - Add [ReXNet](https://arxiv.org/abs/2007.00992) weights [#132](https://github.com/Oneflow-Inc/vision/pull/132)
-- Support IResNeSt model for face recognition #160
+- Support IResNeSt model for face recognition [#160](https://github.com/Oneflow-Inc/vision/pull/160)
 
 **Bug Fixes**
 
