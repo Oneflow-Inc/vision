@@ -98,7 +98,7 @@ pip install flowvision==0.1.0
         </ul>
         <li><b>Face Recognition</b></li>
         <ul>
-            <li>IResnet</li>
+            <li>IResNet</li>
         </ul>        
       </ul>
       </td>
