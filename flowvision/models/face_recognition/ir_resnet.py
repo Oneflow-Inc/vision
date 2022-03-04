@@ -228,7 +228,7 @@ def iresnet50(pretrained=False, progress=True, **kwargs):
         The required input size of the model is 112x112.
 
     Args:
-        pretrained (bool): Whether to download the pre-trained model on  webface600K. Default: ``False``
+        pretrained (bool): Whether to download the pre-trained model on webface600K. Default: ``False``
         progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
 
     For example:
