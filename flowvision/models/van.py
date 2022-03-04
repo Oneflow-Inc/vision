@@ -276,10 +276,10 @@ class DWConv(nn.Module):
 @ModelCreator.register_model
 def van_tiny(pretrained: bool = False, progress: bool = True, **kwargs):
     """
-    Constructs the Van-Tiny model trained on ImageNet-1k.
+    Constructs the VAN-Tiny model trained on ImageNet-1k.
 
     .. note::
-        Van-Tiny model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
+        VAN-Tiny model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -307,10 +307,10 @@ def van_tiny(pretrained: bool = False, progress: bool = True, **kwargs):
 @ModelCreator.register_model
 def van_small(pretrained: bool = False, progress: bool = True, **kwargs):
     """
-    Constructs the Van-Small model trained on ImageNet-1k.
+    Constructs the VAN-Small model trained on ImageNet-1k.
 
     .. note::
-        Van-Small model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
+        VAN-Small model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -337,10 +337,10 @@ def van_small(pretrained: bool = False, progress: bool = True, **kwargs):
 @ModelCreator.register_model
 def van_base(pretrained: bool = False, progress: bool = True, **kwargs):
     """
-    Constructs the Van-Base model trained on ImageNet-1k.
+    Constructs the VAN-Base model trained on ImageNet-1k.
 
     .. note::
-        Van-Base model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
+        VAN-Base model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
@@ -367,10 +367,10 @@ def van_base(pretrained: bool = False, progress: bool = True, **kwargs):
 @ModelCreator.register_model
 def van_large(pretrained: bool = False, progress: bool = True, **kwargs):
     """
-    Constructs the Van-Large model trained on ImageNet-1k.
+    Constructs the VAN-Large model trained on ImageNet-1k.
 
     .. note::
-        Van-Large model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
+        VAN-Large model from `"Visual Attention Network" <https://arxiv.org/pdf/2202.09741.pdf>`_.
         The required input size of the model is 224x224.
 
     Args:
