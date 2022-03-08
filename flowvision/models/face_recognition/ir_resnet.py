@@ -10,7 +10,10 @@ import oneflow.nn as nn
 from ..utils import load_state_dict_from_url
 from ..registry import ModelCreator
 
-__all__ = ["iresnet50", "iresnet101", ]
+__all__ = [
+    "iresnet50",
+    "iresnet101",
+]
 
 
 model_urls = {
@@ -55,11 +58,9 @@ class IBasicBlock(nn.Module):
     ):
         super(IBasicBlock, self).__init__()
         if groups != 1 or base_width != 64:
-            raise ValueError(
-                "BasicBlock only supports groups=1 and base_width=64")
+            raise ValueError("BasicBlock only supports groups=1 and base_width=64")
         if dilation > 1:
-            raise NotImplementedError(
-                "Dilation > 1 not supported in BasicBlock")
+            raise NotImplementedError("Dilation > 1 not supported in BasicBlock")
         self.bn1 = nn.BatchNorm2d(inplanes, eps=1e-05,)
         self.conv1 = conv3x3(inplanes, planes)
         self.bn2 = nn.BatchNorm2d(planes, eps=1e-05,)
@@ -108,8 +109,7 @@ class IResNet(nn.Module):
         if len(replace_stride_with_dilation) != 3:
             raise ValueError(
                 "replace_stride_with_dilation should be None "
-                "or a 3-element tuple, got {}".format(
-                    replace_stride_with_dilation)
+                "or a 3-element tuple, got {}".format(replace_stride_with_dilation)
             )
         self.groups = groups
         self.base_width = width_per_group
@@ -131,8 +131,7 @@ class IResNet(nn.Module):
         )
         self.bn2 = nn.BatchNorm2d(512 * block.expansion, eps=1e-05,)
         self.dropout = nn.Dropout(p=dropout, inplace=True)
-        self.fc = nn.Linear(512 * block.expansion *
-                            self.fc_scale, num_features)
+        self.fc = nn.Linear(512 * block.expansion * self.fc_scale, num_features)
         self.features = nn.BatchNorm1d(num_features, eps=1e-05)
         nn.init.constant_(self.features.weight, 1.0)
         self.features.weight.requires_grad = False
@@ -213,8 +212,7 @@ def _iresnet(
 ) -> IResNet:
     model = IResNet(block, layers, **kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(
-            model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 

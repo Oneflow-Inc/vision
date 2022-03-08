@@ -40,3 +40,4 @@ from .regularization.stochastic_depth import stochastic_depth
 from .weight_init import trunc_normal_, lecun_normal_
 from .activation import hard_sigmoid, hard_swish
 from .helpers import make_divisible
+from .dynamic_conv import Dynamic_conv2d
