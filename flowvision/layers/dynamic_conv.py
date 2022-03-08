@@ -31,7 +31,7 @@ class attention2d(nn.Module):
 
 
 class Dynamic_conv2d(nn.Module):
-    '''https://arxiv.org/abs/1912.03458'''
+    '''`Dynamic Convolution: Attention over Convolution Kernels <https://arxiv.org/abs/1912.03458>`_'''
     def __init__(self, in_planes, out_planes, kernel_size, ratio=0.25, stride=1, padding=0, dilation=1, groups=1, bias=True, K=4, temperature=34):
         super(Dynamic_conv2d, self).__init__()
         assert in_planes%groups==0
