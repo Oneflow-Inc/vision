@@ -12,7 +12,9 @@
 - Support [PoolFormer](https://arxiv.org/abs/2111.11418) model and pretrained weight [#137](https://github.com/Oneflow-Inc/vision/pull/137)
 - Support [RegionViT](https://arxiv.org/abs/2106.02689) model and pretrained weight [#144](https://github.com/Oneflow-Inc/vision/pull/144)
 - Support [UniFormer](https://arxiv.org/abs/2201.04676) model and pretrained weight [#147](https://github.com/Oneflow-Inc/vision/pull/147)
+- Support IResNeSt model for face recognition [#160](https://github.com/Oneflow-Inc/vision/pull/160)
 - Support [VAN](https://arxiv.org/abs/2202.09741) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
+- Support [Dynamic convolution](https://arxiv.org/abs/1912.03458) module [#166](https://github.com/Oneflow-Inc/vision/pull/169)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
@@ -35,7 +37,7 @@ A total of x developers contributed to this release.
 - Add `resmlp_12_224_dino` model and pretrained weight [#128](https://github.com/Oneflow-Inc/vision/pull/128)
 - Support [ConvNeXt](https://arxiv.org/abs/2201.03545) model [#93](https://github.com/Oneflow-Inc/vision/pull/93)
 - Add [ReXNet](https://arxiv.org/abs/2007.00992) weights [#132](https://github.com/Oneflow-Inc/vision/pull/132)
-- Support IResNeSt model for face recognition [#160](https://github.com/Oneflow-Inc/vision/pull/160)
+
 
 **Bug Fixes**
 
