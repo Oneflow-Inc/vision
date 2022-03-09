@@ -39,20 +39,20 @@ __all__ = [
 
 
 model_urls = {
-    "regnet_y_400mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_400mf.zip",
-    "regnet_y_800mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_800mf.zip",
-    "regnet_y_1_6gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_1_6gf.zip",
-    "regnet_y_3_2gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_3_2gf.zip",
-    "regnet_y_8gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_8gf.zip",
-    "regnet_y_16gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_16gf.zip",
-    "regnet_y_32gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_y_32gf.zip",
-    "regnet_x_400mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_400mf.zip",
-    "regnet_x_800mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_800mf.zip",
-    "regnet_x_1_6gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_1_6gf.zip",
-    "regnet_x_3_2gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_3_2gf.zip",
-    "regnet_x_8gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_8gf.zip",
-    "regnet_x_16gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_16gf.zip",
-    "regnet_x_32gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ResMLP/regnet_x_32gf.zip",
+    "regnet_y_400mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_400mf.zip",
+    "regnet_y_800mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_800mf.zip",
+    "regnet_y_1_6gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_1_6gf.zip",
+    "regnet_y_3_2gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_3_2gf.zip",
+    "regnet_y_8gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_8gf.zip",
+    "regnet_y_16gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_16gf.zip",
+    "regnet_y_32gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_y_32gf.zip",
+    "regnet_x_400mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_400mf.zip",
+    "regnet_x_800mf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_800mf.zip",
+    "regnet_x_1_6gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_1_6gf.zip",
+    "regnet_x_3_2gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_3_2gf.zip",
+    "regnet_x_8gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_8gf.zip",
+    "regnet_x_16gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_16gf.zip",
+    "regnet_x_32gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_32gf.zip",
 }
 
 class SimpleStemIN(ConvBnAct):
