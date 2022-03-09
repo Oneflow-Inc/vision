@@ -26,6 +26,7 @@ architectures for image classification:
 -  `GhostNet`_
 -  `Res2Net`_
 -  `EfficientNet`_
+-  `RegNet`_
 -  `ReXNet`_
 -  `ViT`_
 -  `DeiT`_
@@ -73,6 +74,7 @@ architectures for image classification:
 .. _gMLP: https://arxiv.org/abs/2105.08050
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
+.. _RegNet: https://arxiv.org/abs/2003.13678
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
 .. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
 .. _VAN: https://arxiv.org/pdf/2202.09741.pdf
@@ -220,6 +222,26 @@ EfficientNet
         efficientnet_b5,
         efficientnet_b6,
         efficientnet_b7
+
+
+RegNet
+------------
+.. automodule:: flowvision.models
+    :members:
+        regnet_y_400mf,
+        regnet_y_800mf,
+        regnet_y_1_6gf,
+        regnet_y_3_2gf,
+        regnet_y_8gf,
+        regnet_y_16gf,
+        regnet_y_32gf,
+        regnet_x_400mf,
+        regnet_x_800mf,
+        regnet_x_1_6gf,
+        regnet_x_3_2gf,
+        regnet_x_8gf,
+        regnet_x_16gf,
+        regnet_x_32gf,
 
 
 ReXNet
