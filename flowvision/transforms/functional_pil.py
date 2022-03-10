@@ -242,3 +242,20 @@ def rotate(img, angle, interpolation=0, expand=False, center=None, fill=None):
 
     opts = _parse_fill(fill, img)
     return img.rotate(angle, interpolation, expand, center, **opts)
+
+
+def to_grayscale(img: Image.Image, num_output_channels: int) -> Image.Image:
+    if not _is_pil_image(img):
+        raise TypeError(f"img should be PIL Image. Got {type(img)}")
+
+    if num_output_channels == 1:
+        img = img.convert("L")
+    elif num_output_channels == 3:
+        img = img.convert("L")
+        np_img = np.array(img, dtype=np.uint8)
+        np_img = np.dstack([np_img, np_img, np_img])
+        img = Image.fromarray(np_img, "RGB")
+    else:
+        raise ValueError("num_output_channels should be either 1 or 3")
+
+    return 

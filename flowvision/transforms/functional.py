@@ -988,3 +988,28 @@ def rotate(
     return F_t.rotate(
         img, matrix=matrix, interpolation=interpolation.value, expand=expand, fill=fill
     )
+
+
+def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
+    """Convert RGB image to grayscale version of image.
+    If the image is flow Tensor, it is expected
+    to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
+
+    Note:
+        Please, note that this method supports only RGB images as input. For inputs in other color spaces,
+        please, consider using meth:`~flowvision.transforms.functional.to_grayscale` with PIL Image.
+
+    Args:
+        img (PIL Image or Tensor): RGB Image to be converted to grayscale.
+        num_output_channels (int): number of channels of the output image. Value can be 1 or 3. Default, 1.
+
+    Returns:
+        PIL Image or Tensor: Grayscale version of the image.
+
+        - if num_output_channels = 1 : returned image is single channel
+        - if num_output_channels = 3 : returned image is 3 channel with r = g = b
+    """
+    if not isinstance(img, flow.Tensor):
+        return F_pil.to_grayscale(img, num_output_channels)
+
+    return F_t.rgb_to_grayscale(img, num_output_channels)
