@@ -1190,6 +1190,10 @@ class RandomRotation(Module):
         return format_string
 
 
+class RandomGrayscale(Module):
+
+    pass
+
 def _setup_size(size, error_msg):
     if isinstance(size, numbers.Number):
         return int(size), int(size)
