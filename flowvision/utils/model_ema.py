@@ -17,7 +17,7 @@ class ModelEmaV2(nn.Module):
 
     Keep a moving average of everything in the model state_dict (parameters and buffers).
     V2 of this module is simpler, it does not match params/buffers based on name but simply
-    iterates in order. It works with torchscript (JIT of full model).
+    iterates in order.
 
     This is intended to allow functionality like
     https://www.tensorflow.org/api_docs/python/tf/train/ExponentialMovingAverage
