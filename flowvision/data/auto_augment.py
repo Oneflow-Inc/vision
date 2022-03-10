@@ -540,7 +540,7 @@ def auto_augment_transform(config_str, hparams):
         'mstd' -  float std deviation of magnitude noise applied
     Ex 'original-mstd0.5' results in AutoAugment with original policy, magnitude_std 0.5
     :param hparams: Other hparams (kwargs) for the AutoAugmentation scheme
-    :return: A PyTorch compatible Transform
+    :return: An OneFlow compatible Transform
     """
     config = config_str.split("-")
     policy_name = config[0]
@@ -681,7 +681,7 @@ def rand_augment_transform(config_str, hparams):
 
     :param hparams: Other hparams (kwargs) for the RandAugmentation scheme
 
-    :return: A PyTorch compatible Transform
+    :return: An OneFlow compatible Transform
     """
     magnitude = _LEVEL_DENOM  # default to _LEVEL_DENOM for magnitude (currently 10)
     num_layers = 2  # default to 2 ops per image
@@ -827,7 +827,7 @@ class AugMixAugment:
 
 
 def augment_and_mix_transform(config_str, hparams):
-    """ Create AugMix PyTorch transform
+    """ Create AugMix OneFlow transform
 
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
     dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
@@ -841,7 +841,7 @@ def augment_and_mix_transform(config_str, hparams):
 
     :param hparams: Other hparams (kwargs) for the Augmentation transforms
 
-    :return: A PyTorch compatible Transform
+    :return: An OneFlow compatible Transform
     """
     magnitude = 3
     width = 3
