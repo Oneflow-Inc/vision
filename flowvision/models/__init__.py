@@ -22,6 +22,7 @@ from .rexnet_lite import *
 from .ghostnet import *
 from .res2net import *
 from .efficientnet import *
+from .regnet import *
 from .vision_transformer import *
 from .convnext import *
 from .poolformer import *

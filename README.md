@@ -65,6 +65,7 @@ pip install flowvision==0.1.0
             <li>Res2Net</li>
             <li>EfficientNet</li>  
             <li>GhostNet</li>
+            <li>RegNet</li> 
             <li>ReXNet</li>
             <li>Vision Transformer</li>
             <li>DeiT</li>
