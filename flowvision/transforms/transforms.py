@@ -936,7 +936,7 @@ class TenCrop(Module):
 
 class ColorJitter(Module):
     """Randomly change the brightness, contrast, saturation and hue of an image.
-    If the image is torch Tensor, it is expected
+    If the image is flow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions.
     If img is PIL Image, mode "1", "L", "I", "F" and modes with transparency (alpha channel) are not supported.
 
@@ -1188,6 +1188,46 @@ class RandomRotation(Module):
             format_string += ", fill={0}".format(self.fill)
         format_string += ")"
         return format_string
+
+
+class RandomGrayscale(Module):
+    """Randomly convert image to grayscale with a probability of p (default 0.1).
+    If the image is flow Tensor, it is expected
+    to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
+
+    Args:
+        p (float): probability that image should be converted to grayscale.
+
+    Returns:
+        PIL Image or Tensor: Grayscale version of the input image with probability p and unchanged
+        with probability (1-p).
+        - If input image is 1 channel: grayscale version is 1 channel
+        - If input image is 3 channel: grayscale version is 3 channel with r == g == b
+
+    """
+
+    def __init__(self, p=0.1):
+        super().__init__()
+        
+        assert 0. <= p <= 1.
+
+        self.p = p
+
+    def forward(self, img):
+        """
+        Args:
+            img (PIL Image or Tensor): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image or Tensor: Randomly grayscaled image.
+        """
+        num_output_channels = F._get_image_num_channels(img)
+        if flow.rand(1) < self.p:
+            return F.rgb_to_grayscale(img, num_output_channels=num_output_channels)
+        return img
+
+    def __repr__(self):
+        return self.__class__.__name__ + '(p={0})'.format(self.p)
 
 
 def _setup_size(size, error_msg):
