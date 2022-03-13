@@ -1,4 +1,4 @@
-from resnest import *
+from benchmark.resnest import *
 
 def test_resnest50(benchmark):
     benchmark(run_resnest50)
