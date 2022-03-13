@@ -35,15 +35,15 @@ def test_resnest101(benchmark):
 
 
 # def test_resnest200(benchmark):
-#    benchmark(run_resnest200)
+#     benchmark(run_resnest200)
 
 
 # def test_resnest269(benchmark):
-#    benchmark(run_resnest269)
+#     benchmark(run_resnest269)
 
 
-def test_convnext(benchmark):
-    benchmark(run_convnext)
+# def test_convnext(benchmark):
+#     benchmark(run_convnext)
 
 
 def test_mlp_mixer(benchmark):
@@ -70,12 +70,12 @@ def test_poolformer_s36(benchmark):
     benchmark(run_poolformer_s36)
 
 
-def test_poolformer_m36(benchmark):
-    benchmark(run_poolformer_m36)
+# def test_poolformer_m36(benchmark):
+#     benchmark(run_poolformer_m36)
 
 
-def test_poolformer_m48(benchmark):
-    benchmark(run_poolformer_m48)
+# def test_poolformer_m48(benchmark):
+#     benchmark(run_poolformer_m48)
 
 
 def test_res_mlp(benchmark):
