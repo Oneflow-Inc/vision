@@ -9,34 +9,16 @@ def input_shape(ls):
     input_shape = np.ones(ls).astype(np.float32)
     return flow.tensor(input_shape, requires_grad=False).to('cuda')
 
-def run_resnest50():
-    model = resnest50().to('cuda')
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    x = input_shape([16, 3, 224, 224])
-    model(x).sum().backward()
+def run_resnest(model, input_shape):
+    model = model().to('cuda')
+    optimizer = flow.optim.SGD(
+        model.parameters(), lr=learning_rate, momentum=mom)
+    x = input_shape()
+    model(x).sum().backward(input_shape)
     optimizer.zero_grad()
     optimizer.step()
 
-def run_resnest101():
-    model = resnest101().to('cuda')
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    x = input_shape([16, 3, 256, 256])
-    model(x).sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
-
-def run_resnest200():
-    model = resnest200().to('cuda')
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    x = input_shape([16, 3, 320, 320])
-    model(x).sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
-
-def run_resnest269():
-    model = resnest269().to('cuda')
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    x = input_shape([16, 3, 416, 416])
-    model(x).sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
+def run_resnest50(): return run_resnest(resnest50, [16, 3, 224, 224])
+def run_resnest101(): return run_resnest(resnest101, [16, 3, 256, 256])
+def run_resnest200(): return run_resnest(resnest200, [16, 3, 320, 320])
+def run_resnest269(): return run_resnest(resnest269, [16, 3, 416, 416])
