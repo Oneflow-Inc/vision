@@ -69,25 +69,34 @@ class RandomErasing:
         self.device = device
 
     def _erase(self, img, chan, img_h, img_w, dtype):
-        if random.random() > self.probability:
-            return
+        # if random.random() > self.probability:
+        #     return
         area = img_h * img_w
+        flow._oneflow_internal.profiler.RangePush('count')
         count = (
             self.min_count
             if self.min_count == self.max_count
             else random.randint(self.min_count, self.max_count)
         )
+        flow._oneflow_internal.profiler.RangePop()
+        # print("test cont ----> ", count)
+        count = 2
         for _ in range(count):
             for attempt in range(10):
+                flow._oneflow_internal.profiler.RangePush('uniform-exp')
                 target_area = (
                     random.uniform(self.min_area, self.max_area) * area / count
                 )
                 aspect_ratio = math.exp(random.uniform(*self.log_aspect_ratio))
                 h = int(round(math.sqrt(target_area * aspect_ratio)))
                 w = int(round(math.sqrt(target_area / aspect_ratio)))
+                flow._oneflow_internal.profiler.RangePop()
                 if w < img_w and h < img_h:
+                    flow._oneflow_internal.profiler.RangePush('randint')
                     top = random.randint(0, img_h - h)
                     left = random.randint(0, img_w - w)
+                    flow._oneflow_internal.profiler.RangePop()
+                    flow._oneflow_internal.profiler.RangePush('slice')
                     img[:, top : top + h, left : left + w] = _get_pixels(
                         self.per_pixel,
                         self.rand_color,
@@ -95,9 +104,11 @@ class RandomErasing:
                         dtype=dtype,
                         device=self.device,
                     )
+                    flow._oneflow_internal.profiler.RangePop()
                     break
 
     def __call__(self, input):
+        flow._oneflow_internal.profiler.RangePush('RandomErasing')
         if len(input.size()) == 3:
             self._erase(input, *input.size(), input.dtype)
         else:
@@ -106,6 +117,7 @@ class RandomErasing:
             batch_start = batch_size // self.num_splits if self.num_splits > 1 else 0
             for i in range(batch_start, batch_size):
                 self._erase(input[i], chan, img_h, img_w, input.dtype)
+        flow._oneflow_internal.profiler.RangePop()
         return input
 
     def __repr__(self):

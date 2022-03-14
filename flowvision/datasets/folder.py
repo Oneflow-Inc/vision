@@ -7,6 +7,7 @@ from PIL import Image
 from typing import Any, Callable, cast, Dict, List, Optional, Tuple
 
 from .vision import VisionDataset
+import oneflow as flow
 
 
 def has_file_allowed_extension(filename: str, extensions: Tuple[str, ...]) -> bool:
@@ -231,12 +232,21 @@ class DatasetFolder(VisionDataset):
         Returns:
             tuple: (sample, target) where target is class_index of the target class.
         """
+        flow._oneflow_internal.profiler.RangePush('samples')
         path, target = self.samples[index]
+        flow._oneflow_internal.profiler.RangePop()
+        flow._oneflow_internal.profiler.RangePush('loader')
         sample = self.loader(path)
+        flow._oneflow_internal.profiler.RangePop()
         if self.transform is not None:
+            print(self.transform)
+            flow._oneflow_internal.profiler.RangePush('transform')
             sample = self.transform(sample)
+            flow._oneflow_internal.profiler.RangePop()
         if self.target_transform is not None:
+            flow._oneflow_internal.profiler.RangePush('target_transform')
             target = self.target_transform(target)
+            flow._oneflow_internal.profiler.RangePop()
 
         return sample, target
 

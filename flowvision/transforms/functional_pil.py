@@ -187,8 +187,10 @@ def crop(img: Image.Image, top: int, left: int, height: int, width: int) -> Imag
     if not _is_pil_image(img):
         raise TypeError("img should be PIL Image. Got {}".format(type(img)))
 
-    return img.crop((left, top, left + width, top + height))
-
+    flow._oneflow_internal.profiler.RangePush('f_pil.crop')
+    ret = img.crop((left, top, left + width, top + height))
+    flow._oneflow_internal.profiler.RangePop()
+    return ret
 
 def resize(img, size, interpolation=Image.BILINEAR):
     if not _is_pil_image(img):

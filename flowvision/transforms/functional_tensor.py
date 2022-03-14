@@ -153,7 +153,7 @@ def hflip(img: Tensor) -> Tensor:
 
 def crop(img: Tensor, top: int, left: int, height: int, width: int) -> Tensor:
     _assert_image_tensor(img)
-
+    flow._oneflow_internal.profiler.RangePush('f_t crop')
     w, h = _get_image_size(img)
     right = left + width
     bottom = top + height
@@ -165,10 +165,15 @@ def crop(img: Tensor, top: int, left: int, height: int, width: int) -> Tensor:
             max(right - w, 0),
             max(bottom - h, 0),
         ]
-        return pad(
+        ret = pad(
             img[..., max(top, 0) : bottom, max(left, 0) : right], padding_ltrb, fill=0
         )
-    return img[..., top:bottom, left:right]
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
+    ret = img[..., top:bottom, left:right]
+    flow._oneflow_internal.profiler.RangePop()
+    return ret
+
 
 
 def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:

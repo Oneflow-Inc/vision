@@ -74,10 +74,10 @@ def transforms_imagenet_train(
     scale = tuple(scale or (0.08, 1.0))  # default imagenet scale range
     ratio = tuple(ratio or (3.0 / 4.0, 4.0 / 3.0))  # default imagenet ratio range
     primary_tfl = [
-        transforms.RandomResizedCrop(
+        transforms.Resize(
             img_size,
-            scale=scale,
-            ratio=ratio,
+            # scale=scale,
+            # ratio=ratio,
             interpolation=str_to_interp_mode(interpolation),
         )
     ]
@@ -122,7 +122,7 @@ def transforms_imagenet_train(
         # prefetcher and collate will handle tensor conversion and norm
         final_tfl += [transforms.ToNumpy()]
     else:
-        final_tfl += [transforms.Normalize(mean=mean, std=std), transforms.ToTensor()]
+        final_tfl += [transforms.ToTensor(), transforms.Normalize(mean=mean, std=std)]
         if re_prob > 0.0:
             final_tfl.append(
                 RandomErasing(

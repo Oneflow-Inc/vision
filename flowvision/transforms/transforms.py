@@ -84,7 +84,10 @@ class ToTensor:
         Returns:
             Tensor: Converted image.
         """
-        return F.to_tensor(pic)
+        flow._oneflow_internal.profiler.RangePush('ToTensor')
+        ret = F.to_tensor(pic)
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
 
     def __repr__(self):
         return self.__class__.__name__ + "()"
@@ -207,7 +210,10 @@ class Normalize(Module):
         Returns:
             Tensor: Normalized Tensor image.
         """
-        return F.normalize(tensor, self.mean, self.std, self.inplace)
+        flow._oneflow_internal.profiler.RangePush('normalize')
+        out = F.normalize(tensor, self.mean, self.std, self.inplace)
+        flow._oneflow_internal.profiler.RangePop()
+        return out
 
     def __repr__(self):
         return self.__class__.__name__ + "(mean={0}, std={1})".format(
@@ -308,7 +314,10 @@ class CenterCrop(Module):
         Returns:
             PIL Image or Tensor: Cropped image.
         """
-        return F.center_crop(img, self.size)
+        flow._oneflow_internal.profiler.RangePush('CenterCrop')
+        ret = F.center_crop(img, self.size)
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
 
     def __repr__(self):
         return self.__class__.__name__ + "(size={0})".format(self.size)
@@ -610,6 +619,7 @@ class RandomCrop(Module):
         Returns:
             PIL Image or Tensor: Cropped image.
         """
+        flow._oneflow_internal.profiler.RangePush('RandomCrop:622')
         if self.padding is not None:
             img = F.pad(img, self.padding, self.fill, self.padding_mode)
 
@@ -625,7 +635,11 @@ class RandomCrop(Module):
 
         i, j, h, w = self.get_params(img, self.size)
 
-        return F.crop(img, i, j, h, w)
+        flow._oneflow_internal.profiler.RangePush('transforms crop')
+        ret= F.crop(img, i, j, h, w)
+        flow._oneflow_internal.profiler.RangePop()
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
 
     def __repr__(self):
         return self.__class__.__name__ + "(size={0}, padding={1})".format(
@@ -656,8 +670,12 @@ class RandomHorizontalFlip(Module):
             PIL Image or Tensor: Randomly flipped image.
         """
         # TODO: replace with flow.rand(1):
+        flow._oneflow_internal.profiler.RangePush('RandomHorizontalFlip')
         if np.random.rand(1) < self.p:
-            return F.hflip(img)
+            ret = F.hflip(img)
+            flow._oneflow_internal.profiler.RangePop()
+            return ret
+        flow._oneflow_internal.profiler.RangePop()
         return img
 
     def __repr__(self):
@@ -808,8 +826,15 @@ class RandomResizedCrop(Module):
         Returns:
             PIL Image or Tensor: Randomly cropped and resized image.
         """
+        flow._oneflow_internal.profiler.RangePush('RandomResizedCrop')
+        flow._oneflow_internal.profiler.RangePush('get_params')
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
-        return F.resized_crop(img, i, j, h, w, self.size, self.interpolation)
+        flow._oneflow_internal.profiler.RangePop()
+        flow._oneflow_internal.profiler.RangePush('F.resized_crop')
+        ret = F.resized_crop(img, i, j, h, w, self.size, self.interpolation)
+        flow._oneflow_internal.profiler.RangePop()
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
 
     def __repr__(self):
         interpolate_str = self.interpolation.value

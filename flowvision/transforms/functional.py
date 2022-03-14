@@ -139,6 +139,7 @@ def to_tensor(pic):
     Returns:
         Tensor: Converted image.
     """
+    flow._oneflow_internal.profiler.RangePush('to_tensor 1')
     if not (_is_pil_image(pic) or _is_numpy(pic)):
         raise TypeError("pic should be PIL Image or ndarray. Got {}".format(type(pic)))
 
@@ -175,19 +176,26 @@ def to_tensor(pic):
         dtype = flow.int32
     else:
         dtype = flow.float32
-
+    flow._oneflow_internal.profiler.RangePop()
+    flow._oneflow_internal.profiler.RangePush('tensor')
     img = flow.tensor(
         np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True), dtype=dtype,
     )
-
+    flow._oneflow_internal.profiler.RangePop()
+    
     if pic.mode == "1":
         img = 255 * img
-
+    flow._oneflow_internal.profiler.RangePush('reshape')
     img = flow._C.reshape(img, shape=(pic.size[1], pic.size[0], len(pic.getbands())))
+    flow._oneflow_internal.profiler.RangePop()
     # put it from HWC to CHW format
+    flow._oneflow_internal.profiler.RangePush('transpose')
     res = flow._C.transpose(img, perm=[2, 0, 1])
+    flow._oneflow_internal.profiler.RangePop()
+    flow._oneflow_internal.profiler.RangePush('cast')
     if img.dtype == flow.int:
         res = flow._C.cast(res, dtype=default_float_dtype).div(255)
+    flow._oneflow_internal.profiler.RangePop()
     return res
 
 
@@ -390,6 +398,7 @@ def normalize(
     Returns:
         Tensor: Normalized Tensor image.
     """
+    flow._oneflow_internal.profiler.RangePush('normalize')
     if isinstance(tensor, Image.Image):
         tensor = tensor.convert("RGB")
         im = np.array(tensor).astype(np.float32)
@@ -412,25 +421,34 @@ def normalize(
             "Expected tensor to be a tensor image of size (..., C, H, W). Got tensor.size() = "
             "{}.".format(tensor.size())
         )
-
+    flow._oneflow_internal.profiler.RangePush('clone')
     if not inplace:
         tensor = tensor.clone()
-
+    flow._oneflow_internal.profiler.RangePop()
     dtype = tensor.dtype
+    flow._oneflow_internal.profiler.RangePush('as_tensor')
     mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
     std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
+    flow._oneflow_internal.profiler.RangePop()
+
+    flow._oneflow_internal.profiler.RangePush('any')
     if (std == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
                 dtype
             )
         )
+    flow._oneflow_internal.profiler.RangePop()
+    flow._oneflow_internal.profiler.RangePush('reshape')
     if mean.ndim == 1:
         mean = flow._C.reshape(mean, shape=(-1, 1, 1))
     if std.ndim == 1:
         std = flow._C.reshape(std, shape=(-1, 1, 1))
     # tensor.sub_(mean).div_(std)
-    return flow._C.div(flow._C.sub(tensor, mean), std)
+    flow._oneflow_internal.profiler.RangePop()
+    out = flow._C.div(flow._C.sub(tensor, mean), std)
+    flow._oneflow_internal.profiler.RangePop()
+    return out
 
 
 def resize(
@@ -459,6 +477,7 @@ def resize(
         PIL Image or Tensor: Resized image.
     """
     # Backward compatibility with integer value
+    flow._oneflow_internal.profiler.RangePush('resize')
     if isinstance(interpolation, int):
         warnings.warn(
             "Argument interpolation should be of type InterpolationMode instead of int. "
@@ -471,9 +490,13 @@ def resize(
 
     if not isinstance(img, (flow.Tensor, flow._oneflow_internal.Tensor)):
         pil_interpolation = pil_modes_mapping[interpolation]
-        return F_pil.resize(img, size=size, interpolation=pil_interpolation)
+        ret = F_pil.resize(img, size=size, interpolation=pil_interpolation)
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
 
-    return F_t.resize(img, size=size, interpolation=interpolation.value)
+    out = F_t.resize(img, size=size, interpolation=interpolation.value)
+    flow._oneflow_internal.profiler.RangePop()
+    return out
 
 
 def scale(*args, **kwargs):
@@ -548,9 +571,14 @@ def crop(img: Tensor, top: int, left: int, height: int, width: int) -> Tensor:
     """
 
     if not isinstance(img, flow.Tensor):
-        return F_pil.crop(img, top, left, height, width)
-
-    return F_t.crop(img, top, left, height, width)
+        flow._oneflow_internal.profiler.RangePush('crop not isinstance')
+        ret = F_pil.crop(img, top, left, height, width)
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
+    flow._oneflow_internal.profiler.RangePush('f.crop')
+    ret = F_t.crop(img, top, left, height, width)
+    flow._oneflow_internal.profiler.RangePop()
+    return ret
 
 
 def center_crop(img: Tensor, output_size: List[int]) -> Tensor:
@@ -623,8 +651,12 @@ def resized_crop(
     Returns:
         PIL Image or Tensor: Cropped image.
     """
+    flow._oneflow_internal.profiler.RangePush('crop')
     img = crop(img, top, left, height, width)
+    flow._oneflow_internal.profiler.RangePop()
+    flow._oneflow_internal.profiler.RangePush('resize')
     img = resize(img, size, interpolation)
+    flow._oneflow_internal.profiler.RangePop()
     return img
 
 
