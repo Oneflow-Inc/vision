@@ -445,7 +445,7 @@ def regnet_y_400mf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_400MF architecture from
+    Constructs a RegNetY-400MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -470,7 +470,7 @@ def regnet_y_800mf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_800MF architecture from
+    Constructs a RegNetY-800MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -495,7 +495,7 @@ def regnet_y_1_6gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_1.6GF architecture from
+    Constructs a RegNetY-1.6GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -520,7 +520,7 @@ def regnet_y_3_2gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_3.2GF architecture from
+    Constructs a RegNetY-3.2GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -545,7 +545,7 @@ def regnet_y_8gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_8GF architecture from
+    Constructs a RegNetY-8GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -570,7 +570,7 @@ def regnet_y_16gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_16GF architecture from
+    Constructs a RegNetY-16GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -601,7 +601,7 @@ def regnet_y_32gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_32GF architecture from
+    Constructs a RegNetY-32GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -632,7 +632,7 @@ def regnet_y_128gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetY_128GF architecture from
+    Constructs a RegNetY-128GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     NOTE: Pretrained weights are not available for this model.
@@ -661,7 +661,7 @@ def regnet_x_400mf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_400MF architecture from
+    Constructs a RegNetX-400MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -686,7 +686,7 @@ def regnet_x_800mf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_800MF architecture from
+    Constructs a RegNetX-800MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -711,7 +711,7 @@ def regnet_x_1_6gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_1.6GF architecture from
+    Constructs a RegNetX-1.6GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -736,7 +736,7 @@ def regnet_x_3_2gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_3.2GF architecture from
+    Constructs a RegNetX-3.2GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -761,7 +761,7 @@ def regnet_x_8gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_8GF architecture from
+    Constructs a RegNetX-8GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -786,7 +786,7 @@ def regnet_x_16gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_16GF architecture from
+    Constructs a RegNetX-16GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
@@ -811,7 +811,7 @@ def regnet_x_32gf(
     pretrained: bool = False, progress: bool = True, **kwargs: Any
 ) -> RegNet:
     """
-    Constructs a RegNetX_32GF architecture from
+    Constructs a RegNetX-32GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
     
     Args:
