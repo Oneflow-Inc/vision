@@ -183,8 +183,8 @@ def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
     if num_output_channels not in (1, 3):
         raise ValueError("num_output_channels should be either 1 or 3")
 
-    #TODO: replace split with unbind
-    r, g, b = img.split([1,1,1], -3)
+    # TODO: replace split with unbind
+    r, g, b = img.split([1, 1, 1], -3)
 
     # This implementation closely follows the TF one:
     # https://github.com/tensorflow/tensorflow/blob/v2.3.0/tensorflow/python/ops/image_ops_impl.py#L2105-L2138
