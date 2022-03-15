@@ -1,8 +1,17 @@
 $(document).ready(function()
    {
-	   $(".toc-tree ul li ul li ul").hide();
-	   $(".toc-tree ul li ul li").click(function()
-	   {
-           $(".toc-tree ul li ul li ul").toggle();
+		var parent = $(".toc-tree ul li ul li");
+		parent.css("list-style-image", "url(_static/plus.png)");
+		var ulNode = $(".toc-tree ul li ul li ul");
+	    ulNode.hide();
+	  	parent.click(function()
+	    {
+			if (ulNode.css("display") == "none") {
+					ulNode.css("display", "block")
+					parent.css("list-style-image", "url(_static/minus.png)");
+				} else {
+					ulNode.css("display", "none")
+					parent.css("list-style-image", "url(_static/plus.png)");
+				}
 	   });
    });
