@@ -82,6 +82,7 @@ pip install flowvision==0.1.0
             <li>RegionViT</li>
             <li>UniFormer</li>
             <li>VAN</li>
+            <li>LeViT</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>
