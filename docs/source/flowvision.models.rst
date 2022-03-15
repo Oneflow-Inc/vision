@@ -487,21 +487,79 @@ VAN
         van_large,
         
 
-Neural Style
-============
+Neural Style Transfer
+==============
 
 .. currentmodule:: flowvision.models
-.. automodule:: flowvision.models
+
+.. automodule:: flowvision.models.style_transfer
     :members:
-        neural_style_transfer,
+        fast_neural_style,
 
 
 Face Recognition
-============
+==============
+.. currentmodule:: flowvision.models
+.. automodule:: flowvision.models.face_recognition
+    :members:
+        iresnet50,
+        iresnet101,
+
+Semantic Segmentation
+==============
 
 .. currentmodule:: flowvision.models
-.. automodule:: flowvision.models
-    :members:
-        face_recognition,
 
+FCN
+--------
+.. automodule:: flowvision.models.segmentation
+    :members:
+        fcn_resnet50_coco,
+        fcn_resnet101_coco,
+
+DeepLabV3
+--------
+.. automodule:: flowvision.models.segmentation
+    :members:
+        deeplabv3_resnet50_coco,
+        deeplabv3_resnet101_coco,
+        deeplabv3_mobilenet_v3_large_coco,
+
+LRASPP
+--------
+.. automodule:: flowvision.models.segmentation
+    :members:
+        lraspp_mobilenet_v3_large_coco,
+
+
+Object Detection
+==============
+
+.. currentmodule:: flowvision.models
+
+Faster R-CNN
+--------
+.. automodule:: flowvision.models.detection
+    :members:
+        fasterrcnn_resnet50_fpn,
+        fasterrcnn_mobilenet_v3_large_320_fpn,
+        fasterrcnn_mobilenet_v3_large_fpn,
+
+RetinaNet
+--------
+.. automodule:: flowvision.models.detection
+    :members:
+        retinanet_resnet50_fpn,
+
+SSD
+--------
+.. automodule:: flowvision.models.detection
+    :members:
+        ssd300_vgg16,
+
+SSDLite
+--------
+.. automodule:: flowvision.models.detection
+    :members:
+        ssdlite320_mobilenet_v3_large,
 

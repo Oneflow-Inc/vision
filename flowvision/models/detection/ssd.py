@@ -638,6 +638,14 @@ def ssd300_vgg16(
         pretrained_backbone (bool): If True, returns a model with backbone pre-trained on Imagenet
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 5, with 5 meaning all backbone layers are trainable.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> ssd300_vgg16 = flowvision.models.detection.ssd300_vgg16(pretrained=False, progress=True)
+
     """
     if "size" in kwargs:
         warnings.warn("The size of the model is already fixed; ignoring the argument.")

@@ -23,7 +23,12 @@ from .backbone_utils import (
 )
 
 
-__all__ = ["FasterRCNN", "fasterrcnn_resnet50_fpn"]
+__all__ = [
+    "FasterRCNN",
+    "fasterrcnn_resnet50_fpn",
+    "fasterrcnn_mobilenet_v3_large_320_fpn",
+    "fasterrcnn_mobilenet_v3_large_fpn",
+]
 
 
 model_urls = {
@@ -335,6 +340,14 @@ def fasterrcnn_resnet50_fpn(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 5, with 5 meaning all backbone layers are trainable. If ``None`` is
             passed (the default) this value is set to 3.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_resnet50_fpn = flowvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=False, progress=True)
+
     """
     trainable_backbone_layers = _validate_trainable_layers(
         pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
@@ -424,6 +437,14 @@ def fasterrcnn_mobilenet_v3_large_320_fpn(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 6, with 6 meaning all backbone layers are trainable. If ``None`` is
             passed (the default) this value is set to 3.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_mobilenet_v3_large_320_fpn = flowvision.models.detection.fasterrcnn_mobilenet_v3_large_320_fpn(pretrained=False, progress=True)
+
     """
     weights_name = "fasterrcnn_mobilenet_v3_large_320_fpn_coco"
     defaults = {
@@ -469,6 +490,14 @@ def fasterrcnn_mobilenet_v3_large_fpn(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 6, with 6 meaning all backbone layers are trainable. If ``None`` is
             passed (the default) this value is set to 3.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_mobilenet_v3_large_fpn = flowvision.models.detection.fasterrcnn_mobilenet_v3_large_fpn(pretrained=False, progress=True)
+
     """
     weights_name = "fasterrcnn_mobilenet_v3_large_fpn_coco"
     defaults = {
