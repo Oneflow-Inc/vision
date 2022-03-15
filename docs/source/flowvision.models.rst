@@ -42,6 +42,7 @@ architectures for image classification:
 -  `ConvNeXt`_
 -  `RegionViT`_
 -  `VAN`_
+_  `LeViT`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -78,6 +79,7 @@ architectures for image classification:
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
 .. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
 .. _VAN: https://arxiv.org/pdf/2202.09741.pdf
+.. _LeViT: https://arxiv.org/pdf/2104.01136.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -486,6 +488,17 @@ VAN
         van_base,
         van_large,
         
+
+LeViT
+--------
+.. automodule:: flowvision.models
+    :members:
+        LeViT_128S,
+        LeViT_128,
+        LeViT_192,
+        LeViT_256,
+        LeViT_384,
+
 
 Neural Style
 ============
