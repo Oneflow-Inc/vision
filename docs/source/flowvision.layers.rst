@@ -3,6 +3,9 @@ flowvision.layers
 
 Plug and Play Modules or Functions that are specific for Computer Vision Tasks
 
+Layers
+==============================
+
 .. currentmodule:: flowvision.layers
 .. automodule:: flowvision.layers
     :members:
