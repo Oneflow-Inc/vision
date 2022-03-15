@@ -446,7 +446,9 @@ def normalize(
         std = flow._C.reshape(std, shape=(-1, 1, 1))
     # tensor.sub_(mean).div_(std)
     flow._oneflow_internal.profiler.RangePop()
+    flow._oneflow_internal.profiler.RangePush('sub div')
     out = flow._C.div(flow._C.sub(tensor, mean), std)
+    flow._oneflow_internal.profiler.RangePop()
     flow._oneflow_internal.profiler.RangePop()
     return out
 
