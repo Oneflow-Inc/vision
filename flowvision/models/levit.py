@@ -4,7 +4,6 @@ Modified from https://github.com/facebookresearch/LeViT
 import itertools
 
 import oneflow as flow
-from torch import ne
 
 from flowvision.layers import trunc_normal_
 from .utils import load_state_dict_from_url
