@@ -9,7 +9,7 @@ from ..registry import ModelCreator
 from ..utils import load_state_dict_from_url
 
 
-__all__ = ["NeuralStyleTransfer", "neural_style_transfer"]
+__all__ = ["FastNeuralStyle", "fast_neural_style"]
 
 
 style_model_urls = {
@@ -80,9 +80,9 @@ class UpsampleConvLayer(flow.nn.Module):
         return out
 
 
-class NeuralStyleTransfer(flow.nn.Module):
+class FastNeuralStyle(flow.nn.Module):
     def __init__(self):
-        super(NeuralStyleTransfer, self).__init__()
+        super(FastNeuralStyle, self).__init__()
         # Initial convolution layers
         self.conv1 = ConvLayer(3, 32, kernel_size=9, stride=1)
         self.in1 = flow.nn.InstanceNorm2d(32, affine=True)
@@ -122,14 +122,14 @@ class NeuralStyleTransfer(flow.nn.Module):
 
 
 @ModelCreator.register_model
-def neural_style_transfer(
+def fast_neural_style(
     pretrained: bool = False,
     progress: bool = True,
     style_model: str = "sketch",
     **kwargs: Any
-) -> NeuralStyleTransfer:
+) -> FastNeuralStyle:
     """
-    Constructs the Neural Style Transfer model.
+    Constructs the Fast Neural Style Transfer model.
 
     .. note::
         `Perceptual Losses for Real-Time Style Transfer and Super-Resolution <https://arxiv.org/abs/1603.08155>`_.
@@ -146,14 +146,14 @@ def neural_style_transfer(
     .. code-block:: python
 
         >>> import flowvision
-        >>> neural_style_transfer = flowvision.models.neural_style_transfer(pretrained=True, progress=True, style_model = "sketch")
+        >>> stylenet = flowvision.models.style_transfer.fast_neural_style(pretrained=True, progress=True, style_model = "sketch")
 
     """
     assert (
         style_model in style_model_urls.keys()
     ), "`style_model` must choose from [sketch, candy, mosaic, rain_princess, udnie]"
 
-    model = NeuralStyleTransfer(**kwargs)
+    model = FastNeuralStyle(**kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(
             style_model_urls[style_model], progress=progress

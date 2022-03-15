@@ -220,29 +220,29 @@ We have conducted all the tests under the same setting, please refer to the mode
 ### Create a model
 In flowvision we support two ways to create a model.
 
-- First, import the target model from `flowvision.models`, e.g., create `alexnet` from flowvision
+- Import the target model from `flowvision.models`, e.g., create `alexnet` from flowvision
 
 ```python
 from flowvision.models.alexnet import alexnet
 model = alexnet()
+
+# will download the pretrained model
+model = alexnet(pretrained=True)
+
+# customize model to fit different number of classes
+model = alexnet(num_classes=100)
 ```
 
-- Second, create model in an easier way by using `ModelCreator`, e.g., create `alexnet` model by `ModelCreator`
+- Or create model in an easier way by using `ModelCreator`, e.g., create `alexnet` model by `ModelCreator`
 ```python
 from flowvision.models import ModelCreator
 alexnet = ModelCreator.create_model("alexnet")
-```
 
-- To create a pretrained model, simply pass `pretrained=True` into `ModelCreator.create_model` function
-```python
-from flowvision.models import ModelCreator
+# will download the pretrained model
 alexnet = ModelCreator.create_model("alexnet", pretrained=True)
-```
 
-- To create a custom model to fit different number of classes, simply pass `num_classes=<number of class>` into `ModelCreator.create_model` function
-```python
-from flowvision.models import ModelCreator
-model = ModelCreator.create_model("alexnet", num_classes=100)
+# customize model to fit different number of classes
+alexnet = ModelCreator.create_model("alexnet", num_classes=100)
 ```
 
 ### Tabulate all models with pretrained weights
