@@ -32,7 +32,7 @@ from .senet import *
 from .van import *
 from .levit import *
 
-from . import neural_style_transfer
+from . import style_transfer
 from . import detection
 from . import segmentation
 from . import face_recognition

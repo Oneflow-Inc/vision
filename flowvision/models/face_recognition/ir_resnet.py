@@ -234,7 +234,7 @@ def iresnet50(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnest50 = flowvision.models.iresnest50(pretrained=False, progress=True)
+        >>> resnest50 = flowvision.models.face_recognition.iresnest50(pretrained=False, progress=True)
 
     """
     return _iresnet(
@@ -259,7 +259,7 @@ def iresnet101(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> iresnest101 = flowvision.models.iresnest101(pretrained=False, progress=True)
+        >>> iresnest101 = flowvision.models.face_recognition.iresnest101(pretrained=False, progress=True)
 
     """
     return _iresnet(
