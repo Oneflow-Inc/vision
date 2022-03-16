@@ -155,6 +155,7 @@ def main(args):
     print(args)
 
     device = flow.device(args.device)
+    flow.backends.cudnn.set_reserved_mem_mbytes(int(args.batch_size / 32 * 1024))
 
     # Data loading code
     print("Loading data")
@@ -212,10 +213,9 @@ def main(args):
     model = ModelCreator.create_model(args.model, pretrained=args.pretrained)
     model.to(device)
 
-    model_without_ddp = model
     if args.distributed:
+        model.train()
         model = flow.nn.parallel.DistributedDataParallel(model, broadcast_buffers=False)
-        model_without_ddp = model
 
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = flow.optim.SGD(
@@ -239,7 +239,7 @@ def main(args):
 
     if args.resume:
         checkpoint = flow.load(args.resume, map_location="cpu")
-        model_without_ddp.load_state_dict(checkpoint["model"])
+        model.load_state_dict(checkpoint["model"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
         args.start_epoch = checkpoint["epoch"] + 1
@@ -257,7 +257,7 @@ def main(args):
         lr_scheduler.step()
         if args.output_dir:
             checkpoint = {
-                "model": model_without_ddp.state_dict(),
+                "model": model.state_dict(),
                 "optimizer": optimizer.state_dict(),
                 "lr_scheduler": lr_scheduler.state_dict(),
                 "args": args,

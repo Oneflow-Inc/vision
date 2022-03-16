@@ -1,6 +1,7 @@
 import oneflow as flow
 from oneflow import Tensor
 from typing import Tuple
+import numpy as np
 
 
 def nms(boxes: Tensor, scores: Tensor, iou_threshold: float) -> Tensor:
@@ -163,5 +164,30 @@ def box_iou(boxes1: Tensor, boxes2: Tensor) -> Tensor:
         Tensor[N, M]: the NxM matrix containing the pairwise IoU values for every element in boxes 1 and boxes2
     """
     inter, union = _box_inter_union(boxes1, boxes2)
+    iou = inter / union
+    return iou
+
+
+def box_area_np(boxes):
+    return (boxes[:, 2] - boxes[:, 0]) * (boxes[:, 3] - boxes[:, 1])
+
+
+def _box_inter_union_np(boxes1, boxes2):
+    area1 = box_area_np(boxes1)
+    area2 = box_area_np(boxes2)
+
+    lt = np.maximum(boxes1[:, None, :2], boxes2[:, :2])
+    rb = np.minimum(boxes1[:, None, 2:], boxes2[:, 2:])
+
+    wh = (rb - lt).clip(min=0)
+    inter = wh[:, :, 0] * wh[:, :, 1]
+
+    union = area1[:, None] + area2 - inter
+
+    return inter, union
+
+
+def box_iou_np(boxes1, boxes2):
+    inter, union = _box_inter_union_np(boxes1, boxes2)
     iou = inter / union
     return iou
