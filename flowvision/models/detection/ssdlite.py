@@ -253,6 +253,14 @@ def ssdlite320_mobilenet_v3_large(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 6, with 6 meaning all backbone layers are trainable.
         norm_layer (callable, optional): Module specifying the normalization layer to use.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> ssdlite320_mobilenet_v3_large = flowvision.models.detection.ssdlite320_mobilenet_v3_large(pretrained=False, progress=True)
+
     """
     if "size" in kwargs:
         warnings.warn("The size of the model is already fixed; ignoring the argument.")

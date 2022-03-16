@@ -127,6 +127,14 @@ def fcn_resnet50_coco(
         progress (bool): If True, displays a progress bar of the download to stderr
         num_classes (int): number of output classes of the model (including the background)
         aux_loss (bool): If True, it uses an auxiliary loss
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deeplabv3_mobilenet_v3_large_coco = flowvision.models.segmentation.fcn_resnet50_coco(pretrained=True, progress=True)
+
     """
     return _load_model(
         "fcn", "resnet50", pretrained, progress, num_classes, aux_loss, **kwargs
@@ -144,6 +152,14 @@ def fcn_resnet101_coco(
         progress (bool): If True, displays a progress bar of the download to stderr
         num_classes (int): number of output classes of the model (including the background)
         aux_loss (bool): If True, it uses an auxiliary loss
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deeplabv3_mobilenet_v3_large_coco = flowvision.models.segmentation.fcn_resnet101_coco(pretrained=True, progress=True)
+
     """
     return _load_model(
         "fcn", "resnet101", pretrained, progress, num_classes, aux_loss, **kwargs
