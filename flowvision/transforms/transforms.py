@@ -1208,8 +1208,8 @@ class RandomGrayscale(Module):
 
     def __init__(self, p=0.1):
         super().__init__()
-        
-        assert 0. <= p <= 1.
+
+        assert 0.0 <= p <= 1.0
 
         self.p = p
 
@@ -1227,7 +1227,7 @@ class RandomGrayscale(Module):
         return img
 
     def __repr__(self):
-        return self.__class__.__name__ + '(p={0})'.format(self.p)
+        return self.__class__.__name__ + "(p={0})".format(self.p)
 
 
 def _setup_size(size, error_msg):

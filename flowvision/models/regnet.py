@@ -55,6 +55,7 @@ model_urls = {
     "regnet_x_32gf": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/RegNet/regnet_x_32gf.zip",
 }
 
+
 class SimpleStemIN(ConvBnAct):
     """Simple stem for ImageNet: 3x3, BN, ReLU."""
 
@@ -66,7 +67,12 @@ class SimpleStemIN(ConvBnAct):
         activation_layer: Callable[..., nn.Module],
     ) -> None:
         super().__init__(
-            width_in, width_out, kernel_size=3, stride=2, norm_layer=norm_layer, act_layer=activation_layer
+            width_in,
+            width_out,
+            kernel_size=3,
+            stride=2,
+            norm_layer=norm_layer,
+            act_layer=activation_layer,
         )
 
 
@@ -89,10 +95,22 @@ class BottleneckTransform(nn.Sequential):
         g = w_b // group_width
 
         layers["a"] = ConvBnAct(
-            width_in, w_b, kernel_size=1, stride=1, norm_layer=norm_layer, act_layer=activation_layer
+            width_in,
+            w_b,
+            kernel_size=1,
+            stride=1,
+            norm_layer=norm_layer,
+            act_layer=activation_layer,
         )
         layers["b"] = ConvBnAct(
-            w_b, w_b, kernel_size=3, stride=stride, groups=g, norm_layer=norm_layer, act_layer=activation_layer, padding=1
+            w_b,
+            w_b,
+            kernel_size=3,
+            stride=stride,
+            groups=g,
+            norm_layer=norm_layer,
+            act_layer=activation_layer,
+            padding=1,
         )
 
         if se_ratio:
@@ -100,15 +118,19 @@ class BottleneckTransform(nn.Sequential):
             # beginning of the block
             width_se_out = int(round(se_ratio * width_in))
             layers["se"] = SqueezeExcitation(
-                channels=w_b,
-                rd_channels=width_se_out,
-                act_layer=activation_layer,
+                channels=w_b, rd_channels=width_se_out, act_layer=activation_layer,
             )
 
         layers["c"] = ConvBnAct(
-            w_b, width_out, kernel_size=1, stride=1, norm_layer=norm_layer, act_layer=None
+            w_b,
+            width_out,
+            kernel_size=1,
+            stride=1,
+            norm_layer=norm_layer,
+            act_layer=None,
         )
         super().__init__(layers)
+
 
 class ResBottleneckBlock(nn.Module):
     """Residual bottleneck block: x + F(x), F = bottleneck transform."""
@@ -131,7 +153,12 @@ class ResBottleneckBlock(nn.Module):
         should_proj = (width_in != width_out) or (stride != 1)
         if should_proj:
             self.proj = ConvBnAct(
-                width_in, width_out, kernel_size=1, stride=stride, norm_layer=norm_layer, act_layer=None
+                width_in,
+                width_out,
+                kernel_size=1,
+                stride=stride,
+                norm_layer=norm_layer,
+                act_layer=None,
             )
         self.f = BottleneckTransform(
             width_in,
@@ -151,6 +178,7 @@ class ResBottleneckBlock(nn.Module):
         else:
             x = x + self.f(x)
         return self.activation(x)
+
 
 class AnyStage(nn.Sequential):
     """AnyNet stage (sequence of blocks w/ the same output shape)."""
@@ -184,6 +212,7 @@ class AnyStage(nn.Sequential):
             )
 
             self.add_module(f"block{stage_index}-{i}", block)
+
 
 class BlockParams:
     def __init__(
@@ -239,8 +268,12 @@ class BlockParams:
         # Compute the block widths. Each stage has one unique block width
         widths_cont = flow.arange(depth) * w_a + w_0
         block_capacity = flow.round(flow.log(widths_cont / w_0) / math.log(w_m))
-        w_m = flow.zeros_like(block_capacity)+w_m
-        block_widths = (flow.round(w_0 * flow.pow(w_m, block_capacity)/ QUANT) * QUANT).int().tolist()
+        w_m = flow.zeros_like(block_capacity) + w_m
+        block_widths = (
+            (flow.round(w_0 * flow.pow(w_m, block_capacity) / QUANT) * QUANT)
+            .int()
+            .tolist()
+        )
         num_stages = len(set(block_widths))
 
         # Convert to per stage parameters
@@ -255,7 +288,9 @@ class BlockParams:
         stage_widths = [w for w, t in zip(block_widths, splits[:-1]) if t]
         # flow.diff?
         # stage_depths = torch.diff(torch.tensor([d for d, t in enumerate(splits) if t])).int().tolist()
-        stage_depths = np.diff(np.array([d for d, t in enumerate(splits) if t])).tolist()
+        stage_depths = np.diff(
+            np.array([d for d, t in enumerate(splits) if t])
+        ).tolist()
 
         strides = [STRIDE] * num_stages
         bottleneck_multipliers = [bottleneck_multiplier] * num_stages
@@ -276,7 +311,13 @@ class BlockParams:
         )
 
     def _get_expanded_params(self):
-        return zip(self.widths, self.strides, self.depths, self.group_widths, self.bottleneck_multipliers)
+        return zip(
+            self.widths,
+            self.strides,
+            self.depths,
+            self.group_widths,
+            self.bottleneck_multipliers,
+        )
 
     @staticmethod
     def _adjust_widths_groups_compatibilty(
@@ -291,9 +332,12 @@ class BlockParams:
         group_widths_min = [min(g, w_bot) for g, w_bot in zip(group_widths, widths)]
 
         # Compute the adjusted widths so that stage and group widths fit
-        ws_bot = [make_divisible(w_bot, g) for w_bot, g in zip(widths, group_widths_min)]
+        ws_bot = [
+            make_divisible(w_bot, g) for w_bot, g in zip(widths, group_widths_min)
+        ]
         stage_widths = [int(w_bot / b) for w_bot, b in zip(ws_bot, bottleneck_ratios)]
         return stage_widths, group_widths_min
+
 
 class RegNet(nn.Module):
     def __init__(
@@ -318,22 +362,14 @@ class RegNet(nn.Module):
             activation = nn.ReLU
 
         # Ad hoc stem
-        self.stem = stem_type(
-            3,  # width_in
-            stem_width,
-            norm_layer,
-            activation,
-        )
+        self.stem = stem_type(3, stem_width, norm_layer, activation,)  # width_in
 
         current_width = stem_width
 
         blocks = []
-        for i, (
-            width_out,
-            stride,
-            depth,
-            group_width,
-            bottleneck_multiplier,
+        for (
+            i,
+            (width_out, stride, depth, group_width, bottleneck_multiplier,),
         ) in enumerate(block_params._get_expanded_params()):
             blocks.append(
                 (
@@ -385,8 +421,16 @@ class RegNet(nn.Module):
         return x
 
 
-def _regnet(arch: str, block_params: BlockParams, pretrained: bool, progress: bool, **kwargs: Any) -> RegNet:
-    norm_layer = kwargs.pop("norm_layer", partial(nn.BatchNorm2d, eps=1e-05, momentum=0.1))
+def _regnet(
+    arch: str,
+    block_params: BlockParams,
+    pretrained: bool,
+    progress: bool,
+    **kwargs: Any,
+) -> RegNet:
+    norm_layer = kwargs.pop(
+        "norm_layer", partial(nn.BatchNorm2d, eps=1e-05, momentum=0.1)
+    )
     model = RegNet(block_params, norm_layer=norm_layer, **kwargs)
     if pretrained:
         if arch not in model_urls:
@@ -395,8 +439,11 @@ def _regnet(arch: str, block_params: BlockParams, pretrained: bool, progress: bo
         model.load_state_dict(state_dict)
     return model
 
+
 @ModelCreator.register_model
-def regnet_y_400mf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_400mf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_400MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -412,11 +459,16 @@ def regnet_y_400mf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> import flowvision
         >>> regnet_y_400mf = flowvision.models.regnet_y_400mf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=16, w_0=48, w_a=27.89, w_m=2.09, group_width=8, se_ratio=0.25, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=16, w_0=48, w_a=27.89, w_m=2.09, group_width=8, se_ratio=0.25, **kwargs
+    )
     return _regnet("regnet_y_400mf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_800mf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_800mf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_800MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -432,11 +484,16 @@ def regnet_y_800mf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> import flowvision
         >>> regnet_y_800mf = flowvision.models.regnet_y_800mf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=14, w_0=56, w_a=38.84, w_m=2.4, group_width=16, se_ratio=0.25, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=14, w_0=56, w_a=38.84, w_m=2.4, group_width=16, se_ratio=0.25, **kwargs
+    )
     return _regnet("regnet_y_800mf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_1_6gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_1_6gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_1.6GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -457,8 +514,11 @@ def regnet_y_1_6gf(pretrained: bool = False, progress: bool = True, **kwargs: An
     )
     return _regnet("regnet_y_1_6gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_3_2gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_3_2gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_3.2GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -479,8 +539,11 @@ def regnet_y_3_2gf(pretrained: bool = False, progress: bool = True, **kwargs: An
     )
     return _regnet("regnet_y_3_2gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_8gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_8gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_8GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -501,8 +564,11 @@ def regnet_y_8gf(pretrained: bool = False, progress: bool = True, **kwargs: Any)
     )
     return _regnet("regnet_y_8gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_16gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_16gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_16GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -519,12 +585,21 @@ def regnet_y_16gf(pretrained: bool = False, progress: bool = True, **kwargs: Any
         >>> regnet_y_16gf = flowvision.models.regnet_y_16gf(pretrained=False, progress=True)
     """
     params = BlockParams.from_init_params(
-        depth=18, w_0=200, w_a=106.23, w_m=2.48, group_width=112, se_ratio=0.25, **kwargs
+        depth=18,
+        w_0=200,
+        w_a=106.23,
+        w_m=2.48,
+        group_width=112,
+        se_ratio=0.25,
+        **kwargs,
     )
     return _regnet("regnet_y_16gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_32gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_32gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_32GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -541,12 +616,21 @@ def regnet_y_32gf(pretrained: bool = False, progress: bool = True, **kwargs: Any
         >>> regnet_y_32gf = flowvision.models.regnet_y_32gf(pretrained=False, progress=True)
     """
     params = BlockParams.from_init_params(
-        depth=20, w_0=232, w_a=115.89, w_m=2.53, group_width=232, se_ratio=0.25, **kwargs
+        depth=20,
+        w_0=232,
+        w_a=115.89,
+        w_m=2.53,
+        group_width=232,
+        se_ratio=0.25,
+        **kwargs,
     )
     return _regnet("regnet_y_32gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_y_128gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_y_128gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetY_128GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -561,12 +645,21 @@ def regnet_y_128gf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> regnet_y_128gf = flowvision.models.regnet_y_128gf(pretrained=False, progress=True)
     """
     params = BlockParams.from_init_params(
-        depth=27, w_0=456, w_a=160.83, w_m=2.52, group_width=264, se_ratio=0.25, **kwargs
+        depth=27,
+        w_0=456,
+        w_a=160.83,
+        w_m=2.52,
+        group_width=264,
+        se_ratio=0.25,
+        **kwargs,
     )
     return _regnet("regnet_y_128gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_400mf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_400mf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_400MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -582,11 +675,16 @@ def regnet_x_400mf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> import flowvision
         >>> regnet_x_400mf = flowvision.models.regnet_x_400mf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=22, w_0=24, w_a=24.48, w_m=2.54, group_width=16, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=22, w_0=24, w_a=24.48, w_m=2.54, group_width=16, **kwargs
+    )
     return _regnet("regnet_x_400mf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_800mf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_800mf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_800MF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -602,11 +700,16 @@ def regnet_x_800mf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> import flowvision
         >>> regnet_x_800mf = flowvision.models.regnet_x_800mf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=16, w_0=56, w_a=35.73, w_m=2.28, group_width=16, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=16, w_0=56, w_a=35.73, w_m=2.28, group_width=16, **kwargs
+    )
     return _regnet("regnet_x_800mf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_1_6gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_1_6gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_1.6GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -622,11 +725,16 @@ def regnet_x_1_6gf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> import flowvision
         >>> regnet_x_1_6gf = flowvision.models.regnet_x_1_6gf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=18, w_0=80, w_a=34.01, w_m=2.25, group_width=24, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=18, w_0=80, w_a=34.01, w_m=2.25, group_width=24, **kwargs
+    )
     return _regnet("regnet_x_1_6gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_3_2gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_3_2gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_3.2GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -642,11 +750,16 @@ def regnet_x_3_2gf(pretrained: bool = False, progress: bool = True, **kwargs: An
         >>> import flowvision
         >>> regnet_x_3_2gf = flowvision.models.regnet_x_3_2gf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=25, w_0=88, w_a=26.31, w_m=2.25, group_width=48, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=25, w_0=88, w_a=26.31, w_m=2.25, group_width=48, **kwargs
+    )
     return _regnet("regnet_x_3_2gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_8gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_8gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_8GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -662,11 +775,16 @@ def regnet_x_8gf(pretrained: bool = False, progress: bool = True, **kwargs: Any)
         >>> import flowvision
         >>> regnet_x_8gf = flowvision.models.regnet_x_8gf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=23, w_0=80, w_a=49.56, w_m=2.88, group_width=120, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=23, w_0=80, w_a=49.56, w_m=2.88, group_width=120, **kwargs
+    )
     return _regnet("regnet_x_8gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_16gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_16gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_16GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -682,11 +800,16 @@ def regnet_x_16gf(pretrained: bool = False, progress: bool = True, **kwargs: Any
         >>> import flowvision
         >>> regnet_x_16gf = flowvision.models.regnet_x_16gf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=22, w_0=216, w_a=55.59, w_m=2.1, group_width=128, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=22, w_0=216, w_a=55.59, w_m=2.1, group_width=128, **kwargs
+    )
     return _regnet("regnet_x_16gf", params, pretrained, progress, **kwargs)
 
+
 @ModelCreator.register_model
-def regnet_x_32gf(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> RegNet:
+def regnet_x_32gf(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> RegNet:
     """
     Constructs a RegNetX_32GF architecture from
     `"Designing Network Design Spaces" <https://arxiv.org/abs/2003.13678>`_.
@@ -702,5 +825,7 @@ def regnet_x_32gf(pretrained: bool = False, progress: bool = True, **kwargs: Any
         >>> import flowvision
         >>> regnet_x_32gf = flowvision.models.regnet_x_32gf(pretrained=False, progress=True)
     """
-    params = BlockParams.from_init_params(depth=23, w_0=320, w_a=69.86, w_m=2.0, group_width=168, **kwargs)
+    params = BlockParams.from_init_params(
+        depth=23, w_0=320, w_a=69.86, w_m=2.0, group_width=168, **kwargs
+    )
     return _regnet("regnet_x_32gf", params, pretrained, progress, **kwargs)

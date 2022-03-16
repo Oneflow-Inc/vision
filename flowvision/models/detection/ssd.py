@@ -353,9 +353,8 @@ class SSD(nn.Module):
             for target_idx, target in enumerate(targets):
                 boxes = target["boxes"]
                 degenerate_boxes = boxes[:, 2:] <= boxes[:, :2]
-                # TODO (shijie wang): Use Tensor.any()
-                if degenerate_boxes.sum() > 0:
-                    bb_idx = flow.where(degenerate_boxes.sum(dim=1))[0][0]
+                if degenerate_boxes.any():
+                    bb_idx = flow.where(degenerate_boxes.any(dim=1))[0][0]
                     degen_bb: List[float] = boxes[bb_idx].tolist()
                     raise ValueError(
                         "All bounding boxes should have positive height and width."
