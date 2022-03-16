@@ -14,7 +14,10 @@ def run_vit_small_patch16_224():
     input_shape = np.ones(input_shape).astype(np.float32)
     x = flow.tensor(input_shape, requires_grad=False).to('cuda')
 
-    model(x).sum().backward()
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
     optimizer.zero_grad()
     optimizer.step()
 
