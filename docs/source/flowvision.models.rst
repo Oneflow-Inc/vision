@@ -40,6 +40,7 @@ architectures for image classification:
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
+_  `LeViT`_
 -  `RegionViT`_
 -  `VAN`_
 
@@ -78,6 +79,7 @@ architectures for image classification:
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
 .. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
 .. _VAN: https://arxiv.org/pdf/2202.09741.pdf
+.. _LeViT: https://arxiv.org/pdf/2104.01136.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -486,6 +488,17 @@ VAN
         van_base,
         van_large,
         
+
+LeViT
+--------
+.. automodule:: flowvision.models
+    :members:
+        levit_128s,
+        levit_128,
+        levit_192,
+        levit_256,
+        levit_384,
+
 
 Neural Style Transfer
 ==============

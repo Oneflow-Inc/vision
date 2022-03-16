@@ -30,6 +30,7 @@ from .resnest import *
 from .uniformer import *
 from .senet import *
 from .van import *
+from .levit import *
 
 from . import style_transfer
 from . import detection

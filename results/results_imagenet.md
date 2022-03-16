@@ -170,6 +170,11 @@
 | uniformer_small_plus          | 82.938 | 17.062 | 96.406 | 3.594 | 50.0M | 224 | 0.900 | bicubic |
 | uniformer_base                | 83.814 | 16.186 | 96.738 | 3.262 | 50.0M | 224 | 0.900 | bicubic |
 | uniformer_base_ls             | 83.952 | 16.048 | 96.728 | 3.272 | 50.0M | 224 | 0.900 | bicubic |
+| levit-128s | 76.518 | 23.482 | 92.904 | 7.096 | 7.8M  | 224 | 0.875 | bicubic |
+| levit-128  | 78.586 | 21.414 | 93.944 | 6.056 | 9.2M  | 224 | 0.875 | bicubic |
+| levit-192  | 79.874 | 20.126 | 94.750 | 5.250 | 10.9M | 224 | 0.875 | bicubic |
+| levit-256  | 81.594 | 18.406 | 95.456 | 4.544 | 18.9M | 224 | 0.875 | bicubic |
+| levit-384  | 82.594 | 17.406 | 95.956 | 4.044 | 39.1M | 224 | 0.875 | bicubic |
 | regionvit_tiny_224            | 80.100 | 19.900 | 95.174 | 4.826 | 13.8M  | 224 | 0.875   | bicubic |
 | regionvit_small_224           | 82.558 | 17.442 | 96.112 | 3.888 | 30.6M  | 224 | 0.875   | bicubic |
 | regionvit_medium_224          | 83.002 | 16.998 | 96.220 | 3.780 | 41.2M  | 224 | 0.875   | bicubic |
@@ -178,6 +183,7 @@
 | van_small | 81.012 | 18.988 | 95.626 | 4.374 | 13.9M | 224 | 0.9 | bicubic |
 | van_base  | 82.806 | 17.194 | 96.206 | 3.794 | 26.6M | 224 | 0.9 | bicubic |
 | van_large | 83.860 | 16.140 | 96.728 | 3.272 | 44.8M | 224 | 0.9 | bicubic |
+
 
 #### Spetial Normalized Case
 - `vit`, `mlp-mixer`, `gmlp` based model: test images normalized using `mean=(0.5, 0.5, 0.5)` and `std=(0.5, 0.5, 0.5)`

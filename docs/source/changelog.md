@@ -16,7 +16,8 @@
 - Support [VAN](https://arxiv.org/abs/2202.09741) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
 - Support [Dynamic convolution](https://arxiv.org/abs/1912.03458) module [#166](https://github.com/Oneflow-Inc/vision/pull/169)
 - Support transforms.RandomGrayscale method [#171](https://github.com/Oneflow-Inc/vision/pull/171)
-- Support [RegNet](https://arxiv.org/abs/2003.13678) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/170)
+- Support [RegNet](https://arxiv.org/abs/2003.13678) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
+- Support [LeViT](https://arxiv.org/abs/2104.01136) model and pretrained weight [#177](https://github.com/Oneflow-Inc/vision/pull/177)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
