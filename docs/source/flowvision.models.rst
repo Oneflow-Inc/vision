@@ -40,9 +40,9 @@ architectures for image classification:
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
+_  `LeViT`_
 -  `RegionViT`_
 -  `VAN`_
-_  `LeViT`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -493,11 +493,11 @@ LeViT
 --------
 .. automodule:: flowvision.models
     :members:
-        LeViT_128S,
-        LeViT_128,
-        LeViT_192,
-        LeViT_256,
-        LeViT_384,
+        levit_128s,
+        levit_128,
+        levit_192,
+        levit_256,
+        levit_384,
 
 
 Neural Style

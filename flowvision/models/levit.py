@@ -11,11 +11,11 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "LeViT_128S": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_128s.zip",
-    "LeViT_128": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_128.zip",
-    "LeViT_192": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_192.zip",
-    "LeViT_256": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_256.zip",
-    "LeViT_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_384.zip",
+    "levit_128s": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_128s.zip",
+    "levit_128": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_128.zip",
+    "levit_192": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_192.zip",
+    "levit_256": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_256.zip",
+    "levit_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/LeViT/levit_384.zip",
 }
 
 
@@ -328,7 +328,7 @@ class LeViT(flow.nn.Module):
         return x
 
 def model_factory(C, D, X, N, drop_path,
-                  num_classes, distillation, pretrained, progress=True):
+                  num_classes, distillation, pretrained, name, progress=True):
     embed_dim = [int(x) for x in C.split('_')]
     num_heads = [int(x) for x in N.split('_')]
     depth = [int(x) for x in X.split('_')]
@@ -355,7 +355,7 @@ def model_factory(C, D, X, N, drop_path,
     )
     if pretrained:
         state_dict = load_state_dict_from_url(
-            model_urls["mobilenet_v2"], progress=progress
+            model_urls[name], progress=progress
         )
         model.load_state_dict(state_dict)
 
@@ -363,16 +363,16 @@ def model_factory(C, D, X, N, drop_path,
 
 
 specification = {
-    'LeViT_128S': {'C': '128_256_384', 'D': 16, 'N': '4_6_8', 'X': '2_3_4', 'drop_path': 0},
-    'LeViT_128': {'C': '128_256_384', 'D': 16, 'N': '4_8_12', 'X': '4_4_4', 'drop_path': 0},
-    'LeViT_192': {'C': '192_288_384', 'D': 32, 'N': '3_5_6', 'X': '4_4_4', 'drop_path': 0},
-    'LeViT_256': {'C': '256_384_512', 'D': 32, 'N': '4_6_8', 'X': '4_4_4', 'drop_path': 0},
-    'LeViT_384': {'C': '384_512_768', 'D': 32, 'N': '6_9_12', 'X': '4_4_4', 'drop_path': 0.1},
+    'levit_128s': {'C': '128_256_384', 'D': 16, 'N': '4_6_8', 'X': '2_3_4', 'drop_path': 0},
+    'levit_128': {'C': '128_256_384', 'D': 16, 'N': '4_8_12', 'X': '4_4_4', 'drop_path': 0},
+    'levit_192': {'C': '192_288_384', 'D': 32, 'N': '3_5_6', 'X': '4_4_4', 'drop_path': 0},
+    'levit_256': {'C': '256_384_512', 'D': 32, 'N': '4_6_8', 'X': '4_4_4', 'drop_path': 0},
+    'levit_384': {'C': '384_512_768', 'D': 32, 'N': '6_9_12', 'X': '4_4_4', 'drop_path': 0.1},
 }
 
 
 @ModelCreator.register_model
-def LeViT_128S(num_classes=1000, distillation=True,
+def levit_128s(num_classes=1000, distillation=True,
                pretrained=False):
     """
     Constructs the LeViT-128S model.
@@ -389,14 +389,14 @@ def LeViT_128S(num_classes=1000, distillation=True,
     .. code-block:: python
 
         >>> import flowvision
-        >>> LeViT_128S = flowvision.models.LeViT_128S(pretrained=False, progress=True)
+        >>> levit_128s = flowvision.models.levit_128s(pretrained=False, progress=True)
 
     """
-    return model_factory(**specification['LeViT_128S'], num_classes=num_classes,
-                         distillation=distillation, pretrained=pretrained,)
+    return model_factory(**specification['levit_128s'], num_classes=num_classes,
+                         distillation=distillation, pretrained=pretrained, name="levit_128s")
 
 @ModelCreator.register_model
-def LeViT_128(num_classes=1000, distillation=True,
+def levit_128(num_classes=1000, distillation=True,
                pretrained=False):
     """
     Constructs the LeViT-128 model.
@@ -413,14 +413,14 @@ def LeViT_128(num_classes=1000, distillation=True,
     .. code-block:: python
 
         >>> import flowvision
-        >>> LeViT_128 = flowvision.models.LeViT_128(pretrained=False, progress=True)
+        >>> levit_128 = flowvision.models.levit_128(pretrained=False, progress=True)
 
     """
-    return model_factory(**specification['LeViT_128'], num_classes=num_classes,
-                         distillation=distillation, pretrained=pretrained,)
+    return model_factory(**specification['levit_128'], num_classes=num_classes,
+                         distillation=distillation, pretrained=pretrained, name="levit_128")
 
 @ModelCreator.register_model
-def LeViT_192(num_classes=1000, distillation=True,
+def levit_192(num_classes=1000, distillation=True,
                pretrained=False):
     """
     Constructs the LeViT-192 model.
@@ -437,14 +437,14 @@ def LeViT_192(num_classes=1000, distillation=True,
     .. code-block:: python
 
         >>> import flowvision
-        >>> LeViT_192 = flowvision.models.LeViT_192(pretrained=False, progress=True)
+        >>> levit_192 = flowvision.models.levit_192(pretrained=False, progress=True)
 
     """
-    return model_factory(**specification['LeViT_192'], num_classes=num_classes,
-                         distillation=distillation, pretrained=pretrained,)
+    return model_factory(**specification['levit_192'], num_classes=num_classes,
+                         distillation=distillation, pretrained=pretrained, name="levit_192")
 
 @ModelCreator.register_model
-def LeViT_256(num_classes=1000, distillation=True,
+def levit_256(num_classes=1000, distillation=True,
                pretrained=False):
     """
     Constructs the LeViT-256 model.
@@ -461,14 +461,14 @@ def LeViT_256(num_classes=1000, distillation=True,
     .. code-block:: python
 
         >>> import flowvision
-        >>> LeViT_256 = flowvision.models.LeViT_256(pretrained=False, progress=True)
+        >>> levit_256 = flowvision.models.levit_256(pretrained=False, progress=True)
 
     """
-    return model_factory(**specification['LeViT_256'], num_classes=num_classes,
-                         distillation=distillation, pretrained=pretrained,)
+    return model_factory(**specification['levit_256'], num_classes=num_classes,
+                         distillation=distillation, pretrained=pretrained, name="levit_256")
 
 @ModelCreator.register_model
-def LeViT_384(num_classes=1000, distillation=True,
+def levit_384(num_classes=1000, distillation=True,
                pretrained=False):
     """
     Constructs the LeViT-384 model.
@@ -485,8 +485,8 @@ def LeViT_384(num_classes=1000, distillation=True,
     .. code-block:: python
 
         >>> import flowvision
-        >>> LeViT_384 = flowvision.models.LeViT_384(pretrained=False, progress=True)
+        >>> levit_384 = flowvision.models.levit_384(pretrained=False, progress=True)
 
     """
-    return model_factory(**specification['LeViT_384'], num_classes=num_classes,
-                         distillation=distillation, pretrained=pretrained,)
+    return model_factory(**specification['levit_384'], num_classes=num_classes,
+                         distillation=distillation, pretrained=pretrained, name="levit_384")
