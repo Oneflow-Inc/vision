@@ -2,7 +2,7 @@ from typing import Optional
 
 import oneflow as flow
 import oneflow.nn as nn
-from oneflow.nn import ReLU, Sigmoid
+from oneflow.nn import ReLU, LogSigmoid
 
 
 class SEModule(nn.Module):
