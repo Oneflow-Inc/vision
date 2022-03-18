@@ -5,7 +5,7 @@ def run_swin_base_patch4_window7_224():
     from flowvision.models.swin_transformer import swin_base_patch4_window7_224
 
     model = swin_base_patch4_window7_224().to('cuda')
-    input_shape = [16, 3, 224, 224]
+    input_shape = [8, 3, 224, 224]
 
     learning_rate = 0.01
     mom = 0.9

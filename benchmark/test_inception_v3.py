@@ -5,7 +5,7 @@ def run_inception_v3():
     from flowvision.models.inception_v3 import inception_v3
 
     model = inception_v3().to('cuda')
-    input_shape = [16,3,299,299]
+    input_shape = [4,3,299,299]
 
     learning_rate = 0.01
     mom = 0.9

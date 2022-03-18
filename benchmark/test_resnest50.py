@@ -5,7 +5,7 @@ def run_resnest50():
     from flowvision.models.resnest import resnest50
 
     model = resnest50().to('cuda')
-    input_shape = [16, 3, 224, 224]
+    input_shape = [8, 3, 224, 224]
 
     learning_rate = 0.01
     mom = 0.9

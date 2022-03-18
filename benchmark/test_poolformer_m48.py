@@ -5,7 +5,7 @@ def run_poolformer_m48():
     from flowvision.models.poolformer import poolformer_m48
 
     model = poolformer_m48().to('cuda')
-    input_shape = [16, 3, 224, 224]
+    input_shape = [8, 3, 224, 224]
 
     learning_rate = 0.01
     mom = 0.9
