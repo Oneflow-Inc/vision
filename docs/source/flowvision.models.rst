@@ -176,21 +176,6 @@ MNASNet
         mnasnet1_3,
 
 
-HRNet
---------
-.. automodule:: flowvision.models
-    :members:
-        hrnet_w18_small_v1,
-        hrnet_w18_small_v2,
-        hrnet_w18,
-        hrnet_w30,
-        hrnet_w32,
-        hrnet_w40,
-        hrnet_w44,
-        hrnet_w48,
-        hrnet_w64,
-
-
 GhostNet
 --------
 .. automodule:: flowvision.models
@@ -435,7 +420,35 @@ RegionViT
         regionvit_base_224,
         regionvit_base_w14_224,
         regionvit_base_w14_peg_224,
-        
+
+
+HRNet
+--------
+.. automodule:: flowvision.models
+    :members:
+        hrnet_w18_small_v1,
+        hrnet_w18_small_v2,
+        hrnet_w18,
+        hrnet_w30,
+        hrnet_w32,
+        hrnet_w40,
+        hrnet_w44,
+        hrnet_w48,
+        hrnet_w64,
+
+
+--------
+.. automodule:: flowvision.models
+    :members:
+        hrnet_w18_small_v1,
+        hrnet_w18_small_v2,
+        hrnet_w18,
+        hrnet_w30,
+        hrnet_w32,
+        hrnet_w40,
+        hrnet_w44,
+        hrnet_w48,
+        hrnet_w64,
 
 
 Neural Style
