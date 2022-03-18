@@ -23,6 +23,7 @@ architectures for image classification:
 -  `MobileNetV2`_
 -  `MobileNetV3`_
 -  `MNASNet`_
+-  `HRNet`_
 -  `GhostNet`_
 -  `Res2Net`_
 -  `EfficientNet`_
@@ -61,6 +62,7 @@ _  `LeViT`_
 .. _Res2Net: https://arxiv.org/abs/1904.01169
 .. _ReXNet: https://arxiv.org/abs/2007.00992
 .. _MNASNet: https://arxiv.org/abs/1807.11626
+.. _HRNet: https://arxiv.org/abs/1908.07919v1
 .. _GhostNet: https://arxiv.org/abs/1911.11907
 .. _ViT: https://arxiv.org/abs/2010.11929
 .. _DeiT: https://arxiv.org/abs/2012.12877
@@ -191,6 +193,21 @@ MNASNet
         mnasnet0_75,
         mnasnet1_0,
         mnasnet1_3,
+
+
+HRNet
+--------
+.. automodule:: flowvision.models
+    :members:
+        hrnet_w18_small_v1,
+        hrnet_w18_small_v2,
+        hrnet_w18,
+        hrnet_w30,
+        hrnet_w32,
+        hrnet_w40,
+        hrnet_w44,
+        hrnet_w48,
+        hrnet_w64,
 
 
 GhostNet

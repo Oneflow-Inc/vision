@@ -29,6 +29,7 @@ from .poolformer import *
 from .resnest import *
 from .uniformer import *
 from .senet import *
+from .hrnet import *
 from .van import *
 from .levit import *
 
