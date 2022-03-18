@@ -25,6 +25,7 @@ from .efficientnet import *
 from .vision_transformer import *
 from .convnext import *
 from .senet import *
+from .hrnet import *
 
 from . import neural_style_transfer
 from . import detection

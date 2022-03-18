@@ -61,6 +61,7 @@ pip install flowvision==0.1.0
             <li>MobileNetV2</li>
             <li>MobileNetV3</li>
             <li>MNASNet</li>
+            <li>HRNet</li>
             <li>Res2Net</li>
             <li>EfficientNet</li>  
             <li>GhostNet</li>
