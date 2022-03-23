@@ -75,7 +75,7 @@ def transforms_imagenet_train(
     ratio = tuple(ratio or (3.0 / 4.0, 4.0 / 3.0))  # default imagenet ratio range
     primary_tfl = [
         transforms.Resize(
-            img_size,
+            (img_size,img_size),
             # scale=scale,
             # ratio=ratio,
             interpolation=str_to_interp_mode(interpolation),

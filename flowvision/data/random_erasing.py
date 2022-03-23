@@ -9,11 +9,24 @@ import oneflow as flow
 
 def _get_pixels(per_pixel, rand_color, patch_size, dtype=flow.float32, device="cuda"):
     if per_pixel:
-        return flow.empty(patch_size, dtype=dtype, device=device).normal_()
+
+        flow._oneflow_internal.profiler.RangePush('_get_pixels-per_pixel')
+        empty = flow.empty(patch_size, dtype=dtype, device=device)
+        flow._oneflow_internal.profiler.RangePush('normal_')
+        ret = empty.normal_()
+        flow._oneflow_internal.profiler.RangePop()
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
     elif rand_color:
-        return flow.empty((patch_size[0], 1, 1), dtype=dtype, device=device).normal_()
+        flow._oneflow_internal.profiler.RangePush('_get_pixels-rand_color')
+        ret = flow.empty((patch_size[0], 1, 1), dtype=dtype, device=device).normal_()
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
     else:
-        return flow.zeros((patch_size[0], 1, 1), dtype=dtype, device=device)
+        flow._oneflow_internal.profiler.RangePush('_get_pixels-zeros')
+        ret = flow.zeros((patch_size[0], 1, 1), dtype=dtype, device=device)
+        flow._oneflow_internal.profiler.RangePop()
+        return ret
 
 
 class RandomErasing:

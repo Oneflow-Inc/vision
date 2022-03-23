@@ -423,6 +423,7 @@ def normalize(
         )
     flow._oneflow_internal.profiler.RangePush('clone')
     if not inplace:
+        # print(tensor.size())
         tensor = tensor.clone()
     flow._oneflow_internal.profiler.RangePop()
     dtype = tensor.dtype
@@ -492,9 +493,9 @@ def resize(
 
     if not isinstance(img, (flow.Tensor, flow._oneflow_internal.Tensor)):
         pil_interpolation = pil_modes_mapping[interpolation]
-        ret = F_pil.resize(img, size=size, interpolation=pil_interpolation)
+        out = F_pil.resize(img, size=size, interpolation=pil_interpolation)
         flow._oneflow_internal.profiler.RangePop()
-        return ret
+        return out
 
     out = F_t.resize(img, size=size, interpolation=interpolation.value)
     flow._oneflow_internal.profiler.RangePop()
