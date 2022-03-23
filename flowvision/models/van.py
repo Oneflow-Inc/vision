@@ -392,7 +392,9 @@ def van_small(pretrained: bool = False, progress: bool = True, **kwargs):
         **kwargs,
     )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["van_small"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["van_small"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -460,6 +462,8 @@ def van_large(pretrained: bool = False, progress: bool = True, **kwargs):
         **kwargs,
     )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["van_large"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["van_large"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
