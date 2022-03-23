@@ -13,19 +13,18 @@ def run_alexnet_batch_size16():
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
 
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_alexnet_batch_size16(benchmark):
-    benchmark(run_alexnet_batch_size16)
+    benchmark.pedantic(run_alexnet_batch_size16)
 def run_alexnet_batch_size8():
 
     import oneflow as flow
@@ -41,19 +40,18 @@ def run_alexnet_batch_size8():
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
 
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_alexnet_batch_size8(benchmark):
-    benchmark(run_alexnet_batch_size8)
+    benchmark.pedantic(run_alexnet_batch_size8)
 def run_alexnet_batch_size4():
 
     import oneflow as flow
@@ -69,19 +67,18 @@ def run_alexnet_batch_size4():
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
 
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_alexnet_batch_size4(benchmark):
-    benchmark(run_alexnet_batch_size4)
+    benchmark.pedantic(run_alexnet_batch_size4)
 def run_alexnet_batch_size2():
 
     import oneflow as flow
@@ -97,19 +94,18 @@ def run_alexnet_batch_size2():
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
 
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_alexnet_batch_size2(benchmark):
-    benchmark(run_alexnet_batch_size2)
+    benchmark.pedantic(run_alexnet_batch_size2)
 def run_alexnet_batch_size1():
 
     import oneflow as flow
@@ -125,16 +121,15 @@ def run_alexnet_batch_size1():
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
 
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_alexnet_batch_size1(benchmark):
-    benchmark(run_alexnet_batch_size1)
+    benchmark.pedantic(run_alexnet_batch_size1)

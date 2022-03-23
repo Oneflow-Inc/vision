@@ -12,19 +12,18 @@ def run_rexnetv1_1_0_batch_size16():
     optimizer = flow.optim.SGD(
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_rexnetv1_1_0_batch_size16(benchmark):
-    benchmark(run_rexnetv1_1_0_batch_size16)
+    benchmark.pedantic(run_rexnetv1_1_0_batch_size16)
 def run_rexnetv1_1_0_batch_size8():
 
     import oneflow as flow
@@ -39,19 +38,18 @@ def run_rexnetv1_1_0_batch_size8():
     optimizer = flow.optim.SGD(
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_rexnetv1_1_0_batch_size8(benchmark):
-    benchmark(run_rexnetv1_1_0_batch_size8)
+    benchmark.pedantic(run_rexnetv1_1_0_batch_size8)
 def run_rexnetv1_1_0_batch_size4():
 
     import oneflow as flow
@@ -66,19 +64,18 @@ def run_rexnetv1_1_0_batch_size4():
     optimizer = flow.optim.SGD(
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_rexnetv1_1_0_batch_size4(benchmark):
-    benchmark(run_rexnetv1_1_0_batch_size4)
+    benchmark.pedantic(run_rexnetv1_1_0_batch_size4)
 def run_rexnetv1_1_0_batch_size2():
 
     import oneflow as flow
@@ -93,19 +90,18 @@ def run_rexnetv1_1_0_batch_size2():
     optimizer = flow.optim.SGD(
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_rexnetv1_1_0_batch_size2(benchmark):
-    benchmark(run_rexnetv1_1_0_batch_size2)
+    benchmark.pedantic(run_rexnetv1_1_0_batch_size2)
 def run_rexnetv1_1_0_batch_size1():
 
     import oneflow as flow
@@ -120,16 +116,15 @@ def run_rexnetv1_1_0_batch_size1():
     optimizer = flow.optim.SGD(
         model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    for i in range(100):
-        x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-        y = model(x)   
-        if isinstance(y, tuple):
-            y = y[0]
-        y.sum().backward()
-        optimizer.zero_grad()
-        optimizer.step()
-        x.numpy()
-        y.numpy()
+    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
+    y = model(x)   
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+    x.numpy()
+    y.numpy()
 
 def test_rexnetv1_1_0_batch_size1(benchmark):
-    benchmark(run_rexnetv1_1_0_batch_size1)
+    benchmark.pedantic(run_rexnetv1_1_0_batch_size1)
