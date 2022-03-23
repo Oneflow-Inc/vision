@@ -21,6 +21,8 @@ def run_alexnet_batch_size16():
         y.sum().backward()
         optimizer.zero_grad()
         optimizer.step()
+        x.numpy()
+        y.numpy()
 
 def test_alexnet_batch_size16(benchmark):
     benchmark(run_alexnet_batch_size16)
@@ -47,6 +49,8 @@ def run_alexnet_batch_size8():
         y.sum().backward()
         optimizer.zero_grad()
         optimizer.step()
+        x.numpy()
+        y.numpy()
 
 def test_alexnet_batch_size8(benchmark):
     benchmark(run_alexnet_batch_size8)
@@ -73,6 +77,8 @@ def run_alexnet_batch_size4():
         y.sum().backward()
         optimizer.zero_grad()
         optimizer.step()
+        x.numpy()
+        y.numpy()
 
 def test_alexnet_batch_size4(benchmark):
     benchmark(run_alexnet_batch_size4)
@@ -99,6 +105,8 @@ def run_alexnet_batch_size2():
         y.sum().backward()
         optimizer.zero_grad()
         optimizer.step()
+        x.numpy()
+        y.numpy()
 
 def test_alexnet_batch_size2(benchmark):
     benchmark(run_alexnet_batch_size2)
@@ -125,6 +133,8 @@ def run_alexnet_batch_size1():
         y.sum().backward()
         optimizer.zero_grad()
         optimizer.step()
+        x.numpy()
+        y.numpy()
 
 def test_alexnet_batch_size1(benchmark):
     benchmark(run_alexnet_batch_size1)
