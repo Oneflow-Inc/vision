@@ -128,8 +128,11 @@ def _resnet_fpn_extractor(
 
 
 def _validate_trainable_layers(
-    pretrained, trainable_backbone_layers, max_value, default_value
-):
+    pretrained: bool,
+    trainable_backbone_layers: Optional[int],
+    max_value: int,
+    default_value: int,
+) -> int:
     # dont freeze any layers if pretrained model or backbone is not used
     if not pretrained:
         if trainable_backbone_layers is not None:
