@@ -4,7 +4,7 @@ def run_mobilenet_v3_batch_size16():
     import numpy as np
     from flowvision.models.mobilenet_v3 import mobilenet_v3_large
 
-    model = mobilenet_v3_large()().to('cuda')
+    model = mobilenet_v3_large().to('cuda')
     input_shape = [16, 3, 224, 224]
 
     learning_rate = 0.01
@@ -30,7 +30,7 @@ def run_mobilenet_v3_batch_size8():
     import numpy as np
     from flowvision.models.mobilenet_v3 import mobilenet_v3_large
 
-    model = mobilenet_v3_large()().to('cuda')
+    model = mobilenet_v3_large().to('cuda')
     input_shape = [8, 3, 224, 224]
 
     learning_rate = 0.01
@@ -56,7 +56,7 @@ def run_mobilenet_v3_batch_size4():
     import numpy as np
     from flowvision.models.mobilenet_v3 import mobilenet_v3_large
 
-    model = mobilenet_v3_large()().to('cuda')
+    model = mobilenet_v3_large().to('cuda')
     input_shape = [4, 3, 224, 224]
 
     learning_rate = 0.01
@@ -82,7 +82,7 @@ def run_mobilenet_v3_batch_size2():
     import numpy as np
     from flowvision.models.mobilenet_v3 import mobilenet_v3_large
 
-    model = mobilenet_v3_large()().to('cuda')
+    model = mobilenet_v3_large().to('cuda')
     input_shape = [2, 3, 224, 224]
 
     learning_rate = 0.01
@@ -108,7 +108,7 @@ def run_mobilenet_v3_batch_size1():
     import numpy as np
     from flowvision.models.mobilenet_v3 import mobilenet_v3_large
 
-    model = mobilenet_v3_large()().to('cuda')
+    model = mobilenet_v3_large().to('cuda')
     input_shape = [1, 3, 224, 224]
 
     learning_rate = 0.01
