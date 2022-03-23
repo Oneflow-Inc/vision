@@ -178,8 +178,6 @@ class GeneralizedRCNNTransform(nn.Module):
         image, target = _resize_image_and_masks(
             image, size, float(self.max_size), target, self.fixed_size
         )
-        if image.shape[-1] <= 0 or image.shape[-2] <= 0:
-            print(image.shape[-2:])
 
         if target is None:
             return image, target
