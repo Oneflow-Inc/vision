@@ -54,7 +54,7 @@ def get_args_parser():
         default=26,
         type=int,
         metavar="N",
-        help="number of data loading workers (default: 4)",
+        help="number of total epochs to run",
     )
     parser.add_argument(
         "-j",
@@ -124,6 +124,10 @@ def get_args_parser():
         help="data augmentation policy (default: hflip)",
     )
     parser.add_argument(
+        "--evaluation", type=int, nargs="+", default=None,
+        help="epoch at which to evaluate, None is evaluate after each epoch"
+    )
+    parser.add_argument(
         "--test-only",
         dest="test_only",
         help="Only test the model",
@@ -155,7 +159,6 @@ def main(args):
     print(args)
 
     device = flow.device(args.device)
-    flow.backends.cudnn.set_reserved_mem_mbytes(int(args.batch_size / 32 * 1024))
 
     # Data loading code
     print("Loading data")
@@ -270,8 +273,11 @@ def main(args):
                 checkpoint, os.path.join(args.output_dir, "checkpoint.pth")
             )
 
-        # evaluate after every epoch
-        evaluate(model, data_loader_test, device=device)
+        if args.evaluation is None:
+            evaluate(model, data_loader_test, device=device)
+        else:
+            if epoch in args.evaluation:
+                evaluate(model, data_loader_test, device=device)
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
