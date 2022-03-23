@@ -124,8 +124,11 @@ def get_args_parser():
         help="data augmentation policy (default: hflip)",
     )
     parser.add_argument(
-        "--evaluation", type=int, nargs="+", default=None,
-        help="epoch at which to evaluate, None is evaluate after each epoch"
+        "--evaluation",
+        type=int,
+        nargs="+",
+        default=None,
+        help="epoch at which to evaluate, None is evaluate after each epoch",
     )
     parser.add_argument(
         "--test-only",
