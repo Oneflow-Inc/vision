@@ -1,3 +1,4 @@
+import numpy as np
 import oneflow as flow
 import flowvision
 
@@ -96,9 +97,11 @@ class RandomIoUCrop(nn.Module):
 
         orig_w, orig_h = F._get_image_size(image)
 
+        boxes_np = target["boxes"].numpy()
+
         while True:
             # sample on option
-            idx = flow.randint(low=0, high=len(self.options), size=(1,)).item()
+            idx = int(np.random.randint(low=0, high=len(self.options), size=(1,)))
             min_jaccard_overlap = self.options[idx]
             if (
                 min_jaccard_overlap >= 1.0
@@ -107,49 +110,55 @@ class RandomIoUCrop(nn.Module):
 
             for _ in range(self.trials):
                 # check the aspect ratio limitations
-                r = self.min_scale + (self.max_scale - self.min_scale) * flow.rand(2)
-                new_w = int((orig_w * r[0]).item())
-                new_h = int((orig_h * r[1]).item())
+                r = self.min_scale + (self.max_scale - self.min_scale) * np.random.rand(
+                    2
+                )
+                new_w = int(orig_w * r[0])
+                new_h = int(orig_h * r[1])
                 aspect_ratio = new_w / new_h
                 if not (self.min_aspect_ratio <= aspect_ratio <= self.max_aspect_ratio):
                     continue
 
                 # check for 0 area crops
-                r = flow.rand(2)
-                left = int(((orig_w - new_w) * r[0]).item())
-                top = int(((orig_h - new_h) * r[1]).item())
+                r = np.random.rand(2)
+                left = int((orig_w - new_w) * r[0])
+                top = int((orig_h - new_h) * r[1])
                 right = left + new_w
                 bottom = top + new_h
                 if left == right or top == bottom:
                     continue
 
                 # check for any valid boxes with centers within the crop area
-                cx = 0.5 * (target["boxes"][:, 0] + target["boxes"][:, 2])
-                cy = 0.5 * (target["boxes"][:, 1] + target["boxes"][:, 3])
+                # cx = 0.5 * (boxes_flow[:, 0] + boxes_flow[:, 2])
+                # cy = 0.5 * (boxes_flow[:, 1] + boxes_flow[:, 3])
+                cx = 0.5 * (boxes_np[:, 0] + boxes_np[:, 2])
+                cy = 0.5 * (boxes_np[:, 1] + boxes_np[:, 3])
                 is_within_crop_area = (
                     (left < cx) & (cx < right) & (top < cy) & (cy < bottom)
                 )
-                # TODO (shijie wang): Use tensor.any()
-                # if not is_within_crop_area.any():
-                if is_within_crop_area.sum() <= 0:
+                if not is_within_crop_area.any():
                     continue
 
                 # check at least 1 box with jaccard limitations
-                boxes = target["boxes"][is_within_crop_area]
-                ious = flowvision.layers.blocks.box_iou(
-                    boxes,
-                    flow.tensor(
-                        [[left, top, right, bottom]],
-                        dtype=boxes.dtype,
-                        device=boxes.device,
-                    ),
+                boxes = boxes_np[is_within_crop_area]
+                ious = flowvision.layers.blocks.box_iou_np(
+                    boxes, np.array([[left, top, right, bottom]], dtype=np.float32,)
                 )
+                # boxes = targets["boxes"][is_within_crop_area]
+                # ious = flowvision.layers.blocks.box_iou(
+                #     boxes,
+                #     flow.tensor(
+                #         [[left, top, right, bottom]],
+                #         dtype=boxes.dtype,
+                #         device=boxes.device,
+                #     ),
+                # )
                 if ious.max() < min_jaccard_overlap:
                     continue
 
                 # keep only valid boxes and perform cropping
-                target["boxes"] = boxes
-                target["labels"] = target["labels"][is_within_crop_area]
+                target["boxes"] = flow.tensor(boxes)
+                target["labels"] = target["labels"][flow.tensor(is_within_crop_area)]
                 target["boxes"][:, 0::2] -= left
                 target["boxes"][:, 1::2] -= top
                 target["boxes"][:, 0::2].clamp(min=0, max=new_w)

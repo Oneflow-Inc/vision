@@ -40,7 +40,7 @@ architectures for image classification:
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
-_  `LeViT`_
+-  `LeViT`_
 -  `RegionViT`_
 -  `VAN`_
 
