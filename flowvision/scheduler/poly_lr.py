@@ -20,10 +20,9 @@ class PolyLRScheduler(Scheduler):
     Args:
         optimizer: The optimizer will be used for the training process
         t_initial: The initial number of epochs. Example, 50, 100 etc.
-        t_mul: updates the SGDR schedule annealing.
-        lr_min: Defaults to 1e-5. The minimum learning rate to use during the scheduling. The learning rate does not ever go below this value.
-        decay_rate: When decay rate > 0 and < 1., at every restart the learning rate is decayed by new learning rate which equals lr * decay_rate. If decay_rate=0.5,
-                    then in that case, the new learning rate becomes half the initial lr.
+        power: The power of polynomial. Defaults to 0.5.
+        lr_min: Defaults to 1e-5. The minimum learning rate to use during 
+        the scheduling. The learning rate does not ever go below this value.
         warmup_t: Defines the number of warmup epochs.
         warmup_lr_init: The initial learning rate during warmup.
     
