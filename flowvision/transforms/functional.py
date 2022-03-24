@@ -1042,8 +1042,10 @@ def gaussian_blur(img: Tensor, kernel_size: List[int], sigma: Optional[List[floa
     Returns:
         PIL Image or Tensor: Gaussian Blurred version of the image.
     """
+    # TODO: implement the following code with oneflow
     # if not flow.jit.is_scripting() and not flow.jit.is_tracing():
     #     _log_api_usage_once(gaussian_blur)
+    
     if not isinstance(kernel_size, (int, list, tuple)):
         raise TypeError(f"kernel_size should be int or a sequence of integers. Got {type(kernel_size)}")
     if isinstance(kernel_size, int):
