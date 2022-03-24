@@ -5,6 +5,7 @@ from typing import Optional, Tuple, List
 
 from oneflow.framework.tensor import Tensor
 import oneflow as flow
+import oneflow.nn as nn
 from oneflow.nn.functional import grid_sample, conv2d, interpolate, pad as flow_pad
 
 def _is_tensor_a_flow_image(x: Tensor) -> bool:
@@ -582,6 +583,14 @@ def gaussian_blur(img: Tensor, kernel_size: List[int], sigma: List[float]) -> Te
     # padding = (left, right, top, bottom)
     padding = [kernel_size[0] // 2, kernel_size[0] // 2, kernel_size[1] // 2, kernel_size[1] // 2]
     img = flow_pad(img, padding, mode="reflect")
-    img = conv2d(img, kernel, groups=img.shape[-3], stride=[1], padding=[0], dilation=[1])
+
+    # TODO: fix the bug of oneflow.nn.functional.conv2d
+    # img = conv2d(img, kernel, groups=img.shape[-3], stride=[1], padding=[0], dilation=[1])
+
+    # the alternative
+    Conv2d = nn.Conv2d(in_channels=img.shape[-3], out_channels=img.shape[-3], kernel_size=kernel.size()[2:], groups=img.shape[-3], bias=False)
+    Conv2d.weight = nn.Parameter(kernel)
+    img = Conv2d(img)
+
     img = _cast_squeeze_out(img, need_cast, need_squeeze, out_dtype)
-    return 
+    return img
