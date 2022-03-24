@@ -29,4 +29,5 @@ Utils for Image Transforms
         RandomGrayscale,
         FiveCrop,
         TenCrop,
-        InterpolationMode
+        InterpolationMode,
+        GaussianBlur,

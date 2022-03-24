@@ -18,6 +18,7 @@
 - Support transforms.RandomGrayscale method [#171](https://github.com/Oneflow-Inc/vision/pull/171)
 - Support [RegNet](https://arxiv.org/abs/2003.13678) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
 - Support [LeViT](https://arxiv.org/abs/2104.01136) model and pretrained weight [#177](https://github.com/Oneflow-Inc/vision/pull/177)
+- Support transforms.GaussianBlur method [#188](https://github.com/Oneflow-Inc/vision/pull/188)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
