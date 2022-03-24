@@ -25,7 +25,7 @@ class LabelSmoothingCrossEntropy(nn.Module):
 
 
 class SoftTargetCrossEntropy(nn.Module):
-    """Soft target crossEntropy loss
+    """Soft target CrossEntropy loss
     """
 
     def __init__(self):
