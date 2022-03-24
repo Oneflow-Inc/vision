@@ -13,7 +13,8 @@ _logger = logging.getLogger(__name__)
 
 
 class ModelEmaV2(nn.Module):
-    """ Model Exponential Moving Average V2
+    """ Model Exponential Moving Average V2 borrowed from:
+    https://github.com/rwightman/pytorch-image-models/blob/master/timm/utils/model_ema.py
 
     Keep a moving average of everything in the model state_dict (parameters and buffers).
     V2 of this module is simpler, it does not match params/buffers based on name but simply
