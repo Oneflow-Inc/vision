@@ -557,7 +557,6 @@ def _get_gaussian_kernel2d(
 ) -> Tensor:
     kernel1d_x = _get_gaussian_kernel1d(kernel_size[0], sigma[0]).to(device, dtype=dtype)
     kernel1d_y = _get_gaussian_kernel1d(kernel_size[1], sigma[1]).to(device, dtype=dtype)
-    # kernel2d = flow.mm(kernel1d_y[:, None], kernel1d_x[None, :])
     kernel2d = flow.matmul(kernel1d_y[:, None], kernel1d_x[None, :])
 
     return kernel2d
