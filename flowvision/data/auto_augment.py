@@ -512,6 +512,11 @@ def auto_augment_policy(name="v0", hparams=None):
 
 
 class AutoAugment:
+    """
+    Auto Augmentation
+
+    From paper `AutoAugment: Learning Augmentation Policies from Data <https://arxiv.org/abs/1805.09501>`_
+    """
     def __init__(self, policy):
         self.policy = policy
 
@@ -642,6 +647,11 @@ def rand_augment_ops(magnitude=10, hparams=None, transforms=None):
 
 
 class RandAugment:
+    """
+    Random Augmentation
+
+    From paper `RandAugment: Practical automated data augmentation <https://arxiv.org/abs/1909.13719>`_
+    """
     def __init__(self, ops, num_layers=2, choice_weights=None):
         self.ops = ops
         self.num_layers = num_layers
@@ -759,8 +769,8 @@ def augmix_ops(magnitude=10, hparams=None, transforms=None):
 class AugMixAugment:
     """ AugMix Transform
     Adapted and improved from impl here: https://github.com/google-research/augmix/blob/master/imagenet.py
-    From paper: 'AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty -
-    https://arxiv.org/abs/1912.02781
+    
+    From paper `AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty <https://arxiv.org/abs/1912.02781>`_
     """
 
     def __init__(self, ops, alpha=1.0, width=3, depth=-1, blended=False):
