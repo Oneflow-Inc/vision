@@ -517,6 +517,7 @@ class AutoAugment:
 
     From paper `AutoAugment: Learning Augmentation Policies from Data <https://arxiv.org/abs/1805.09501>`_
     """
+
     def __init__(self, policy):
         self.policy = policy
 
@@ -652,6 +653,7 @@ class RandAugment:
 
     From paper `RandAugment: Practical automated data augmentation <https://arxiv.org/abs/1909.13719>`_
     """
+
     def __init__(self, ops, num_layers=2, choice_weights=None):
         self.ops = ops
         self.num_layers = num_layers

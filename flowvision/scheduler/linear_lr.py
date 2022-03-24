@@ -28,7 +28,7 @@ class LinearLRScheduler(Scheduler):
         warmup_lr_init: The initial learning rate during warmup.
 
     """
-    
+
     def __init__(
         self,
         optimizer: flow.optim.Optimizer,
