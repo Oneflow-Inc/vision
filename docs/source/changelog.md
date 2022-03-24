@@ -12,12 +12,13 @@
 - Support [PoolFormer](https://arxiv.org/abs/2111.11418) model and pretrained weight [#137](https://github.com/Oneflow-Inc/vision/pull/137)
 - Support [RegionViT](https://arxiv.org/abs/2106.02689) model and pretrained weight [#144](https://github.com/Oneflow-Inc/vision/pull/144)
 - Support [UniFormer](https://arxiv.org/abs/2201.04676) model and pretrained weight [#147](https://github.com/Oneflow-Inc/vision/pull/147)
-- Support IResNeSt model for face recognition [#160](https://github.com/Oneflow-Inc/vision/pull/160)
+- Support ``IResNet`` model for face recognition [#160](https://github.com/Oneflow-Inc/vision/pull/160)
 - Support [VAN](https://arxiv.org/abs/2202.09741) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
 - Support [Dynamic convolution](https://arxiv.org/abs/1912.03458) module [#166](https://github.com/Oneflow-Inc/vision/pull/169)
-- Support transforms.RandomGrayscale method [#171](https://github.com/Oneflow-Inc/vision/pull/171)
+- Support ``transforms.RandomGrayscale`` method [#171](https://github.com/Oneflow-Inc/vision/pull/171)
 - Support [RegNet](https://arxiv.org/abs/2003.13678) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
 - Support [LeViT](https://arxiv.org/abs/2104.01136) model and pretrained weight [#177](https://github.com/Oneflow-Inc/vision/pull/177)
+- Support ``transforms.GaussianBlur`` method [#188](https://github.com/Oneflow-Inc/vision/pull/188)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)

@@ -1013,3 +1013,73 @@ def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
         return F_pil.to_grayscale(img, num_output_channels)
 
     return F_t.rgb_to_grayscale(img, num_output_channels)
+
+
+
+def gaussian_blur(img: Tensor, kernel_size: List[int], sigma: Optional[List[float]] = None) -> Tensor:
+    """Performs Gaussian blurring on the image by given kernel.
+    If the image is oneflow Tensor, it is expected
+    to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
+
+    Args:
+        img (PIL Image or Tensor): Image to be blurred
+        kernel_size (sequence of ints or int): Gaussian kernel size. Can be a sequence of integers
+            like ``(kx, ky)`` or a single integer for square kernels.
+
+            .. note::
+                In torchscript mode kernel_size as single int is not supported, use a sequence of
+                length 1: ``[ksize, ]``.
+        sigma (sequence of floats or float, optional): Gaussian kernel standard deviation. Can be a
+            sequence of floats like ``(sigma_x, sigma_y)`` or a single float to define the
+            same sigma in both X/Y directions. If None, then it is computed using
+            ``kernel_size`` as ``sigma = 0.3 * ((kernel_size - 1) * 0.5 - 1) + 0.8``.
+            Default, None.
+
+            .. note::
+                In torchscript mode sigma as single float is
+                not supported, use a sequence of length 1: ``[sigma, ]``.
+
+    Returns:
+        PIL Image or Tensor: Gaussian Blurred version of the image.
+    """
+    # TODO: implement the following code with oneflow
+    # if not flow.jit.is_scripting() and not flow.jit.is_tracing():
+    #     _log_api_usage_once(gaussian_blur)
+    
+    if not isinstance(kernel_size, (int, list, tuple)):
+        raise TypeError(f"kernel_size should be int or a sequence of integers. Got {type(kernel_size)}")
+    if isinstance(kernel_size, int):
+        kernel_size = [kernel_size, kernel_size]
+    if len(kernel_size) != 2:
+        raise ValueError(f"If kernel_size is a sequence its length should be 2. Got {len(kernel_size)}")
+    for ksize in kernel_size:
+        if ksize % 2 == 0 or ksize < 0:
+            raise ValueError(f"kernel_size should have odd and positive integers. Got {kernel_size}")
+
+    if sigma is None:
+        sigma = [ksize * 0.15 + 0.35 for ksize in kernel_size]
+
+    if sigma is not None and not isinstance(sigma, (int, float, list, tuple)):
+        raise TypeError(f"sigma should be either float or sequence of floats. Got {type(sigma)}")
+    if isinstance(sigma, (int, float)):
+        sigma = [float(sigma), float(sigma)]
+    if isinstance(sigma, (list, tuple)) and len(sigma) == 1:
+        sigma = [sigma[0], sigma[0]]
+    if len(sigma) != 2:
+        raise ValueError(f"If sigma is a sequence, its length should be 2. Got {len(sigma)}")
+    for s in sigma:
+        if s <= 0.0:
+            raise ValueError(f"sigma should have positive values. Got {sigma}")
+
+    t_img = img
+    if not isinstance(img, flow.Tensor):
+        if not F_pil._is_pil_image(img):
+            raise TypeError(f"img should be PIL Image or Tensor. Got {type(img)}")
+
+        t_img = to_tensor(img)
+
+    output = F_t.gaussian_blur(t_img, kernel_size, sigma)
+
+    if not isinstance(img, flow.Tensor):
+        output = to_pil_image(output)
+    return output
