@@ -385,10 +385,10 @@ UniFormer
 -----------
 .. automodule:: flowvision.models
     :members: 
-        uniformer_small
-        uniformer_small_plus
-        uniformer_base
-        uniformer_base_ls
+        uniformer_small,
+        uniformer_small_plus,
+        uniformer_base,
+        uniformer_base_ls,
 
 
 Mlp-Mixer

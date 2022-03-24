@@ -12,6 +12,7 @@ def dispatch_clip_grad(
     parameters, value: float, mode: str = "norm", norm_type: float = 2.0
 ):
     """ Dispatch to gradient clipping method
+    
     Args:
         parameters (Iterable): model parameters to clip
         value (float): clipping value/factor/norm, mode dependant

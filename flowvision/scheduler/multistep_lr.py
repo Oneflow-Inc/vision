@@ -10,7 +10,16 @@ from .scheduler import Scheduler
 
 
 class MultiStepLRScheduler(Scheduler):
-    """ MultiStep LRScheduler
+    """MultiStep LRScheduler
+    Decays the learning rate of each parameter group by decay_rate once the 
+    number of step reaches one of the decay_t. 
+
+    Args:
+        optimizer: The optimizer will be used for the training process
+        decay_t: List of epoch indices. Must be increasing.
+        decay_rate: Multiplicative factor of learning rate decay. Default: 1.0.
+        warmup_t: Defines the number of warmup epochs.
+        warmup_lr_init: The initial learning rate during warmup.
     """
 
     def __init__(

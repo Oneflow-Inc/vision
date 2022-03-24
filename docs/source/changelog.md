@@ -26,6 +26,7 @@
 
 **Docs Update**
 - Add `SEModule` Docs [#143](https://github.com/Oneflow-Inc/vision/pull/143)
+- Add `Scheduler` and `Data` Docs [#189](https://github.com/Oneflow-Inc/vision/pull/189)
 
 **Contributors**
 A total of x developers contributed to this release.
