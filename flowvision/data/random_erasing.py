@@ -35,6 +35,7 @@ class RandomErasing:
             * 'const' - erase block is constant color of 0 for all channels
             * 'rand'  - erase block is same per-channel random (normal) color
             * 'pixel' - erase block is per-pixel random (normal) color
+        
         max_count: Maximum number of erasing blocks per image, area per box is scaled by count.
             per-image count is randomly chosen between 1 and this value
     """
