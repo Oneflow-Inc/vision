@@ -1249,14 +1249,18 @@ class GaussianBlur(Module):
 
     def __init__(self, kernel_size, sigma=(0.1, 2.0)):
         super().__init__()
-        
+
         # TODO: implement the following code with oneflow
         # _log_api_usage_once(self)
-        
-        self.kernel_size = _setup_size(kernel_size, "Kernel size should be a tuple/list of two integers")
+
+        self.kernel_size = _setup_size(
+            kernel_size, "Kernel size should be a tuple/list of two integers"
+        )
         for ks in self.kernel_size:
             if ks <= 0 or ks % 2 == 0:
-                raise ValueError("Kernel size value should be an odd and positive number.")
+                raise ValueError(
+                    "Kernel size value should be an odd and positive number."
+                )
 
         if isinstance(sigma, numbers.Number):
             if sigma <= 0:
@@ -1264,9 +1268,13 @@ class GaussianBlur(Module):
             sigma = (sigma, sigma)
         elif isinstance(sigma, Sequence) and len(sigma) == 2:
             if not 0.0 < sigma[0] <= sigma[1]:
-                raise ValueError("sigma values should be positive and of the form (min, max).")
+                raise ValueError(
+                    "sigma values should be positive and of the form (min, max)."
+                )
         else:
-            raise ValueError("sigma should be a single number or a list/tuple with length 2.")
+            raise ValueError(
+                "sigma should be a single number or a list/tuple with length 2."
+            )
 
         self.sigma = sigma
 
@@ -1313,7 +1321,9 @@ def _setup_size(size, error_msg):
 
 
 def _check_sequence_input(x, name, req_sizes):
-    msg = req_sizes[0] if len(req_sizes) < 2 else " or ".join([str(s) for s in req_sizes])
+    msg = (
+        req_sizes[0] if len(req_sizes) < 2 else " or ".join([str(s) for s in req_sizes])
+    )
     if not isinstance(x, Sequence):
         raise TypeError(f"{name} should be a sequence of length {msg}.")
     if len(x) not in req_sizes:
