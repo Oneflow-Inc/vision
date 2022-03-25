@@ -4,16 +4,15 @@ def run_resnest200_batch_size16():
     import numpy as np
     from flowvision.models.resnest import resnest200
 
-    model = resnest200().to('cuda')
+    model = resnest200().to("cuda")
     input_shape = [16, 3, 320, 320]
 
     learning_rate = 0.01
     mom = 0.9
-    optimizer = flow.optim.SGD(
-        model.parameters(), lr=learning_rate, momentum=mom)
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-    y = model(x)   
+    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
@@ -22,24 +21,26 @@ def run_resnest200_batch_size16():
     x.numpy()
     y.numpy()
 
+
 def test_resnest200_batch_size16(benchmark):
     benchmark.pedantic(run_resnest200_batch_size16)
+
+
 def run_resnest200_batch_size8():
 
     import oneflow as flow
     import numpy as np
     from flowvision.models.resnest import resnest200
 
-    model = resnest200().to('cuda')
+    model = resnest200().to("cuda")
     input_shape = [8, 3, 320, 320]
 
     learning_rate = 0.01
     mom = 0.9
-    optimizer = flow.optim.SGD(
-        model.parameters(), lr=learning_rate, momentum=mom)
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-    y = model(x)   
+    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
@@ -48,24 +49,26 @@ def run_resnest200_batch_size8():
     x.numpy()
     y.numpy()
 
+
 def test_resnest200_batch_size8(benchmark):
     benchmark.pedantic(run_resnest200_batch_size8)
+
+
 def run_resnest200_batch_size4():
 
     import oneflow as flow
     import numpy as np
     from flowvision.models.resnest import resnest200
 
-    model = resnest200().to('cuda')
+    model = resnest200().to("cuda")
     input_shape = [4, 3, 320, 320]
 
     learning_rate = 0.01
     mom = 0.9
-    optimizer = flow.optim.SGD(
-        model.parameters(), lr=learning_rate, momentum=mom)
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-    y = model(x)   
+    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
@@ -74,24 +77,26 @@ def run_resnest200_batch_size4():
     x.numpy()
     y.numpy()
 
+
 def test_resnest200_batch_size4(benchmark):
     benchmark.pedantic(run_resnest200_batch_size4)
+
+
 def run_resnest200_batch_size2():
 
     import oneflow as flow
     import numpy as np
     from flowvision.models.resnest import resnest200
 
-    model = resnest200().to('cuda')
+    model = resnest200().to("cuda")
     input_shape = [2, 3, 320, 320]
 
     learning_rate = 0.01
     mom = 0.9
-    optimizer = flow.optim.SGD(
-        model.parameters(), lr=learning_rate, momentum=mom)
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-    y = model(x)   
+    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
@@ -100,24 +105,26 @@ def run_resnest200_batch_size2():
     x.numpy()
     y.numpy()
 
+
 def test_resnest200_batch_size2(benchmark):
     benchmark.pedantic(run_resnest200_batch_size2)
+
+
 def run_resnest200_batch_size1():
 
     import oneflow as flow
     import numpy as np
     from flowvision.models.resnest import resnest200
 
-    model = resnest200().to('cuda')
+    model = resnest200().to("cuda")
     input_shape = [1, 3, 320, 320]
 
     learning_rate = 0.01
     mom = 0.9
-    optimizer = flow.optim.SGD(
-        model.parameters(), lr=learning_rate, momentum=mom)
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to('cuda')
-    y = model(x)   
+    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
@@ -125,6 +132,7 @@ def run_resnest200_batch_size1():
     optimizer.step()
     x.numpy()
     y.numpy()
+
 
 def test_resnest200_batch_size1(benchmark):
     benchmark.pedantic(run_resnest200_batch_size1)
