@@ -174,6 +174,8 @@ pip install flowvision==0.1.0
             <li>RandomVerticalFlip</li>
             <li>RandomHorizontalFlip</li>
             <li>Resize</li>
+            <li>RandomGrayscale</li>
+            <li>GaussianBlur</li>
           </ul>  
         </ul>
         <ul><li><b>Advanced Augmentation</b></li>

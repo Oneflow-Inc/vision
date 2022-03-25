@@ -140,7 +140,7 @@ ResNet
         wide_resnet101_2,
 
 ResNeSt
-------
+--------
 .. automodule:: flowvision.models
     :members: 
         resnest50,
@@ -255,6 +255,9 @@ ReXNet
         rexnetv1_1_5,
         rexnetv1_2_0,
         rexnetv1_3_0,
+
+.. automodule:: flowvision.models
+    :members:
         rexnet_lite_1_0,
         rexnet_lite_1_3,
         rexnet_lite_1_5,
@@ -385,10 +388,10 @@ UniFormer
 -----------
 .. automodule:: flowvision.models
     :members: 
-        uniformer_small
-        uniformer_small_plus
-        uniformer_base
-        uniformer_base_ls
+        uniformer_small,
+        uniformer_small_plus,
+        uniformer_base,
+        uniformer_base_ls,
 
 
 Mlp-Mixer
@@ -426,7 +429,7 @@ ResMLP
 
 
 gMLP
-----
+-----
 .. automodule:: flowvision.models
     :members: 
         gmlp_ti16_224,
@@ -435,7 +438,7 @@ gMLP
 
 
 ConvMixer
----------
+----------
 .. automodule:: flowvision.models
     :members: 
         convmixer_1536_20,
@@ -444,7 +447,7 @@ ConvMixer
 
 
 ConvNeXt
---------
+---------
 .. automodule:: flowvision.models
     :members:
         convnext_tiny_224,
@@ -467,7 +470,7 @@ ConvNeXt
         convnext_iso_large_224,
 
 RegionViT
---------
+----------
 .. automodule:: flowvision.models
     :members:
         regionvit_tiny_224,
@@ -501,7 +504,7 @@ LeViT
 
 
 Neural Style Transfer
-==============
+======================
 
 .. currentmodule:: flowvision.models
 
@@ -511,15 +514,16 @@ Neural Style Transfer
 
 
 Face Recognition
-==============
+=================
 .. currentmodule:: flowvision.models
 .. automodule:: flowvision.models.face_recognition
     :members:
         iresnet50,
         iresnet101,
 
+
 Semantic Segmentation
-==============
+======================
 
 .. currentmodule:: flowvision.models
 
@@ -531,7 +535,7 @@ FCN
         fcn_resnet101_coco,
 
 DeepLabV3
---------
+----------
 .. automodule:: flowvision.models.segmentation
     :members:
         deeplabv3_resnet50_coco,
@@ -546,12 +550,12 @@ LRASPP
 
 
 Object Detection
-==============
+=================
 
 .. currentmodule:: flowvision.models
 
 Faster R-CNN
---------
+-------------
 .. automodule:: flowvision.models.detection
     :members:
         fasterrcnn_resnet50_fpn,
@@ -559,7 +563,7 @@ Faster R-CNN
         fasterrcnn_mobilenet_v3_large_fpn,
 
 RetinaNet
---------
+----------
 .. automodule:: flowvision.models.detection
     :members:
         retinanet_resnet50_fpn,

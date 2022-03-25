@@ -19,6 +19,9 @@ def one_hot(x, num_classes, on_value=1.0, off_value=0.0, device="cuda"):
 
 
 def mixup_target(target, num_classes, lam=1.0, smoothing=0.0, device="cuda"):
+    """
+    Mixup the targets with label-smoothing
+    """
     off_value = smoothing / num_classes
     on_value = 1.0 - smoothing + off_value
     y1 = one_hot(
@@ -38,6 +41,7 @@ def rand_bbox(img_shape, lam, margin=0.0, count=None):
     """ Standard CutMix bounding-box
     Generates a random square bbox based on lambda value. This impl includes
     support for enforcing a border margin as percent of bbox dimensions.
+    
     Args:
         img_shape (tuple): Image shape as tuple
         lam (float): Cutmix lambda value
@@ -62,6 +66,7 @@ def rand_bbox_minmax(img_shape, minmax, count=None):
     Inspired by Darknet cutmix impl, generates a random rectangular bbox
     based on min/max percent values applied to each dimension of the input image.
     Typical defaults for minmax are usually in the  .2-.3 for min and .8-.9 range for max.
+    
     Args:
         img_shape (tuple): Image shape as tuple
         minmax (tuple or list): Min and max bbox ratios (as percent of image size)
@@ -100,6 +105,7 @@ def cutmix_bbox_and_lam(
 
 class Mixup:
     """ Mixup/Cutmix that applies different params to each element or whole batch
+    
     Args:
         mixup_alpha (float): Mixup alpha value, mixup is active if > 0
         cutmix_alpha (float): Cutmix alpha value, cutmix is active if > 0

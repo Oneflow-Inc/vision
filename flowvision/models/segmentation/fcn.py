@@ -16,6 +16,7 @@ model_urls = {
 class FCN(_SimpleSegmentationModel):
     """
     Implements a Fully-Convolutional Network for semantic segmentation.
+    
     Args:
         backbone (nn.Module): the network used to compute the features for the model.
             The backbone should return an OrderedDict[Tensor], with the key being
@@ -121,6 +122,7 @@ def fcn_resnet50_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
     """Constructs a Fully-Convolutional Network model with a ResNet-50 backbone.
+    
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC
@@ -146,6 +148,7 @@ def fcn_resnet101_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
     """Constructs a Fully-Convolutional Network model with a ResNet-101 backbone.
+    
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC

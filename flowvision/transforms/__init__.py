@@ -27,6 +27,7 @@ from .transforms import (
     InterpolationMode,
     ToNumpy,
     ColorJitter,
+    GaussianBlur,
 )
 
 
@@ -57,4 +58,5 @@ __all__ = [
     "InterpolationMode",
     "ToNumpy",
     "ColorJitter",
+    "GaussianBlur",
 ]

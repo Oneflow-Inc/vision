@@ -512,6 +512,12 @@ def auto_augment_policy(name="v0", hparams=None):
 
 
 class AutoAugment:
+    """
+    Auto Augmentation
+
+    From paper `AutoAugment: Learning Augmentation Policies from Data <https://arxiv.org/abs/1805.09501>`_
+    """
+
     def __init__(self, policy):
         self.policy = policy
 
@@ -534,12 +540,16 @@ class AutoAugment:
 def auto_augment_transform(config_str, hparams):
     """
     Create a AutoAugment transform
+
     :param config_str: String defining configuration of auto augmentation. Consists of multiple sections separated by
-    dashes ('-'). The first section defines the AutoAugment policy (one of 'v0', 'v0r', 'original', 'originalr').
-    The remaining sections, not order sepecific determine
-        'mstd' -  float std deviation of magnitude noise applied
-    Ex 'original-mstd0.5' results in AutoAugment with original policy, magnitude_std 0.5
+        dashes ('-'). The first section defines the AutoAugment policy (one of 'v0', 'v0r', 'original', 'originalr').
+        The remaining sections, not order sepecific determine
+            * 'mstd' -  float std deviation of magnitude noise applied
+        
+        Example: 'original-mstd0.5' results in AutoAugment with original policy, magnitude_std 0.5
+    
     :param hparams: Other hparams (kwargs) for the AutoAugmentation scheme
+    
     :return: An OneFlow compatible Transform
     """
     config = config_str.split("-")
@@ -638,6 +648,12 @@ def rand_augment_ops(magnitude=10, hparams=None, transforms=None):
 
 
 class RandAugment:
+    """
+    Random Augmentation
+
+    From paper `RandAugment: Practical automated data augmentation <https://arxiv.org/abs/1909.13719>`_
+    """
+
     def __init__(self, ops, num_layers=2, choice_weights=None):
         self.ops = ops
         self.num_layers = num_layers
@@ -666,22 +682,25 @@ class RandAugment:
 def rand_augment_transform(config_str, hparams):
     """
     Create a RandAugment transform
-
+    
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
-    dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
-    sections, not order sepecific determine
-        'm' - integer magnitude of rand augment
-        'n' - integer num layers (number of transform ops selected per image)
-        'w' - integer probabiliy weight index (index of a set of weights to influence choice of op)
-        'mstd' -  float std deviation of magnitude noise applied, or uniform sampling if infinity (or > 100)
-        'mmax' - set upper bound for magnitude to something other than default of  _LEVEL_DENOM (10)
-        'inc' - integer (bool), use augmentations that increase in severity with magnitude (default: 0)
-    Ex 'rand-m9-n3-mstd0.5' results in RandAugment with magnitude 9, num_layers 3, magnitude_std 0.5
-    'rand-mstd1-w0' results in magnitude_std 1.0, weights 0, default magnitude of 10 and num_layers 2
+        dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
+        sections, not order sepecific determine
+
+            * 'm' - integer magnitude of rand augment
+            * 'n' - integer num layers (number of transform ops selected per image)
+            * 'w' - integer probabiliy weight index (index of a set of weights to influence choice of op)
+            * 'mstd' -  float std deviation of magnitude noise applied, or uniform sampling if infinity (or > 100)
+            * 'mmax' - set upper bound for magnitude to something other than default of  _LEVEL_DENOM (10)
+            * 'inc' - integer (bool), use augmentations that increase in severity with magnitude (default: 0)
+        
+        Example: 'rand-m9-n3-mstd0.5' results in RandAugment with magnitude 9, num_layers 3, magnitude_std 0.5
+        'rand-mstd1-w0' results in magnitude_std 1.0, weights 0, default magnitude of 10 and num_layers 2
 
     :param hparams: Other hparams (kwargs) for the RandAugmentation scheme
 
-    :return: An OneFlow compatible Transform
+    Returns:
+        An OneFlow compatible Transform
     """
     magnitude = _LEVEL_DENOM  # default to _LEVEL_DENOM for magnitude (currently 10)
     num_layers = 2  # default to 2 ops per image
@@ -752,8 +771,8 @@ def augmix_ops(magnitude=10, hparams=None, transforms=None):
 class AugMixAugment:
     """ AugMix Transform
     Adapted and improved from impl here: https://github.com/google-research/augmix/blob/master/imagenet.py
-    From paper: 'AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty -
-    https://arxiv.org/abs/1912.02781
+    
+    From paper `AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty <https://arxiv.org/abs/1912.02781>`_
     """
 
     def __init__(self, ops, alpha=1.0, width=3, depth=-1, blended=False):
@@ -830,14 +849,16 @@ def augment_and_mix_transform(config_str, hparams):
     """ Create AugMix OneFlow transform
 
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
-    dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
-    sections, not order sepecific determine
-        'm' - integer magnitude (severity) of augmentation mix (default: 3)
-        'w' - integer width of augmentation chain (default: 3)
-        'd' - integer depth of augmentation chain (-1 is random [1, 3], default: -1)
-        'b' - integer (bool), blend each branch of chain into end result without a final blend, less CPU (default: 0)
-        'mstd' -  float std deviation of magnitude noise applied (default: 0)
-    Ex 'augmix-m5-w4-d2' results in AugMix with severity 5, chain width 4, chain depth 2
+        dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
+        sections, not order sepecific determine
+
+            * 'm' - integer magnitude (severity) of augmentation mix (default: 3)
+            * 'w' - integer width of augmentation chain (default: 3)
+            * 'd' - integer depth of augmentation chain (-1 is random [1, 3], default: -1)
+            * 'b' - integer (bool), blend each branch of chain into end result without a final blend, less CPU (default: 0)
+            * 'mstd' -  float std deviation of magnitude noise applied (default: 0)
+            
+        Example: 'augmix-m5-w4-d2' results in AugMix with severity 5, chain width 4, chain depth 2
 
     :param hparams: Other hparams (kwargs) for the Augmentation transforms
 
