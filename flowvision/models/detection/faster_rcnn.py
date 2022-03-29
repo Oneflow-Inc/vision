@@ -1,3 +1,5 @@
+from typing import Any, Optional, Union
+
 import oneflow as flow
 from oneflow import nn
 import oneflow.nn.functional as F
@@ -158,8 +160,14 @@ class FasterRCNN(GeneralizedRCNN):
                 "same for all the levels)"
             )
 
-        assert isinstance(rpn_anchor_generator, (AnchorGenerator, type(None)))
-        assert isinstance(box_roi_pool, (MultiScaleRoIAlign, type(None)))
+        if not isinstance(rpn_anchor_generator, (AnchorGenerator, type(None))):
+            raise TypeError(
+                f"rpn_anchor_generator should be of type AnchorGenerator or None instead of {type(rpn_anchor_generator)}"
+            )
+        if not isinstance(box_roi_pool, (MultiScaleRoIAlign, type(None))):
+            raise TypeError(
+                f"box_roi_pool should be of type MultiScaleRoIAlign or None instead of {type(box_roi_pool)}"
+            )
 
         if num_classes is not None:
             if box_predictor is not None:
@@ -251,7 +259,7 @@ class TwoMLPHead(nn.Module):
         representation_size (int): size of the intermediate representation
     """
 
-    def __init__(self, in_channels, representation_size):
+    def __init__(self, in_channels: int, representation_size: int):
         super().__init__()
 
         self.fc6 = nn.Linear(in_channels, representation_size)
@@ -276,7 +284,7 @@ class FastRCNNPredictor(nn.Module):
         num_classes (int): number of output classes (including background)
     """
 
-    def __init__(self, in_channels, num_classes):
+    def __init__(self, in_channels: int, num_classes: int):
         super().__init__()
         self.cls_score = nn.Linear(in_channels, num_classes)
         self.bbox_pred = nn.Linear(in_channels, num_classes * 4)
@@ -293,11 +301,11 @@ class FastRCNNPredictor(nn.Module):
 
 @ModelCreator.register_model
 def fasterrcnn_resnet50_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     """

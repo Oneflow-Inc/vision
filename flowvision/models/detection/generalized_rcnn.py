@@ -31,8 +31,9 @@ class GeneralizedRCNN(nn.Module):
         self.rpn = rpn
         self.roi_heads = roi_heads
 
-    def forward(self, images, targets=None):
-        # type: (List[Tensor], Optional[List[Dict[str, Tensor]]]) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]
+    def forward(
+        self, images: List[Tensor], targets: Optional[List[Dict[str, Tensor]]] = None
+    ) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]:
         """
         Args:
             images (list[Tensor]): images to be processed
@@ -44,10 +45,10 @@ class GeneralizedRCNN(nn.Module):
                 During testing, it returns list[BoxList] contains additional fields
                 like `scores`, `labels` and `mask` (for Mask R-CNN models).
         """
-        if self.training and targets is None:
-            raise ValueError("In training mode, targes should be passed")
         if self.training:
-            assert targets is not None
+            if targets is None:
+                raise ValueError("In training mode, targes should be passed")
+
             for target in targets:
                 boxes = target["boxes"]
                 if isinstance(boxes, flow.Tensor):
@@ -63,7 +64,10 @@ class GeneralizedRCNN(nn.Module):
         original_image_sizes: List[Tuple[int, int]] = []
         for img in images:
             val = img.shape[-2:]
-            assert len(val) == 2
+            if len(val) != 2:
+                raise ValueError(
+                    f"Expecting the last two dimensions of the input tensor to be H and W, instead got {img.shape[-2:]}"
+                )
             original_image_sizes.append((val[0], val[1]))
 
         images, targets = self.transform(images, targets)
@@ -74,9 +78,9 @@ class GeneralizedRCNN(nn.Module):
             for target_idx, target in enumerate(targets):
                 boxes = target["boxes"]
                 degenerate_boxes = boxes[:, 2:] <= boxes[:, :2]
-                if degenerate_boxes.sum() > 0:
+                if degenerate_boxes.any() > 0:
                     # print the first degenerate box
-                    bb_idx = flow.where(degenerate_boxes.sum(dim=1))[0][0]
+                    bb_idx = flow.where(degenerate_boxes.any(dim=1))[0][0]
                     degen_bb: List[float] = boxes[bb_idx].tolist()
                     raise ValueError(
                         "All bounding boxes should have positive height and width."
