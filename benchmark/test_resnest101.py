@@ -23,7 +23,7 @@ def run_resnest101_batch_size16():
 
 
 def test_resnest101_batch_size16(benchmark):
-    benchmark.pedantic(run_resnest101_batch_size16, iterations=50)
+    benchmark.pedantic(run_resnest101_batch_size16, rounds=50)
 
 
 def run_resnest101_batch_size8():
@@ -51,7 +51,7 @@ def run_resnest101_batch_size8():
 
 
 def test_resnest101_batch_size8(benchmark):
-    benchmark.pedantic(run_resnest101_batch_size8, iterations=50)
+    benchmark.pedantic(run_resnest101_batch_size8, rounds=50)
 
 
 def run_resnest101_batch_size4():
@@ -79,7 +79,7 @@ def run_resnest101_batch_size4():
 
 
 def test_resnest101_batch_size4(benchmark):
-    benchmark.pedantic(run_resnest101_batch_size4, iterations=50)
+    benchmark.pedantic(run_resnest101_batch_size4, rounds=50)
 
 
 def run_resnest101_batch_size2():
@@ -107,7 +107,7 @@ def run_resnest101_batch_size2():
 
 
 def test_resnest101_batch_size2(benchmark):
-    benchmark.pedantic(run_resnest101_batch_size2, iterations=50)
+    benchmark.pedantic(run_resnest101_batch_size2, rounds=50)
 
 
 def run_resnest101_batch_size1():
@@ -135,4 +135,4 @@ def run_resnest101_batch_size1():
 
 
 def test_resnest101_batch_size1(benchmark):
-    benchmark.pedantic(run_resnest101_batch_size1, iterations=50)
+    benchmark.pedantic(run_resnest101_batch_size1, rounds=50)
