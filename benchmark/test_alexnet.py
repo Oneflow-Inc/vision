@@ -21,10 +21,11 @@ def run_alexnet_batch_size16():
     optimizer.step()
     x.numpy()
     y.numpy()
-
+    import gc
+    gc.collect()
 
 def test_alexnet_batch_size16(benchmark):
-    benchmark.pedantic(run_alexnet_batch_size16, rounds=50)
+    benchmark(run_alexnet_batch_size16)
 
 
 def run_alexnet_batch_size8():
@@ -50,10 +51,12 @@ def run_alexnet_batch_size8():
     optimizer.step()
     x.numpy()
     y.numpy()
+    import gc
+    gc.collect()
 
 
 def test_alexnet_batch_size8(benchmark):
-    benchmark.pedantic(run_alexnet_batch_size8, rounds=50)
+    benchmark(run_alexnet_batch_size8)
 
 
 def run_alexnet_batch_size4():
@@ -79,10 +82,12 @@ def run_alexnet_batch_size4():
     optimizer.step()
     x.numpy()
     y.numpy()
+    import gc
+    gc.collect()
 
 
 def test_alexnet_batch_size4(benchmark):
-    benchmark.pedantic(run_alexnet_batch_size4, rounds=50)
+    benchmark(run_alexnet_batch_size4)
 
 
 def run_alexnet_batch_size2():
@@ -108,10 +113,12 @@ def run_alexnet_batch_size2():
     optimizer.step()
     x.numpy()
     y.numpy()
+    import gc
+    gc.collect()
 
 
 def test_alexnet_batch_size2(benchmark):
-    benchmark.pedantic(run_alexnet_batch_size2, rounds=50)
+    benchmark(run_alexnet_batch_size2)
 
 
 def run_alexnet_batch_size1():
@@ -137,7 +144,9 @@ def run_alexnet_batch_size1():
     optimizer.step()
     x.numpy()
     y.numpy()
+    import gc
+    gc.collect()
 
 
 def test_alexnet_batch_size1(benchmark):
-    benchmark.pedantic(run_alexnet_batch_size1, rounds=50)
+    benchmark(run_alexnet_batch_size1)
