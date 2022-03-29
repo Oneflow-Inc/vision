@@ -165,7 +165,7 @@ class RegionProposalNetwork(nn.Module):
         self, anchors: List[Tensor], targets: List[Dict[str, Tensor]]
     ) -> Tuple[List[Tensor], List[Tensor]]:
 
-        lables = []
+        labels = []
         matched_gt_boxes = []
         for anchors_per_image, targets_per_image in zip(anchors, targets):
             gt_boxes = targets_per_image["boxes"]
@@ -180,7 +180,7 @@ class RegionProposalNetwork(nn.Module):
                     (anchors_per_image.shape[0],), dtype=flow.float32, device=device
                 )
             else:
-                match_quality_matrix = self.box_similarity(gt_bxoes, anchors_per_image)
+                match_quality_matrix = self.box_similarity(gt_boxes, anchors_per_image)
                 matched_idxs = self.proposal_matcher(match_quality_matrix)
                 # get the targets corresponding GT for each proposal
                 # NB: need to clamp the indices because we can have a single
@@ -316,7 +316,7 @@ class RegionProposalNetwork(nn.Module):
 
         # TODO (shijie wang): Use functional API
         objectness_loss = flow._C.binary_cross_entropy_with_logits_loss(
-            objectness[sampled_inds], labels[sampled_inds]
+            objectness[sampled_inds], labels[sampled_inds], reduction="mean"
         )
 
         return objectness_loss, box_loss
@@ -367,7 +367,8 @@ class RegionProposalNetwork(nn.Module):
 
         losses = {}
         if self.training:
-            assert targets is not None
+            if targets is None:
+                raise ValueError("targets should not be None")
             labels, matched_gt_boxes = self.assign_targets_to_anchors(anchors, targets)
             regression_targets = self.box_coder.encode(matched_gt_boxes, anchors)
             loss_objectness, loss_rpn_box_reg = self.compute_loss(

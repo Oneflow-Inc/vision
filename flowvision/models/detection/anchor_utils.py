@@ -34,7 +34,7 @@ class AnchorGenerator(nn.Module):
     def __init__(
         self, sizes=((128, 256, 512),), aspect_ratios=((0.5, 1.0, 2.0),),
     ):
-        super(AnchorGenerator, self).__init__()
+        super().__init__()
 
         if not isinstance(sizes[0], (list, tuple)):
             sizes = tuple((s,) for s in sizes)
@@ -87,7 +87,9 @@ class AnchorGenerator(nn.Module):
     ) -> List[Tensor]:
         anchors = []
         cell_anchors = self.cell_anchors
-        assert cell_anchors is not None
+
+        if cell_anchors is None:
+            raise ValueError("cell_anchors should not be None")
 
         if not (len(grid_sizes) == len(strides) == len(cell_anchors)):
             raise ValueError(

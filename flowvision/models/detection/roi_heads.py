@@ -8,8 +8,12 @@ from flowvision.layers.blocks import boxes as box_ops
 from . import det_utils
 
 
-def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
-    # type: (Tensor, Tensor, List[Tensor], List[Tensor]) -> Tuple[Tensor, Tensor]
+def fastrcnn_loss(
+    class_logits: Tensor,
+    box_regression: Tensor,
+    labels: List[Tensor],
+    regression_targets: List[Tensor],
+) -> Tuple[Tensor, Tensor]:
     """
     Computes the loss for Faster R-CNN.
 
@@ -27,9 +31,7 @@ def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
     labels = flow.cat(labels, dim=0)
     regression_targets = flow.cat(regression_targets, dim=0)
 
-    classification_loss = flow._C.cross_entropy(
-        class_logits, labels, ignore_index=-100, reduction="none",
-    )
+    classification_loss = flow._C.cross_entropy(class_logits, labels)
 
     # get indices that correspond to the regression targets for
     # the corresponding ground truth labels, to be used with
@@ -59,26 +61,26 @@ class RoIHeads(nn.Module):
 
     def __init__(
         self,
-        box_roi_pool,
-        box_head,
-        box_predictor,
+        box_roi_pool: nn.Module,
+        box_head: nn.Module,
+        box_predictor: nn.Module,
         # Faster R-CNN training
-        fg_iou_thresh,
-        bg_iou_thresh,
-        batch_size_per_image,
-        positive_fraction,
-        bbox_reg_weights,
+        fg_iou_thresh: float,
+        bg_iou_thresh: float,
+        batch_size_per_image: int,
+        positive_fraction: float,
+        bbox_reg_weights: float,
         # Faster R-CNN inference
-        score_thresh,
-        nms_thresh,
-        detections_per_img,
+        score_thresh: float,
+        nms_thresh: float,
+        detections_per_img: int,
         # Mask
-        mask_roi_pool=None,
-        mask_head=None,
-        mask_predictor=None,
-        keypoint_roi_pool=None,
-        keypoint_head=None,
-        keypoint_predictor=None,
+        mask_roi_pool: Optional[nn.Module] = None,
+        mask_head: Optional[nn.Module] = None,
+        mask_predictor: Optional[nn.Module] = None,
+        keypoint_roi_pool: Optional[nn.Module] = None,
+        keypoint_head: Optional[nn.Module] = None,
+        keypoint_predictor: Optional[nn.Module] = None,
     ):
         super().__init__()
 
@@ -130,8 +132,9 @@ class RoIHeads(nn.Module):
             return False
         return True
 
-    def assign_targets_to_proposals(self, proposals, gt_boxes, gt_labels):
-        # type: (List[Tensor], List[Tensor], List[Tensor]) -> Tuple[List[Tensor], List[Tensor]]
+    def assign_targets_to_proposals(
+        self, proposals: List[Tensor], gt_boxes: List[Tensor], gt_labels: List[Tensor]
+    ) -> Tuple[List[Tensor], List[Tensor]]:
         matched_idxs = []
         labels = []
         for proposals_in_image, gt_boxes_in_image, gt_labels_in_image in zip(
@@ -194,22 +197,23 @@ class RoIHeads(nn.Module):
 
         return proposals
 
-    def check_targets(self, targets):
-        # type: (Optional[List[Dict[str, Tensor]]]) -> None
-        assert targets is not None
-        assert all(["boxes" in t for t in targets])
-        assert all(["labels" in t for t in targets])
+    def check_targets(self, targets: Optional[List[Dict[str, Tensor]]]) -> None:
+        if targets is None:
+            raise ValueError("targets should not be None")
+        if not all(["boxes" in t for t in targets]):
+            raise ValueError("Every element of targets should have a boxes key")
+        if not all(["labels" in t for t in targets]):
+            raise ValueError("Every element of targets should have a labels key")
         if self.has_mask():
-            assert all(["masks" in t for t in targets])
+            if not all(["masks" in t for t in targets]):
+                raise ValueError("Every element of targets should have a masks key")
 
     def select_training_samples(
-        self,
-        proposals,  # type: List[Tensor]
-        targets,  # type: Optional[List[Dict[str, Tensor]]]
-    ):
-        # type: (...) -> Tupel[List[Tensor], List[Tensor], List[Tensor], List[Tensor]]
+        self, proposals: List[Tensor], targets: Optional[List[Dict[str, Tensor]]],
+    ) -> Tuple[List[Tensor], List[Tensor], List[Tensor], List[Tensor]]:
         self.check_targets(targets)
-        assert targets is not None
+        if targets is None:
+            raise ValueError("targets should not be None")
         dtype = proposals[0].dtype
         device = proposals[0].device
 
@@ -220,7 +224,7 @@ class RoIHeads(nn.Module):
         proposals = self.add_gt_proposals(proposals, gt_boxes)
 
         # get matching gt indices for each proposal
-        matched_idxs, labels = self.assign_target_to_proposals(
+        matched_idxs, labels = self.assign_targets_to_proposals(
             proposals, gt_boxes, gt_labels
         )
         # sample a fixed proportion of positive-negative proposals
@@ -243,12 +247,11 @@ class RoIHeads(nn.Module):
 
     def postprocess_detections(
         self,
-        class_logits,  # type: Tensor
-        box_regression,  # type: Tensor
-        proposals,  # type: List[Tensor]
-        image_shapes,  # type: List[Tuple[int, int]]
-    ):
-        # type: (...) -> Tuple[List[Tensor], List[Tensor], List[Tensor]]s
+        class_logits: Tensor,
+        box_regression: Tensor,
+        proposals: List[Tensor],
+        image_shapes: List[Tuple[int, int]],
+    ) -> Tuple[List[Tensor], List[Tensor], List[Tensor]]:
         device = class_logits.device
         num_classes = class_logits.shape[-1]
 
@@ -304,12 +307,11 @@ class RoIHeads(nn.Module):
 
     def forward(
         self,
-        features,  # type: Dict[str, Tensor]
-        proposals,  # type: List[Tensor]
-        image_shapes,  # type: List
-        targets=None,  # type: Optional[List[Dict[str, Tensor]]]
+        features: Dict[str, Tensor],
+        proposals: List[Tensor],
+        image_shapes: List[Tuple[int, int]],
+        targets: Optional[List[Dict[str, Tensor]]] = None,
     ):
-        # type: (...) -> Tuple[List[Dict[str, Tensor]], Dict[str, Tensor]]
         """
         Args:
             features (List[Tensor])
@@ -320,16 +322,19 @@ class RoIHeads(nn.Module):
         if targets is not None:
             for t in targets:
                 floating_point_types = (flow.float, flow.double, flow.half)
-                assert (
-                    t["boxes"].dtype in floating_point_types
-                ), "target boxes must of float type"
-                assert (
-                    t["labels"].dtype == flow.int64
-                ), "target labels must of int64 type"
+                if not t["boxes"].dtype in floating_point_types:
+                    raise TypeError(
+                        f"target boxes must of float type, instead got {t['boxes'].dtype}"
+                    )
+                if not t["labels"].dtype == flow.int64:
+                    raise TypeError(
+                        "target labels must of int64 type, instead got {t['labels'].dtype}"
+                    )
                 if self.has_keypoint():
-                    assert (
-                        t["keypoints"].dtype == flow.float32
-                    ), "target keypoints must of float type"
+                    if not t["keypoints"].dtype == flow.float32:
+                        raise TypeError(
+                            f"target keypoints must of float type, instead got {t['keypoints'].dtype}"
+                        )
 
         if self.training:
             (
