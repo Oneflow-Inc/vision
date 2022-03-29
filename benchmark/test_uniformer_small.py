@@ -1,148 +1,203 @@
-def run_uniformer_small_batch_size16():
-
-    import oneflow as flow
-    import numpy as np
-    from flowvision.models.uniformer import uniformer_small
-
-    model = uniformer_small().to("cuda")
-    input_shape = [16, 3, 224, 224]
-
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
-    x.numpy()
-    y.numpy()
-    import gc
-    gc.collect()
+import numpy as np
+import oneflow as flow
 
 
 def test_uniformer_small_batch_size16(benchmark):
-    benchmark(run_uniformer_small_batch_size16)
-
-
-def run_uniformer_small_batch_size8():
-
-    import oneflow as flow
-    import numpy as np
     from flowvision.models.uniformer import uniformer_small
-
-    model = uniformer_small().to("cuda")
-    input_shape = [8, 3, 224, 224]
-
+    input_shape = [16, 3, 224, 224]
+    model = alexnet().to("cuda")
     learning_rate = 0.01
     mom = 0.9
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_uniformer_small_batch_size16, model, data, optimizer)
+
+
+def run_uniformer_small_batch_size8(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
     y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
     optimizer.zero_grad()
     optimizer.step()
-    x.numpy()
-    y.numpy()
-    import gc
-    gc.collect()
 
 
 def test_uniformer_small_batch_size8(benchmark):
-    benchmark(run_uniformer_small_batch_size8)
-
-
-def run_uniformer_small_batch_size4():
-
-    import oneflow as flow
-    import numpy as np
     from flowvision.models.uniformer import uniformer_small
-
-    model = uniformer_small().to("cuda")
-    input_shape = [4, 3, 224, 224]
-
+    input_shape = [8, 3, 224, 224]
+    model = alexnet().to("cuda")
     learning_rate = 0.01
     mom = 0.9
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_uniformer_small_batch_size8, model, data, optimizer)
+
+
+def run_uniformer_small_batch_size4(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
     y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
     optimizer.zero_grad()
     optimizer.step()
-    x.numpy()
-    y.numpy()
-    import gc
-    gc.collect()
 
 
 def test_uniformer_small_batch_size4(benchmark):
-    benchmark(run_uniformer_small_batch_size4)
-
-
-def run_uniformer_small_batch_size2():
-
-    import oneflow as flow
-    import numpy as np
     from flowvision.models.uniformer import uniformer_small
-
-    model = uniformer_small().to("cuda")
-    input_shape = [2, 3, 224, 224]
-
+    input_shape = [4, 3, 224, 224]
+    model = alexnet().to("cuda")
     learning_rate = 0.01
     mom = 0.9
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_uniformer_small_batch_size4, model, data, optimizer)
+
+
+def run_uniformer_small_batch_size2(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
     y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
     optimizer.zero_grad()
     optimizer.step()
-    x.numpy()
-    y.numpy()
-    import gc
-    gc.collect()
 
 
 def test_uniformer_small_batch_size2(benchmark):
-    benchmark(run_uniformer_small_batch_size2)
-
-
-def run_uniformer_small_batch_size1():
-
-    import oneflow as flow
-    import numpy as np
     from flowvision.models.uniformer import uniformer_small
-
-    model = uniformer_small().to("cuda")
-    input_shape = [1, 3, 224, 224]
-
+    input_shape = [2, 3, 224, 224]
+    model = alexnet().to("cuda")
     learning_rate = 0.01
     mom = 0.9
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_uniformer_small_batch_size2, model, data, optimizer)
+
+
+def run_uniformer_small_batch_size1(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
     y = model(x)
     if isinstance(y, tuple):
         y = y[0]
     y.sum().backward()
     optimizer.zero_grad()
     optimizer.step()
-    x.numpy()
-    y.numpy()
-    import gc
-    gc.collect()
 
 
 def test_uniformer_small_batch_size1(benchmark):
-    benchmark(run_uniformer_small_batch_size1)
+    from flowvision.models.uniformer import uniformer_small
+    input_shape = [1, 3, 224, 224]
+    model = alexnet().to("cuda")
+    learning_rate = 0.01
+    mom = 0.9
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_uniformer_small_batch_size1, model, data, optimizer)
+
+
+def run_vit_small_patch16_224_batch_size16(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
+    y = model(x)
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+
+
+def test_vit_small_patch16_224_batch_size16(benchmark):
+    from flowvision.models.vision_transformer import vit_small_patch16_224
+    input_shape = [16, 3, 224, 224]
+    model = alexnet().to("cuda")
+    learning_rate = 0.01
+    mom = 0.9
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_vit_small_patch16_224_batch_size16, model, data, optimizer)
+
+
+def run_vit_small_patch16_224_batch_size8(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
+    y = model(x)
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+
+
+def test_vit_small_patch16_224_batch_size8(benchmark):
+    from flowvision.models.vision_transformer import vit_small_patch16_224
+    input_shape = [8, 3, 224, 224]
+    model = alexnet().to("cuda")
+    learning_rate = 0.01
+    mom = 0.9
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_vit_small_patch16_224_batch_size8, model, data, optimizer)
+
+
+def run_vit_small_patch16_224_batch_size4(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
+    y = model(x)
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+
+
+def test_vit_small_patch16_224_batch_size4(benchmark):
+    from flowvision.models.vision_transformer import vit_small_patch16_224
+    input_shape = [4, 3, 224, 224]
+    model = alexnet().to("cuda")
+    learning_rate = 0.01
+    mom = 0.9
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_vit_small_patch16_224_batch_size4, model, data, optimizer)
+
+
+def run_vit_small_patch16_224_batch_size2(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
+    y = model(x)
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+
+
+def test_vit_small_patch16_224_batch_size2(benchmark):
+    from flowvision.models.vision_transformer import vit_small_patch16_224
+    input_shape = [2, 3, 224, 224]
+    model = alexnet().to("cuda")
+    learning_rate = 0.01
+    mom = 0.9
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_vit_small_patch16_224_batch_size2, model, data, optimizer)
+
+
+def run_vit_small_patch16_224_batch_size1(model, data, optimizer):
+    x = flow.tensor(data, requires_grad=False).to("cuda")
+    y = model(x)
+    if isinstance(y, tuple):
+        y = y[0]
+    y.sum().backward()
+    optimizer.zero_grad()
+    optimizer.step()
+
+
+def test_vit_small_patch16_224_batch_size1(benchmark):
+    from flowvision.models.vision_transformer import vit_small_patch16_224
+    input_shape = [1, 3, 224, 224]
+    model = alexnet().to("cuda")
+    learning_rate = 0.01
+    mom = 0.9
+    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
+    data = np.ones(input_shape).astype(np.float32)
+    benchmark(run_vit_small_patch16_224_batch_size1, model, data, optimizer)
+
