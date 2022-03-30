@@ -11,6 +11,8 @@ def test_uniformer_small_batch_size16(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_uniformer_small_batch_size16, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_uniformer_small_batch_size8(model, data, optimizer):
@@ -32,6 +34,8 @@ def test_uniformer_small_batch_size8(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_uniformer_small_batch_size8, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_uniformer_small_batch_size4(model, data, optimizer):
@@ -53,6 +57,8 @@ def test_uniformer_small_batch_size4(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_uniformer_small_batch_size4, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_uniformer_small_batch_size2(model, data, optimizer):
@@ -74,6 +80,8 @@ def test_uniformer_small_batch_size2(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_uniformer_small_batch_size2, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_uniformer_small_batch_size1(model, data, optimizer):
@@ -95,6 +103,8 @@ def test_uniformer_small_batch_size1(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_uniformer_small_batch_size1, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_vit_small_patch16_224_batch_size16(model, data, optimizer):
@@ -116,6 +126,8 @@ def test_vit_small_patch16_224_batch_size16(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_vit_small_patch16_224_batch_size16, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_vit_small_patch16_224_batch_size8(model, data, optimizer):
@@ -137,6 +149,8 @@ def test_vit_small_patch16_224_batch_size8(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_vit_small_patch16_224_batch_size8, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_vit_small_patch16_224_batch_size4(model, data, optimizer):
@@ -158,6 +172,8 @@ def test_vit_small_patch16_224_batch_size4(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_vit_small_patch16_224_batch_size4, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_vit_small_patch16_224_batch_size2(model, data, optimizer):
@@ -179,6 +195,8 @@ def test_vit_small_patch16_224_batch_size2(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_vit_small_patch16_224_batch_size2, model, data, optimizer)
+    import gc
+    gc.collect()
 
 
 def run_vit_small_patch16_224_batch_size1(model, data, optimizer):
@@ -200,4 +218,6 @@ def test_vit_small_patch16_224_batch_size1(benchmark):
     optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
     data = np.ones(input_shape).astype(np.float32)
     benchmark(run_vit_small_patch16_224_batch_size1, model, data, optimizer)
+    import gc
+    gc.collect()
 

@@ -1,109 +1,32 @@
-import numpy as np
-import oneflow as flow
+from benchmark import *
+from flowvision.models.alexnet import alexnet
 
 
-def run_alexnet_batch_size16(model, data, optimizer):
-    x = flow.tensor(data, requires_grad=False).to("cuda")
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
+@gc_wrapper
+def test_alexnet_batch_size16(benchmark, net=alexnet, input_shape=[16, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
 
 
-def test_alexnet_batch_size16(benchmark):
-    from flowvision.models.alexnet import alexnet
-    input_shape = [16, 3, 224, 224]
-    model = alexnet().to("cuda")
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    data = np.ones(input_shape).astype(np.float32)
-    benchmark(run_alexnet_batch_size16, model, data, optimizer)
+@gc_wrapper
+def test_alexnet_batch_size8(benchmark, net=alexnet, input_shape=[8, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
 
 
-def run_alexnet_batch_size8(model, data, optimizer):
-    x = flow.tensor(data, requires_grad=False).to("cuda")
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
+@gc_wrapper
+def test_alexnet_batch_size4(benchmark, net=alexnet, input_shape=[4, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
 
 
-def test_alexnet_batch_size8(benchmark):
-    from flowvision.models.alexnet import alexnet
-    input_shape = [8, 3, 224, 224]
-    model = alexnet().to("cuda")
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    data = np.ones(input_shape).astype(np.float32)
-    benchmark(run_alexnet_batch_size8, model, data, optimizer)
+@gc_wrapper
+def test_alexnet_batch_size2(benchmark, net=alexnet, input_shape=[2, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
 
-
-def run_alexnet_batch_size4(model, data, optimizer):
-    x = flow.tensor(data, requires_grad=False).to("cuda")
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
-
-
-def test_alexnet_batch_size4(benchmark):
-    from flowvision.models.alexnet import alexnet
-    input_shape = [4, 3, 224, 224]
-    model = alexnet().to("cuda")
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    data = np.ones(input_shape).astype(np.float32)
-    benchmark(run_alexnet_batch_size4, model, data, optimizer)
-
-
-def run_alexnet_batch_size2(model, data, optimizer):
-    x = flow.tensor(data, requires_grad=False).to("cuda")
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
-
-
-def test_alexnet_batch_size2(benchmark):
-    from flowvision.models.alexnet import alexnet
-    input_shape = [2, 3, 224, 224]
-    model = alexnet().to("cuda")
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    data = np.ones(input_shape).astype(np.float32)
-    benchmark(run_alexnet_batch_size2, model, data, optimizer)
-
-
-def run_alexnet_batch_size1(model, data, optimizer):
-    x = flow.tensor(data, requires_grad=False).to("cuda")
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
-
-
-def test_alexnet_batch_size1(benchmark):
-    from flowvision.models.alexnet import alexnet
-    input_shape = [1, 3, 224, 224]
-    model = alexnet().to("cuda")
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    data = np.ones(input_shape).astype(np.float32)
-    benchmark(run_alexnet_batch_size1, model, data, optimizer)
-
-
+    
+@gc_wrapper
+def test_alexnet_batch_size1(benchmark, net=alexnet, input_shape=[1, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
