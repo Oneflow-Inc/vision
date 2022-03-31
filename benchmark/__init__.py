@@ -23,8 +23,8 @@ def fetch_args(net, input_shape):
 
 def gc_wrapper(func):
     def inner(benchmark):
-        ret = func(benchmark)
         gc.collect()
+        ret = func(benchmark)
         return ret
     return inner
 
