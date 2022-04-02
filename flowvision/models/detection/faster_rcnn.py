@@ -381,12 +381,12 @@ def fasterrcnn_resnet50_fpn(
 
 
 def _fasterrcnn_mobilenet_v3_large_fpn(
-    weights_name,
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    weights_name: Optional[str] = None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     trainable_backbone_layers = _validate_trainable_layers(
@@ -424,11 +424,11 @@ def _fasterrcnn_mobilenet_v3_large_fpn(
 
 @ModelCreator.register_model
 def fasterrcnn_mobilenet_v3_large_320_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     """
@@ -477,11 +477,11 @@ def fasterrcnn_mobilenet_v3_large_320_fpn(
 
 @ModelCreator.register_model
 def fasterrcnn_mobilenet_v3_large_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     """
