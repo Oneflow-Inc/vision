@@ -78,7 +78,7 @@ class GeneralizedRCNN(nn.Module):
             for target_idx, target in enumerate(targets):
                 boxes = target["boxes"]
                 degenerate_boxes = boxes[:, 2:] <= boxes[:, :2]
-                if degenerate_boxes.any() > 0:
+                if degenerate_boxes.any():
                     # print the first degenerate box
                     bb_idx = flow.where(degenerate_boxes.any(dim=1))[0][0]
                     degen_bb: List[float] = boxes[bb_idx].tolist()
