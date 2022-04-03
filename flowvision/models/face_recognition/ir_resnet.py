@@ -220,7 +220,7 @@ def _iresnet(
 @ModelCreator.register_model
 def iresnet50(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the IResNeSt-50 model trained on webface600K(https://www.face-benchmark.org/download.html).
+    Constructs the IResNet-50 model trained on webface600K(https://www.face-benchmark.org/download.html).
 
     .. note::
         The required input size of the model is 112x112.
@@ -234,7 +234,7 @@ def iresnet50(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> resnest50 = flowvision.models.face_recognition.iresnest50(pretrained=False, progress=True)
+        >>> iresnet50 = flowvision.models.face_recognition.iresnet50(pretrained=False, progress=True)
 
     """
     return _iresnet(
@@ -245,7 +245,7 @@ def iresnet50(pretrained=False, progress=True, **kwargs):
 @ModelCreator.register_model
 def iresnet101(pretrained=False, progress=True, **kwargs):
     """
-    Constructs the IResNeSt-101 model trained on Glint360K(https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc#4-download).
+    Constructs the IResNet-101 model trained on Glint360K(https://github.com/deepinsight/insightface/tree/master/recognition/partial_fc#4-download).
 
     .. note::
         The required input size of the model is 112x112.
@@ -259,7 +259,7 @@ def iresnet101(pretrained=False, progress=True, **kwargs):
     .. code-block:: python
 
         >>> import flowvision
-        >>> iresnest101 = flowvision.models.face_recognition.iresnest101(pretrained=False, progress=True)
+        >>> iresnet101 = flowvision.models.face_recognition.iresnet101(pretrained=False, progress=True)
 
     """
     return _iresnet(
