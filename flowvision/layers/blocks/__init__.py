@@ -11,3 +11,4 @@ from .feature_pyramid_network import (
     LastLevelP6P7,
     ExtraFPNBlock,
 )
+from .focal_loss import sigmoid_focal_loss

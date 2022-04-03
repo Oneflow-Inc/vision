@@ -27,6 +27,7 @@ from .blocks import (
     LastLevelP6P7,
     LastLevelMaxPool,
     ExtraFPNBlock,
+    sigmoid_focal_loss,
 )
 from .regularization import (
     drop_path,
