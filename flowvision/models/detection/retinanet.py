@@ -6,7 +6,6 @@ import oneflow as flow
 from oneflow import nn, Tensor
 from typing import Dict, List, Tuple, Optional
 
-from .det_utils import overwrite_eps
 from ..utils import load_state_dict_from_url
 
 from . import det_utils
@@ -15,6 +14,7 @@ from .transform import GeneralizedRCNNTransform
 from .backbone_utils import resnet_fpn_backbone, _validate_trainable_layers
 from flowvision.layers.blocks.feature_pyramid_network import LastLevelP6P7
 from flowvision.layers.blocks import boxes as box_ops
+from flowvision.layers import sigmoid_focal_loss
 from ..registry import ModelCreator
 
 
@@ -24,6 +24,13 @@ __all__ = ["RetinaNet", "retinanet_resnet50_fpn"]
 model_urls = {
     "retinanet_resnet50_fpn_coco": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/detection/retinanet/retinanet_resnet50_fpn_coco.tar.gz",
 }
+
+
+def _sum(x: List[Tensor]) -> Tensor:
+    res = x[0]
+    for i in x[1:]:
+        res = res + i
+    return res
 
 
 class RetinaNetHead(nn.Module):
@@ -43,8 +50,23 @@ class RetinaNetHead(nn.Module):
         )
         self.regression_head = RetinaNetRegressionHead(in_channels, num_anchors)
 
-    def forward(self, x):
-        # type: (List[Tensor]) -> Dict[str, Tensor]
+    def compute_loss(
+        self,
+        targets: List[Dict[str, Tensor]],
+        head_outputs: Dict[str, Tensor],
+        anchors: List[Tensor],
+        matched_idxs: List[Tensor],
+    ) -> Dict[str, Tensor]:
+        return {
+            "classification": self.classification_head.compute_loss(
+                targets, head_outputs, matched_idxs
+            ),
+            "bbox_regression": self.regression_head.compute_loss(
+                targets, head_outputs, anchors, matched_idxs
+            ),
+        }
+
+    def forward(self, x: List[Tensor]) -> Dict[str, Tensor]:
         return {
             "cls_logits": self.classification_head(x),
             "bbox_regression": self.regression_head(x),
@@ -90,8 +112,48 @@ class RetinaNetClassificationHead(nn.Module):
 
         self.BETWEEN_THRESHOLDS = det_utils.Matcher.BETWEEN_THRESHOLDS
 
-    def forward(self, x):
-        # type: (List[Tensor]) -> Tensor
+    def compute_loss(
+        self,
+        targets: List[Dict[str, Tensor]],
+        head_outputs: Dict[str, Tensor],
+        matched_idxs: List[Tensor],
+    ) -> Tensor:
+        losses = []
+
+        cls_logits = head_outputs["cls_logits"]
+
+        for targets_per_image, cls_logits_per_image, matched_idxs_per_image in zip(
+            targets, cls_logits, matched_idxs
+        ):
+            # determin only the foreground
+            foreground_idxs_per_image = matched_idxs_per_image >= 0
+            num_foreground = foreground_idxs_per_image.sum()
+
+            # create the target classification
+            gt_classes_target = flow.zeros_like(cls_logits_per_image)
+            gt_classes_target[
+                foreground_idxs_per_image,
+                targets_per_image["labels"][
+                    matched_idxs_per_image[foreground_idxs_per_image]
+                ],
+            ] = 1.0
+
+            # find indices for which anchors should be ignored
+            valid_idxs_per_image = matched_idxs_per_image != self.BETWEEN_THRESHOLDS
+
+            # compute the classification loss
+            losses.append(
+                sigmoid_focal_loss(
+                    cls_logits_per_image[valid_idxs_per_image],
+                    gt_classes_target[valid_idxs_per_image],
+                    reduction="sum",
+                )
+                / max(1, num_foreground)
+            )
+
+        return _sum(losses) / len(targets)
+
+    def forward(self, x: List[Tensor]) -> Tensor:
         all_cls_logits = []
 
         for features in x:
@@ -146,8 +208,52 @@ class RetinaNetRegressionHead(nn.Module):
 
         self.box_coder = det_utils.BoxCoder(weights=(1.0, 1.0, 1.0, 1.0))
 
-    def forward(self, x):
-        # type: (List[Tensor]) -> Tensor
+    def compute_loss(
+        self,
+        targets: List[Dict[str, Tensor]],
+        head_outputs: Dict[str, Tensor],
+        anchors: List[Tensor],
+        matched_idxs: List[Tensor],
+    ) -> Tensor:
+        losses = []
+
+        bbox_regression = head_outputs["bbox_regression"]
+
+        for (
+            targets_per_image,
+            bbox_regression_per_image,
+            anchors_per_image,
+            matched_idxs_per_image,
+        ) in zip(targets, bbox_regression, anchors, matched_idxs):
+            # determine only the foreground indices, ignore the rest
+            foreground_idxs_per_image = flow.where(matched_idxs_per_image >= 0)[0]
+            num_foreground = foreground_idxs_per_image.numel()
+
+            # select only the foreground boxes
+            matched_gt_boxes_per_image = targets_per_image["boxes"][
+                matched_idxs_per_image[foreground_idxs_per_image]
+            ]
+            bbox_regression_per_image = bbox_regression_per_image[
+                foreground_idxs_per_image, :
+            ]
+            anchors_per_image = anchors_per_image[foreground_idxs_per_image, :]
+
+            # compute the regression targets
+            target_regression = self.box_coder.encode_single(
+                matched_gt_boxes_per_image, anchors_per_image
+            )
+
+            # compute the loss
+            losses.append(
+                flow._C.l1_loss(
+                    bbox_regression_per_image, target_regression, reduction="sum"
+                )
+                / max(1, num_foreground)
+            )
+
+        return _sum(losses) / max(1, len(targets))
+
+    def forward(self, x: List[Tensor]) -> Tensor:
         all_bbox_regression = []
 
         for features in x:
@@ -242,6 +348,7 @@ class RetinaNet(nn.Module):
         fg_iou_thresh=0.5,
         bg_iou_thresh=0.4,
         topk_candidates=1000,
+        **kwargs,
     ):
         super().__init__()
 
@@ -253,7 +360,10 @@ class RetinaNet(nn.Module):
             )
         self.backbone = backbone
 
-        assert isinstance(anchor_generator, (AnchorGenerator, type(None)))
+        if not isinstance(anchor_generator, (AnchorGenerator, type(None))):
+            raise TypeError(
+                f"anchor_generator should be of type AnchorGenerator or None instead of {type(anchor_generator)}"
+            )
 
         if anchor_generator is None:
             anchor_sizes = tuple(
@@ -285,7 +395,7 @@ class RetinaNet(nn.Module):
         if image_std is None:
             image_std = [0.229, 0.224, 0.225]
         self.transform = GeneralizedRCNNTransform(
-            min_size, max_size, image_mean, image_std
+            min_size, max_size, image_mean, image_std, **kwargs
         )
 
         self.score_thresh = score_thresh
@@ -293,8 +403,38 @@ class RetinaNet(nn.Module):
         self.detections_per_img = detections_per_img
         self.topk_candidates = topk_candidates
 
-    def postprocess_detections(self, head_outputs, anchors, image_shapes):
-        # type: (Dict[str, List[Tensor]], List[List[Tensor]], List[Tuple[int, int]]) -> List[Dict[str, Tensor]]
+    def compute_loss(
+        self,
+        targets: List[Dict[str, Tensor]],
+        head_outputs: Dict[str, Tensor],
+        anchors: List[Tensor],
+    ) -> Dict[str, Tensor]:
+        matched_idxs = []
+        for anchors_per_image, targets_per_image in zip(anchors, targets):
+            if targets_per_image["boxes"].numel() == 0:
+                matched_idxs.append(
+                    flow.full(
+                        (anchors_per_image.size(0),),
+                        -1,
+                        dtype=flow.int64,
+                        device=anchors_per_image.device,
+                    )
+                )
+                continue
+
+            match_quality_matrix = box_ops.box_iou(
+                targets_per_image["boxes"], anchors_per_image
+            )
+            matched_idxs.append(self.proposal_matcher(match_quality_matrix))
+
+        return self.head.compute_loss(targets, head_outputs, anchors, matched_idxs)
+
+    def postprocess_detections(
+        self,
+        head_outputs: Dict[str, List[Tensor]],
+        anchors: List[List[Tensor]],
+        image_shapes: List[Tuple[int, int]],
+    ) -> List[Dict[str, Tensor]]:
         class_logits = head_outputs["cls_logits"]
         box_regression = head_outputs["bbox_regression"]
 
@@ -362,8 +502,9 @@ class RetinaNet(nn.Module):
 
         return detections
 
-    def forward(self, images, targets=None):
-        # type: (List[Tensor], Optional[List[Dict[str, Tensor]]]) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]
+    def forward(
+        self, images: List[Tensor], targets: Optional[List[Dict[str, Tensor]]] = None
+    ) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]:
         """
         Args:
             images (list[Tensor]): images to be processed
@@ -389,17 +530,20 @@ class RetinaNet(nn.Module):
                             "Expected target boxes to be a tensor"
                             "of shape [N, 4], got {:}.".format(boxes.shape)
                         )
-                    else:
-                        raise ValueError(
-                            "Expected target boxes to be of type "
-                            "Tensor, got {:}.".format(type(boxes))
-                        )
+                else:
+                    raise ValueError(
+                        "Expected target boxes to be of type "
+                        "Tensor, got {:}.".format(type(boxes))
+                    )
 
         # get the original image sizes
         original_image_sizes: List[Tuple[int, int]] = []
         for img in images:
             val = img.shape[-2:]
-            assert len(val) == 2
+            if len(val) != 2:
+                raise ValueError(
+                    f"expecting the last two dimensions of the Tensor to be H and W instead got {img.shape[-2:]}",
+                )
             original_image_sizes.append((val[0], val[1]))
 
         # transform the input
@@ -437,10 +581,11 @@ class RetinaNet(nn.Module):
         losses = {}
         detections: List[Dict[str, Tensor]] = []
         if self.training:
-            assert targets is not None
-
-            # compute the losses
-            losses = self.compute_loss(targets, head_outputs, anchors)
+            if targets is None:
+                raise ValueError("targets should not be none when in training mode")
+            else:
+                # compute the losses
+                losses = self.compute_loss(targets, head_outputs, anchors)
         else:
             # recover level sizes
             num_anchors_per_level = [x.size(2) * x.size(3) for x in features]
@@ -475,12 +620,12 @@ class RetinaNet(nn.Module):
 
 @ModelCreator.register_model
 def retinanet_resnet50_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
-    **kwargs
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
+    **kwargs,
 ):
     """
     Constructs a RetinaNet model with a ResNet-50-FPN backbone.
@@ -550,5 +695,5 @@ def retinanet_resnet50_fpn(
             model_urls["retinanet_resnet50_fpn_coco"], progress=progress
         )
         model.load_state_dict(state_dict)
-        overwrite_eps(model, 0.0)
+        det_utils.overwrite_eps(model, 0.0)
     return model
