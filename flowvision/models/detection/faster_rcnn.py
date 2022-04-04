@@ -11,7 +11,7 @@ from .det_utils import overwrite_eps
 from ..utils import load_state_dict_from_url
 from ..registry import ModelCreator
 
-from ..resnet import resnet50
+from ..resnet import resnet50, resnet101
 from ..mobilenet_v3 import mobilenet_v3_large
 from .anchor_utils import AnchorGenerator
 from .generalized_rcnn import GeneralizedRCNN
@@ -374,6 +374,49 @@ def fasterrcnn_resnet50_fpn(
     if pretrained:
         state_dict = load_state_dict_from_url(
             model_urls["fasterrcnn_resnet50_fpn_coco"], progress=progress
+        )
+        model.load_state_dict(state_dict)
+        overwrite_eps(model, 0.0)
+    return model
+
+
+@ModelCreator.register_model
+def fasterrcnn_resnet101_fpn(
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
+    **kwargs,
+):
+    """
+    See details in `fasterrcnn_resnet50_fpn`.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_resnet101_fpn = flowvision.models.detection.fasterrcnn_resnet101_fpn(pretrained=False, progress=True)
+
+    """
+    trainable_backbone_layers = _validate_trainable_layers(
+        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
+    )
+
+    if pretrained:
+        # no need to download the backbone if pretrained is set
+        pretrained_backbone = False
+    backbone = resnet101(
+        pretrained=pretrained_backbone,
+        progress=progress,
+        norm_layer=misc_nn_ops.FrozenBatchNorm2d,
+    )
+    backbone = _resnet_fpn_extractor(backbone, trainable_backbone_layers)
+    model = FasterRCNN(backbone, num_classes, **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["fasterrcnn_resnet101_fpn_coco"], progress=progress
         )
         model.load_state_dict(state_dict)
         overwrite_eps(model, 0.0)
