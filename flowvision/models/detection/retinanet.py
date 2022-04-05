@@ -697,3 +697,48 @@ def retinanet_resnet50_fpn(
         model.load_state_dict(state_dict)
         det_utils.overwrite_eps(model, 0.0)
     return model
+
+
+@ModelCreator.register_model
+def retinanet_resnet101_fpn(
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
+    **kwargs,
+):
+    """
+    See details in `retinanet_resnet101_fpn`.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> retinanet_resnet101_fpn = flowvision.models.detection.retinanet_resnet101_fpn(pretrained=False, progress=True)
+
+    """
+    trainable_backbone_layers = _validate_trainable_layers(
+        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
+    )
+
+    if pretrained:
+        # no need to download the backbone if pretrained is set
+        pretrained_backbone = False
+    # skip P2 because it generates too many anchors
+    backbone = resnet_fpn_backbone(
+        "resnet101",
+        pretrained_backbone,
+        returned_layers=[2, 3, 4],
+        extra_blocks=LastLevelP6P7(256, 256),
+        trainable_layers=trainable_backbone_layers,
+    )
+    model = RetinaNet(backbone, num_classes, **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["retinanet_resnet101_fpn_coco"], progress=progress
+        )
+        model.load_state_dict(state_dict)
+        det_utils.overwrite_eps(model, 0.0)
+    return model
