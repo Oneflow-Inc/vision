@@ -1,6 +1,8 @@
 import numpy as np
 import oneflow as flow
 import gc
+import functools
+import sys
 
 def run(model, x, optimizer):
     y = model(x)
@@ -28,3 +30,18 @@ def gc_wrapper(func):
         return ret
     return inner
 
+def compare_args(args):
+    def decorator(func):
+        func_name = func.__name__
+        file_name = sys._getframe().f_back.f_code.co_filename
+        print({
+            'func_name': func_name,
+            'file_name': file_name,
+            'args': args
+            })
+        @gc_wrapper
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
