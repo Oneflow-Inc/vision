@@ -38,7 +38,8 @@ def compare_args(args):
             'func_name': func_name,
             'file_name': file_name,
             'args': args
-            })
+            }, end=' > ')
+        print('.benchmark-collect/'+func_name+'.json')
         @gc_wrapper
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
