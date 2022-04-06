@@ -626,7 +626,7 @@ def _retinanet_resnet_fpn(
     num_classes: Optional[int] = 91,
     pretrained_backbone: bool = True,
     trainable_backbone_layers: Optional[int] = None,
-    **kwargs
+    **kwargs,
 ):
     trainable_backbone_layers = _validate_trainable_layers(
         pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
