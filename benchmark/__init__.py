@@ -3,6 +3,8 @@ import oneflow as flow
 import gc
 import functools
 import sys
+import json
+
 
 def run(model, x, optimizer):
     y = model(x)
@@ -34,12 +36,12 @@ def compare_args(args):
     def decorator(func):
         func_name = func.__name__
         file_name = sys._getframe().f_back.f_code.co_filename
+        print('oneflow-benchmark-function::', end='')
         print({
             'func_name': func_name,
             'file_name': file_name,
             'args': args
-            }, end=' > ')
-        print('.benchmark-collect/'+func_name+'.json')
+            })
         @gc_wrapper
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
