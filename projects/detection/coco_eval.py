@@ -60,6 +60,8 @@ class CocoEvaluator:
     def prepare(self, predictions, iou_type):
         if iou_type == "bbox":
             return self.prepare_for_coco_detection(predictions)
+        if iou_type == "segm":
+            return self.prepare_for_coco_segmentation(predictions)
 
     def prepare_for_coco_detection(self, predictions):
         coco_results = []
@@ -81,6 +83,45 @@ class CocoEvaluator:
                         "score": scores[k],
                     }
                     for k, box in enumerate(boxes)
+                ]
+            )
+        return coco_results
+
+    def prepare_for_coco_segmentation(self, predictions):
+        coco_results = []
+        for original_id, prediction in predictions.items():
+            if len(prediction) == 0:
+                continue
+
+            scores = prediction["scores"]
+            labels = prediction["labels"]
+            masks = prediction["masks"]
+
+            masks = masks > 0.5
+
+            scores = prediction["scores"].tolist()
+            labels = prediction["labels"].tolist()
+
+            rles = [
+                mask_util.encode(
+                    np.array(mask.numpy(), dtype=np.uint8, order="F")[
+                        0, :, :, np.newaxis
+                    ]
+                )[0]
+                for mask in masks
+            ]
+            for rle in rles:
+                rle["counts"] = rle["counts"].decode("utf-8")
+
+            coco_results.extend(
+                [
+                    {
+                        "image_id": original_id,
+                        "category_id": labels[k],
+                        "segmentation": rle,
+                        "score": scores[k],
+                    }
+                    for k, rle in enumerate(rles)
                 ]
             )
         return coco_results
