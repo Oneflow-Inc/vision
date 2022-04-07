@@ -2,6 +2,7 @@ import math
 import sys
 import time
 import oneflow as flow
+import flowvision
 
 from coco_utils import get_coco_api_from_dataset
 from coco_eval import CocoEvaluator
@@ -57,6 +58,8 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
 
 def _get_iou_types(model):
     iou_types = ["bbox"]
+    if isinstance(model, flowvision.models.detection.MaskRCNN):
+        iou_types.append("segm")
     return iou_types
 
 

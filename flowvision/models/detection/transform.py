@@ -6,6 +6,7 @@ from oneflow import nn, Tensor
 from typing import List, Tuple, Dict, Optional
 
 from .image_list import ImageList
+from .roi_heads import paste_masks_in_image
 
 
 def _resize_image_and_masks(
