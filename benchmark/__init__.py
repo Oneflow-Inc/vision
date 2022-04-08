@@ -1,9 +1,6 @@
 import numpy as np
 import oneflow as flow
-import gc
-import functools
-import sys
-import json
+
 
 
 def run(model, x, optimizer):
@@ -24,28 +21,3 @@ def fetch_args(net, input_shape):
     x = flow.tensor(data, requires_grad=False).to("cuda")
     return model, x, optimizer
 
-
-def gc_wrapper(func):
-    def inner(benchmark):
-        gc.collect()
-        ret = func(benchmark)
-        return ret
-    return inner
-
-def compare_args(args):
-    def decorator(func):
-        func_name = func.__name__
-        file_name = sys._getframe().f_back.f_code.co_filename
-        print('oneflow-benchmark-function::', end='')
-        collect_info = json.dumps({
-            'func_name': func_name,
-            'file_name': file_name,
-            'args': args
-            })
-        print(collect_info)
-        @gc_wrapper
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            return func(*args, **kwargs)
-        return wrapper
-    return decorator
