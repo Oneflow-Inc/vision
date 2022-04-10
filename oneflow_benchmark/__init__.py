@@ -3,7 +3,7 @@ import functools
 import sys
 import json
 
-def ci_settings(compare=None, retry={"stddev": 3, "times": 3}, enable_gc=False):
+def ci_settings(compare=None, retry={"stddev": 4, "times": 3}, enable_gc=False):
     def decorator(func):
         func_name = func.__name__
         file_name = sys._getframe().f_back.f_code.co_filename
