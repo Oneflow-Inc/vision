@@ -1,25 +1,33 @@
-def run_ghostnet():
-
-    import oneflow as flow
-    import numpy as np
-    from flowvision.models.ghostnet import ghostnet
-
-    model = ghostnet().to("cuda")
-    input_shape = [16, 3, 224, 224]
-
-    learning_rate = 0.01
-    mom = 0.9
-    optimizer = flow.optim.SGD(model.parameters(), lr=learning_rate, momentum=mom)
-    input_shape = np.ones(input_shape).astype(np.float32)
-    x = flow.tensor(input_shape, requires_grad=False).to("cuda")
-
-    y = model(x)
-    if isinstance(y, tuple):
-        y = y[0]
-    y.sum().backward()
-    optimizer.zero_grad()
-    optimizer.step()
+from benchmark import *
+import oneflow_benchmark
+from flowvision.models.ghostnet import ghostnet
 
 
-def test_ghostnet(benchmark):
-    benchmark(run_ghostnet)
+@oneflow_benchmark.ci_settings(compare={"median": "5%"})
+def test_ghostnet_batch_size1(benchmark, net=ghostnet, input_shape=[1, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
+
+
+@oneflow_benchmark.ci_settings(compare={"median": "5%"})
+def test_ghostnet_batch_size2(benchmark, net=ghostnet, input_shape=[2, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
+
+
+@oneflow_benchmark.ci_settings(compare={"median": "5%"})
+def test_ghostnet_batch_size4(benchmark, net=ghostnet, input_shape=[4, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
+
+
+@oneflow_benchmark.ci_settings(compare={"median": "5%"})
+def test_ghostnet_batch_size8(benchmark, net=ghostnet, input_shape=[8, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
+
+
+@oneflow_benchmark.ci_settings(compare={"median": "5%"})
+def test_ghostnet_batch_size16(benchmark, net=ghostnet, input_shape=[16, 3, 224, 224]):
+    model, x, optimizer = fetch_args(net, input_shape)
+    benchmark(run, model, x, optimizer)
