@@ -42,14 +42,14 @@ def _resize_image_and_masks(
     if target is None:
         return image, target
 
-    if "mask" in target:
+    if "masks" in target:
         mask = target["masks"]
         mask = flow.nn.functional.interpolate(
             mask[:, None].float(),
             size=size,
             scale_factor=scale_factor,
             recompute_scale_factor=recompute_scale_factor,
-        )[:, 0].byte()
+        )[:, 0].to(flow.uint8)
         target["masks"] = mask
     return image, target
 
