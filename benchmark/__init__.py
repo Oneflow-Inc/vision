@@ -2,7 +2,6 @@ import numpy as np
 import oneflow as flow
 
 
-
 def run(model, x, optimizer):
     y = model(x)
     if isinstance(y, tuple):
@@ -20,4 +19,3 @@ def fetch_args(net, input_shape):
     data = np.ones(input_shape).astype(np.float32)
     x = flow.tensor(data, requires_grad=False).to("cuda")
     return model, x, optimizer
-
