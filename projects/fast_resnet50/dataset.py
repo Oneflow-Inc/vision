@@ -1,9 +1,33 @@
 import os
 
+from oneflow.utils.data import DataLoader
+
 from flowvision import datasets, transforms
 from flowvision.data.constants import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
 from flowvision.transforms.functional import str_to_interp_mode
-from flowvision.data import Mixup
+
+
+def build_loader(config):
+    config.defrost()
+    dataset_train, config.MODEL.NUM_CLASSES = build_dataset(
+        is_train=True, config=config
+    )
+    config.freeze()
+    dataset_val, _ = build_dataset(is_train=False, config=config)
+    data_loader_train = DataLoader(
+        dataset_train,
+        batch_size=config.DATA.BATCH_SIZE,
+        num_workers=config.DATA.NUM_WORKERS,
+        drop_last=True,
+    )
+    data_loader_val = DataLoader(
+        dataset_val,
+        batch_size=config.DATA.BATCH_SIZE,
+        shuffle=False,
+        num_workers=config.DATA.NUM_WORKERS,
+        drop_last=False,
+    )
+    return dataset_train, dataset_val, data_loader_train, data_loader_val
 
 
 def build_dataset(is_train, config):
@@ -12,7 +36,19 @@ def build_dataset(is_train, config):
         prefix = "train" if is_train else "val"
         root = os.path.join(config.DATA.DATA_PATH, prefix)
         dataset = datasets.ImageFolder(root, transform=transform)
+        nb_classes = 1000
+    elif config.DATA.DATASET == "cifar100":
+        dataset = datasets.CIFAR100(
+            root = config.DATA.DATA_PATH,
+            train=is_train,
+            transform=transform,
+            download=True,
+        )
+        nb_classes = 100
+    else:
+        raise NotImplementedError("We only support ImageNet and CIFAR100 Now.")
 
+    return dataset, nb_classes
 
 
 def build_transform(is_train, config):
