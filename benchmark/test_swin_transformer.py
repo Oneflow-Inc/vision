@@ -123,8 +123,12 @@ def test_swin_small_patch4_window7_224_batch_size16(
 ):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
-
-
+    
+@unittest.skipUnless(
+    os.getenv("ONEFLOW_BENCHMARK_ALL") == "1",
+    "set ONEFLOW_BENCHMARK_ALL=1 to run this test",
+)
+@oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_swin_base_patch4_window7_224_batch_size1(
     benchmark, net=swin_base_patch4_window7_224, input_shape=[1, 3, 224, 224]
 ):
