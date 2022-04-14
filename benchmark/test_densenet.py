@@ -2,6 +2,7 @@ from benchmark import *
 import oneflow_benchmark
 from flowvision.models.densenet import densenet121
 
+
 @unittest.skipUnless(
     os.getenv("ONEFLOW_BENCHMARK_ALL") == "1",
     "set ONEFLOW_BENCHMARK_ALL=1 to run this test",
