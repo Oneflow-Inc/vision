@@ -10,6 +10,7 @@ def test_inception_v3_batch_size1(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
+
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_inception_v3_batch_size2(
     benchmark, net=inception_v3, input_shape=[2, 3, 299, 299]
@@ -17,12 +18,14 @@ def test_inception_v3_batch_size2(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
+
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_inception_v3_batch_size4(
     benchmark, net=inception_v3, input_shape=[4, 3, 299, 299]
 ):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
+
 
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_inception_v3_batch_size8(
