@@ -123,7 +123,8 @@ def test_swin_small_patch4_window7_224_batch_size16(
 ):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
-    
+
+
 @unittest.skipUnless(
     os.getenv("ONEFLOW_BENCHMARK_ALL") == "1",
     "set ONEFLOW_BENCHMARK_ALL=1 to run this test",

@@ -42,7 +42,8 @@ def test_mobilenet_v3_large_batch_size16(
 ):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
-    
+
+
 @unittest.skipUnless(
     os.getenv("ONEFLOW_BENCHMARK_ALL") == "1",
     "set ONEFLOW_BENCHMARK_ALL=1 to run this test",
