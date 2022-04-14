@@ -10,19 +10,16 @@ def test_resnet50_batch_size1(benchmark, net=resnet50, input_shape=[1, 3, 224, 2
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnet50_batch_size2(benchmark, net=resnet50, input_shape=[2, 3, 224, 224]):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnet50_batch_size4(benchmark, net=resnet50, input_shape=[4, 3, 224, 224]):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnet50_batch_size8(benchmark, net=resnet50, input_shape=[8, 3, 224, 224]):
     model, x, optimizer = fetch_args(net, input_shape)
@@ -42,7 +39,6 @@ def test_resnext50_32x4d_batch_size1(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnext50_32x4d_batch_size2(
     benchmark, net=resnext50_32x4d, input_shape=[2, 3, 224, 224]
@@ -50,7 +46,6 @@ def test_resnext50_32x4d_batch_size2(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnext50_32x4d_batch_size4(
     benchmark, net=resnext50_32x4d, input_shape=[4, 3, 224, 224]
@@ -58,14 +53,12 @@ def test_resnext50_32x4d_batch_size4(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnext50_32x4d_batch_size8(
     benchmark, net=resnext50_32x4d, input_shape=[8, 3, 224, 224]
 ):
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
-
 
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_resnext50_32x4d_batch_size16(
@@ -74,7 +67,6 @@ def test_resnext50_32x4d_batch_size16(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_wide_resnet50_2_batch_size1(
     benchmark, net=wide_resnet50_2, input_shape=[1, 3, 224, 224]
@@ -82,7 +74,6 @@ def test_wide_resnet50_2_batch_size1(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_wide_resnet50_2_batch_size2(
     benchmark, net=wide_resnet50_2, input_shape=[2, 3, 224, 224]
@@ -90,7 +81,6 @@ def test_wide_resnet50_2_batch_size2(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_wide_resnet50_2_batch_size4(
     benchmark, net=wide_resnet50_2, input_shape=[4, 3, 224, 224]
@@ -98,7 +88,6 @@ def test_wide_resnet50_2_batch_size4(
     model, x, optimizer = fetch_args(net, input_shape)
     benchmark(run, model, x, optimizer)
 
-@unittest.skipUnless(os.getenv("ONEFLOW_BENCHMARK_ALL") == "1", "set ONEFLOW_BENCHMARK_ALL=1 to run this test")
 @oneflow_benchmark.ci_settings(compare={"median": "5%"})
 def test_wide_resnet50_2_batch_size8(
     benchmark, net=wide_resnet50_2, input_shape=[8, 3, 224, 224]
