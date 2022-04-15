@@ -29,6 +29,8 @@ from .blocks import (
     LastLevelMaxPool,
     ExtraFPNBlock,
     sigmoid_focal_loss,
+    generalized_box_iou_loss,
+    misc,
     roi_align,
 )
 from .regularization import (

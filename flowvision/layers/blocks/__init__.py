@@ -12,4 +12,5 @@ from .feature_pyramid_network import (
     ExtraFPNBlock,
 )
 from .focal_loss import sigmoid_focal_loss
+from .giou_loss import generalized_box_iou_loss
 from .roi_align import roi_align

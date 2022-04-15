@@ -19,7 +19,7 @@ def convert_coco_poly_to_mask(segmentations, height, width):
         mask = coco_mask.decode(rles)
         if len(mask.shape) < 3:
             mask = mask[..., None]
-        mask = flow.as_tensor(mask, dtype=flow.uint8)
+        mask = flow.as_tensor(mask)
         mask = mask.any(dim=2).to(dtype=flow.uint8)
         masks.append(mask)
     if masks:
