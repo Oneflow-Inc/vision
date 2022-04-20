@@ -773,9 +773,7 @@ class RandomResizedCrop(Module):
         log_ratio = np.log(np.array(ratio))
         for _ in range(10):
             target_area = area * np.random.uniform(scale[0], scale[1])
-            aspect_ratio = np.exp(
-                np.random.uniform(log_ratio[0], log_ratio[1])
-            )
+            aspect_ratio = np.exp(np.random.uniform(log_ratio[0], log_ratio[1]))
 
             w = int(round(math.sqrt(target_area * aspect_ratio)))
             h = int(round(math.sqrt(target_area / aspect_ratio)))
