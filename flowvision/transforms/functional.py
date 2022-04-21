@@ -156,10 +156,10 @@ def to_tensor(pic):
             pic = pic[:, :, None]
 
         img = flow.tensor(
-            np.ascontiguousarray(pic.transpose((2, 0, 1)), dtype=np.float32)
+            np.ascontiguousarray(pic.transpose((2, 0, 1)))
         )
         # backward compatibility
-        if img.dtype == flow.int:
+        if img.dtype == flow.uint8:
             return flow._C.cast(img, dtype=default_float_dtype).div(255)
         else:
             return img
