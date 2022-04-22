@@ -171,14 +171,9 @@ def to_tensor(pic):
 
     # handle PIL Image
     mode_to_nptype = {"I": np.int32, "I;16": np.int16, "F": np.float32}
-    if mode_to_nptype.get(pic.mode, np.uint8) == np.uint8:
-        dtype = flow.int32
-    else:
-        dtype = flow.float32
 
-    img = flow.tensor(
-        np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True), dtype=dtype,
-    )
+    np_arr = np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True)
+    img = flow.from_numpy(np_arr)
 
     if pic.mode == "1":
         img = 255 * img
@@ -186,7 +181,7 @@ def to_tensor(pic):
     img = flow._C.reshape(img, shape=(pic.size[1], pic.size[0], len(pic.getbands())))
     # put it from HWC to CHW format
     res = flow._C.transpose(img, perm=[2, 0, 1])
-    if img.dtype == flow.int:
+    if img.dtype == flow.uint8:
         res = flow._C.cast(res, dtype=default_float_dtype).div(255)
     return res
 
@@ -417,20 +412,22 @@ def normalize(
         tensor = tensor.clone()
 
     dtype = tensor.dtype
-    mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
-    std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
+    std = np.array(std, dtype=dtype)
     if (std == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
                 dtype
             )
         )
+
+    mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
+    std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
     if mean.ndim == 1:
         mean = flow._C.reshape(mean, shape=(-1, 1, 1))
     if std.ndim == 1:
         std = flow._C.reshape(std, shape=(-1, 1, 1))
-    # tensor.sub_(mean).div_(std)
-    return flow._C.div(flow._C.sub(tensor, mean), std)
+    tensor.sub_(mean).div_(std)
+    return tensor
 
 
 def resize(

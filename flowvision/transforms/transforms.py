@@ -770,19 +770,17 @@ class RandomResizedCrop(Module):
         width, height = F._get_image_size(img)
         area = height * width
 
-        log_ratio = flow.log(flow.tensor(ratio))
+        log_ratio = np.log(np.array(ratio))
         for _ in range(10):
-            target_area = area * flow.empty(1).uniform_(scale[0], scale[1]).item()
-            aspect_ratio = flow.exp(
-                flow.empty(1).uniform_(log_ratio[0], log_ratio[1])
-            ).item()
+            target_area = area * np.random.uniform(scale[0], scale[1])
+            aspect_ratio = np.exp(np.random.uniform(log_ratio[0], log_ratio[1]))
 
             w = int(round(math.sqrt(target_area * aspect_ratio)))
             h = int(round(math.sqrt(target_area / aspect_ratio)))
 
             if 0 < w <= width and 0 < h <= height:
-                i = flow._C.randint(0, height - h + 1, size=(1,)).item()
-                j = flow._C.randint(0, width - w + 1, size=(1,)).item()
+                i = np.random.randint(0, height - h + 1)
+                j = np.random.randint(0, width - w + 1)
                 return i, j, h, w
 
         # Fallback to central crop
