@@ -412,7 +412,7 @@ def normalize(
         tensor = tensor.clone()
 
     dtype = tensor.dtype
-    std = np.array(std, dtype=dtype)
+    std = np.array(std, dtype=flow.framework.dtype.convert_oneflow_dtype_to_numpy_dtype(dtype))
     if (std == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
