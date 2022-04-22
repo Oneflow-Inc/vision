@@ -155,9 +155,7 @@ def to_tensor(pic):
         if pic.ndim == 2:
             pic = pic[:, :, None]
 
-        img = flow.tensor(
-            np.ascontiguousarray(pic.transpose((2, 0, 1)))
-        )
+        img = flow.tensor(np.ascontiguousarray(pic.transpose((2, 0, 1))))
         # backward compatibility
         if img.dtype == flow.uint8:
             return flow._C.cast(img, dtype=default_float_dtype).div(255)
@@ -412,8 +410,9 @@ def normalize(
         tensor = tensor.clone()
 
     dtype = tensor.dtype
-    std = np.array(std, dtype=flow.framework.dtype.convert_oneflow_dtype_to_numpy_dtype(dtype))
-    if (std == 0).any():
+    # NOTE: np array cannot be used as flow.as_tensor argument because of oneflow bug
+    np_dtype = flow.framework.dtype.convert_oneflow_dtype_to_numpy_dtype(dtype)
+    if (np.array(std, dtype=np_dtype) == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
                 dtype
