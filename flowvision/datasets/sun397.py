@@ -38,7 +38,9 @@ class SUN397(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         with open(self._data_dir / "ClassName.txt") as f:
             self.classes = [c[3:].strip() for c in f]
@@ -47,7 +49,8 @@ class SUN397(VisionDataset):
         self._image_files = list(self._data_dir.rglob("sun_*.jpg"))
 
         self._labels = [
-            self.class_to_idx["/".join(path.relative_to(self._data_dir).parts[1:-1])] for path in self._image_files
+            self.class_to_idx["/".join(path.relative_to(self._data_dir).parts[1:-1])]
+            for path in self._image_files
         ]
 
     def __len__(self) -> int:
@@ -71,5 +74,6 @@ class SUN397(VisionDataset):
     def _download(self) -> None:
         if self._check_exists():
             return
-        download_and_extract_archive(self._DATASET_URL, download_root=self.root, md5=self._DATASET_MD5)
-
+        download_and_extract_archive(
+            self._DATASET_URL, download_root=self.root, md5=self._DATASET_MD5
+        )

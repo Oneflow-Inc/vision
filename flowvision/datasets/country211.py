@@ -44,9 +44,15 @@ class Country211(ImageFolder):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
-        super().__init__(str(self._base_folder / self._split), transform=transform, target_transform=target_transform)
+        super().__init__(
+            str(self._base_folder / self._split),
+            transform=transform,
+            target_transform=target_transform,
+        )
         self.root = str(root)
 
     def _check_exists(self) -> bool:
