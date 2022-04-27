@@ -1,3 +1,4 @@
+# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/country211.py"
 from pathlib import Path
 from typing import Callable, Optional
 
