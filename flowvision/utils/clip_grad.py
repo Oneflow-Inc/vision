@@ -11,7 +11,7 @@ from flowvision.utils.agc import adaptive_clip_grad
 def dispatch_clip_grad(
     parameters, value: float, mode: str = "norm", norm_type: float = 2.0
 ):
-    """ Dispatch to gradient clipping method
+    """ Dispatches to gradient clipping method
     
     Args:
         parameters (Iterable): model parameters to clip

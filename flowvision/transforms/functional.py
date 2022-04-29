@@ -214,7 +214,7 @@ def pil_to_tensor(pic):
 def convert_image_dtype(
     image: flow.Tensor, dtype: flow.dtype = flow.float
 ) -> flow.Tensor:
-    """Convert a tensor image to the given ``dtype`` and scale the values accordingly
+    """Converts a tensor image to the given ``dtype`` and scale the values accordingly
     This function does not support PIL Image.
 
     Args:
@@ -242,7 +242,7 @@ def convert_image_dtype(
 
 
 def to_pil_image(pic, mode=None):
-    """Convert a tensor or an ndarray to PIL Image.
+    """Converts a tensor or an ndarray to PIL Image.
 
     See :class:`~flowvision.transforms.ToPILImage` for more details.
 
@@ -434,7 +434,7 @@ def resize(
     size: List[int],
     interpolation: InterpolationMode = InterpolationMode.BILINEAR,
 ) -> Tensor:
-    r"""Resize the input image to the given size.
+    r"""Resizes the input image to the given size.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions
 
@@ -483,7 +483,7 @@ def scale(*args, **kwargs):
 def pad(
     img: Tensor, padding: List[int], fill: int = 0, padding_mode: str = "constant"
 ) -> Tensor:
-    r"""Pad the given image on all sides with the given "pad" value.
+    r"""Pads the given image on all sides with the given "pad" value.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means at most 2 leading dimensions for mode reflect and symmetric,
     at most 3 leading dimensions for mode edge,
@@ -527,7 +527,7 @@ def pad(
 
 
 def crop(img: Tensor, top: int, left: int, height: int, width: int) -> Tensor:
-    """Crop the given image at specified location and output size.
+    """Crops the given image at specified location and output size.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
     If image size is smaller than output size along any edge, image is padded with 0 and then cropped.
@@ -597,7 +597,7 @@ def resized_crop(
     size: List[int],
     interpolation: InterpolationMode = InterpolationMode.BILINEAR,
 ) -> Tensor:
-    """Crop the given image and resize it to desired size.
+    """Crops the given image and resize it to desired size.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions
 
@@ -663,7 +663,7 @@ def vflip(img: Tensor) -> Tensor:
 def five_crop(
     img: Tensor, size: List[int]
 ) -> Tuple[Tensor, Tensor, Tensor, Tensor, Tensor]:
-    """Crop the given image into four corners and the central crop.
+    """Crops the given image into four corners and the central crop.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions
 
@@ -713,7 +713,7 @@ def five_crop(
 
 def ten_crop(img: Tensor, size: List[int], vertical_flip: bool = False) -> List[Tensor]:
     """Generate ten cropped images from the given image.
-    Crop the given image into four corners and the central crop plus the
+    Crops the given image into four corners and the central crop plus the
     flipped version of these (horizontal flipping is used by default).
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions

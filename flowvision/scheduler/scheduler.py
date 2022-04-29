@@ -17,7 +17,7 @@ class Scheduler:
 
     The schedulers built on this should try to remain as stateless as possible (for simplicity).
     This family of schedulers is attempting to avoid the confusion of the meaning of 'last_epoch'
-    and -1 values for special behaviour. All epoch and update counts must be tracked in the training
+    and -1 values for special behavior. All epoch and update counts must be tracked in the training
     code and explicitly passed in to the schedulers on the corresponding step or step_update call.
     Based on ideas from:
 

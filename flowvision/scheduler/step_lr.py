@@ -9,7 +9,7 @@ from .scheduler import Scheduler
 
 class StepLRScheduler(Scheduler):
     """ Step LRScheduler
-    Decays the learning rate of each parameter group by 
+    decays the learning rate of each parameter group by 
     decay_rate every decay_t steps.
 
     Args:

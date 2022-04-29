@@ -539,7 +539,7 @@ class AutoAugment:
 
 def auto_augment_transform(config_str, hparams):
     """
-    Create a AutoAugment transform
+    Creates a AutoAugment transform
 
     :param config_str: String defining configuration of auto augmentation. Consists of multiple sections separated by
         dashes ('-'). The first section defines the AutoAugment policy (one of 'v0', 'v0r', 'original', 'originalr').
@@ -681,7 +681,7 @@ class RandAugment:
 
 def rand_augment_transform(config_str, hparams):
     """
-    Create a RandAugment transform
+    Creates a RandAugment transform
     
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
         dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
@@ -846,7 +846,7 @@ class AugMixAugment:
 
 
 def augment_and_mix_transform(config_str, hparams):
-    """ Create AugMix OneFlow transform
+    """ Creates AugMix OneFlow transform
 
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
         dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining

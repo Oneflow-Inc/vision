@@ -14,9 +14,9 @@ pip install -e .
 
 ## Usage
 ### Create a model
-Flowvision supports two ways to create a model:
+FlowVision supports two ways to create a model:
 
-- Import the target model from `flowvision.models`, e.g., create `alexnet` from flowvision
+- Import the target model from `flowvision.models`, e.g., create `alexnet` from FlowVision
 
 ```python
 from flowvision.models.alexnet import alexnet
@@ -77,7 +77,7 @@ You can get the results like:
 ╘════════════════════════════════════════════╧══════════════╛
 ```
 
-### Search for the supported model by Wildcard
+### Search for the supported model by wildcard
 It is easy to search for model architectures by using Wildcard as below:
 ```python
 from flowvision.models import ModelCreator
@@ -107,8 +107,8 @@ You can get the results like:
 ╘════════════════════╧══════════════╛
 ```
 
-### List all models supported in flowvision
-`ModelCreator.model_list` has a similar function as `ModelCreator.model_table` but returns a list object, which gives the user a more flexible way to check the supported model in flowvision.
+### List all models supported in FlowVision
+`ModelCreator.model_list` has a similar function as `ModelCreator.model_table` but returns a list object, which gives the user a more flexible way to check the supported model in FlowVision.
 - List all models with pretrained weights
 ```python
 from flowvision.models import ModelCreator
