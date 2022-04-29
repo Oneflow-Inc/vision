@@ -3,6 +3,7 @@ from .caltech import Caltech101, Caltech256
 from .celeba import CelebA
 from .cifar import CIFAR10, CIFAR100
 from .cityscapes import Cityscapes
+from .country211 import Country211
 from .coco import CocoCaptions, CocoDetection
 from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
@@ -21,6 +22,7 @@ from .sbu import SBU
 from .semeion import SEMEION
 from .stl10 import STL10
 from .svhn import SVHN
+from .sun397 import SUN397
 from .usps import USPS
 from .vision import VisionDataset
 from .widerface import WIDERFace
@@ -34,6 +36,7 @@ __all__ = [
     "Caltech256",
     "CelebA",
     "Cityscapes",
+    "Country211",
     "CocoCaptions",
     "CocoDetection",
     "ImageNet",
@@ -55,6 +58,7 @@ __all__ = [
     "Places365",
     "SBDataset",
     "SBU",
+    "SUN397",
     "SEMEION",
     "STL10",
     "SVHN",
