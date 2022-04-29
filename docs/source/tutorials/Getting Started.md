@@ -1,7 +1,7 @@
 # Getting Started
 
 ## Installation
-- To install the latest stable release of flowvision:
+- To install the latest stable release of FlowVision:
 ```bash
 pip install flowvision==0.1.0
 ```
@@ -78,7 +78,7 @@ You can get the results like:
 ```
 
 ### Search for the supported model by wildcard
-It is easy to search for model architectures by using Wildcard as below:
+It is easy to search for model architectures by using wildcard as below:
 ```python
 from flowvision.models import ModelCreator
 all_efficientnet_models = ModelCreator.model_table("**efficientnet**")

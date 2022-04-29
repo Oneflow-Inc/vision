@@ -32,7 +32,7 @@ def batched_nms(
     """
     Performs non-maximum suppression in a batched fashion.
 
-    Each index value correspond to a category, and NMS
+    Each index value corresponds to a category, and NMS
     will not be applied between elements of different categories.
 
     Args:
