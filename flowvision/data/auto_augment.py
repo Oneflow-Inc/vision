@@ -543,7 +543,7 @@ def auto_augment_transform(config_str, hparams):
 
     :param config_str: String defining configuration of auto augmentation. Consists of multiple sections separated by
         dashes ('-'). The first section defines the AutoAugment policy (one of 'v0', 'v0r', 'original', 'originalr').
-        The remaining sections, not order sepecific determine
+        The remaining sections, not order specific determine
             * 'mstd' -  float std deviation of magnitude noise applied
         
         Example: 'original-mstd0.5' results in AutoAugment with original policy, magnitude_std 0.5
@@ -685,11 +685,11 @@ def rand_augment_transform(config_str, hparams):
     
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
         dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
-        sections, not order sepecific determine
+        sections, not order specific determine
 
             * 'm' - integer magnitude of rand augment
             * 'n' - integer num layers (number of transform ops selected per image)
-            * 'w' - integer probabiliy weight index (index of a set of weights to influence choice of op)
+            * 'w' - integer probability weight index (index of a set of weights to influence choice of op)
             * 'mstd' -  float std deviation of magnitude noise applied, or uniform sampling if infinity (or > 100)
             * 'mmax' - set upper bound for magnitude to something other than default of  _LEVEL_DENOM (10)
             * 'inc' - integer (bool), use augmentations that increase in severity with magnitude (default: 0)
@@ -850,7 +850,7 @@ def augment_and_mix_transform(config_str, hparams):
 
     :param config_str: String defining configuration of random augmentation. Consists of multiple sections separated by
         dashes ('-'). The first section defines the specific variant of rand augment (currently only 'rand'). The remaining
-        sections, not order sepecific determine
+        sections, not order specific determine
 
             * 'm' - integer magnitude (severity) of augmentation mix (default: 3)
             * 'w' - integer width of augmentation chain (default: 3)

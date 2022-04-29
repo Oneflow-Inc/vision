@@ -6,7 +6,7 @@ Pretrain Models for Visual Tasks
 Classification
 ==============
 
-The models subpackage contains definitions for the following model
+The models' subpackage contains definitions for the following model
 architectures for image classification:
 
 -  `AlexNet`_

@@ -507,7 +507,7 @@ class RandomOrder(RandomTransforms):
 
 
 class RandomChoice(RandomTransforms):
-    """Apply single transformation randomly picked from a list.
+    """Apply a single transformation randomly picked from a list.
     """
 
     def __call__(self, img):
@@ -635,7 +635,7 @@ class RandomCrop(Module):
 
 class RandomHorizontalFlip(Module):
     """Horizontally flip the given image randomly with a given probability.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -666,7 +666,7 @@ class RandomHorizontalFlip(Module):
 
 class RandomVerticalFlip(Module):
     """Vertically flip the given image randomly with a given probability.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -698,7 +698,7 @@ class RandomVerticalFlip(Module):
 class RandomResizedCrop(Module):
     """Crop a random portion of image and resize it to a given size.
 
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions
 
     A crop of the original image is made: the crop has a random area (H * W)
@@ -833,7 +833,7 @@ class RandomSizedCrop(RandomResizedCrop):
 
 class FiveCrop(Module):
     """Crop the given image into four corners and the central crop.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -882,7 +882,7 @@ class FiveCrop(Module):
 class TenCrop(Module):
     """Crop the given image into four corners and the central crop plus the flipped version of
     these (horizontal flipping is used by default).
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -934,7 +934,7 @@ class TenCrop(Module):
 
 class ColorJitter(Module):
     """Randomly change the brightness, contrast, saturation and hue of an image.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions.
     If img is PIL Image, mode "1", "L", "I", "F" and modes with transparency (alpha channel) are not supported.
 
@@ -1078,7 +1078,7 @@ class ColorJitter(Module):
 
 class RandomRotation(Module):
     """Rotate the image by angle.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
 
     Args:
@@ -1190,7 +1190,7 @@ class RandomRotation(Module):
 
 class RandomGrayscale(Module):
     """Randomly convert image to grayscale with a probability of p (default 0.1).
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
 
     Args:
@@ -1278,14 +1278,14 @@ class GaussianBlur(Module):
 
     @staticmethod
     def get_params(sigma_min: float, sigma_max: float) -> float:
-        """Choose sigma for random gaussian blurring.
+        """Choose sigma for random Gaussian blurring.
 
         Args:
             sigma_min (float): Minimum standard deviation that can be chosen for blurring kernel.
             sigma_max (float): Maximum standard deviation that can be chosen for blurring kernel.
 
         Returns:
-            float: Standard deviation to be passed to calculate kernel for gaussian blurring.
+            float: Standard deviation to be passed to calculate kernel for Gaussian blurring.
         """
         return flow.empty(1).uniform_(sigma_min, sigma_max).item()
 

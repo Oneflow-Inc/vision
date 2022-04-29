@@ -988,7 +988,7 @@ def rotate(
 
 def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
     """Convert RGB image to grayscale version of image.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
 
     Note:
