@@ -309,7 +309,7 @@ def fasterrcnn_resnet50_fpn(
     **kwargs,
 ):
     """
-    Constructs a Faster R-CNN model with a ResNet-50-FPN backbone.
+    Constructs the Faster R-CNN model with a ResNet-50-FPN backbone.
 
     Reference: `"Faster R-CNN: Towards Real-Time Object Detection with
     Region Proposal Networks" <https://arxiv.org/abs/1506.01497>`_.
@@ -475,7 +475,7 @@ def fasterrcnn_mobilenet_v3_large_320_fpn(
     **kwargs,
 ):
     """
-    Constructs a low resolution Faster R-CNN model with a MobileNetV3-Large FPN backbone tunned for mobile use-cases.
+    Constructs the low resolution Faster R-CNN model with a MobileNetV3-Large FPN backbone tunned for mobile use-cases.
     It works similarly to Faster R-CNN with ResNet-50 FPN backbone. See
     :func:`~flowvision.models.detection.fasterrcnn_resnet50_fpn` for more
     details.
@@ -528,7 +528,7 @@ def fasterrcnn_mobilenet_v3_large_fpn(
     **kwargs,
 ):
     """
-    Constructs a high resolution Faster R-CNN model with a MobileNetV3-Large FPN backbone.
+    Constructs the high resolution Faster R-CNN model with a MobileNetV3-Large FPN backbone.
     It works similarly to Faster R-CNN with ResNet-50 FPN backbone. See
     :func:`~flowvision.models.detection.fasterrcnn_resnet50_fpn` for more
     details.

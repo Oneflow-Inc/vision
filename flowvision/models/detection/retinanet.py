@@ -663,7 +663,7 @@ def retinanet_resnet50_fpn(
     **kwargs,
 ):
     """
-    Constructs a RetinaNet model with a ResNet-50-FPN backbone.
+    Constructs the RetinaNet model with a ResNet-50-FPN backbone.
 
     Reference: `"Focal Loss for Dense Object Detection" <https://arxiv.org/abs/1708.02002>`_.
 

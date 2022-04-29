@@ -599,7 +599,7 @@ def ssd300_vgg16(
     trainable_backbone_layers: Optional[int] = None,
     **kwargs: Any
 ):
-    """Constructs an SSD model with input size 300x300 and a VGG16 backbone.
+    """Constructs the SSD model with input size 300x300 and a VGG16 backbone.
 
     Reference: `"SSD: Single Shot MultiBox Detector" <https://arxiv.org/abs/1512.02325>`_.
 

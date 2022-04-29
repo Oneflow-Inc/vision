@@ -121,7 +121,7 @@ def _segm_lraspp_mobilenetv3(backbone_name, num_classes, pretrained_backbone=Tru
 def lraspp_mobilenet_v3_large_coco(
     pretrained=False, progress=True, num_classes=21, **kwargs
 ):
-    """Constructs a Lite R-ASPP Network model with a MobileNetV3-Large backbone.
+    """Constructs the Lite R-ASPP Network model with a MobileNetV3-Large backbone.
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC

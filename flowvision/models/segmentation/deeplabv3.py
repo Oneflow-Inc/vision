@@ -193,7 +193,7 @@ def _load_weights(model, arch_type, backbone, progress):
 def deeplabv3_resnet50_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
-    """Constructs a DeepLabV3 model with a ResNet-50 backbone.
+    """Constructs the DeepLabV3 model with a ResNet-50 backbone.
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC
@@ -218,7 +218,7 @@ def deeplabv3_resnet50_coco(
 def deeplabv3_resnet101_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
-    """Constructs a DeepLabV3 model with a ResNet-101 backbone.
+    """Constructs the DeepLabV3 model with a ResNet-101 backbone.
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC
@@ -243,7 +243,7 @@ def deeplabv3_resnet101_coco(
 def deeplabv3_mobilenet_v3_large_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
-    """Constructs a DeepLabV3 model with a MobileNetV3-Large backbone.
+    """Constructs the DeepLabV3 model with a MobileNetV3-Large backbone.
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC
