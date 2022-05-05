@@ -9,6 +9,8 @@ from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
 from .folder import DatasetFolder, ImageFolder
 from .fakedata import FakeData
+from .fgvc_aircraft import FGVCAircraft
+from .flowers102 import Flowers102
 from .flickr import Flickr8k, Flickr30k
 from .inaturalist import INaturalist
 from .kitti import Kitti
@@ -45,6 +47,8 @@ __all__ = [
     "DatasetFolder",
     "ImageFolder",
     "FakeData",
+    "FGVCAircraft",
+    "Flowers102",
     "Flickr8k",
     "Flickr30k",
     "INaturalist",
