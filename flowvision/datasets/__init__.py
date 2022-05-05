@@ -26,6 +26,7 @@ from .rendered_sst2 import RenderedSST2
 from .sbd import SBDataset
 from .sbu import SBU
 from .semeion import SEMEION
+from .stanford_cars import StanfordCars
 from .stl10 import STL10
 from .svhn import SVHN
 from .sun397 import SUN397
@@ -72,6 +73,7 @@ __all__ = [
     "SBU",
     "SUN397",
     "SEMEION",
+    "StanfordCars",
     "STL10",
     "SVHN",
     "USPS",
