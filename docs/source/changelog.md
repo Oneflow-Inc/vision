@@ -19,6 +19,8 @@
 - Support [RegNet](https://arxiv.org/abs/2003.13678) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
 - Support [LeViT](https://arxiv.org/abs/2104.01136) model and pretrained weight [#177](https://github.com/Oneflow-Inc/vision/pull/177)
 - Support ``transforms.GaussianBlur`` method [#188](https://github.com/Oneflow-Inc/vision/pull/188)
+- Support [SUN397](https://vision.princeton.edu/projects/2010/SUN/) dataset [#215](https://github.com/Oneflow-Inc/vision/pull/215)
+- Support [Country211](https://github.com/openai/CLIP/blob/main/data/country211.md) dataset [#215](https://github.com/Oneflow-Inc/vision/pull/215)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
