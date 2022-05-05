@@ -5,6 +5,7 @@ from .cifar import CIFAR10, CIFAR100
 from .cityscapes import Cityscapes
 from .country211 import Country211
 from .coco import CocoCaptions, CocoDetection
+from .dtd import DTD
 from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
 from .folder import DatasetFolder, ImageFolder
@@ -46,6 +47,7 @@ __all__ = [
     "VOCDetection",
     "VOCSegmentation",
     "DatasetFolder",
+    "DTD",
     "ImageFolder",
     "FakeData",
     "FGVCAircraft",
