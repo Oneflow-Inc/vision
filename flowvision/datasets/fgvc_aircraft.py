@@ -47,7 +47,9 @@ class FGVCAircraft(VisionDataset):
         download: bool = False,
     ) -> None:
         super().__init__(root, transform=transform, target_transform=target_transform)
-        self._split = verify_str_arg(split, "split", ("train", "val", "trainval", "test"))
+        self._split = verify_str_arg(
+            split, "split", ("train", "val", "trainval", "test")
+        )
         self._annotation_level = verify_str_arg(
             annotation_level, "annotation_level", ("variant", "family", "manufacturer")
         )
@@ -57,7 +59,9 @@ class FGVCAircraft(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         annotation_file = os.path.join(
             self._data_path,
@@ -74,7 +78,11 @@ class FGVCAircraft(VisionDataset):
         self.class_to_idx = dict(zip(self.classes, range(len(self.classes))))
 
         image_data_folder = os.path.join(self._data_path, "data", "images")
-        labels_file = os.path.join(self._data_path, "data", f"images_{self._annotation_level}_{self._split}.txt")
+        labels_file = os.path.join(
+            self._data_path,
+            "data",
+            f"images_{self._annotation_level}_{self._split}.txt",
+        )
 
         self._image_files = []
         self._labels = []
@@ -82,7 +90,9 @@ class FGVCAircraft(VisionDataset):
         with open(labels_file, "r") as f:
             for line in f:
                 image_name, label_name = line.strip().split(" ", 1)
-                self._image_files.append(os.path.join(image_data_folder, f"{image_name}.jpg"))
+                self._image_files.append(
+                    os.path.join(image_data_folder, f"{image_name}.jpg")
+                )
                 self._labels.append(self.class_to_idx[label_name])
 
     def __len__(self) -> int:
