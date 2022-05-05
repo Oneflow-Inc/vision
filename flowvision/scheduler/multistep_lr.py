@@ -11,7 +11,7 @@ from .scheduler import Scheduler
 
 class MultiStepLRScheduler(Scheduler):
     """MultiStep LRScheduler
-    decays the learning rate of each parameter group by decay_rate once the 
+    Decays the learning rate of each parameter group by decay_rate once the 
     number of step reaches one of the decay_t. 
 
     Args:

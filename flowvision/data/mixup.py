@@ -20,7 +20,7 @@ def one_hot(x, num_classes, on_value=1.0, off_value=0.0, device="cuda"):
 
 def mixup_target(target, num_classes, lam=1.0, smoothing=0.0, device="cuda"):
     """
-    Mixes up the targets with label-smoothing
+    Mixup the targets with label-smoothing
     """
     off_value = smoothing / num_classes
     on_value = 1.0 - smoothing + off_value
@@ -39,7 +39,7 @@ def mixup_target(target, num_classes, lam=1.0, smoothing=0.0, device="cuda"):
 
 def rand_bbox(img_shape, lam, margin=0.0, count=None):
     """ Standard CutMix bounding-box
-    generates a random square bbox based on lambda value. This implementation includes
+    Generates a random square bbox based on lambda value. This implementation includes
     support for enforcing a border margin as percent of bbox dimensions.
     
     Args:
