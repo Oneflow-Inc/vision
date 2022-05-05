@@ -17,6 +17,7 @@ from .kitti import Kitti
 from .lfw import LFWPairs, LFWPeople
 from .lsun import LSUN, LSUNClass
 from .omniglot import Omniglot
+from .oxford_iiit_pet import OxfordIIITPet
 from .phototour import PhotoTour
 from .places365 import Places365
 from .sbd import SBDataset
@@ -58,6 +59,7 @@ __all__ = [
     "LSUN",
     "LSUNClass",
     "Omniglot",
+    "OxfordIIITPet",
     "PhotoTour",
     "Places365",
     "SBDataset",
