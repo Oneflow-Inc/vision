@@ -22,6 +22,7 @@ from .omniglot import Omniglot
 from .oxford_iiit_pet import OxfordIIITPet
 from .phototour import PhotoTour
 from .places365 import Places365
+from .rendered_sst2 import RenderedSST2
 from .sbd import SBDataset
 from .sbu import SBU
 from .semeion import SEMEION
@@ -66,6 +67,7 @@ __all__ = [
     "OxfordIIITPet",
     "PhotoTour",
     "Places365",
+    "RenderedSST2",
     "SBDataset",
     "SBU",
     "SUN397",

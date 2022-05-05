@@ -1,4 +1,4 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/food101.py"
+# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/food101.py
 import json
 from pathlib import Path
 from typing import Any, Tuple, Callable, Optional

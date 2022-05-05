@@ -1,4 +1,4 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/dtd.py"
+# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/dtd.py
 import os
 import pathlib
 from typing import Optional, Callable
