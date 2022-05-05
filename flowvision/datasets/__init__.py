@@ -13,6 +13,7 @@ from .fakedata import FakeData
 from .fgvc_aircraft import FGVCAircraft
 from .flowers102 import Flowers102
 from .flickr import Flickr8k, Flickr30k
+from .food101 import Food101
 from .inaturalist import INaturalist
 from .kitti import Kitti
 from .lfw import LFWPairs, LFWPeople
@@ -54,6 +55,7 @@ __all__ = [
     "Flowers102",
     "Flickr8k",
     "Flickr30k",
+    "Food101",
     "INaturalist",
     "Kitti",
     "LFWPairs",
