@@ -373,7 +373,7 @@ def _verify_compression(compression: str) -> None:
 
 
 def _detect_file_type(file: str) -> Tuple[str, Optional[str], Optional[str]]:
-    SUFFIX_FORMATS = '.tar', '.gz', '.tgz', '.xz', 'zip', '.7z', '.rar', '.bz', '.bz2', '.h5'
+    SUFFIX_FORMATS = '.tar', '.gz', '.tgz', '.xz', '.zip', '.7z', '.rar', '.bz', '.bz2', '.h5'
     path = pathlib.Path(file)
     suffix = path.suffix
     suffixes = [suff for suff in pathlib.Path(file).suffixes if suff in SUFFIX_FORMATS]

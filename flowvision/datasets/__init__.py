@@ -6,6 +6,7 @@ from .cityscapes import Cityscapes
 from .country211 import Country211
 from .coco import CocoCaptions, CocoDetection
 from .dtd import DTD
+from .eurosat import EuroSAT
 from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
 from .folder import DatasetFolder, ImageFolder
@@ -52,6 +53,7 @@ __all__ = [
     "VOCSegmentation",
     "DatasetFolder",
     "DTD",
+    "EuroSAT",
     "ImageFolder",
     "FakeData",
     "FGVCAircraft",
