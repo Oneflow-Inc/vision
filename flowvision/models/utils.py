@@ -76,7 +76,7 @@ def _legacy_zip_load(filename, model_dir, map_location, delete_zip_file=True):
         if not os.path.exists(extracted_file):
             os.mkdir(extracted_file)
         f.extractall(model_dir)
-    if delete_zip_file:
+    if delete_zip_file and os.path.exists(filename):
         os.remove(filename)
     return flow.load(extracted_file, map_location)
 
