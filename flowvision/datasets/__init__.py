@@ -7,6 +7,7 @@ from .country211 import Country211
 from .coco import CocoCaptions, CocoDetection
 from .dtd import DTD
 from .eurosat import EuroSAT
+from .gtsrb import GTSRB
 from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
 from .folder import DatasetFolder, ImageFolder
@@ -54,6 +55,7 @@ __all__ = [
     "DatasetFolder",
     "DTD",
     "EuroSAT",
+    "GTSRB",
     "ImageFolder",
     "FakeData",
     "FGVCAircraft",
