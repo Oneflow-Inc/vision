@@ -3,6 +3,7 @@ from .caltech import Caltech101, Caltech256
 from .celeba import CelebA
 from .cifar import CIFAR10, CIFAR100
 from .cityscapes import Cityscapes
+from .clevr import CLEVRClassification
 from .country211 import Country211
 from .coco import CocoCaptions, CocoDetection
 from .dtd import DTD
@@ -46,6 +47,7 @@ __all__ = [
     "Caltech256",
     "CelebA",
     "Cityscapes",
+    "CLEVRClassification",
     "Country211",
     "CocoCaptions",
     "CocoDetection",
