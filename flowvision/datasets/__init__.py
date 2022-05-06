@@ -20,6 +20,7 @@ from .lfw import LFWPairs, LFWPeople
 from .lsun import LSUN, LSUNClass
 from .omniglot import Omniglot
 from .oxford_iiit_pet import OxfordIIITPet
+from .pcam import PCAM
 from .phototour import PhotoTour
 from .places365 import Places365
 from .rendered_sst2 import RenderedSST2
@@ -66,6 +67,7 @@ __all__ = [
     "LSUNClass",
     "Omniglot",
     "OxfordIIITPet",
+    "PCAM",
     "PhotoTour",
     "Places365",
     "RenderedSST2",
