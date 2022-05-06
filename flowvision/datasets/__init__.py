@@ -8,6 +8,7 @@ from .country211 import Country211
 from .coco import CocoCaptions, CocoDetection
 from .dtd import DTD
 from .eurosat import EuroSAT
+from .fer2013 import FER2013
 from .gtsrb import GTSRB
 from .imagenet import ImageNet
 from .voc import VOCDetection, VOCSegmentation
@@ -60,6 +61,7 @@ __all__ = [
     "GTSRB",
     "ImageFolder",
     "FakeData",
+    "FER2013",
     "FGVCAircraft",
     "Flowers102",
     "Flickr8k",
