@@ -21,6 +21,18 @@
 - Support ``transforms.GaussianBlur`` method [#188](https://github.com/Oneflow-Inc/vision/pull/188)
 - Support [SUN397](https://vision.princeton.edu/projects/2010/SUN/) dataset [#215](https://github.com/Oneflow-Inc/vision/pull/215)
 - Support [Country211](https://github.com/openai/CLIP/blob/main/data/country211.md) dataset [#215](https://github.com/Oneflow-Inc/vision/pull/215)
+- Support [Flowers102](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [FGVCAircraft](https://www.robots.ox.ac.uk/~vgg/data/fgvc-aircraft/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [OxfordIIITPet](https://www.robots.ox.ac.uk/~vgg/data/pets/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [DTD](https://www.robots.ox.ac.uk/~vgg/data/dtd/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [Food101](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [RenderedSST2](https://github.com/openai/CLIP/blob/main/data/rendered-sst2.md) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [StanfordCars](https://ai.stanford.edu/~jkrause/cars/car_dataset.html) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [PCAM](https://github.com/basveeling/pcam) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [EuroSAT](https://github.com/phelber/eurosat) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [GTSRB](https://benchmark.ini.rub.de/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [CLEVR](https://cs.stanford.edu/people/jcjohns/clevr/) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
+- Support [FER2013](https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge) dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
