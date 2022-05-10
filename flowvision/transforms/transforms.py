@@ -4,6 +4,7 @@ import warnings
 import numbers
 from collections.abc import Sequence
 from typing import Tuple, List, Optional
+from PIL import ImageOps
 
 import numpy as np
 import random
@@ -1188,6 +1189,37 @@ class RandomRotation(Module):
         return format_string
 
 
+class Grayscale(Module):
+    """Convert image to grayscale.
+    If the image is oneflow Tensor, it is expected
+    to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
+    
+    Args:
+        num_output_channels (int): (1 or 3) number of channels desired for output image
+    
+    Returns:
+        PIL Image: Grayscale version of the input.
+        - If ``num_output_channels == 1`` : returned image is single channel
+        - If ``num_output_channels == 3`` : returned image is 3 channel with r == g == b
+    """
+
+    def __init__(self, num_output_channels=1):
+        super().__init__()
+        self.num_output_channels = num_output_channels
+
+    def forward(self, img):
+        """
+        Args:
+            img (PIL Image or Tensor): Image to be converted to grayscale.
+        Returns:
+            PIL Image or Tensor: Grayscaled image.
+        """
+        return F.rgb_to_grayscale(img, num_output_channels=self.num_output_channels)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(num_output_channels={self.num_output_channels})"
+
+
 class RandomGrayscale(Module):
     """Randomly convert image to grayscale with a probability of p (default 0.1).
     If the image is flow Tensor, it is expected
@@ -1304,6 +1336,38 @@ class GaussianBlur(Module):
         s = f"{self.__class__.__name__}(kernel_size={self.kernel_size}, sigma={self.sigma})"
         return s
 
+
+class Solarization(Module):
+    """
+    Apply Solarization to the input PIL Image.
+
+    Args:
+        p (float): probability that image should be applied with solarization operation.
+    """
+    def __init__(self, p=0.1):
+        super().__init__()
+        self.p = p
+        if p > 1:
+            warnings.warn(
+                "Probability is larger than 1, return the original image."
+            )
+    
+    def forward(self, img):
+        """
+        Args:
+            img (PIL Image or Tensor): Image to be applied with solarization operation.
+
+        Returns:
+            PIL Image or Tensor: selorization image.
+        """
+        if flow.rand(1) < self.p:
+            return  ImageOps.solarize(img)
+        else:
+            return img
+
+    def __repr__(self) -> str:
+        s = f"{self.__class__.__name__}(p={self.p})"
+        return s
 
 def _setup_size(size, error_msg):
     if isinstance(size, numbers.Number):
