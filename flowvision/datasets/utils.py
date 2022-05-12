@@ -373,9 +373,10 @@ def _verify_compression(compression: str) -> None:
 
 
 def _detect_file_type(file: str) -> Tuple[str, Optional[str], Optional[str]]:
+    SUFFIX_FORMATS = '.tar', '.gz', '.tgz', '.xz', '.zip', '.7z', '.rar', '.bz', '.bz2', '.h5'
     path = pathlib.Path(file)
     suffix = path.suffix
-    suffixes = pathlib.Path(file).suffixes
+    suffixes = [suff for suff in pathlib.Path(file).suffixes if suff in SUFFIX_FORMATS]
     if not suffixes:
         raise RuntimeError(
             f"File '{file}' has no suffixes that could be used to detect the archive type and compression."
@@ -389,7 +390,10 @@ def _detect_file_type(file: str) -> Tuple[str, Optional[str], Optional[str]]:
         # if we have exactly two suffixes we assume the first one is the archive type and the second on is the
         # compression
         archive_type, compression = suffixes
-        _verify_archive_type(archive_type)
+        if archive_type == ".h5":
+            print(f"Format {archive_type} is testing now.")
+        else:
+            _verify_archive_type(archive_type)
         _verify_compression(compression)
         return "".join(suffixes), archive_type, compression
 
