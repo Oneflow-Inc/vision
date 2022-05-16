@@ -48,7 +48,9 @@ class Food101(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         self._labels = []
         self._image_files = []
@@ -61,7 +63,8 @@ class Food101(VisionDataset):
         for class_label, im_rel_paths in metadata.items():
             self._labels += [self.class_to_idx[class_label]] * len(im_rel_paths)
             self._image_files += [
-                self._images_folder.joinpath(*f"{im_rel_path}.jpg".split("/")) for im_rel_path in im_rel_paths
+                self._images_folder.joinpath(*f"{im_rel_path}.jpg".split("/"))
+                for im_rel_path in im_rel_paths
             ]
 
     def __len__(self) -> int:
@@ -83,7 +86,10 @@ class Food101(VisionDataset):
         return f"split={self._split}"
 
     def _check_exists(self) -> bool:
-        return all(folder.exists() and folder.is_dir() for folder in (self._meta_folder, self._images_folder))
+        return all(
+            folder.exists() and folder.is_dir()
+            for folder in (self._meta_folder, self._images_folder)
+        )
 
     def _download(self) -> None:
         if self._check_exists():

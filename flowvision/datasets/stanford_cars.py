@@ -38,7 +38,9 @@ class StanfordCars(VisionDataset):
         try:
             import scipy.io as sio
         except ImportError:
-            raise RuntimeError("Scipy is not found. This dataset needs to have scipy installed: pip install scipy")
+            raise RuntimeError(
+                "Scipy is not found. This dataset needs to have scipy installed: pip install scipy"
+            )
 
         super().__init__(root, transform=transform, target_transform=target_transform)
 
@@ -50,24 +52,33 @@ class StanfordCars(VisionDataset):
             self._annotations_mat_path = devkit / "cars_train_annos.mat"
             self._images_base_path = self._base_folder / "cars_train"
         else:
-            self._annotations_mat_path = self._base_folder / "cars_test_annos_withlabels.mat"
+            self._annotations_mat_path = (
+                self._base_folder / "cars_test_annos_withlabels.mat"
+            )
             self._images_base_path = self._base_folder / "cars_test"
 
         if download:
             self.download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         self._samples = [
             (
                 str(self._images_base_path / annotation["fname"]),
-                annotation["class"] - 1,  # Original target mapping  starts from 1, hence -1
+                annotation["class"]
+                - 1,  # Original target mapping  starts from 1, hence -1
             )
-            for annotation in sio.loadmat(self._annotations_mat_path, squeeze_me=True)["annotations"]
+            for annotation in sio.loadmat(self._annotations_mat_path, squeeze_me=True)[
+                "annotations"
+            ]
         ]
 
-        self.classes = sio.loadmat(str(devkit / "cars_meta.mat"), squeeze_me=True)["class_names"].tolist()
+        self.classes = sio.loadmat(str(devkit / "cars_meta.mat"), squeeze_me=True)[
+            "class_names"
+        ].tolist()
         self.class_to_idx = {cls: i for i, cls in enumerate(self.classes)}
 
     def __len__(self) -> int:

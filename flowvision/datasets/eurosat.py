@@ -34,9 +34,13 @@ class EuroSAT(ImageFolder):
             self.download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
-        super().__init__(self._data_folder, transform=transform, target_transform=target_transform)
+        super().__init__(
+            self._data_folder, transform=transform, target_transform=target_transform
+        )
         self.root = os.path.expanduser(root)
 
     def __len__(self) -> int:

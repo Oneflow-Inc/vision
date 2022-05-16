@@ -65,12 +65,12 @@ class PCAM(VisionDataset):
     }
 
     def __init__(
-            self,
-            root: str,
-            split: str = "train",
-            transform: Optional[Callable] = None,
-            target_transform: Optional[Callable] = None,
-            download: bool = False,
+        self,
+        root: str,
+        split: str = "train",
+        transform: Optional[Callable] = None,
+        target_transform: Optional[Callable] = None,
+        download: bool = False,
     ):
         try:
             import h5py
@@ -90,7 +90,9 @@ class PCAM(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
     def __len__(self) -> int:
         images_file = self._FILES[self._split]["images"][0]
@@ -104,7 +106,9 @@ class PCAM(VisionDataset):
 
         targets_file = self._FILES[self._split]["targets"][0]
         with self.h5py.File(self._base_folder / targets_file) as targets_data:
-            target = int(targets_data["y"][idx, 0, 0, 0])  # shape is [num_images, 1, 1, 1]
+            target = int(
+                targets_data["y"][idx, 0, 0, 0]
+            )  # shape is [num_images, 1, 1, 1]
 
         if self.transform:
             image = self.transform(image)
@@ -116,7 +120,10 @@ class PCAM(VisionDataset):
     def _check_exists(self) -> bool:
         images_file = self._FILES[self._split]["images"][0]
         targets_file = self._FILES[self._split]["targets"][0]
-        return all(self._base_folder.joinpath(h5_file).exists() for h5_file in (images_file, targets_file))
+        return all(
+            self._base_folder.joinpath(h5_file).exists()
+            for h5_file in (images_file, targets_file)
+        )
 
     def _download(self) -> None:
         if self._check_exists():
@@ -124,6 +131,8 @@ class PCAM(VisionDataset):
 
         for file_name, file_id, md5 in self._FILES[self._split].values():
             archive_name = file_name + ".gz"
-            print(file_id, str(self._base_folder),archive_name,md5)
-            download_file_from_google_drive(file_id, str(self._base_folder), filename=archive_name, md5=md5)
+            print(file_id, str(self._base_folder), archive_name, md5)
+            download_file_from_google_drive(
+                file_id, str(self._base_folder), filename=archive_name, md5=md5
+            )
             _decompress(str(self._base_folder / archive_name))

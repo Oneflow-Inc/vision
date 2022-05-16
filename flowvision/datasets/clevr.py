@@ -38,22 +38,35 @@ class CLEVRClassification(VisionDataset):
         self._split = verify_str_arg(split, "split", ("train", "val", "test"))
         super().__init__(root, transform=transform, target_transform=target_transform)
         self._base_folder = pathlib.Path(self.root) / "clevr"
-        self._data_folder = self._base_folder / pathlib.Path(urlparse(self._URL).path).stem
+        self._data_folder = (
+            self._base_folder / pathlib.Path(urlparse(self._URL).path).stem
+        )
 
         if download:
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found or corrupted. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found or corrupted. You can use download=True to download it"
+            )
 
-        self._image_files = sorted(self._data_folder.joinpath("images", self._split).glob("*"))
+        self._image_files = sorted(
+            self._data_folder.joinpath("images", self._split).glob("*")
+        )
 
         self._labels: List[Optional[int]]
         if self._split != "test":
-            with open(self._data_folder / "scenes" / f"CLEVR_{self._split}_scenes.json") as file:
+            with open(
+                self._data_folder / "scenes" / f"CLEVR_{self._split}_scenes.json"
+            ) as file:
                 content = json.load(file)
-            num_objects = {scene["image_filename"]: len(scene["objects"]) for scene in content["scenes"]}
-            self._labels = [num_objects[image_file.name] for image_file in self._image_files]
+            num_objects = {
+                scene["image_filename"]: len(scene["objects"])
+                for scene in content["scenes"]
+            }
+            self._labels = [
+                num_objects[image_file.name] for image_file in self._image_files
+            ]
         else:
             self._labels = [None] * len(self._image_files)
 

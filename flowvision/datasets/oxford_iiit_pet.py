@@ -29,29 +29,41 @@ class OxfordIIITPet(VisionDataset):
     """
 
     _RESOURCES = (
-        ("https://www.robots.ox.ac.uk/~vgg/data/pets/data/images.tar.gz", "5c4f3ee8e5d25df40f4fd59a7f44e54c"),
-        ("https://www.robots.ox.ac.uk/~vgg/data/pets/data/annotations.tar.gz", "95a8c909bbe2e81eed6a22bccdf3f68f"),
+        (
+            "https://www.robots.ox.ac.uk/~vgg/data/pets/data/images.tar.gz",
+            "5c4f3ee8e5d25df40f4fd59a7f44e54c",
+        ),
+        (
+            "https://www.robots.ox.ac.uk/~vgg/data/pets/data/annotations.tar.gz",
+            "95a8c909bbe2e81eed6a22bccdf3f68f",
+        ),
     )
     _VALID_TARGET_TYPES = ("category", "segmentation")
 
     def __init__(
-            self,
-            root: str,
-            split: str = "trainval",
-            target_types: Union[Sequence[str], str] = "category",
-            transforms: Optional[Callable] = None,
-            transform: Optional[Callable] = None,
-            target_transform: Optional[Callable] = None,
-            download: bool = False,
+        self,
+        root: str,
+        split: str = "trainval",
+        target_types: Union[Sequence[str], str] = "category",
+        transforms: Optional[Callable] = None,
+        transform: Optional[Callable] = None,
+        target_transform: Optional[Callable] = None,
+        download: bool = False,
     ):
         self._split = verify_str_arg(split, "split", ("trainval", "test"))
         if isinstance(target_types, str):
             target_types = [target_types]
         self._target_types = [
-            verify_str_arg(target_type, "target_types", self._VALID_TARGET_TYPES) for target_type in target_types
+            verify_str_arg(target_type, "target_types", self._VALID_TARGET_TYPES)
+            for target_type in target_types
         ]
 
-        super().__init__(root, transforms=transforms, transform=transform, target_transform=target_transform)
+        super().__init__(
+            root,
+            transforms=transforms,
+            transform=transform,
+            target_transform=target_transform,
+        )
         self._base_folder = pathlib.Path(self.root) / "oxford-iiit-pet"
         self._images_folder = self._base_folder / "images"
         self._anns_folder = self._base_folder / "annotations"
@@ -61,7 +73,9 @@ class OxfordIIITPet(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         image_ids = []
         self._labels = []
@@ -74,13 +88,18 @@ class OxfordIIITPet(VisionDataset):
         self.classes = [
             " ".join(part.title() for part in raw_cls.split("_"))
             for raw_cls, _ in sorted(
-                {(image_id.rsplit("_", 1)[0], label) for image_id, label in zip(image_ids, self._labels)},
+                {
+                    (image_id.rsplit("_", 1)[0], label)
+                    for image_id, label in zip(image_ids, self._labels)
+                },
                 key=lambda image_id_and_label: image_id_and_label[1],
             )
         ]
         self.class_to_idx = dict(zip(self.classes, range(len(self.classes))))
 
-        self._images = [self._images_folder / f"{image_id}.jpg" for image_id in image_ids]
+        self._images = [
+            self._images_folder / f"{image_id}.jpg" for image_id in image_ids
+        ]
         self._segs = [self._segs_folder / f"{image_id}.png" for image_id in image_ids]
 
     def __len__(self) -> int:
@@ -120,4 +139,6 @@ class OxfordIIITPet(VisionDataset):
             return
 
         for url, md5 in self._RESOURCES:
-            download_and_extract_archive(url, download_root=str(self._base_folder), md5=md5)
+            download_and_extract_archive(
+                url, download_root=str(self._base_folder), md5=md5
+            )

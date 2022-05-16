@@ -37,14 +37,18 @@ class GTSRB(VisionDataset):
         self._split = verify_str_arg(split, "split", ("train", "test"))
         self._base_folder = pathlib.Path(root) / "gtsrb"
         self._target_folder = (
-            self._base_folder / "GTSRB" / ("Training" if self._split == "train" else "Final_Test/Images")
+            self._base_folder
+            / "GTSRB"
+            / ("Training" if self._split == "train" else "Final_Test/Images")
         )
 
         if download:
             self.download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         if self._split == "train":
             samples = make_dataset(str(self._target_folder), extensions=(".ppm",))
@@ -52,7 +56,9 @@ class GTSRB(VisionDataset):
             with open(self._base_folder / "GT-final_test.csv") as csv_file:
                 samples = [
                     (str(self._target_folder / row["Filename"]), int(row["ClassId"]))
-                    for row in csv.DictReader(csv_file, delimiter=";", skipinitialspace=True)
+                    for row in csv.DictReader(
+                        csv_file, delimiter=";", skipinitialspace=True
+                    )
                 ]
 
         self._samples = samples
@@ -82,7 +88,9 @@ class GTSRB(VisionDataset):
         if self._check_exists():
             return
 
-        base_url = "https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/"
+        base_url = (
+            "https://sid.erda.dk/public/archives/daaeac0d7ce1152aea9b61d9f1e19370/"
+        )
 
         if self._split == "train":
             download_and_extract_archive(

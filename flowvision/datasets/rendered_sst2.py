@@ -32,12 +32,12 @@ class RenderedSST2(VisionDataset):
     _MD5 = "2384d08e9dcfa4bd55b324e610496ee5"
 
     def __init__(
-            self,
-            root: str,
-            split: str = "train",
-            transform: Optional[Callable] = None,
-            target_transform: Optional[Callable] = None,
-            download: bool = False,
+        self,
+        root: str,
+        split: str = "train",
+        transform: Optional[Callable] = None,
+        target_transform: Optional[Callable] = None,
+        download: bool = False,
     ) -> None:
         super().__init__(root, transform=transform, target_transform=target_transform)
         self._split = verify_str_arg(split, "split", ("train", "val", "test"))
@@ -50,9 +50,14 @@ class RenderedSST2(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
-        self._samples = make_dataset(str(self._base_folder / self._split_to_folder[self._split]), extensions=("png",))
+        self._samples = make_dataset(
+            str(self._base_folder / self._split_to_folder[self._split]),
+            extensions=("png",),
+        )
 
     def __len__(self) -> int:
         return len(self._samples)
@@ -74,7 +79,9 @@ class RenderedSST2(VisionDataset):
 
     def _check_exists(self) -> bool:
         for class_label in set(self.classes):
-            if not (self._base_folder / self._split_to_folder[self._split] / class_label).is_dir():
+            if not (
+                self._base_folder / self._split_to_folder[self._split] / class_label
+            ).is_dir():
                 return False
         return True
 
