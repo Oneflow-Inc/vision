@@ -50,7 +50,9 @@ class FER2013(VisionDataset):
         with open(data_file, "r", newline="") as file:
             self._samples = [
                 (
-                    torch.tensor([int(idx) for idx in row["pixels"].split()], dtype=torch.uint8).reshape(48, 48),
+                    torch.tensor(
+                        [int(idx) for idx in row["pixels"].split()], dtype=torch.uint8
+                    ).reshape(48, 48),
                     int(row["emotion"]) if "emotion" in row else None,
                 )
                 for row in csv.DictReader(file)

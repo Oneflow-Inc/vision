@@ -56,7 +56,9 @@ class DTD(VisionDataset):
             self._download()
 
         if not self._check_exists():
-            raise RuntimeError("Dataset not found. You can use download=True to download it")
+            raise RuntimeError(
+                "Dataset not found. You can use download=True to download it"
+            )
 
         self._image_files = []
         classes = []
@@ -94,4 +96,6 @@ class DTD(VisionDataset):
     def _download(self) -> None:
         if self._check_exists():
             return
-        download_and_extract_archive(self._URL, download_root=str(self._base_folder), md5=self._MD5)
+        download_and_extract_archive(
+            self._URL, download_root=str(self._base_folder), md5=self._MD5
+        )
