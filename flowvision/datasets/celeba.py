@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/celeba.py
 """
 from functools import partial
 import oneflow as flow

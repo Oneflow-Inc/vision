@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/sbd.py
+"""
 import os
 import shutil
 from .vision import VisionDataset

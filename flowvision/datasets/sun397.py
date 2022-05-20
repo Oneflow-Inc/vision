@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/sun397.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/sun397.py
+"""
 from pathlib import Path
 from typing import Any, Tuple, Callable, Optional
 

@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/pcam.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/pcam.py
+"""
 import pathlib
 from typing import Any, Callable, Optional, Tuple
 

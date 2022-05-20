@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/fgvc_aircraft.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/fgvc_aircraft.py
+"""
 from __future__ import annotations
 
 import os

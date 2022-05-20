@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/clevr.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/clevr.py
+"""
 import json
 import pathlib
 from typing import Any, Callable, Optional, Tuple, List

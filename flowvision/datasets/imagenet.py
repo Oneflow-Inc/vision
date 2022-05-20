@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/imagenet.py
 """
 import warnings
 from contextlib import contextmanager

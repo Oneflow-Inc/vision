@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/flowers102.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/flowers102.py
+"""
 from pathlib import Path
 from typing import Any, Tuple, Callable, Optional
 

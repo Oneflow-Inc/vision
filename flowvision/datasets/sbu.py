@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/sbu.py
 """
 from PIL import Image
 from six.moves import zip

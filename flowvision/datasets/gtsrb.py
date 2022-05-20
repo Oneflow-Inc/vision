@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/gtsrb.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/gtsrb.py
+"""
 import csv
 import pathlib
 from typing import Any, Callable, Optional, Tuple
