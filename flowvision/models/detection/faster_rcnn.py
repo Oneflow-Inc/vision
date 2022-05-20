@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/faster_rcnn.py
+"""
 from typing import Any, Optional, Union
 
 import oneflow as flow

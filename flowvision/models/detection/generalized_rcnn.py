@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/generalized_rcnn.py
+"""
 from collections import OrderedDict
 from typing import Tuple, List, Dict, Optional, Union
 

@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/segmentation/deeplabv3.py
+"""
 import oneflow as flow
 from oneflow import nn
 from oneflow.nn import functional as F

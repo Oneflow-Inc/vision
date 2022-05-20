@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/segmentation/lraspp.py
+"""
 from collections import OrderedDict
 
 from oneflow import nn, Tensor

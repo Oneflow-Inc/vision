@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/roi_heads.py
+"""
 from typing import Optional, List, Dict, Tuple
 
 import oneflow as flow
