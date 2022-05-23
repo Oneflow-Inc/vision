@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/fcos.py
+"""
 import math
 import warnings
 from collections import OrderedDict

@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/transforms/functional_tensor.py
 """
 import warnings
 from typing import Optional, Tuple, List

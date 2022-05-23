@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/stanford_cars.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/stanford_cars.py
+"""
 import pathlib
 from typing import Callable, Optional, Any, Tuple
 

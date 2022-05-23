@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/backbone_utils.py
+"""
 import warnings
 from typing import Callable, Dict, Optional, List, Union
 

@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/rpn.py
+"""
 from typing import List, Optional, Dict, Tuple
 
 import oneflow as flow

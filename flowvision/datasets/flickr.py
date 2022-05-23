@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/flickr.py
 """
 import glob
 import os

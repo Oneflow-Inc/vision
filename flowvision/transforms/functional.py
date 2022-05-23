@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/transforms/functional.py
 """
 import warnings
 import numbers

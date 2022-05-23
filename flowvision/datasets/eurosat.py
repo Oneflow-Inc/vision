@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/eurosat.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/eurosat.py
+"""
 import os
 from typing import Callable, Optional
 

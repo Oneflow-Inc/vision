@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/fer2013.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/fer2013.py
+"""
 import csv
 import pathlib
 from typing import Any, Callable, Optional, Tuple

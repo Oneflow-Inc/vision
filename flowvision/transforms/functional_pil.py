@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/transforms/functional_pil.py
 """
 import numbers
 from typing import Any, List, Sequence

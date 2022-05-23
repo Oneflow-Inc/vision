@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/ssdlite.py
+"""
 import oneflow as flow
 import warnings
 

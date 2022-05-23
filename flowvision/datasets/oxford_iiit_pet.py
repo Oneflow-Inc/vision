@@ -1,4 +1,6 @@
-# Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/oxford_iiit_pet.py
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/oxford_iiit_pet.py
+"""
 import os
 import os.path
 import pathlib
