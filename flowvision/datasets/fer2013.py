@@ -5,7 +5,7 @@ import csv
 import pathlib
 from typing import Any, Callable, Optional, Tuple
 
-import torch
+import oneflow as flow
 from PIL import Image
 
 from .utils import verify_str_arg, check_integrity
@@ -52,8 +52,8 @@ class FER2013(VisionDataset):
         with open(data_file, "r", newline="") as file:
             self._samples = [
                 (
-                    torch.tensor(
-                        [int(idx) for idx in row["pixels"].split()], dtype=torch.uint8
+                    flow.tensor(
+                        [int(idx) for idx in row["pixels"].split()], dtype=flow.uint8
                     ).reshape(48, 48),
                     int(row["emotion"]) if "emotion" in row else None,
                 )
