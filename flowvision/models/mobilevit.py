@@ -1,14 +1,23 @@
-# import torch
-import oneflow as torch
+"""
+Modified from https://github.com/apple/ml-cvnets/blob/d38a116fe134a8cd5db18670764fdaafd39a5d4f/cvnets/models/classification/mobilevit.py
+"""
+import math
 from typing import Dict, Tuple, Optional, Union
 
-import math
-from oneflow import nn, Tensor
+import oneflow as flow
+import oneflow.nn as nn
+from oneflow import Tensor
 from oneflow.nn import functional as F
 
+from .registry import ModelCreator
+from .utils import load_state_dict_from_url
 
-# from torch import nn, Tensor
-# from torch.nn import functional as F
+
+model_urls = {
+    "mobilevit_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_s.zip",
+    "mobilevit_x_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_xs.zip",
+    "mobilevit_xx_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_xxs.zip"
+}
 
 
 class MultiHeadAttention(nn.Module):
@@ -18,8 +27,7 @@ class MultiHeadAttention(nn.Module):
     """
 
     def __init__(self, embed_dim: int, num_heads: int, attn_dropout: Optional[float] = 0.0,
-                 bias: Optional[bool] = True,
-                 *args, **kwargs):
+                 bias: Optional[bool] = True):
         """
         :param embed_dim: Embedding dimension
         :param num_heads: Number of attention heads
@@ -62,13 +70,13 @@ class MultiHeadAttention(nn.Module):
 
         # QK^T
         # [B x h x N x c] x [B x h x c x N] --> [B x h x N x N]
-        attn = torch.matmul(query, key)
+        attn = flow.matmul(query, key)
         attn = self.softmax(attn)
         attn = self.attn_dropout(attn)
 
         # weighted sum
         # [B x h x N x N] x [B x h x N x c] --> [B x h x N x c]
-        out = torch.matmul(attn, value)
+        out = flow.matmul(attn, value)
 
         # [B x h x N x c] --> [B x N x h x c] --> [B x N x C=ch]
         out = out.transpose(1, 2).reshape(b_sz, n_patches, -1)
@@ -85,22 +93,17 @@ class TransformerEncoder(nn.Module):
 
     def __init__(self, embed_dim: int, ffn_latent_dim: int, num_heads: Optional[int] = 8,
                  attn_dropout: Optional[float] = 0.0,
-                 dropout: Optional[float] = 0.1, ffn_dropout: Optional[float] = 0.0,
-                 transformer_norm_layer: Optional[str] = "layer_norm",
-                 *args, **kwargs):
+                 dropout: Optional[float] = 0.1, ffn_dropout: Optional[float] = 0.0):
         super(TransformerEncoder, self).__init__()
 
         self.pre_norm_mha = nn.Sequential(
             nn.LayerNorm(embed_dim),
-            # get_normalization_layer(opts=opts, norm_type=transformer_norm_layer, num_features=embed_dim),
             MultiHeadAttention(embed_dim, num_heads, attn_dropout=attn_dropout, bias=True),
-            # Dropout(p=dropout)
             nn.Dropout(dropout)
         )
 
         self.pre_norm_ffn = nn.Sequential(
             nn.LayerNorm(embed_dim),
-            # get_normalization_layer(opts=opts, norm_type=transformer_norm_layer, num_features=embed_dim),
             LinearLayer(in_features=embed_dim, out_features=ffn_latent_dim, bias=True),
             nn.SiLU(),
             nn.Dropout(ffn_dropout),
@@ -129,11 +132,10 @@ class MobileViTBlock(nn.Module):
                  n_transformer_blocks: Optional[int] = 2,
                  head_dim: Optional[int] = 32, attn_dropout: Optional[float] = 0.1,
                  dropout: Optional[float] = 0.1, ffn_dropout: Optional[float] = 0.1, patch_h: Optional[int] = 8,
-                 patch_w: Optional[int] = 8, transformer_norm_layer: Optional[str] = "layer_norm",
+                 patch_w: Optional[int] = 8,
                  conv_ksize: Optional[int] = 3,
                  dilation: Optional[int] = 1, var_ffn: Optional[bool] = False,
-                 no_fusion: Optional[bool] = False,
-                 *args, **kwargs):
+                 no_fusion: Optional[bool] = False):
         conv_3x3_in = ConvLayer(
             in_channels=in_channels, out_channels=in_channels,
             kernel_size=conv_ksize, stride=1, use_norm=True, use_act=True, dilation=dilation
@@ -165,13 +167,9 @@ class MobileViTBlock(nn.Module):
 
         global_rep = [
             TransformerEncoder(embed_dim=transformer_dim, ffn_latent_dim=ffn_dims[block_idx], num_heads=num_heads,
-                               attn_dropout=attn_dropout, dropout=dropout, ffn_dropout=ffn_dropout,
-                               transformer_norm_layer=transformer_norm_layer)
+                               attn_dropout=attn_dropout, dropout=dropout, ffn_dropout=ffn_dropout)
             for block_idx in range(n_transformer_blocks)
         ]
-        # global_rep.append(
-        #     get_normalization_layer(opts=opts, norm_type=transformer_norm_layer, num_features=transformer_dim)
-        # )
         global_rep.append(nn.LayerNorm(transformer_dim))
         self.global_rep = nn.Sequential(*global_rep)
 
@@ -196,31 +194,6 @@ class MobileViTBlock(nn.Module):
         self.var_ffn = var_ffn
         self.n_blocks = n_transformer_blocks
         self.conv_ksize = conv_ksize
-
-    def __repr__(self):
-        repr_str = "{}(".format(self.__class__.__name__)
-        repr_str += "\n\tconv_in_dim={}, conv_out_dim={}, dilation={}, conv_ksize={}".format(self.cnn_in_dim,
-                                                                                             self.cnn_out_dim,
-                                                                                             self.dilation,
-                                                                                             self.conv_ksize)
-        repr_str += "\n\tpatch_h={}, patch_w={}".format(self.patch_h, self.patch_w)
-        repr_str += "\n\ttransformer_in_dim={}, transformer_n_heads={}, transformer_ffn_dim={}, dropout={}, " \
-                    "ffn_dropout={}, attn_dropout={}, blocks={}".format(
-            self.cnn_out_dim,
-            self.n_heads,
-            self.ffn_dim,
-            self.dropout,
-            self.ffn_dropout,
-            self.attn_dropout,
-            self.n_blocks
-        )
-        if self.var_ffn:
-            repr_str += "\n\t var_ffn_min_mult={}, var_ffn_max_mult={}".format(
-                self.ffn_min_dim, self.ffn_max_dim
-            )
-
-        repr_str += "\n)"
-        return repr_str
 
     def unfolding(self, feature_map: Tensor) -> Tuple[Tensor, Dict]:
         patch_w, patch_h = self.patch_w, self.patch_h
@@ -304,7 +277,7 @@ class MobileViTBlock(nn.Module):
 
         if self.fusion is not None:
             fm = self.fusion(
-                torch.cat((res, fm), dim=1)
+                flow.cat((res, fm), dim=1)
             )
         return fm
 
@@ -396,14 +369,14 @@ class GlobalPool(nn.Module):
         assert x.dim() == 4, "Got: {}".format(x.shape)
         if self.pool_type == 'rms':
             x = x ** 2
-            x = torch.mean(x, dim=[-2, -1], keepdim=self.keep_dim)
+            x = flow.mean(x, dim=[-2, -1], keepdim=self.keep_dim)
             x = x ** -0.5
         elif self.pool_type == 'abs':
-            x = torch.mean(torch.abs(x), dim=[-2, -1], keepdim=self.keep_dim)
+            x = flow.mean(flow.abs(x), dim=[-2, -1], keepdim=self.keep_dim)
         else:
             # default is mean
             # same as AdaptiveAvgPool
-            x = torch.mean(x, dim=[-2, -1], keepdim=self.keep_dim)
+            x = flow.mean(x, dim=[-2, -1], keepdim=self.keep_dim)
         return x
 
     def forward(self, x: Tensor) -> Tensor:
@@ -414,8 +387,8 @@ class LinearLayer(nn.Module):
     def __init__(self,
                  in_features: int,
                  out_features: int,
-                 bias: Optional[bool] = True,
-                 *args, **kwargs) -> None:
+                 bias: Optional[bool] = True
+                 ) -> None:
         """
             Applies a linear transformation to the input data
             :param in_features: size of each input sample
@@ -423,23 +396,23 @@ class LinearLayer(nn.Module):
             :param bias: Add bias (learnable) or not
         """
         super(LinearLayer, self).__init__()
-        self.weight = nn.Parameter(torch.Tensor(out_features, in_features))
+        self.weight = nn.Parameter(flow.Tensor(out_features, in_features))
         self.bias = None
         if bias:
-            self.bias = nn.Parameter(torch.Tensor(out_features))
+            self.bias = nn.Parameter(flow.Tensor(out_features))
         self.in_features = in_features
         self.out_features = out_features
         self.reset_params()
 
     def reset_params(self):
         if self.weight is not None:
-            torch.nn.init.xavier_uniform_(self.weight)
+            flow.nn.init.xavier_uniform_(self.weight)
         if self.bias is not None:
-            torch.nn.init.constant_(self.bias, 0)
+            flow.nn.init.constant_(self.bias, 0)
 
     def forward(self, x: Tensor) -> Tensor:
         if self.bias is not None and x.dim() == 2:
-            x = torch.addmm(self.bias, x, self.weight.t())
+            x = flow.addmm(self.bias, x, self.weight.t())
         else:
             x = x.matmul(self.weight.t())
             if self.bias is not None:
@@ -449,8 +422,8 @@ class LinearLayer(nn.Module):
 
 class Conv2d(nn.Conv2d):
     def __init__(self, in_channels: int, out_channels: int, kernel_size: tuple or int, stride: tuple or int,
-                 padding: tuple or int, dilation: int or tuple, groups: int, bias: bool, padding_mode: str,
-                 *args, **kwargs):
+                 padding: tuple or int, dilation: int or tuple, groups: int, bias: bool, padding_mode: str
+                 ):
         super(Conv2d, self).__init__(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
                                      stride=stride, padding=padding, dilation=dilation, groups=groups, bias=bias,
                                      padding_mode=padding_mode)
@@ -461,8 +434,7 @@ class ConvLayer(nn.Module):
                  stride: Optional[int or tuple] = 1,
                  dilation: Optional[int or tuple] = 1, groups: Optional[int] = 1,
                  bias: Optional[bool] = False, padding_mode: Optional[str] = 'zeros',
-                 use_norm: Optional[bool] = True, use_act: Optional[bool] = True,
-                 *args, **kwargs
+                 use_norm: Optional[bool] = True, use_act: Optional[bool] = True
                  ) -> None:
         """
             Applies a 2D convolution over an input signal composed of several input planes.
@@ -514,7 +486,6 @@ class ConvLayer(nn.Module):
 
         self.norm_name = None
         if use_norm:
-            # norm_layer = get_normalization_layer(opts=opts, num_features=out_channels)
             norm_layer = nn.BatchNorm2d(out_channels)
             block.add_module(name="norm", module=norm_layer)
             self.norm_name = norm_layer.__class__.__name__
@@ -522,13 +493,7 @@ class ConvLayer(nn.Module):
         self.act_name = None
 
         if use_act:
-            # neg_slope = getattr(opts, "model.activation.neg_slope", 0.1)
-            # inplace = getattr(opts, "model.activation.inplace", False)
             act_layer = nn.SiLU()
-            # act_layer = get_activation_fn(act_type=act_type,
-            #                               inplace=inplace,
-            #                               negative_slope=neg_slope,
-            #                               num_parameters=out_channels)
             block.add_module(name="act", module=act_layer)
             self.act_name = act_layer.__class__.__name__
 
@@ -553,22 +518,17 @@ class MobileViT(nn.Module):
 
     def __init__(
             self,
-            name,
+            arch,
             num_classes=1000,
             classifier_dropout=0.1,
             pool_type='mean',
-            *args,
             **kwargs
     ) -> None:
-        # num_classes = getattr(opts, "model.classification.n_classes", 1000)
-        # classifier_dropout = getattr(opts, "model.classification.classifier_dropout", 0.2)
-
-        # pool_type = getattr(opts, "model.layer.global_pool", "mean")
         image_channels = 3
         out_channels = 16
 
-        assert name in CONFIG.keys()
-        mobilevit_config = CONFIG[name]
+        assert arch in CONFIG.keys()
+        mobilevit_config = CONFIG[arch]
 
         # Segmentation architectures like Deeplab and PSPNet modifies the strides of the classification backbones
         # We allow that using `output_stride` arguments
@@ -772,7 +732,7 @@ class MobileViT(nn.Module):
 
 
 CONFIG = {
-    'xx_small': {
+    'mobilevit_xx_small': {
         "layer1": {
             "out_channels": 16,
             "expand_ratio": 2,
@@ -828,7 +788,7 @@ CONFIG = {
         },
         "last_layer_exp_factor": 4
     },
-    'x_small': {
+    'mobilevit_x_small': {
         "layer1": {
             "out_channels": 32,
             "expand_ratio": 4,
@@ -884,7 +844,7 @@ CONFIG = {
         },
         "last_layer_exp_factor": 4
     },
-    'small': {
+    'mobilevit_small': {
         "layer1": {
             "out_channels": 32,
             "expand_ratio": 4,
@@ -942,11 +902,25 @@ CONFIG = {
     }
 }
 
-if __name__ == '__main__':
-    model = MobileViT(name='xx_small').cuda()
-    img = torch.randn(5, 3, 224, 224).cuda()
-    # dic = torch.load('/dataset/ldl_home/Model/pretrained/mobilevit_xxs.pt')
-    # model.load_state_dict(dic)
-    import pdb;
 
-    pdb.set_trace()
+def _create_mobilevit(arch: str, pretrained: bool = False, progress: bool = True, **model_kwargs):
+    model = MobileViT(arch=arch, **model_kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        model.load_state_dict(state_dict)
+    return model
+
+
+@ModelCreator.register_model
+def mobilevit_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    return _create_mobilevit(arch='mobilevit_small', pretrained=pretrained, progress=progress, **kwargs)
+
+
+@ModelCreator.register_model
+def mobilevit_x_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    return _create_mobilevit(arch='mobilevit_x_small', pretrained=pretrained, progress=progress, **kwargs)
+
+
+@ModelCreator.register_model
+def mobilevit_xx_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    return _create_mobilevit(arch='mobilevit_xx_small', pretrained=pretrained, progress=progress, **kwargs)

@@ -31,6 +31,7 @@ from .uniformer import *
 from .senet import *
 from .van import *
 from .levit import *
+from .mobilevit import *
 
 from . import style_transfer
 from . import detection
