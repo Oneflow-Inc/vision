@@ -913,14 +913,68 @@ def _create_mobilevit(arch: str, pretrained: bool = False, progress: bool = True
 
 @ModelCreator.register_model
 def mobilevit_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs MobileViT-S 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        MobileViT-S 224x224 model from `"MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer" <https://arxiv.org/pdf/2110.02178>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mobilevit_s = flowvision.models.mobilevit_small(pretrained=False, progress=True)
+
+    """
     return _create_mobilevit(arch='mobilevit_small', pretrained=pretrained, progress=progress, **kwargs)
 
 
 @ModelCreator.register_model
 def mobilevit_x_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs MobileViT-XS 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        MobileViT-XS 224x224 model from `"MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer" <https://arxiv.org/pdf/2110.02178>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mobilevit_xs = flowvision.models.mobilevit_x_small(pretrained=False, progress=True)
+
+    """
     return _create_mobilevit(arch='mobilevit_x_small', pretrained=pretrained, progress=progress, **kwargs)
 
 
 @ModelCreator.register_model
 def mobilevit_xx_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs MobileViT-XXS 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        MobileViT-XXS 224x224 model from `"MobileViT: Light-weight, General-purpose, and Mobile-friendly Vision Transformer" <https://arxiv.org/pdf/2110.02178>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> mobilevit_xxs = flowvision.models.mobilevit_xx_small(pretrained=False, progress=True)
+
+    """
     return _create_mobilevit(arch='mobilevit_xx_small', pretrained=pretrained, progress=progress, **kwargs)
