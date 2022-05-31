@@ -1766,3 +1766,7 @@ def vit_base_patch16_224_miil(pretrained=False, progress=True, **kwargs):
         **model_kwargs
     )
     return model
+
+
+if __name__ == '__main__':
+    pass
