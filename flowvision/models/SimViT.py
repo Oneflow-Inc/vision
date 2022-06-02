@@ -4,7 +4,7 @@ import oneflow.nn.functional as F
 
 from functools import partial
 
-from flowvision.layers import trunc_normal_, lecun_normal_
+from flowvision.layers import trunc_normal_
 import math
 
 # helpers
