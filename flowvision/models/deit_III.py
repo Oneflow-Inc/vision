@@ -446,6 +446,8 @@ def deit_large_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
     return model
 
 
+# 304.76388M
+# Acc@1: 87.440, Acc@1-Error: 12.560, Acc@5: 98.346, Acc@5-Error: 1.654
 @ModelCreator.register_model
 def deit_large_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
     model = vit_models(
