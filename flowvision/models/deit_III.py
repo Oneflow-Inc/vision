@@ -13,20 +13,20 @@ from .registry import ModelCreator
 
 
 model_urls = {
-    "deit_3_base_224_1k": "/home/lindelv/Model/pretrained/deit_3_base_224_1k.zip",
-    "deit_3_base_224_21k": "/home/lindelv/Model/pretrained/deit_3_base_224_21k.zip",
-    "deit_3_base_384_1k": "/home/lindelv/Model/pretrained/deit_3_base_384_1k.zip",
-    "deit_3_base_384_21k": "/home/lindelv/Model/pretrained/deit_3_base_384_21k.zip",
-    "deit_3_huge_224_1k": "/home/lindelv/Model/pretrained/deit_3_huge_224_1k.zip",
-    "deit_3_huge_224_21k_v1": "/home/lindelv/Model/pretrained/deit_3_huge_224_21k_v1.zip",
-    "deit_3_large_224_1k": "/home/lindelv/Model/pretrained/deit_3_large_224_1k.zip",
-    "deit_3_large_224_21k": "/home/lindelv/Model/pretrained/deit_3_large_224_21k.zip",
-    "deit_3_large_384_1k": "/home/lindelv/Model/pretrained/deit_3_large_384_1k.zip",
-    "deit_3_large_384_21k": "/home/lindelv/Model/pretrained/deit_3_large_384_21k.zip",
-    "deit_3_small_224_1k": "/home/lindelv/Model/pretrained/deit_3_small_224_1k.zip",
-    "deit_3_small_224_21k": "/home/lindelv/Model/pretrained/deit_3_small_224_21k.zip",
-    "deit_3_small_384_1k": "/home/lindelv/Model/pretrained/deit_3_small_384_1k.zip",
-    "deit_3_small_384_21k": "/home/lindelv/Model/pretrained/deit_3_small_384_21k.zip",
+    "deit_3_base_224_1k": "/home/lindelv/Model/pretrained/deit_3_base_224_1k",
+    "deit_3_base_224_21k": "/home/lindelv/Model/pretrained/deit_3_base_224_21k",
+    "deit_3_base_384_1k": "/home/lindelv/Model/pretrained/deit_3_base_384_1k",
+    "deit_3_base_384_21k": "/home/lindelv/Model/pretrained/deit_3_base_384_21k",
+    "deit_3_huge_224_1k": "/home/lindelv/Model/pretrained/deit_3_huge_224_1k",
+    "deit_3_huge_224_21k_v1": "/home/lindelv/Model/pretrained/deit_3_huge_224_21k_v1",
+    "deit_3_large_224_1k": "/home/lindelv/Model/pretrained/deit_3_large_224_1k",
+    "deit_3_large_224_21k": "/home/lindelv/Model/pretrained/deit_3_large_224_21k",
+    "deit_3_large_384_1k": "/home/lindelv/Model/pretrained/deit_3_large_384_1k",
+    "deit_3_large_384_21k": "/home/lindelv/Model/pretrained/deit_3_large_384_21k",
+    "deit_3_small_224_1k": "/home/lindelv/Model/pretrained/deit_3_small_224_1k",
+    "deit_3_small_224_21k": "/home/lindelv/Model/pretrained/deit_3_small_224_21k",
+    "deit_3_small_384_1k": "/home/lindelv/Model/pretrained/deit_3_small_384_1k",
+    "deit_3_small_384_21k": "/home/lindelv/Model/pretrained/deit_3_small_384_21k",
 }
 
 
@@ -294,102 +294,193 @@ class vit_models(nn.Module):
 
         return x
 
+
+# 22.059496M
+# Acc@1: 81.306, Acc@1-Error: 18.694, Acc@5: 95.356, Acc@5-Error: 4.644
 @ModelCreator.register_model
-def deit_small_patch16_LS_224():
-    pass
-
-
-@ModelCreator.register_model
-def deit_small_patch16_LS_384():
-    pass
-
-
-@ModelCreator.register_model
-def deit_small_patch16_LS_224_in21k():
-    pass
-
-
-@ModelCreator.register_model
-def deit_small_patch16_LS_384_in21k():
-    pass
-
-
-@ModelCreator.register_model
-def deit_base_patch16_LS_224():
-    pass
-
-
-@ModelCreator.register_model
-def deit_base_patch16_LS_384():
-    pass
-
-
-@ModelCreator.register_model
-def deit_base_patch16_LS_224_in21k():
-    pass
-
-
-@ModelCreator.register_model
-def deit_base_patch16_LS_384_in21k():
-    pass
-
-
-@ModelCreator.register_model
-def deit_large_patch16_LS_224():
-    pass
-
-
-@ModelCreator.register_model
-def deit_large_patch16_LS_384():
-    pass
-
-
-@ModelCreator.register_model
-def deit_large_patch16_LS_224_in21k():
-    pass
-
-
-@ModelCreator.register_model
-def deit_large_patch16_LS_384_in21k():
-    pass
-
-
-@ModelCreator.register_model
-def deit_huge_patch14_LS_224():
-    pass
-
-
-@ModelCreator.register_model
-def deit_huge_patch14_LS_224_in21k():
-    pass
-
-
-
-def deit_small_patch16_LS(pretrained=False, img_size=224, pretrained_21k=False, **kwargs):
+def deit_small_patch16_LS_224(pretrained=False, progress=True, **kwargs):
     model = vit_models(
-        img_size=img_size, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
+        img_size=224, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_small_224_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_small_224_1k"])
+        model.load_state_dict(state_dict)
     return model
 
 
-
-
-def deit_base_patch16_LS(pretrained=False, img_size=224, pretrained_21k=False, **kwargs):
+# 22.205416M
+# Acc@1: 83.274, Acc@1-Error: 16.726, Acc@5: 96.574, Acc@5-Error: 3.426
+@ModelCreator.register_model
+def deit_small_patch16_LS_384(pretrained=False, progress=True, **kwargs):
     model = vit_models(
-        img_size=img_size, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
+        img_size=384, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_small_384_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_small_384_1k"])
+        model.load_state_dict(state_dict)
     return model
 
 
-def deit_large_patch16_LS(pretrained=False, img_size=224, pretrained_21k=False, **kwargs):
+# 22.059496M
+# Acc@1: 82.764, Acc@1-Error: 17.236, Acc@5: 96.700, Acc@5-Error: 3.300
+@ModelCreator.register_model
+def deit_small_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
     model = vit_models(
-        img_size=img_size, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        img_size=224, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_small_224_21k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_small_224_21k"])
+        model.load_state_dict(state_dict)
+    return model
+
+# 22.205416M
+# Acc@1: 84.458, Acc@1-Error: 15.542, Acc@5: 97.240, Acc@5-Error: 2.760
+@ModelCreator.register_model
+def deit_small_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=384, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_small_384_21k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_small_384_21k"])
+        model.load_state_dict(state_dict)
     return model
 
 
-def deit_huge_patch14_LS(pretrained=False, img_size=224, pretrained_21k=False, **kwargs):
+# 86.58532M
+# Acc@1: 83.686, Acc@1-Error: 16.314, Acc@5: 96.542, Acc@5-Error: 3.458
+@ModelCreator.register_model
+def deit_base_patch16_LS_224(pretrained=False, progress=True, **kwargs):
     model = vit_models(
-        img_size=img_size, patch_size=14, embed_dim=1280, depth=32, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_base_224_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_base_224_1k"])
+        model.load_state_dict(state_dict)
+    return model
+
+# 86.87716M
+# Acc@1: 84.740, Acc@1-Error: 15.260, Acc@5: 97.108, Acc@5-Error: 2.892
+@ModelCreator.register_model
+def deit_base_patch16_LS_384(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=384, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_base_384_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_base_384_1k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+# 86.58532M
+# Acc@1: 85.482, Acc@1-Error: 14.518, Acc@5: 97.568, Acc@5-Error: 2.432
+@ModelCreator.register_model
+def deit_base_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_base_224_21k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_base_224_21k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+# 86.87716M
+# Acc@1: 86.354, Acc@1-Error: 13.646, Acc@5: 97.946, Acc@5-Error: 2.054
+@ModelCreator.register_model
+def deit_base_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=384, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_base_384_21k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_base_384_21k"])
+        model.load_state_dict(state_dict)
+    return model
+
+# 304.37476M
+# Acc@1: 84.628, Acc@1-Error: 15.372, Acc@5: 96.946, Acc@5-Error: 3.054
+@ModelCreator.register_model
+def deit_large_patch16_LS_224(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=224, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_large_224_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_large_224_1k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+# 304.76388M
+# Acc@1: 85.602, Acc@1-Error: 14.398, Acc@5: 97.510, Acc@5-Error: 2.490
+@ModelCreator.register_model
+def deit_large_patch16_LS_384(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=384, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_large_384_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_large_384_1k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+# 304.37476M
+# Acc@1: 86.812, Acc@1-Error: 13.188, Acc@5: 98.122, Acc@5-Error: 1.878
+@ModelCreator.register_model
+def deit_large_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=224, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_large_224_21k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_large_224_21k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+@ModelCreator.register_model
+def deit_large_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=384, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_large_384_21k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_large_384_21k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+# 632.12644M
+# Acc@1: 85.158, Acc@1-Error: 14.842, Acc@5: 97.248, Acc@5-Error: 2.752
+@ModelCreator.register_model
+def deit_huge_patch14_LS_224(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=224, patch_size=14, embed_dim=1280, depth=32, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_huge_224_1k"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_huge_224_1k"])
+        model.load_state_dict(state_dict)
+    return model
+
+
+# 632.12644M
+# Acc@1: 86.890, Acc@1-Error: 13.110, Acc@5: 98.140, Acc@5-Error: 1.860
+@ModelCreator.register_model
+def deit_huge_patch14_LS_224_in21k(pretrained=False, progress=True, **kwargs):
+    model = vit_models(
+        img_size=224, patch_size=14, embed_dim=1280, depth=32, num_heads=16, mlp_ratio=4, qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["deit_3_huge_224_21k_v1"], progress=progress)
+        state_dict = oneflow.load(model_urls["deit_3_huge_224_21k_v1"])
+        model.load_state_dict(state_dict)
     return model
