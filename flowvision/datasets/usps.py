@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/usps.py
 """
 import os
 from typing import Any, Callable, Optional, Tuple

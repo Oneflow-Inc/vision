@@ -13,6 +13,15 @@ from flowvision.layers import trunc_normal_, DropPath, SEModule
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
+__all__ = [
+    "SENet",
+    "senet154",
+    "se_resnet50",
+    "se_resnet101",
+    "se_resnet152",
+    "se_resnext50_32x4d",
+    "se_resnext101_32x4d"
+]
 
 model_urls = {
     "senet154": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/SENet/senet154.zip",

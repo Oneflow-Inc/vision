@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/omniglot.py
 """
 from os.path import join
 from typing import Any, Callable, List, Optional, Tuple

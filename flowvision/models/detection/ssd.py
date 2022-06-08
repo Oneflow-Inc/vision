@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/ssd.py
+"""
 import oneflow as flow
 import oneflow.nn.functional as F
 import warnings

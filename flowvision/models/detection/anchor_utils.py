@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/anchor_utils.py
+"""
 import math
 import oneflow as flow
 from oneflow import nn, Tensor

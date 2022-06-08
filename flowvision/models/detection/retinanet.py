@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/retinanet.py
+"""
 import math
 from collections import OrderedDict
 import warnings

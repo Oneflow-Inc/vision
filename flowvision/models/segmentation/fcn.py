@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/segmentation/fcn.py
+"""
 import oneflow.nn as nn
 from .. import resnet
 from .. import mobilenet_v3

@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/fakedata.py
 """
 from typing import Any, Callable, Optional, Tuple
 
