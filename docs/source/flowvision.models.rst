@@ -43,6 +43,7 @@ architectures for image classification:
 -  `LeViT`_
 -  `RegionViT`_
 -  `VAN`_
+-  `MobileViT`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -80,6 +81,7 @@ architectures for image classification:
 .. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
 .. _VAN: https://arxiv.org/pdf/2202.09741.pdf
 .. _LeViT: https://arxiv.org/pdf/2104.01136.pdf
+.. _MobileViT: https://arxiv.org/pdf/2110.02178.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -501,6 +503,15 @@ LeViT
         levit_192,
         levit_256,
         levit_384,
+
+
+MobileViT
+--------
+.. automodule:: flowvision.models
+    :members:
+        mobilevit_small,
+        mobilevit_x_small,
+        mobilevit_xx_small,
 
 
 Neural Style Transfer
