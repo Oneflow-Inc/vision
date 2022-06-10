@@ -2,17 +2,27 @@ from functools import partial
 
 import oneflow as flow
 import oneflow.nn as nn
+import torch
 
-from ..models import Mlp, PatchEmbed, trunc_normal_, DropPath
+from ..layers import Mlp, PatchEmbed, trunc_normal_, DropPath
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
 __all__ = [
-    'cait_M48', 'cait_M36',
-    'cait_S36', 'cait_S24', 'cait_S24_224',
-    'cait_XS24', 'cait_XXS24', 'cait_XXS24_224',
-    'cait_XXS36', 'cait_XXS36_224'
+    'cait_M48_448', 'cait_M36_384',
+    'cait_S36_384', 'cait_S24_384', 'cait_S24_224',
+    'cait_XS24_384'
 ]
+
+
+model_urls = {
+    "cait_XS24": "/dataset/ldl_home/Model/pretrained/XS24_384",
+    "cait_S24_224": "/dataset/ldl_home/Model/pretrained/S24_224",
+    "cait_S24": "/dataset/ldl_home/Model/pretrained/S24",
+    "cait_S36": "/dataset/ldl_home/Model/pretrained/S36_384",
+    "cait_M36": "/dataset/ldl_home/Model/pretrained/M36_384",
+    "cait_M48": "/dataset/ldl_home/Model/pretrained/M48_448"
+}
 
 
 class Class_Attention(nn.Module):
@@ -236,111 +246,85 @@ class cait_models(nn.Module):
         return x
 
 
-@ModelCreator
-def cait_XXS24_224(pretrained=False, **kwargs):
-    model = cait_models(
-        img_size=224, patch_size=16, embed_dim=192, depth=24, num_heads=4, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        init_scale=1e-5,
-        depth_token_only=2, **kwargs)
-
-    return model
-
-
-@ModelCreator
-def cait_XXS24(pretrained=False, **kwargs):
-    model = cait_models(
-        img_size=384, patch_size=16, embed_dim=192, depth=24, num_heads=4, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        init_scale=1e-5,
-        depth_token_only=2, **kwargs)
-
-    return model
-
-
-@ModelCreator
-def cait_XXS36_224(pretrained=False, **kwargs):
-    model = cait_models(
-        img_size=224, patch_size=16, embed_dim=192, depth=36, num_heads=4, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        init_scale=1e-5,
-        depth_token_only=2, **kwargs)
-
-    return model
-
-
-@ModelCreator
-def cait_XXS36(pretrained=False, **kwargs):
-    model = cait_models(
-        img_size=384, patch_size=16, embed_dim=192, depth=36, num_heads=4, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6),
-        init_scale=1e-5,
-        depth_token_only=2, **kwargs)
-
-    return model
-
-
-@ModelCreator
-def cait_XS24(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def cait_XS24_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
         img_size=384, patch_size=16, embed_dim=288, depth=24, num_heads=6, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
         init_scale=1e-5,
         depth_token_only=2, **kwargs)
-
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["cait_XS24"], progress=progress)
+        state_dict = torch.load(model_urls["cait_XS24"])
+        model.load_state_dict(state_dict)
     return model
 
 
-@ModelCreator
-def cait_S24_224(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def cait_S24_224(pretrained=False, progress=True, **kwargs):
     model = cait_models(
         img_size=224, patch_size=16, embed_dim=384, depth=24, num_heads=8, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
         init_scale=1e-5,
         depth_token_only=2, **kwargs)
-
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["cait_S24_224"], progress=progress)
+        state_dict = torch.load(model_urls["cait_S24_224"])
+        model.load_state_dict(state_dict)
     return model
 
 
-@ModelCreator
-def cait_S24(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def cait_S24_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
         img_size=384, patch_size=16, embed_dim=384, depth=24, num_heads=8, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
         init_scale=1e-5,
         depth_token_only=2, **kwargs)
-
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["cait_S24"], progress=progress)
+        state_dict = torch.load(model_urls["cait_S24"])
+        model.load_state_dict(state_dict)
     return model
 
 
-@ModelCreator
-def cait_S36(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def cait_S36_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
         img_size=384, patch_size=16, embed_dim=384, depth=36, num_heads=8, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
         init_scale=1e-6,
         depth_token_only=2, **kwargs)
-
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["cait_S36"], progress=progress)
+        state_dict = torch.load(model_urls["cait_S36"])
+        model.load_state_dict(state_dict)
     return model
 
 
-@ModelCreator
-def cait_M36(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def cait_M36_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
         img_size=384, patch_size=16, embed_dim=768, depth=36, num_heads=16, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
         init_scale=1e-6,
         depth_token_only=2, **kwargs)
-
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["cait_M36"], progress=progress)
+        state_dict = torch.load(model_urls["cait_M36"])
+        model.load_state_dict(state_dict)
     return model
 
 
-@ModelCreator
-def cait_M48(pretrained=False, **kwargs):
+@ModelCreator.register_model
+def cait_M48_448(pretrained=False, progress=True, **kwargs):
     model = cait_models(
         img_size=448, patch_size=16, embed_dim=768, depth=48, num_heads=16, mlp_ratio=4, qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6),
         init_scale=1e-6,
         depth_token_only=2, **kwargs)
-
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["cait_M48"], progress=progress)
+        state_dict = torch.load(model_urls["cait_M48"])
+        model.load_state_dict(state_dict)
     return model
