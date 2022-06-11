@@ -2,7 +2,6 @@ from functools import partial
 
 import oneflow as flow
 import oneflow.nn as nn
-import torch
 
 from ..layers import Mlp, PatchEmbed, trunc_normal_, DropPath
 from .registry import ModelCreator
@@ -18,7 +17,7 @@ __all__ = [
 model_urls = {
     "cait_XS24": "/dataset/ldl_home/Model/pretrained/XS24_384",
     "cait_S24_224": "/dataset/ldl_home/Model/pretrained/S24_224",
-    "cait_S24": "/dataset/ldl_home/Model/pretrained/S24",
+    "cait_S24": "/dataset/ldl_home/Model/pretrained/S24_384",
     "cait_S36": "/dataset/ldl_home/Model/pretrained/S36_384",
     "cait_M36": "/dataset/ldl_home/Model/pretrained/M36_384",
     "cait_M48": "/dataset/ldl_home/Model/pretrained/M48_448"
@@ -245,7 +244,8 @@ class cait_models(nn.Module):
 
         return x
 
-
+# 26.670088M
+# Acc@1: 83.738, Acc@1-Error: 16.262, Acc@5: 96.756, Acc@5-Error: 3.244
 @ModelCreator.register_model
 def cait_XS24_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
@@ -255,11 +255,13 @@ def cait_XS24_384(pretrained=False, progress=True, **kwargs):
         depth_token_only=2, **kwargs)
     if pretrained:
         # state_dict = load_state_dict_from_url(model_urls["cait_XS24"], progress=progress)
-        state_dict = torch.load(model_urls["cait_XS24"])
+        state_dict = flow.load(model_urls["cait_XS24"])
         model.load_state_dict(state_dict)
     return model
 
 
+# 46.9162M
+# Acc@1: 83.372, Acc@1-Error: 16.628, Acc@5: 96.578, Acc@5-Error: 3.422
 @ModelCreator.register_model
 def cait_S24_224(pretrained=False, progress=True, **kwargs):
     model = cait_models(
@@ -269,11 +271,12 @@ def cait_S24_224(pretrained=False, progress=True, **kwargs):
         depth_token_only=2, **kwargs)
     if pretrained:
         # state_dict = load_state_dict_from_url(model_urls["cait_S24_224"], progress=progress)
-        state_dict = torch.load(model_urls["cait_S24_224"])
+        state_dict = flow.load(model_urls["cait_S24_224"])
         model.load_state_dict(state_dict)
     return model
 
-
+# 47.06212M
+# Acc@1: 84.946, Acc@1-Error: 15.054, Acc@5: 97.212, Acc@5-Error: 2.788
 @ModelCreator.register_model
 def cait_S24_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
@@ -283,11 +286,13 @@ def cait_S24_384(pretrained=False, progress=True, **kwargs):
         depth_token_only=2, **kwargs)
     if pretrained:
         # state_dict = load_state_dict_from_url(model_urls["cait_S24"], progress=progress)
-        state_dict = torch.load(model_urls["cait_S24"])
+        state_dict = flow.load(model_urls["cait_S24"])
         model.load_state_dict(state_dict)
     return model
 
 
+# 68.366632M
+# Acc@1: 85.186, Acc@1-Error: 14.814, Acc@5: 97.372, Acc@5-Error: 2.628
 @ModelCreator.register_model
 def cait_S36_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
@@ -297,11 +302,12 @@ def cait_S36_384(pretrained=False, progress=True, **kwargs):
         depth_token_only=2, **kwargs)
     if pretrained:
         # state_dict = load_state_dict_from_url(model_urls["cait_S36"], progress=progress)
-        state_dict = torch.load(model_urls["cait_S36"])
+        state_dict = flow.load(model_urls["cait_S36"])
         model.load_state_dict(state_dict)
     return model
 
-
+# 271.221352M
+# Acc@1: 85.922, Acc@1-Error: 14.078, Acc@5: 97.598, Acc@5-Error: 2.402
 @ModelCreator.register_model
 def cait_M36_384(pretrained=False, progress=True, **kwargs):
     model = cait_models(
@@ -311,11 +317,13 @@ def cait_M36_384(pretrained=False, progress=True, **kwargs):
         depth_token_only=2, **kwargs)
     if pretrained:
         # state_dict = load_state_dict_from_url(model_urls["cait_M36"], progress=progress)
-        state_dict = torch.load(model_urls["cait_M36"])
+        state_dict = flow.load(model_urls["cait_M36"])
         model.load_state_dict(state_dict)
     return model
 
 
+# 356.46052M
+# Acc@1: 86.068, Acc@1-Error: 13.932, Acc@5: 97.592, Acc@5-Error: 2.408
 @ModelCreator.register_model
 def cait_M48_448(pretrained=False, progress=True, **kwargs):
     model = cait_models(
@@ -325,6 +333,6 @@ def cait_M48_448(pretrained=False, progress=True, **kwargs):
         depth_token_only=2, **kwargs)
     if pretrained:
         # state_dict = load_state_dict_from_url(model_urls["cait_M48"], progress=progress)
-        state_dict = torch.load(model_urls["cait_M48"])
+        state_dict = flow.load(model_urls["cait_M48"])
         model.load_state_dict(state_dict)
     return model
