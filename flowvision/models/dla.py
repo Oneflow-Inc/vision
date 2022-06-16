@@ -306,76 +306,126 @@ class DLA(nn.Module):
             return x
 
 
+@ModelCreator.register_model
 def dla34(pretrained=False, progress=True, **kwargs):  # DLA-34
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 128, 256, 512],
                 block=BasicBlock, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla34"], progress=progress)
+        state_dict = flow.load(model_urls["dla34"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla46_c(pretrained=False, progress=True, **kwargs):  # DLA-46-C
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 64, 128, 256],
                 block=Bottleneck, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla46_c"], progress=progress)
+        state_dict = flow.load(model_urls["dla46_c"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla46x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-46-C
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 64, 128, 256],
                 block=BottleneckX, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla46x_c"], progress=progress)
+        state_dict = flow.load(model_urls["dla46x_c"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla60x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-60-C
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 64, 64, 128, 256],
                 block=BottleneckX, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla60x_c"], progress=progress)
+        state_dict = flow.load(model_urls["dla60x_c"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla60(pretrained=False, progress=True, **kwargs):  # DLA-60
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla60"], progress=progress)
+        state_dict = flow.load(model_urls["dla60"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla60x(pretrained=False, progress=True, **kwargs):  # DLA-X-60
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla60x"], progress=progress)
+        state_dict = flow.load(model_urls["dla60x"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla102(pretrained=False, progress=True, **kwargs):  # DLA-102
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla102"], progress=progress)
+        state_dict = flow.load(model_urls["dla102"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla102x(pretrained=False, progress=True, **kwargs):  # DLA-X-102
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla102x"], progress=progress)
+        state_dict = flow.load(model_urls["dla102x"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla102x2(pretrained=False, progress=True, **kwargs):  # DLA-X-102 64
     BottleneckX.cardinality = 64
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla102x2"], progress=progress)
+        state_dict = flow.load(model_urls["dla102x2"])
+        model.load_state_dict(state_dict)
     return model
 
 
+@ModelCreator.register_model
 def dla169(pretrained=False, progress=True, **kwargs):  # DLA-169
     Bottleneck.expansion = 2
     model = DLA([1, 1, 2, 3, 5, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["dla169"], progress=progress)
+        state_dict = flow.load(model_urls["dla169"])
+        model.load_state_dict(state_dict)
     return model
