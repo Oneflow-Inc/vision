@@ -1,20 +1,26 @@
 import math
-from os.path import join
 
-import torch
-from torch import nn
-import torch.utils.model_zoo as model_zoo
+import oneflow as flow
+from oneflow import nn
 
-import dataset
+from .utils import load_state_dict_from_url
+from .registry import ModelCreator
 
 BatchNorm = nn.BatchNorm2d
 
-WEB_ROOT = 'http://dl.yf.io/dla/models'
 
-
-def get_model_url(data, name):
-    return join(WEB_ROOT, data.name,
-                '{}-{}.pth'.format(name, data.model_hash[name]))
+model_urls = {
+    "dla34": "/home/lindelv/Model/pretrained/dla34-ba72cf86",
+    "dla46_c": "/home/lindelv/Model/pretrained/dla46_c-2bfd52c3",
+    "dla46x_c": "/home/lindelv/Model/pretrained/dla46x_c-d761bae7",
+    "dla60x_c": "/home/lindelv/Model/pretrained/dla60x_c-b870c45c",
+    "dla60": "/home/lindelv/Model/pretrained/dla60-24839fc4",
+    "dla60x": "/home/lindelv/Model/pretrained/dla60x-d15cacda",
+    "dla102": "/home/lindelv/Model/pretrained/dla102-d94d9790",
+    "dla102x": "/home/lindelv/Model/pretrained/dla102x-ad62be81",
+    "dla102x2": "/home/lindelv/Model/pretrained/dla102x2-262837b6",
+    "dla169": "/home/lindelv/Model/pretrained/dla169-0914e092"
+}
 
 
 def conv3x3(in_planes, out_planes, stride=1):
@@ -151,7 +157,7 @@ class Root(nn.Module):
 
     def forward(self, *x):
         children = x
-        x = self.conv(torch.cat(x, 1))
+        x = self.conv(flow.cat(x, 1))
         x = self.bn(x)
         if self.residual:
             x += children[0]
@@ -299,114 +305,77 @@ class DLA(nn.Module):
 
             return x
 
-    def load_pretrained_model(self, data_name, name):
-        assert data_name in dataset.__dict__, \
-            'No pretrained model for {}'.format(data_name)
-        data = dataset.__dict__[data_name]
-        fc = self.fc
-        if self.num_classes != data.classes:
-            self.fc = nn.Conv2d(
-                self.channels[-1], data.classes,
-                kernel_size=1, stride=1, padding=0, bias=True)
-        try:
-            model_url = get_model_url(data, name)
-        except KeyError:
-            raise ValueError(
-                '{} trained on {} does not exist.'.format(data.name, name))
-        self.load_state_dict(model_zoo.load_url(model_url))
-        self.fc = fc
 
-
-def dla34(pretrained=None, **kwargs):  # DLA-34
+def dla34(pretrained=False, progress=True, **kwargs):  # DLA-34
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 128, 256, 512],
                 block=BasicBlock, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla34')
     return model
 
 
-def dla46_c(pretrained=None, **kwargs):  # DLA-46-C
+def dla46_c(pretrained=False, progress=True, **kwargs):  # DLA-46-C
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 64, 128, 256],
                 block=Bottleneck, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla46_c')
     return model
 
 
-def dla46x_c(pretrained=None, **kwargs):  # DLA-X-46-C
+def dla46x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-46-C
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 64, 128, 256],
                 block=BottleneckX, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla46x_c')
     return model
 
 
-def dla60x_c(pretrained=None, **kwargs):  # DLA-X-60-C
+def dla60x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-60-C
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 64, 64, 128, 256],
                 block=BottleneckX, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla60x_c')
     return model
 
 
-def dla60(pretrained=None, **kwargs):  # DLA-60
+def dla60(pretrained=False, progress=True, **kwargs):  # DLA-60
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla60')
     return model
 
 
-def dla60x(pretrained=None, **kwargs):  # DLA-X-60
+def dla60x(pretrained=False, progress=True, **kwargs):  # DLA-X-60
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla60x')
     return model
 
 
-def dla102(pretrained=None, **kwargs):  # DLA-102
+def dla102(pretrained=False, progress=True, **kwargs):  # DLA-102
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla102')
     return model
 
 
-def dla102x(pretrained=None, **kwargs):  # DLA-X-102
+def dla102x(pretrained=False, progress=True, **kwargs):  # DLA-X-102
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla102x')
     return model
 
 
-def dla102x2(pretrained=None, **kwargs):  # DLA-X-102 64
+def dla102x2(pretrained=False, progress=True, **kwargs):  # DLA-X-102 64
     BottleneckX.cardinality = 64
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla102x2')
     return model
 
 
-def dla169(pretrained=None, **kwargs):  # DLA-169
+def dla169(pretrained=False, progress=True, **kwargs):  # DLA-169
     Bottleneck.expansion = 2
     model = DLA([1, 1, 2, 3, 5, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
-    if pretrained is not None:
-        model.load_pretrained_model(pretrained, 'dla169')
     return model
