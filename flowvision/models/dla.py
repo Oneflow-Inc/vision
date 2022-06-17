@@ -10,16 +10,16 @@ BatchNorm = nn.BatchNorm2d
 
 
 model_urls = {
-    "dla34": "/home/lindelv/Model/pretrained/dla34-ba72cf86",
-    "dla46_c": "/home/lindelv/Model/pretrained/dla46_c-2bfd52c3",
-    "dla46x_c": "/home/lindelv/Model/pretrained/dla46x_c-d761bae7",
-    "dla60x_c": "/home/lindelv/Model/pretrained/dla60x_c-b870c45c",
-    "dla60": "/home/lindelv/Model/pretrained/dla60-24839fc4",
-    "dla60x": "/home/lindelv/Model/pretrained/dla60x-d15cacda",
-    "dla102": "/home/lindelv/Model/pretrained/dla102-d94d9790",
-    "dla102x": "/home/lindelv/Model/pretrained/dla102x-ad62be81",
-    "dla102x2": "/home/lindelv/Model/pretrained/dla102x2-262837b6",
-    "dla169": "/home/lindelv/Model/pretrained/dla169-0914e092"
+    "dla34": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla34-ba72cf86.zip",
+    "dla46_c": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla46_c-2bfd52c3.zip",
+    "dla46x_c": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla46x_c-d761bae7.zip",
+    "dla60x_c": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla60x_c-b870c45c.zip",
+    "dla60": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla60-24839fc4.zip",
+    "dla60x": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla60x-d15cacda.zip",
+    "dla102": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla102-d94d9790.zip",
+    "dla102x": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla102x-ad62be81.zip",
+    "dla102x2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla102x2-262837b6.zip",
+    "dla169": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/DLA/dla169-0914e092.zip"
 }
 
 
@@ -305,19 +305,21 @@ class DLA(nn.Module):
 
             return x
 
-
+# 15.783832M
+# Acc@1: 74.470, Acc@1-Error: 25.530, Acc@5: 92.010, Acc@5-Error: 7.990
 @ModelCreator.register_model
 def dla34(pretrained=False, progress=True, **kwargs):  # DLA-34
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 128, 256, 512],
                 block=BasicBlock, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla34"], progress=progress)
-        state_dict = flow.load(model_urls["dla34"])
+        state_dict = load_state_dict_from_url(model_urls["dla34"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
+# 1.309848M
+# Acc@1: 64.482, Acc@1-Error: 35.518, Acc@5: 86.088, Acc@5-Error: 13.912
 @ModelCreator.register_model
 def dla46_c(pretrained=False, progress=True, **kwargs):  # DLA-46-C
     Bottleneck.expansion = 2
@@ -325,12 +327,12 @@ def dla46_c(pretrained=False, progress=True, **kwargs):  # DLA-46-C
                 [16, 32, 64, 64, 128, 256],
                 block=Bottleneck, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla46_c"], progress=progress)
-        state_dict = flow.load(model_urls["dla46_c"])
+        state_dict = load_state_dict_from_url(model_urls["dla46_c"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-
+# 1.076888M
+# Acc@1: 65.642, Acc@1-Error: 34.358, Acc@5: 86.658, Acc@5-Error: 13.342
 @ModelCreator.register_model
 def dla46x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-46-C
     BottleneckX.expansion = 2
@@ -338,12 +340,13 @@ def dla46x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-46-C
                 [16, 32, 64, 64, 128, 256],
                 block=BottleneckX, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla46x_c"], progress=progress)
-        state_dict = flow.load(model_urls["dla46x_c"])
+        state_dict = load_state_dict_from_url(model_urls["dla46x_c"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
+# 1.336728M
+# Acc@1: 67.546, Acc@1-Error: 32.454, Acc@5: 88.202, Acc@5-Error: 11.798
 @ModelCreator.register_model
 def dla60x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-60-C
     BottleneckX.expansion = 2
@@ -351,12 +354,13 @@ def dla60x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-60-C
                 [16, 32, 64, 64, 128, 256],
                 block=BottleneckX, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla60x_c"], progress=progress)
-        state_dict = flow.load(model_urls["dla60x_c"])
+        state_dict = load_state_dict_from_url(model_urls["dla60x_c"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
+# 22.334104M
+# Acc@1: 76.824, Acc@1-Error: 23.176, Acc@5: 93.176, Acc@5-Error: 6.824
 @ModelCreator.register_model
 def dla60(pretrained=False, progress=True, **kwargs):  # DLA-60
     Bottleneck.expansion = 2
@@ -364,12 +368,12 @@ def dla60(pretrained=False, progress=True, **kwargs):  # DLA-60
                 [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla60"], progress=progress)
-        state_dict = flow.load(model_urls["dla60"])
+        state_dict = load_state_dict_from_url(model_urls["dla60"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-
+# 17.649816M
+# Acc@1: 78.074, Acc@1-Error: 21.926, Acc@5: 93.948, Acc@5-Error: 6.052
 @ModelCreator.register_model
 def dla60x(pretrained=False, progress=True, **kwargs):  # DLA-X-60
     BottleneckX.expansion = 2
@@ -377,55 +381,56 @@ def dla60x(pretrained=False, progress=True, **kwargs):  # DLA-X-60
                 [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla60x"], progress=progress)
-        state_dict = flow.load(model_urls["dla60x"])
+        state_dict = load_state_dict_from_url(model_urls["dla60x"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
+# 33.731736M
+# Acc@1: 77.706, Acc@1-Error: 22.294, Acc@5: 93.776, Acc@5-Error: 6.224
 @ModelCreator.register_model
 def dla102(pretrained=False, progress=True, **kwargs):  # DLA-102
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla102"], progress=progress)
-        state_dict = flow.load(model_urls["dla102"])
+        state_dict = load_state_dict_from_url(model_urls["dla102"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
+# 26.77212M
+# Acc@1: 78.272, Acc@1-Error: 21.728, Acc@5: 94.102, Acc@5-Error: 5.898
 @ModelCreator.register_model
 def dla102x(pretrained=False, progress=True, **kwargs):  # DLA-X-102
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla102x"], progress=progress)
-        state_dict = flow.load(model_urls["dla102x"])
+        state_dict = load_state_dict_from_url(model_urls["dla102x"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-
+# 41.745048M
+# Acc@1: 79.362, Acc@1-Error: 20.638, Acc@5: 94.634, Acc@5-Error: 5.366
 @ModelCreator.register_model
 def dla102x2(pretrained=False, progress=True, **kwargs):  # DLA-X-102 64
     BottleneckX.cardinality = 64
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla102x2"], progress=progress)
-        state_dict = flow.load(model_urls["dla102x2"])
+        state_dict = load_state_dict_from_url(model_urls["dla102x2"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-
+# 53.989016M
+# Acc@1: 78.528, Acc@1-Error: 21.472, Acc@5: 94.276, Acc@5-Error: 5.724
 @ModelCreator.register_model
 def dla169(pretrained=False, progress=True, **kwargs):  # DLA-169
     Bottleneck.expansion = 2
     model = DLA([1, 1, 2, 3, 5, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["dla169"], progress=progress)
-        state_dict = flow.load(model_urls["dla169"])
+        state_dict = load_state_dict_from_url(model_urls["dla169"], progress=progress)
         model.load_state_dict(state_dict)
     return model
