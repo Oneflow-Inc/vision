@@ -451,6 +451,6 @@ if __name__ == '__main__':
         embed_dims=[32, 64, 160, 256], num_heads=[1, 2, 5, 8], mlp_ratios=[8, 8, 4, 4], qkv_bias=True,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), depths=[2, 2, 2, 2])
 
-    x = flow.randn(512, 3, 224, 224)
+    x = flow.randn(10, 3, 224, 224)
     res = model(x)
     print(res.shape)
