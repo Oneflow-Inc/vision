@@ -32,6 +32,7 @@ from .senet import *
 from .van import *
 from .levit import *
 from .mobilevit import *
+from .convit import *
 
 from . import style_transfer
 from . import detection
