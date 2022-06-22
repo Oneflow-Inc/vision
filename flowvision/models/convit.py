@@ -6,7 +6,21 @@ import oneflow.nn.functional as F
 
 from flowvision.models.helpers import to_2tuple
 from flowvision.layers import trunc_normal_,DropPath,Mlp
+from .registry import ModelCreator
+from .utils import load_state_dict_from_url
 
+__all__ = [
+    "VisionTransformer",
+    "convit_tiny",
+    "convit_small",
+    "convit_base",
+]
+
+model_urls = {
+    "convit_tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConVit/convit_tiny.zip",
+    "convit_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConVit/convit_small.zip",
+    "convit_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ConVit/convit_base.zip",
+}
 
 
 class GPSA(nn.Module):
@@ -354,37 +368,55 @@ class VisionTransformer(nn.Module):
         return x
 
 
-
-def convit_tiny(**kwargs):
+@ModelCreator.register_model
+def convit_tiny(pretrained: bool = False, progress: bool = True, **kwargs):
     num_heads = 4
+    kwargs.setdefault('embed_dim',48)
     kwargs['embed_dim'] *= num_heads
     model = VisionTransformer(
         num_heads=num_heads,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["convit_tiny"],
+            model_dir="./checkpoints",
+            progress=progress,
+        )
+        model.load_state_dict(state_dict)
     return model
 
-
-def convit_small(**kwargs):
+@ModelCreator.register_model
+def convit_small(pretrained: bool = False, progress: bool = True, **kwargs):
     num_heads = 9
+    kwargs.setdefault('embed_dim',48)
     kwargs['embed_dim'] *= num_heads
     model = VisionTransformer(
         num_heads=num_heads,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["convit_small"],
+            model_dir="./checkpoints",
+            progress=progress,
+        )
+        model.load_state_dict(state_dict)
     return model
 
-
-def convit_base(**kwargs):
+@ModelCreator.register_model
+def convit_base(pretrained: bool = False, progress: bool = True, **kwargs):
     num_heads = 16
+    kwargs.setdefault('embed_dim',48)
     kwargs['embed_dim'] *= num_heads
     model = VisionTransformer(
         num_heads=num_heads,
         norm_layer=partial(nn.LayerNorm, eps=1e-6), **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["convit_base"],
+            model_dir="./checkpoints",
+            progress=progress,
+        )
+        model.load_state_dict(state_dict)
     return model
 
 
-if __name__ == '__main__':
-    model = convit_tiny(num_classes=1000,embed_dim=48)
-
-    x = flow.randn(10, 3, 224, 224)
-    res = model(x)
-    print(res.shape)
