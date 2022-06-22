@@ -16,7 +16,7 @@ from .utils import load_state_dict_from_url
 model_urls = {
     "mobilevit_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_s.zip",
     "mobilevit_x_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_xs.zip",
-    "mobilevit_xx_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_xxs.zip"
+    "mobilevit_xx_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MobileViT/mobilevit_xxs.zip",
 }
 
 
@@ -26,8 +26,13 @@ class MultiHeadAttention(nn.Module):
         https://arxiv.org/abs/1706.03762
     """
 
-    def __init__(self, embed_dim: int, num_heads: int, attn_dropout: Optional[float] = 0.0,
-                 bias: Optional[bool] = True):
+    def __init__(
+        self,
+        embed_dim: int,
+        num_heads: int,
+        attn_dropout: Optional[float] = 0.0,
+        bias: Optional[bool] = True,
+    ):
         """
         :param embed_dim: Embedding dimension
         :param num_heads: Number of attention heads
@@ -35,12 +40,18 @@ class MultiHeadAttention(nn.Module):
         :param bias: Bias
         """
         super(MultiHeadAttention, self).__init__()
-        assert embed_dim % num_heads == 0, "Got: embed_dim={} and num_heads={}".format(embed_dim, num_heads)
+        assert embed_dim % num_heads == 0, "Got: embed_dim={} and num_heads={}".format(
+            embed_dim, num_heads
+        )
 
-        self.qkv_proj = LinearLayer(in_features=embed_dim, out_features=3 * embed_dim, bias=bias)
+        self.qkv_proj = LinearLayer(
+            in_features=embed_dim, out_features=3 * embed_dim, bias=bias
+        )
 
         self.attn_dropout = nn.Dropout(attn_dropout)
-        self.out_proj = LinearLayer(in_features=embed_dim, out_features=embed_dim, bias=bias)
+        self.out_proj = LinearLayer(
+            in_features=embed_dim, out_features=embed_dim, bias=bias
+        )
 
         self.head_dim = embed_dim // num_heads
         self.scaling = self.head_dim ** -0.5
@@ -53,10 +64,7 @@ class MultiHeadAttention(nn.Module):
         b_sz, n_patches, in_channels = x.shape
 
         # [B x N x C] --> [B x N x 3 x h x C]
-        qkv = (
-            self.qkv_proj(x)
-                .reshape(b_sz, n_patches, 3, self.num_heads, -1)
-        )
+        qkv = self.qkv_proj(x).reshape(b_sz, n_patches, 3, self.num_heads, -1)
         # [B x N x 3 x h x C] --> [B x h x 3 x N x C]
         qkv = qkv.transpose(1, 3)
 
@@ -91,15 +99,23 @@ class TransformerEncoder(nn.Module):
             https://arxiv.org/abs/1706.03762
     """
 
-    def __init__(self, embed_dim: int, ffn_latent_dim: int, num_heads: Optional[int] = 8,
-                 attn_dropout: Optional[float] = 0.0,
-                 dropout: Optional[float] = 0.1, ffn_dropout: Optional[float] = 0.0):
+    def __init__(
+        self,
+        embed_dim: int,
+        ffn_latent_dim: int,
+        num_heads: Optional[int] = 8,
+        attn_dropout: Optional[float] = 0.0,
+        dropout: Optional[float] = 0.1,
+        ffn_dropout: Optional[float] = 0.0,
+    ):
         super(TransformerEncoder, self).__init__()
 
         self.pre_norm_mha = nn.Sequential(
             nn.LayerNorm(embed_dim),
-            MultiHeadAttention(embed_dim, num_heads, attn_dropout=attn_dropout, bias=True),
-            nn.Dropout(dropout)
+            MultiHeadAttention(
+                embed_dim, num_heads, attn_dropout=attn_dropout, bias=True
+            ),
+            nn.Dropout(dropout),
         )
 
         self.pre_norm_ffn = nn.Sequential(
@@ -108,7 +124,7 @@ class TransformerEncoder(nn.Module):
             nn.SiLU(),
             nn.Dropout(ffn_dropout),
             LinearLayer(in_features=ffn_latent_dim, out_features=embed_dim, bias=True),
-            nn.Dropout(dropout)
+            nn.Dropout(dropout),
         )
         self.embed_dim = embed_dim
         self.ffn_dim = ffn_latent_dim
@@ -128,32 +144,58 @@ class MobileViTBlock(nn.Module):
         MobileViT block: https://arxiv.org/abs/2110.02178?context=cs.LG
     """
 
-    def __init__(self, in_channels: int, transformer_dim: int, ffn_dim: int,
-                 n_transformer_blocks: Optional[int] = 2,
-                 head_dim: Optional[int] = 32, attn_dropout: Optional[float] = 0.1,
-                 dropout: Optional[float] = 0.1, ffn_dropout: Optional[float] = 0.1, patch_h: Optional[int] = 8,
-                 patch_w: Optional[int] = 8,
-                 conv_ksize: Optional[int] = 3,
-                 dilation: Optional[int] = 1, var_ffn: Optional[bool] = False,
-                 no_fusion: Optional[bool] = False):
+    def __init__(
+        self,
+        in_channels: int,
+        transformer_dim: int,
+        ffn_dim: int,
+        n_transformer_blocks: Optional[int] = 2,
+        head_dim: Optional[int] = 32,
+        attn_dropout: Optional[float] = 0.1,
+        dropout: Optional[float] = 0.1,
+        ffn_dropout: Optional[float] = 0.1,
+        patch_h: Optional[int] = 8,
+        patch_w: Optional[int] = 8,
+        conv_ksize: Optional[int] = 3,
+        dilation: Optional[int] = 1,
+        var_ffn: Optional[bool] = False,
+        no_fusion: Optional[bool] = False,
+    ):
         conv_3x3_in = ConvLayer(
-            in_channels=in_channels, out_channels=in_channels,
-            kernel_size=conv_ksize, stride=1, use_norm=True, use_act=True, dilation=dilation
+            in_channels=in_channels,
+            out_channels=in_channels,
+            kernel_size=conv_ksize,
+            stride=1,
+            use_norm=True,
+            use_act=True,
+            dilation=dilation,
         )
         conv_1x1_in = ConvLayer(
-            in_channels=in_channels, out_channels=transformer_dim,
-            kernel_size=1, stride=1, use_norm=False, use_act=False
+            in_channels=in_channels,
+            out_channels=transformer_dim,
+            kernel_size=1,
+            stride=1,
+            use_norm=False,
+            use_act=False,
         )
 
         conv_1x1_out = ConvLayer(
-            in_channels=transformer_dim, out_channels=in_channels,
-            kernel_size=1, stride=1, use_norm=True, use_act=True
+            in_channels=transformer_dim,
+            out_channels=in_channels,
+            kernel_size=1,
+            stride=1,
+            use_norm=True,
+            use_act=True,
         )
         conv_3x3_out = None
         if not no_fusion:
             conv_3x3_out = ConvLayer(
-                in_channels=2 * in_channels, out_channels=in_channels,
-                kernel_size=conv_ksize, stride=1, use_norm=True, use_act=True
+                in_channels=2 * in_channels,
+                out_channels=in_channels,
+                kernel_size=conv_ksize,
+                stride=1,
+                use_norm=True,
+                use_act=True,
             )
         super(MobileViTBlock, self).__init__()
         self.local_rep = nn.Sequential()
@@ -166,8 +208,14 @@ class MobileViTBlock(nn.Module):
         ffn_dims = [ffn_dim] * n_transformer_blocks
 
         global_rep = [
-            TransformerEncoder(embed_dim=transformer_dim, ffn_latent_dim=ffn_dims[block_idx], num_heads=num_heads,
-                               attn_dropout=attn_dropout, dropout=dropout, ffn_dropout=ffn_dropout)
+            TransformerEncoder(
+                embed_dim=transformer_dim,
+                ffn_latent_dim=ffn_dims[block_idx],
+                num_heads=num_heads,
+                attn_dropout=attn_dropout,
+                dropout=dropout,
+                ffn_dropout=ffn_dropout,
+            )
             for block_idx in range(n_transformer_blocks)
         ]
         global_rep.append(nn.LayerNorm(transformer_dim))
@@ -206,7 +254,9 @@ class MobileViTBlock(nn.Module):
         interpolate = False
         if new_w != orig_w or new_h != orig_h:
             # Note: Padding can be done, but then it needs to be handled in attention function.
-            feature_map = F.interpolate(feature_map, size=(new_h, new_w), mode="bilinear", align_corners=False)
+            feature_map = F.interpolate(
+                feature_map, size=(new_h, new_w), mode="bilinear", align_corners=False
+            )
             interpolate = True
 
         # number of patches along width and height
@@ -215,11 +265,15 @@ class MobileViTBlock(nn.Module):
         num_patches = num_patch_h * num_patch_w  # N
 
         # [B, C, H, W] --> [B * C * n_h, p_h, n_w, p_w]
-        reshaped_fm = feature_map.reshape(batch_size * in_channels * num_patch_h, patch_h, num_patch_w, patch_w)
+        reshaped_fm = feature_map.reshape(
+            batch_size * in_channels * num_patch_h, patch_h, num_patch_w, patch_w
+        )
         # [B * C * n_h, p_h, n_w, p_w] --> [B * C * n_h, n_w, p_h, p_w]
         transposed_fm = reshaped_fm.transpose(1, 2)
         # [B * C * n_h, n_w, p_h, p_w] --> [B, C, N, P] where P = p_h * p_w and N = n_h * n_w
-        reshaped_fm = transposed_fm.reshape(batch_size, in_channels, num_patches, patch_area)
+        reshaped_fm = transposed_fm.reshape(
+            batch_size, in_channels, num_patches, patch_area
+        )
         # [B, C, N, P] --> [B, P, N, C]
         transposed_fm = reshaped_fm.transpose(1, 3)
         # [B, P, N, C] --> [BP, N, C]
@@ -231,16 +285,20 @@ class MobileViTBlock(nn.Module):
             "interpolate": interpolate,
             "total_patches": num_patches,
             "num_patches_w": num_patch_w,
-            "num_patches_h": num_patch_h
+            "num_patches_h": num_patch_h,
         }
 
         return patches, info_dict
 
     def folding(self, patches: Tensor, info_dict: Dict) -> Tensor:
         n_dim = patches.dim()
-        assert n_dim == 3, "Tensor should be of shape BPxNxC. Got: {}".format(patches.shape)
+        assert n_dim == 3, "Tensor should be of shape BPxNxC. Got: {}".format(
+            patches.shape
+        )
         # [BP, N, C] --> [B, P, N, C]
-        patches = patches.contiguous().view(info_dict["batch_size"], self.patch_area, info_dict["total_patches"], -1)
+        patches = patches.contiguous().view(
+            info_dict["batch_size"], self.patch_area, info_dict["total_patches"], -1
+        )
 
         batch_size, pixels, num_patches, channels = patches.size()
         num_patch_h = info_dict["num_patches_h"]
@@ -250,13 +308,22 @@ class MobileViTBlock(nn.Module):
         patches = patches.transpose(1, 3)
 
         # [B, C, N, P] --> [B*C*n_h, n_w, p_h, p_w]
-        feature_map = patches.reshape(batch_size * channels * num_patch_h, num_patch_w, self.patch_h, self.patch_w)
+        feature_map = patches.reshape(
+            batch_size * channels * num_patch_h, num_patch_w, self.patch_h, self.patch_w
+        )
         # [B*C*n_h, n_w, p_h, p_w] --> [B*C*n_h, p_h, n_w, p_w]
         feature_map = feature_map.transpose(1, 2)
         # [B*C*n_h, p_h, n_w, p_w] --> [B, C, H, W]
-        feature_map = feature_map.reshape(batch_size, channels, num_patch_h * self.patch_h, num_patch_w * self.patch_w)
+        feature_map = feature_map.reshape(
+            batch_size, channels, num_patch_h * self.patch_h, num_patch_w * self.patch_w
+        )
         if info_dict["interpolate"]:
-            feature_map = F.interpolate(feature_map, size=info_dict["orig_size"], mode="bilinear", align_corners=False)
+            feature_map = F.interpolate(
+                feature_map,
+                size=info_dict["orig_size"],
+                mode="bilinear",
+                align_corners=False,
+            )
         return feature_map
 
     def forward(self, x: Tensor) -> Tensor:
@@ -276,15 +343,15 @@ class MobileViTBlock(nn.Module):
         fm = self.conv_proj(fm)
 
         if self.fusion is not None:
-            fm = self.fusion(
-                flow.cat((res, fm), dim=1)
-            )
+            fm = self.fusion(flow.cat((res, fm), dim=1))
         return fm
 
 
-def make_divisible(v: Union[float, int],
-                   divisor: Optional[int] = 8,
-                   min_value: Optional[Union[float, int]] = None) -> Union[float, int]:
+def make_divisible(
+    v: Union[float, int],
+    divisor: Optional[int] = 8,
+    min_value: Optional[Union[float, int]] = None,
+) -> Union[float, int]:
     """
     This function is taken from the original tf repo.
     It ensures that all layers have a channel number that is divisible by 8
@@ -309,13 +376,14 @@ class InvertedResidual(nn.Module):
     Inverted residual block (MobileNetv2): https://arxiv.org/abs/1801.04381
     """
 
-    def __init__(self,
-                 in_channels: int,
-                 out_channels: int,
-                 stride: int,
-                 expand_ratio: Union[int, float],
-                 dilation: int = 1
-                 ) -> None:
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        stride: int,
+        expand_ratio: Union[int, float],
+        dilation: int = 1,
+    ) -> None:
         assert stride in [1, 2]
         super(InvertedResidual, self).__init__()
         self.stride = stride
@@ -325,19 +393,41 @@ class InvertedResidual(nn.Module):
 
         block = nn.Sequential()
         if expand_ratio != 1:
-            block.add_module(name="exp_1x1",
-                             module=ConvLayer(in_channels=in_channels, out_channels=hidden_dim, kernel_size=1,
-                                              use_act=True, use_norm=True))
+            block.add_module(
+                name="exp_1x1",
+                module=ConvLayer(
+                    in_channels=in_channels,
+                    out_channels=hidden_dim,
+                    kernel_size=1,
+                    use_act=True,
+                    use_norm=True,
+                ),
+            )
 
         block.add_module(
             name="conv_3x3",
-            module=ConvLayer(in_channels=hidden_dim, out_channels=hidden_dim, stride=stride, kernel_size=3,
-                             groups=hidden_dim, use_act=True, use_norm=True, dilation=dilation)
+            module=ConvLayer(
+                in_channels=hidden_dim,
+                out_channels=hidden_dim,
+                stride=stride,
+                kernel_size=3,
+                groups=hidden_dim,
+                use_act=True,
+                use_norm=True,
+                dilation=dilation,
+            ),
         )
 
-        block.add_module(name="red_1x1",
-                         module=ConvLayer(in_channels=hidden_dim, out_channels=out_channels, kernel_size=1,
-                                          use_act=False, use_norm=True))
+        block.add_module(
+            name="red_1x1",
+            module=ConvLayer(
+                in_channels=hidden_dim,
+                out_channels=out_channels,
+                kernel_size=1,
+                use_act=False,
+                use_norm=True,
+            ),
+        )
 
         self.block = block
         self.in_channels = in_channels
@@ -353,25 +443,27 @@ class InvertedResidual(nn.Module):
 
 
 class GlobalPool(nn.Module):
-    def __init__(self, pool_type='mean', keep_dim=False):
+    def __init__(self, pool_type="mean", keep_dim=False):
         """
             Global pooling
             :param pool_type: Global pool operation type (mean, rms, abs)
             :param keep_dim: Keep dimensions the same as the input or not
         """
         super(GlobalPool, self).__init__()
-        pool_types = ['mean', 'rms', 'abs']
-        assert pool_type in pool_types, 'Supported pool types are: {}. Got {}'.format(pool_types, pool_type)
+        pool_types = ["mean", "rms", "abs"]
+        assert pool_type in pool_types, "Supported pool types are: {}. Got {}".format(
+            pool_types, pool_type
+        )
         self.pool_type = pool_type
         self.keep_dim = keep_dim
 
     def _global_pool(self, x):
         assert x.dim() == 4, "Got: {}".format(x.shape)
-        if self.pool_type == 'rms':
+        if self.pool_type == "rms":
             x = x ** 2
             x = flow.mean(x, dim=[-2, -1], keepdim=self.keep_dim)
             x = x ** -0.5
-        elif self.pool_type == 'abs':
+        elif self.pool_type == "abs":
             x = flow.mean(flow.abs(x), dim=[-2, -1], keepdim=self.keep_dim)
         else:
             # default is mean
@@ -384,11 +476,9 @@ class GlobalPool(nn.Module):
 
 
 class LinearLayer(nn.Module):
-    def __init__(self,
-                 in_features: int,
-                 out_features: int,
-                 bias: Optional[bool] = True
-                 ) -> None:
+    def __init__(
+        self, in_features: int, out_features: int, bias: Optional[bool] = True
+    ) -> None:
         """
             Applies a linear transformation to the input data
             :param in_features: size of each input sample
@@ -421,21 +511,45 @@ class LinearLayer(nn.Module):
 
 
 class Conv2d(nn.Conv2d):
-    def __init__(self, in_channels: int, out_channels: int, kernel_size: tuple or int, stride: tuple or int,
-                 padding: tuple or int, dilation: int or tuple, groups: int, bias: bool, padding_mode: str
-                 ):
-        super(Conv2d, self).__init__(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
-                                     stride=stride, padding=padding, dilation=dilation, groups=groups, bias=bias,
-                                     padding_mode=padding_mode)
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size: tuple or int,
+        stride: tuple or int,
+        padding: tuple or int,
+        dilation: int or tuple,
+        groups: int,
+        bias: bool,
+        padding_mode: str,
+    ):
+        super(Conv2d, self).__init__(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=padding,
+            dilation=dilation,
+            groups=groups,
+            bias=bias,
+            padding_mode=padding_mode,
+        )
 
 
 class ConvLayer(nn.Module):
-    def __init__(self, in_channels: int, out_channels: int, kernel_size: int or tuple,
-                 stride: Optional[int or tuple] = 1,
-                 dilation: Optional[int or tuple] = 1, groups: Optional[int] = 1,
-                 bias: Optional[bool] = False, padding_mode: Optional[str] = 'zeros',
-                 use_norm: Optional[bool] = True, use_act: Optional[bool] = True
-                 ) -> None:
+    def __init__(
+        self,
+        in_channels: int,
+        out_channels: int,
+        kernel_size: int or tuple,
+        stride: Optional[int or tuple] = 1,
+        dilation: Optional[int or tuple] = 1,
+        groups: Optional[int] = 1,
+        bias: Optional[bool] = False,
+        padding_mode: Optional[str] = "zeros",
+        use_norm: Optional[bool] = True,
+        use_act: Optional[bool] = True,
+    ) -> None:
         """
             Applies a 2D convolution over an input signal composed of several input planes.
             :param opts: arguments
@@ -454,7 +568,7 @@ class ConvLayer(nn.Module):
         super(ConvLayer, self).__init__()
 
         if use_norm:
-            assert not bias, 'Do not use bias when using normalization layers.'
+            assert not bias, "Do not use bias when using normalization layers."
 
         if isinstance(kernel_size, int):
             kernel_size = (kernel_size, kernel_size)
@@ -469,18 +583,35 @@ class ConvLayer(nn.Module):
         assert isinstance(stride, (tuple, list))
         assert isinstance(dilation, (tuple, list))
 
-        padding = (int((kernel_size[0] - 1) / 2) * dilation[0], int((kernel_size[1] - 1) / 2) * dilation[1])
+        padding = (
+            int((kernel_size[0] - 1) / 2) * dilation[0],
+            int((kernel_size[1] - 1) / 2) * dilation[1],
+        )
 
-        assert in_channels % groups == 0, \
-            'Input channels are not divisible by groups. {}%{} != 0 '.format(in_channels, groups)
-        assert out_channels % groups == 0, \
-            'Output channels are not divisible by groups. {}%{} != 0 '.format(out_channels, groups)
+        assert (
+            in_channels % groups == 0
+        ), "Input channels are not divisible by groups. {}%{} != 0 ".format(
+            in_channels, groups
+        )
+        assert (
+            out_channels % groups == 0
+        ), "Output channels are not divisible by groups. {}%{} != 0 ".format(
+            out_channels, groups
+        )
 
         block = nn.Sequential()
 
-        conv_layer = Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
-                            stride=stride, padding=padding, dilation=dilation, groups=groups, bias=bias,
-                            padding_mode=padding_mode)
+        conv_layer = Conv2d(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            kernel_size=kernel_size,
+            stride=stride,
+            padding=padding,
+            dilation=dilation,
+            groups=groups,
+            bias=bias,
+            padding_mode=padding_mode,
+        )
 
         block.add_module(name="conv", module=conv_layer)
 
@@ -517,12 +648,7 @@ class MobileViT(nn.Module):
     """
 
     def __init__(
-            self,
-            arch,
-            num_classes=1000,
-            classifier_dropout=0.1,
-            pool_type='mean',
-            **kwargs
+        self, arch, num_classes=1000, classifier_dropout=0.1, pool_type="mean", **kwargs
     ) -> None:
         image_channels = 3
         out_channels = 16
@@ -546,58 +672,75 @@ class MobileViT(nn.Module):
         # store model configuration in a dictionary
         self.model_conf_dict = dict()
         self.conv_1 = ConvLayer(
-            in_channels=image_channels, out_channels=out_channels,
-            kernel_size=3, stride=2, use_norm=True, use_act=True
+            in_channels=image_channels,
+            out_channels=out_channels,
+            kernel_size=3,
+            stride=2,
+            use_norm=True,
+            use_act=True,
         )
 
-        self.model_conf_dict['conv1'] = {'in': image_channels, 'out': out_channels}
+        self.model_conf_dict["conv1"] = {"in": image_channels, "out": out_channels}
 
         in_channels = out_channels
         self.layer_1, out_channels = self._make_layer(
             input_channel=in_channels, cfg=mobilevit_config["layer1"]
         )
-        self.model_conf_dict['layer1'] = {'in': in_channels, 'out': out_channels}
+        self.model_conf_dict["layer1"] = {"in": in_channels, "out": out_channels}
 
         in_channels = out_channels
         self.layer_2, out_channels = self._make_layer(
             input_channel=in_channels, cfg=mobilevit_config["layer2"]
         )
-        self.model_conf_dict['layer2'] = {'in': in_channels, 'out': out_channels}
+        self.model_conf_dict["layer2"] = {"in": in_channels, "out": out_channels}
 
         in_channels = out_channels
         self.layer_3, out_channels = self._make_layer(
             input_channel=in_channels, cfg=mobilevit_config["layer3"]
         )
-        self.model_conf_dict['layer3'] = {'in': in_channels, 'out': out_channels}
+        self.model_conf_dict["layer3"] = {"in": in_channels, "out": out_channels}
 
         in_channels = out_channels
         self.layer_4, out_channels = self._make_layer(
             input_channel=in_channels, cfg=mobilevit_config["layer4"], dilate=dilate_l4
         )
-        self.model_conf_dict['layer4'] = {'in': in_channels, 'out': out_channels}
+        self.model_conf_dict["layer4"] = {"in": in_channels, "out": out_channels}
 
         in_channels = out_channels
         self.layer_5, out_channels = self._make_layer(
             input_channel=in_channels, cfg=mobilevit_config["layer5"], dilate=dilate_l5
         )
-        self.model_conf_dict['layer5'] = {'in': in_channels, 'out': out_channels}
+        self.model_conf_dict["layer5"] = {"in": in_channels, "out": out_channels}
 
         in_channels = out_channels
         exp_channels = min(mobilevit_config["last_layer_exp_factor"] * in_channels, 960)
         self.conv_1x1_exp = ConvLayer(
-            in_channels=in_channels, out_channels=exp_channels,
-            kernel_size=1, stride=1, use_act=True, use_norm=True
+            in_channels=in_channels,
+            out_channels=exp_channels,
+            kernel_size=1,
+            stride=1,
+            use_act=True,
+            use_norm=True,
         )
 
-        self.model_conf_dict['exp_before_cls'] = {'in': in_channels, 'out': exp_channels}
+        self.model_conf_dict["exp_before_cls"] = {
+            "in": in_channels,
+            "out": exp_channels,
+        }
 
         self.classifier = nn.Sequential()
-        self.classifier.add_module(name="global_pool", module=GlobalPool(pool_type=pool_type, keep_dim=False))
+        self.classifier.add_module(
+            name="global_pool", module=GlobalPool(pool_type=pool_type, keep_dim=False)
+        )
         if 0.0 < classifier_dropout < 1.0:
-            self.classifier.add_module(name="dropout", module=nn.Dropout(p=classifier_dropout, inplace=True))
+            self.classifier.add_module(
+                name="dropout", module=nn.Dropout(p=classifier_dropout, inplace=True)
+            )
         self.classifier.add_module(
             name="fc",
-            module=LinearLayer(in_features=exp_channels, out_features=num_classes, bias=True)
+            module=LinearLayer(
+                in_features=exp_channels, out_features=num_classes, bias=True
+            ),
         )
 
         # weight initialization
@@ -610,7 +753,7 @@ class MobileViT(nn.Module):
         for m in modules:
             if isinstance(m, nn.Conv2d):
                 if m.weight is not None:
-                    nn.init.kaiming_normal_(m.weight, mode='fan_out')
+                    nn.init.kaiming_normal_(m.weight, mode="fan_out")
                 if m.bias is not None:
                     nn.init.zeros_(m.bias)
             elif isinstance(m, (nn.Linear, LinearLayer)):
@@ -627,22 +770,21 @@ class MobileViT(nn.Module):
                     if m.bias is not None:
                         nn.init.zeros_(m.bias)
 
-    def _make_layer(self, input_channel, cfg: Dict, dilate: Optional[bool] = False) -> Tuple[nn.Sequential, int]:
+    def _make_layer(
+        self, input_channel, cfg: Dict, dilate: Optional[bool] = False
+    ) -> Tuple[nn.Sequential, int]:
         block_type = cfg.get("block_type", "mobilevit")
         if block_type.lower() == "mobilevit":
             return self._make_mit_layer(
-                input_channel=input_channel,
-                cfg=cfg,
-                dilate=dilate
+                input_channel=input_channel, cfg=cfg, dilate=dilate
             )
         else:
-            return self._make_mobilenet_layer(
-                input_channel=input_channel,
-                cfg=cfg
-            )
+            return self._make_mobilenet_layer(input_channel=input_channel, cfg=cfg)
 
     @staticmethod
-    def _make_mobilenet_layer(input_channel: int, cfg: Dict) -> Tuple[nn.Sequential, int]:
+    def _make_mobilenet_layer(
+        input_channel: int, cfg: Dict
+    ) -> Tuple[nn.Sequential, int]:
         output_channels = cfg.get("out_channels")
         num_blocks = cfg.get("num_blocks", 2)
         expand_ratio = cfg.get("expand_ratio", 4)
@@ -655,13 +797,15 @@ class MobileViT(nn.Module):
                 in_channels=input_channel,
                 out_channels=output_channels,
                 stride=stride,
-                expand_ratio=expand_ratio
+                expand_ratio=expand_ratio,
             )
             block.append(layer)
             input_channel = output_channels
         return nn.Sequential(*block), input_channel
 
-    def _make_mit_layer(self, input_channel, cfg: Dict, dilate: Optional[bool] = False) -> Tuple[nn.Sequential, int]:
+    def _make_mit_layer(
+        self, input_channel, cfg: Dict, dilate: Optional[bool] = False
+    ) -> Tuple[nn.Sequential, int]:
         prev_dilation = self.dilation
         block = []
         stride = cfg.get("stride", 1)
@@ -676,7 +820,7 @@ class MobileViT(nn.Module):
                 out_channels=cfg.get("out_channels"),
                 stride=stride,
                 expand_ratio=cfg.get("mv_expand_ratio", 4),
-                dilation=prev_dilation
+                dilation=prev_dilation,
             )
 
             block.append(layer)
@@ -691,9 +835,10 @@ class MobileViT(nn.Module):
                 num_heads = 4
             head_dim = transformer_dim // num_heads
 
-        assert transformer_dim % head_dim == 0, \
-            "Transformer input dimension should be divisible by head dimension. " \
+        assert transformer_dim % head_dim == 0, (
+            "Transformer input dimension should be divisible by head dimension. "
             "Got {} and {}.".format(transformer_dim, head_dim)
+        )
 
         block.append(
             MobileViTBlock(
@@ -708,7 +853,7 @@ class MobileViT(nn.Module):
                 attn_dropout=0.0,
                 head_dim=head_dim,
                 no_fusion=False,
-                conv_ksize=3
+                conv_ksize=3,
             )
         )
 
@@ -732,20 +877,20 @@ class MobileViT(nn.Module):
 
 
 CONFIG = {
-    'mobilevit_xx_small': {
+    "mobilevit_xx_small": {
         "layer1": {
             "out_channels": 16,
             "expand_ratio": 2,
             "num_blocks": 1,
             "stride": 1,
-            "block_type": "mv2"
+            "block_type": "mv2",
         },
         "layer2": {
             "out_channels": 24,
             "expand_ratio": 2,
             "num_blocks": 3,
             "stride": 2,
-            "block_type": "mv2"
+            "block_type": "mv2",
         },
         "layer3": {  # 28x28
             "out_channels": 48,
@@ -758,7 +903,7 @@ CONFIG = {
             "mv_expand_ratio": 2,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
         "layer4": {  # 14x14
             "out_channels": 64,
@@ -771,7 +916,7 @@ CONFIG = {
             "mv_expand_ratio": 2,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
         "layer5": {  # 7x7
             "out_channels": 80,
@@ -784,24 +929,24 @@ CONFIG = {
             "mv_expand_ratio": 2,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
-        "last_layer_exp_factor": 4
+        "last_layer_exp_factor": 4,
     },
-    'mobilevit_x_small': {
+    "mobilevit_x_small": {
         "layer1": {
             "out_channels": 32,
             "expand_ratio": 4,
             "num_blocks": 1,
             "stride": 1,
-            "block_type": "mv2"
+            "block_type": "mv2",
         },
         "layer2": {
             "out_channels": 48,
             "expand_ratio": 4,
             "num_blocks": 3,
             "stride": 2,
-            "block_type": "mv2"
+            "block_type": "mv2",
         },
         "layer3": {  # 28x28
             "out_channels": 64,
@@ -814,7 +959,7 @@ CONFIG = {
             "mv_expand_ratio": 4,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
         "layer4": {  # 14x14
             "out_channels": 80,
@@ -827,7 +972,7 @@ CONFIG = {
             "mv_expand_ratio": 4,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
         "layer5": {  # 7x7
             "out_channels": 96,
@@ -840,24 +985,24 @@ CONFIG = {
             "mv_expand_ratio": 4,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
-        "last_layer_exp_factor": 4
+        "last_layer_exp_factor": 4,
     },
-    'mobilevit_small': {
+    "mobilevit_small": {
         "layer1": {
             "out_channels": 32,
             "expand_ratio": 4,
             "num_blocks": 1,
             "stride": 1,
-            "block_type": "mv2"
+            "block_type": "mv2",
         },
         "layer2": {
             "out_channels": 64,
             "expand_ratio": 4,
             "num_blocks": 3,
             "stride": 2,
-            "block_type": "mv2"
+            "block_type": "mv2",
         },
         "layer3": {  # 28x28
             "out_channels": 96,
@@ -870,7 +1015,7 @@ CONFIG = {
             "mv_expand_ratio": 4,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
         "layer4": {  # 14x14
             "out_channels": 128,
@@ -883,7 +1028,7 @@ CONFIG = {
             "mv_expand_ratio": 4,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
         "layer5": {  # 7x7
             "out_channels": 160,
@@ -896,14 +1041,16 @@ CONFIG = {
             "mv_expand_ratio": 4,
             "head_dim": None,
             "num_heads": 4,
-            "block_type": "mobilevit"
+            "block_type": "mobilevit",
         },
-        "last_layer_exp_factor": 4
-    }
+        "last_layer_exp_factor": 4,
+    },
 }
 
 
-def _create_mobilevit(arch: str, pretrained: bool = False, progress: bool = True, **model_kwargs):
+def _create_mobilevit(
+    arch: str, pretrained: bool = False, progress: bool = True, **model_kwargs
+):
     model = MobileViT(arch=arch, **model_kwargs)
     if pretrained:
         state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
@@ -931,7 +1078,9 @@ def mobilevit_small(pretrained: bool = False, progress: bool = True, **kwargs):
         >>> mobilevit_s = flowvision.models.mobilevit_small(pretrained=False, progress=True)
 
     """
-    return _create_mobilevit(arch='mobilevit_small', pretrained=pretrained, progress=progress, **kwargs)
+    return _create_mobilevit(
+        arch="mobilevit_small", pretrained=pretrained, progress=progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
@@ -954,7 +1103,9 @@ def mobilevit_x_small(pretrained: bool = False, progress: bool = True, **kwargs)
         >>> mobilevit_xs = flowvision.models.mobilevit_x_small(pretrained=False, progress=True)
 
     """
-    return _create_mobilevit(arch='mobilevit_x_small', pretrained=pretrained, progress=progress, **kwargs)
+    return _create_mobilevit(
+        arch="mobilevit_x_small", pretrained=pretrained, progress=progress, **kwargs
+    )
 
 
 @ModelCreator.register_model
@@ -977,4 +1128,6 @@ def mobilevit_xx_small(pretrained: bool = False, progress: bool = True, **kwargs
         >>> mobilevit_xxs = flowvision.models.mobilevit_xx_small(pretrained=False, progress=True)
 
     """
-    return _create_mobilevit(arch='mobilevit_xx_small', pretrained=pretrained, progress=progress, **kwargs)
+    return _create_mobilevit(
+        arch="mobilevit_xx_small", pretrained=pretrained, progress=progress, **kwargs
+    )
