@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/ucbdrive/dla/blob/master/dla.py
+"""
 import math
 
 import oneflow as flow
@@ -305,10 +308,27 @@ class DLA(nn.Module):
 
             return x
 
-# 15.783832M
-# Acc@1: 74.470, Acc@1-Error: 25.530, Acc@5: 92.010, Acc@5-Error: 7.990
+
 @ModelCreator.register_model
-def dla34(pretrained=False, progress=True, **kwargs):  # DLA-34
+def dla34(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA34 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA34 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla34 = flowvision.models.dla34(pretrained=False, progress=True)
+
+    """
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 128, 256, 512],
                 block=BasicBlock, **kwargs)
@@ -318,10 +338,26 @@ def dla34(pretrained=False, progress=True, **kwargs):  # DLA-34
     return model
 
 
-# 1.309848M
-# Acc@1: 64.482, Acc@1-Error: 35.518, Acc@5: 86.088, Acc@5-Error: 13.912
 @ModelCreator.register_model
-def dla46_c(pretrained=False, progress=True, **kwargs):  # DLA-46-C
+def dla46_c(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA46_c 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA46_c 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla46_c = flowvision.models.dla46_c(pretrained=False, progress=True)
+
+    """
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 64, 128, 256],
@@ -331,10 +367,27 @@ def dla46_c(pretrained=False, progress=True, **kwargs):  # DLA-46-C
         model.load_state_dict(state_dict)
     return model
 
-# 1.076888M
-# Acc@1: 65.642, Acc@1-Error: 34.358, Acc@5: 86.658, Acc@5-Error: 13.342
+
 @ModelCreator.register_model
-def dla46x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-46-C
+def dla46x_c(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA46x_c 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA46x_c 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla46x_c = flowvision.models.dla46x_c(pretrained=False, progress=True)
+
+    """
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 2, 1],
                 [16, 32, 64, 64, 128, 256],
@@ -345,10 +398,26 @@ def dla46x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-46-C
     return model
 
 
-# 1.336728M
-# Acc@1: 67.546, Acc@1-Error: 32.454, Acc@5: 88.202, Acc@5-Error: 11.798
 @ModelCreator.register_model
-def dla60x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-60-C
+def dla60x_c(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA60x_c 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA60x_c 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla60x_c = flowvision.models.dla60x_c(pretrained=False, progress=True)
+
+    """
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 64, 64, 128, 256],
@@ -359,10 +428,26 @@ def dla60x_c(pretrained=False, progress=True, **kwargs):  # DLA-X-60-C
     return model
 
 
-# 22.334104M
-# Acc@1: 76.824, Acc@1-Error: 23.176, Acc@5: 93.176, Acc@5-Error: 6.824
 @ModelCreator.register_model
-def dla60(pretrained=False, progress=True, **kwargs):  # DLA-60
+def dla60(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA60 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA60 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla60 = flowvision.models.dla60(pretrained=False, progress=True)
+
+    """
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 128, 256, 512, 1024],
@@ -372,10 +457,27 @@ def dla60(pretrained=False, progress=True, **kwargs):  # DLA-60
         model.load_state_dict(state_dict)
     return model
 
-# 17.649816M
-# Acc@1: 78.074, Acc@1-Error: 21.926, Acc@5: 93.948, Acc@5-Error: 6.052
+
 @ModelCreator.register_model
-def dla60x(pretrained=False, progress=True, **kwargs):  # DLA-X-60
+def dla60x(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA60x 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA60x 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla60x = flowvision.models.dla60x(pretrained=False, progress=True)
+
+    """
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 2, 3, 1],
                 [16, 32, 128, 256, 512, 1024],
@@ -386,10 +488,26 @@ def dla60x(pretrained=False, progress=True, **kwargs):  # DLA-X-60
     return model
 
 
-# 33.731736M
-# Acc@1: 77.706, Acc@1-Error: 22.294, Acc@5: 93.776, Acc@5-Error: 6.224
 @ModelCreator.register_model
-def dla102(pretrained=False, progress=True, **kwargs):  # DLA-102
+def dla102(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA102 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA102 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla102 = flowvision.models.dla102(pretrained=False, progress=True)
+
+    """
     Bottleneck.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
@@ -399,10 +517,26 @@ def dla102(pretrained=False, progress=True, **kwargs):  # DLA-102
     return model
 
 
-# 26.77212M
-# Acc@1: 78.272, Acc@1-Error: 21.728, Acc@5: 94.102, Acc@5-Error: 5.898
 @ModelCreator.register_model
-def dla102x(pretrained=False, progress=True, **kwargs):  # DLA-X-102
+def dla102x(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA102x 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA102x 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla102x = flowvision.models.dla102x(pretrained=False, progress=True)
+
+    """
     BottleneckX.expansion = 2
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
@@ -411,10 +545,27 @@ def dla102x(pretrained=False, progress=True, **kwargs):  # DLA-X-102
         model.load_state_dict(state_dict)
     return model
 
-# 41.745048M
-# Acc@1: 79.362, Acc@1-Error: 20.638, Acc@5: 94.634, Acc@5-Error: 5.366
+
 @ModelCreator.register_model
-def dla102x2(pretrained=False, progress=True, **kwargs):  # DLA-X-102 64
+def dla102x2(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA102x2 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA102x2 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla102x2 = flowvision.models.dla102x2(pretrained=False, progress=True)
+
+    """
     BottleneckX.cardinality = 64
     model = DLA([1, 1, 1, 3, 4, 1], [16, 32, 128, 256, 512, 1024],
                 block=BottleneckX, residual_root=True, **kwargs)
@@ -423,10 +574,27 @@ def dla102x2(pretrained=False, progress=True, **kwargs):  # DLA-X-102 64
         model.load_state_dict(state_dict)
     return model
 
-# 53.989016M
-# Acc@1: 78.528, Acc@1-Error: 21.472, Acc@5: 94.276, Acc@5-Error: 5.724
+
 @ModelCreator.register_model
-def dla169(pretrained=False, progress=True, **kwargs):  # DLA-169
+def dla169(pretrained=False, progress=True, **kwargs):
+    """
+    Constructs DLA169 224x224 model trained on ImageNet-1k.
+
+    .. note::
+        DLA169 224x224 model from `"Deep Layer Aggregation" <https://arxiv.org/pdf/1707.06484>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> dla169 = flowvision.models.dla169(pretrained=False, progress=True)
+
+    """
     Bottleneck.expansion = 2
     model = DLA([1, 1, 2, 3, 5, 1], [16, 32, 128, 256, 512, 1024],
                 block=Bottleneck, residual_root=True, **kwargs)
