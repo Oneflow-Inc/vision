@@ -46,6 +46,7 @@ architectures for image classification:
 -  `MobileViT`_
 -  `DeiT-III`_
 -  `CaiT`_
+-  `DLA`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -86,6 +87,7 @@ architectures for image classification:
 .. _MobileViT: https://arxiv.org/pdf/2110.02178.pdf
 .. _DeiT-III: https://arxiv.org/pdf/2204.07118.pdf
 .. _CaiT: https://arxiv.org/pdf/2103.17239.pdf
+.. _DLA: https://arxiv.org/pdf/1707.06484.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -548,6 +550,22 @@ CaiT
         cait_S36_384,
         cait_M36_384,
         cait_M48_448,
+
+
+DLA
+--------
+.. automodule:: flowvision.models
+    :members:
+        dla34,
+        dla46_c,
+        dla46x_c,
+        dla60x_c,
+        dla60,
+        dla60x,
+        dla102,
+        dla102x,
+        dla102x2,
+        dla169,
 
 
 Neural Style Transfer
