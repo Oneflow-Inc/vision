@@ -197,6 +197,12 @@
 | deit_large_patch16_LS_384_in21k | 87.440 | 12.560 | 98.346 | 1.654 | 304.8M     | 384      | 0.875    | bicubic |
 | deit_huge_patch14_LS_224 | 85.158 | 14.842 | 97.248 | 2.752 | 632.1M      | 224      | 0.875    | bicubic |
 | deit_huge_patch14_LS_224_in21k | 86.890 | 13.110 | 98.140 | 1.860 | 632.1M      | 224      | 0.875    | bicubic |
+| cait_XS24_384 | 84.060 | 15.940 | 96.886 | 3.114 | 26.7M      | 384      | 1 | bicubic |
+| cait_S24_224 | 83.452 | 16.548 | 96.572 | 3.428 | 46.9M      | 224      | 1 | bicubic |
+| cait_S24_384 | 85.048 | 14.952 | 97.344 | 2.656 | 47.1M      | 384      | 1 | bicubic |
+| cait_S36_384 | 86.058 | 14.546 | 97.480 | 2.520 | 68.4M      | 384      | 1 | bicubic |
+| cait_M36_384 | 84.060 | 13.942 | 97.732 | 2.268 | 271.2M     | 384      | 1 | bicubic |
+| cait_M48_448 | 86.492 | 13.508 | 97.752 | 2.248 | 356.5M     | 384      | 1 | bicubic |
 
 #### Spetial Normalized Case
 - `vit`, `mlp-mixer`, `gmlp` based model: test images normalized using `mean=(0.5, 0.5, 0.5)` and `std=(0.5, 0.5, 0.5)`

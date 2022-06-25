@@ -85,6 +85,7 @@ pip install flowvision==0.1.0
             <li>VAN</li>
             <li>MobileViT</li>
             <li>DeiT-III</li>
+            <li>CaiT</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>

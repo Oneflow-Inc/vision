@@ -45,6 +45,7 @@ architectures for image classification:
 -  `VAN`_
 -  `MobileViT`_
 -  `DeiT-III`_
+-  `CaiT`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -84,6 +85,7 @@ architectures for image classification:
 .. _LeViT: https://arxiv.org/pdf/2104.01136.pdf
 .. _MobileViT: https://arxiv.org/pdf/2110.02178.pdf
 .. _DeiT-III: https://arxiv.org/pdf/2204.07118.pdf
+.. _CaiT: https://arxiv.org/pdf/2103.17239.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -534,6 +536,18 @@ DeiT-III
         deit_large_patch16_LS_384_in21k,
         deit_huge_patch14_LS_224,
         deit_huge_patch14_LS_224_in21k,
+
+
+CaiT
+--------
+.. automodule:: flowvision.models
+    :members:
+        cait_XS24_384,
+        cait_S24_224,
+        cait_S24_384,
+        cait_S36_384,
+        cait_M36_384,
+        cait_M48_448,
 
 
 Neural Style Transfer
