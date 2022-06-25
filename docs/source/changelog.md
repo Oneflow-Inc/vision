@@ -22,6 +22,7 @@
 - Support ```SUN397```,```Country211```, dataset [#215](https://github.com/Oneflow-Inc/vision/pull/215)
 - Support ```Flowers102```,```FGVCAircraft```,```OxfordIIITPet```,```DTD```,```Food101```,```RenderedSST2```,```StanfordCars```,```PCAM```,```EuroSAT```,```GTSRB```,```CLEVR```,```FER2013``` dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
 - Support [MobileViT](https://arxiv.org/abs/2110.02178) model and pretrained weight [#231](https://github.com/Oneflow-Inc/vision/pull/231)
+- Support [DeiT III](https://arxiv.org/abs/2204.07118) model and pretrained weight [#233](https://github.com/Oneflow-Inc/vision/pull/233)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
