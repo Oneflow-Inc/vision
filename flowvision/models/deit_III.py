@@ -41,7 +41,15 @@ def to_2tuple(x):
 
 class Attention(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
-    def __init__(self, dim, num_heads=8, qkv_bias=False, qk_scale=None, attn_drop=0., proj_drop=0.):
+    def __init__(
+        self,
+        dim,
+        num_heads=8,
+        qkv_bias=False,
+        qk_scale=None,
+        attn_drop=0.0,
+        proj_drop=0.0,
+    ):
         super().__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
@@ -54,12 +62,16 @@ class Attention(nn.Module):
 
     def forward(self, x):
         B, N, C = x.shape
-        qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+        qkv = (
+            self.qkv(x)
+            .reshape(B, N, 3, self.num_heads, C // self.num_heads)
+            .permute(2, 0, 3, 1, 4)
+        )
         q, k, v = qkv[0], qkv[1], qkv[2]
 
         q = q * self.scale
 
-        attn = (q @ k.transpose(-2, -1))
+        attn = q @ k.transpose(-2, -1)
         attn = attn.softmax(dim=-1)
         attn = self.attn_drop(attn)
 
@@ -71,18 +83,42 @@ class Attention(nn.Module):
 
 class Block(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
-    def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, Attention_block=Attention, Mlp_block=Mlp
-                 , init_values=1e-4):
+    def __init__(
+        self,
+        dim,
+        num_heads,
+        mlp_ratio=4.0,
+        qkv_bias=False,
+        qk_scale=None,
+        drop=0.0,
+        attn_drop=0.0,
+        drop_path=0.0,
+        act_layer=nn.GELU,
+        norm_layer=nn.LayerNorm,
+        Attention_block=Attention,
+        Mlp_block=Mlp,
+        init_values=1e-4,
+    ):
         super().__init__()
         self.norm1 = norm_layer(dim)
         self.attn = Attention_block(
-            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
         # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
-        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         mlp_hidden_dim = int(dim * mlp_ratio)
-        self.mlp = Mlp_block(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
+        self.mlp = Mlp_block(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
 
     def forward(self, x):
         x = x + self.drop_path(self.attn(self.norm1(x)))
@@ -93,20 +129,48 @@ class Block(nn.Module):
 class Layer_scale_init_Block(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     # with slight modifications
-    def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, Attention_block=Attention, Mlp_block=Mlp
-                 , init_values=1e-4):
+    def __init__(
+        self,
+        dim,
+        num_heads,
+        mlp_ratio=4.0,
+        qkv_bias=False,
+        qk_scale=None,
+        drop=0.0,
+        attn_drop=0.0,
+        drop_path=0.0,
+        act_layer=nn.GELU,
+        norm_layer=nn.LayerNorm,
+        Attention_block=Attention,
+        Mlp_block=Mlp,
+        init_values=1e-4,
+    ):
         super().__init__()
         self.norm1 = norm_layer(dim)
         self.attn = Attention_block(
-            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
         # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
-        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         mlp_hidden_dim = int(dim * mlp_ratio)
-        self.mlp = Mlp_block(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
-        self.gamma_1 = nn.Parameter(init_values * oneflow.ones((dim)), requires_grad=True)
-        self.gamma_2 = nn.Parameter(init_values * oneflow.ones((dim)), requires_grad=True)
+        self.mlp = Mlp_block(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
+        self.gamma_1 = nn.Parameter(
+            init_values * oneflow.ones((dim)), requires_grad=True
+        )
+        self.gamma_2 = nn.Parameter(
+            init_values * oneflow.ones((dim)), requires_grad=True
+        )
 
     def forward(self, x):
         x = x + self.drop_path(self.gamma_1 * self.attn(self.norm1(x)))
@@ -117,60 +181,152 @@ class Layer_scale_init_Block(nn.Module):
 class Layer_scale_init_Block_paralx2(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     # with slight modifications
-    def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, Attention_block=Attention, Mlp_block=Mlp
-                 , init_values=1e-4):
+    def __init__(
+        self,
+        dim,
+        num_heads,
+        mlp_ratio=4.0,
+        qkv_bias=False,
+        qk_scale=None,
+        drop=0.0,
+        attn_drop=0.0,
+        drop_path=0.0,
+        act_layer=nn.GELU,
+        norm_layer=nn.LayerNorm,
+        Attention_block=Attention,
+        Mlp_block=Mlp,
+        init_values=1e-4,
+    ):
         super().__init__()
         self.norm1 = norm_layer(dim)
         self.norm11 = norm_layer(dim)
         self.attn = Attention_block(
-            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
         # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
         self.attn1 = Attention_block(
-            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
-        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         self.norm21 = norm_layer(dim)
         mlp_hidden_dim = int(dim * mlp_ratio)
-        self.mlp = Mlp_block(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
-        self.mlp1 = Mlp_block(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
-        self.gamma_1 = nn.Parameter(init_values * oneflow.ones((dim)), requires_grad=True)
-        self.gamma_1_1 = nn.Parameter(init_values * oneflow.ones((dim)), requires_grad=True)
-        self.gamma_2 = nn.Parameter(init_values * oneflow.ones((dim)), requires_grad=True)
-        self.gamma_2_1 = nn.Parameter(init_values * oneflow.ones((dim)), requires_grad=True)
+        self.mlp = Mlp_block(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
+        self.mlp1 = Mlp_block(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
+        self.gamma_1 = nn.Parameter(
+            init_values * oneflow.ones((dim)), requires_grad=True
+        )
+        self.gamma_1_1 = nn.Parameter(
+            init_values * oneflow.ones((dim)), requires_grad=True
+        )
+        self.gamma_2 = nn.Parameter(
+            init_values * oneflow.ones((dim)), requires_grad=True
+        )
+        self.gamma_2_1 = nn.Parameter(
+            init_values * oneflow.ones((dim)), requires_grad=True
+        )
 
     def forward(self, x):
-        x = x + self.drop_path(self.gamma_1 * self.attn(self.norm1(x))) + self.drop_path(
-            self.gamma_1_1 * self.attn1(self.norm11(x)))
-        x = x + self.drop_path(self.gamma_2 * self.mlp(self.norm2(x))) + self.drop_path(
-            self.gamma_2_1 * self.mlp1(self.norm21(x)))
+        x = (
+            x
+            + self.drop_path(self.gamma_1 * self.attn(self.norm1(x)))
+            + self.drop_path(self.gamma_1_1 * self.attn1(self.norm11(x)))
+        )
+        x = (
+            x
+            + self.drop_path(self.gamma_2 * self.mlp(self.norm2(x)))
+            + self.drop_path(self.gamma_2_1 * self.mlp1(self.norm21(x)))
+        )
         return x
 
 
 class Block_paralx2(nn.Module):
     # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
     # with slight modifications
-    def __init__(self, dim, num_heads, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop=0., attn_drop=0.,
-                 drop_path=0., act_layer=nn.GELU, norm_layer=nn.LayerNorm, Attention_block=Attention, Mlp_block=Mlp
-                 , init_values=1e-4):
+    def __init__(
+        self,
+        dim,
+        num_heads,
+        mlp_ratio=4.0,
+        qkv_bias=False,
+        qk_scale=None,
+        drop=0.0,
+        attn_drop=0.0,
+        drop_path=0.0,
+        act_layer=nn.GELU,
+        norm_layer=nn.LayerNorm,
+        Attention_block=Attention,
+        Mlp_block=Mlp,
+        init_values=1e-4,
+    ):
         super().__init__()
         self.norm1 = norm_layer(dim)
         self.norm11 = norm_layer(dim)
         self.attn = Attention_block(
-            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
         # NOTE: drop path for stochastic depth, we shall see if this is better than dropout here
         self.attn1 = Attention_block(
-            dim, num_heads=num_heads, qkv_bias=qkv_bias, qk_scale=qk_scale, attn_drop=attn_drop, proj_drop=drop)
-        self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+            dim,
+            num_heads=num_heads,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            attn_drop=attn_drop,
+            proj_drop=drop,
+        )
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         self.norm21 = norm_layer(dim)
         mlp_hidden_dim = int(dim * mlp_ratio)
-        self.mlp = Mlp_block(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
-        self.mlp1 = Mlp_block(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
+        self.mlp = Mlp_block(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
+        self.mlp1 = Mlp_block(
+            in_features=dim,
+            hidden_features=mlp_hidden_dim,
+            act_layer=act_layer,
+            drop=drop,
+        )
 
     def forward(self, x):
-        x = x + self.drop_path(self.attn(self.norm1(x))) + self.drop_path(self.attn1(self.norm11(x)))
-        x = x + self.drop_path(self.mlp(self.norm2(x))) + self.drop_path(self.mlp1(self.norm21(x)))
+        x = (
+            x
+            + self.drop_path(self.attn(self.norm1(x)))
+            + self.drop_path(self.attn1(self.norm11(x)))
+        )
+        x = (
+            x
+            + self.drop_path(self.mlp(self.norm2(x)))
+            + self.drop_path(self.mlp1(self.norm21(x)))
+        )
         return x
 
 
@@ -180,7 +336,14 @@ class hMLP_stem(nn.Module):
     with slight modifications
     """
 
-    def __init__(self, img_size=224, patch_size=16, in_chans=3, embed_dim=768, norm_layer=nn.BatchNorm2d):
+    def __init__(
+        self,
+        img_size=224,
+        patch_size=16,
+        in_chans=3,
+        embed_dim=768,
+        norm_layer=nn.BatchNorm2d,
+    ):
         super().__init__()
         img_size = to_2tuple(img_size)
         patch_size = to_2tuple(patch_size)
@@ -188,15 +351,18 @@ class hMLP_stem(nn.Module):
         self.img_size = img_size
         self.patch_size = patch_size
         self.num_patches = num_patches
-        self.proj = oneflow.nn.Sequential(*[nn.Conv2d(in_chans, embed_dim // 4, kernel_size=4, stride=4),
-                                          norm_layer(embed_dim // 4),
-                                          nn.GELU(),
-                                          nn.Conv2d(embed_dim // 4, embed_dim // 4, kernel_size=2, stride=2),
-                                          norm_layer(embed_dim // 4),
-                                          nn.GELU(),
-                                          nn.Conv2d(embed_dim // 4, embed_dim, kernel_size=2, stride=2),
-                                          norm_layer(embed_dim),
-                                          ])
+        self.proj = oneflow.nn.Sequential(
+            *[
+                nn.Conv2d(in_chans, embed_dim // 4, kernel_size=4, stride=4),
+                norm_layer(embed_dim // 4),
+                nn.GELU(),
+                nn.Conv2d(embed_dim // 4, embed_dim // 4, kernel_size=2, stride=2),
+                norm_layer(embed_dim // 4),
+                nn.GELU(),
+                nn.Conv2d(embed_dim // 4, embed_dim, kernel_size=2, stride=2),
+                norm_layer(embed_dim),
+            ]
+        )
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -210,14 +376,32 @@ class vit_models(nn.Module):
     with slight modifications
     """
 
-    def __init__(self, img_size=224, patch_size=16, in_chans=3, num_classes=1000, embed_dim=768, depth=12,
-                 num_heads=12, mlp_ratio=4., qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0.,
-                 drop_path_rate=0., norm_layer=nn.LayerNorm, global_pool=None,
-                 block_layers=Block,
-                 Patch_layer=PatchEmbed, act_layer=nn.GELU,
-                 Attention_block=Attention, Mlp_block=Mlp,
-                 dpr_constant=True, init_scale=1e-4,
-                 mlp_ratio_clstk=4.0):
+    def __init__(
+        self,
+        img_size=224,
+        patch_size=16,
+        in_chans=3,
+        num_classes=1000,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4.0,
+        qkv_bias=False,
+        qk_scale=None,
+        drop_rate=0.0,
+        attn_drop_rate=0.0,
+        drop_path_rate=0.0,
+        norm_layer=nn.LayerNorm,
+        global_pool=None,
+        block_layers=Block,
+        Patch_layer=PatchEmbed,
+        act_layer=nn.GELU,
+        Attention_block=Attention,
+        Mlp_block=Mlp,
+        dpr_constant=True,
+        init_scale=1e-4,
+        mlp_ratio_clstk=4.0,
+    ):
         super().__init__()
 
         self.dropout_rate = drop_rate
@@ -226,7 +410,11 @@ class vit_models(nn.Module):
         self.num_features = self.embed_dim = embed_dim
 
         self.patch_embed = Patch_layer(
-            img_size=img_size, patch_size=patch_size, in_chans=in_chans, embed_dim=embed_dim)
+            img_size=img_size,
+            patch_size=patch_size,
+            in_chans=in_chans,
+            embed_dim=embed_dim,
+        )
         num_patches = self.patch_embed.num_patches
 
         self.cls_token = nn.Parameter(oneflow.zeros(1, 1, embed_dim))
@@ -234,25 +422,41 @@ class vit_models(nn.Module):
         self.pos_embed = nn.Parameter(oneflow.zeros(1, num_patches, embed_dim))
 
         dpr = [drop_path_rate for i in range(depth)]
-        self.blocks = nn.ModuleList([
-            block_layers(
-                dim=embed_dim, num_heads=num_heads, mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale,
-                drop=0.0, attn_drop=attn_drop_rate, drop_path=dpr[i], norm_layer=norm_layer,
-                act_layer=act_layer, Attention_block=Attention_block, Mlp_block=Mlp_block, init_values=init_scale)
-            for i in range(depth)])
+        self.blocks = nn.ModuleList(
+            [
+                block_layers(
+                    dim=embed_dim,
+                    num_heads=num_heads,
+                    mlp_ratio=mlp_ratio,
+                    qkv_bias=qkv_bias,
+                    qk_scale=qk_scale,
+                    drop=0.0,
+                    attn_drop=attn_drop_rate,
+                    drop_path=dpr[i],
+                    norm_layer=norm_layer,
+                    act_layer=act_layer,
+                    Attention_block=Attention_block,
+                    Mlp_block=Mlp_block,
+                    init_values=init_scale,
+                )
+                for i in range(depth)
+            ]
+        )
 
         self.norm = norm_layer(embed_dim)
 
-        self.feature_info = [dict(num_chs=embed_dim, reduction=0, module='head')]
-        self.head = nn.Linear(embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+        self.feature_info = [dict(num_chs=embed_dim, reduction=0, module="head")]
+        self.head = (
+            nn.Linear(embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+        )
 
-        trunc_normal_(self.pos_embed, std=.02)
-        trunc_normal_(self.cls_token, std=.02)
+        trunc_normal_(self.pos_embed, std=0.02)
+        trunc_normal_(self.cls_token, std=0.02)
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=.02)
+            trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
@@ -260,7 +464,7 @@ class vit_models(nn.Module):
             nn.init.constant_(m.weight, 1.0)
 
     def no_weight_decay(self):
-        return {'pos_embed', 'cls_token'}
+        return {"pos_embed", "cls_token"}
 
     def get_classifier(self):
         return self.head
@@ -268,9 +472,11 @@ class vit_models(nn.Module):
     def get_num_layers(self):
         return len(self.blocks)
 
-    def reset_classifier(self, num_classes, global_pool=''):
+    def reset_classifier(self, num_classes, global_pool=""):
         self.num_classes = num_classes
-        self.head = nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+        self.head = (
+            nn.Linear(self.embed_dim, num_classes) if num_classes > 0 else nn.Identity()
+        )
 
     def forward_features(self, x):
         B = x.shape[0]
@@ -320,10 +526,21 @@ def deit_small_patch16_LS_224(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_small_224_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_small_224_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -350,10 +567,21 @@ def deit_small_patch16_LS_384(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=384, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=384,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_small_384_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_small_384_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -380,10 +608,21 @@ def deit_small_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_small_224_21k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_small_224_21k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -410,10 +649,21 @@ def deit_small_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=384, patch_size=16, embed_dim=384, depth=12, num_heads=6, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=384,
+        patch_size=16,
+        embed_dim=384,
+        depth=12,
+        num_heads=6,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_small_384_21k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_small_384_21k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -440,10 +690,21 @@ def deit_base_patch16_LS_224(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_base_224_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_base_224_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -470,10 +731,21 @@ def deit_base_patch16_LS_384(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=384, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=384,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_base_384_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_base_384_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -500,10 +772,21 @@ def deit_base_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_base_224_21k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_base_224_21k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -530,10 +813,21 @@ def deit_base_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=384, patch_size=16, embed_dim=768, depth=12, num_heads=12, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=384,
+        patch_size=16,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_base_384_21k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_base_384_21k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -560,10 +854,21 @@ def deit_large_patch16_LS_224(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=16,
+        embed_dim=1024,
+        depth=24,
+        num_heads=16,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_large_224_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_large_224_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -590,10 +895,21 @@ def deit_large_patch16_LS_384(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=384, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=384,
+        patch_size=16,
+        embed_dim=1024,
+        depth=24,
+        num_heads=16,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_large_384_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_large_384_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -620,10 +936,21 @@ def deit_large_patch16_LS_224_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=16,
+        embed_dim=1024,
+        depth=24,
+        num_heads=16,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_large_224_21k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_large_224_21k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -650,10 +977,21 @@ def deit_large_patch16_LS_384_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=384, patch_size=16, embed_dim=1024, depth=24, num_heads=16, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=384,
+        patch_size=16,
+        embed_dim=1024,
+        depth=24,
+        num_heads=16,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_large_384_21k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_large_384_21k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -680,10 +1018,21 @@ def deit_huge_patch14_LS_224(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=14, embed_dim=1280, depth=32, num_heads=16, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=14,
+        embed_dim=1280,
+        depth=32,
+        num_heads=16,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_huge_224_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_huge_224_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -710,9 +1059,20 @@ def deit_huge_patch14_LS_224_in21k(pretrained=False, progress=True, **kwargs):
 
     """
     model = vit_models(
-        img_size=224, patch_size=14, embed_dim=1280, depth=32, num_heads=16, mlp_ratio=4, qkv_bias=True,
-        norm_layer=partial(nn.LayerNorm, eps=1e-6), block_layers=Layer_scale_init_Block, **kwargs)
+        img_size=224,
+        patch_size=14,
+        embed_dim=1280,
+        depth=32,
+        num_heads=16,
+        mlp_ratio=4,
+        qkv_bias=True,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        block_layers=Layer_scale_init_Block,
+        **kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["deit_3_huge_224_21k_v1"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["deit_3_huge_224_21k_v1"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
