@@ -44,6 +44,9 @@ architectures for image classification:
 -  `RegionViT`_
 -  `VAN`_
 -  `MobileViT`_
+-  `DeiT-III`_
+-  `CaiT`_
+-  `DLA`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -82,6 +85,9 @@ architectures for image classification:
 .. _VAN: https://arxiv.org/pdf/2202.09741.pdf
 .. _LeViT: https://arxiv.org/pdf/2104.01136.pdf
 .. _MobileViT: https://arxiv.org/pdf/2110.02178.pdf
+.. _DeiT-III: https://arxiv.org/pdf/2204.07118.pdf
+.. _CaiT: https://arxiv.org/pdf/2103.17239.pdf
+.. _DLA: https://arxiv.org/pdf/1707.06484.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -512,6 +518,54 @@ MobileViT
         mobilevit_small,
         mobilevit_x_small,
         mobilevit_xx_small,
+
+
+DeiT-III
+--------
+.. automodule:: flowvision.models
+    :members:
+        deit_small_patch16_LS_224,
+        deit_small_patch16_LS_384,
+        deit_small_patch16_LS_224_in21k,
+        deit_small_patch16_LS_384_in21k,
+        deit_base_patch16_LS_224,
+        deit_base_patch16_LS_384,
+        deit_base_patch16_LS_224_in21k,
+        deit_base_patch16_LS_384_in21k,
+        deit_large_patch16_LS_224,
+        deit_large_patch16_LS_384,
+        deit_large_patch16_LS_224_in21k,
+        deit_large_patch16_LS_384_in21k,
+        deit_huge_patch14_LS_224,
+        deit_huge_patch14_LS_224_in21k,
+
+
+CaiT
+--------
+.. automodule:: flowvision.models
+    :members:
+        cait_XS24_384,
+        cait_S24_224,
+        cait_S24_384,
+        cait_S36_384,
+        cait_M36_384,
+        cait_M48_448,
+
+
+DLA
+--------
+.. automodule:: flowvision.models
+    :members:
+        dla34,
+        dla46_c,
+        dla46x_c,
+        dla60x_c,
+        dla60,
+        dla60x,
+        dla102,
+        dla102x,
+        dla102x2,
+        dla169,
 
 
 Neural Style Transfer
