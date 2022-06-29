@@ -12,6 +12,13 @@ from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
 
+model_urls = {
+    "genet_small": "/dataset/ldl_home/Model/pretrained/GENet_small",
+    "genet_normal": "/dataset/ldl_home/Model/pretrained/GENet_normal",
+    "genet_large": "/dataset/ldl_home/Model/pretrained/GENet_large"
+}
+
+
 def _fuse_convkx_and_bn_(convkx, bn):
     the_weight_scale = bn.weight / flow.sqrt(bn.running_var + bn.eps)
     convkx.weight[:] = convkx.weight * the_weight_scale.view((-1, 1, 1, 1))
@@ -1379,67 +1386,45 @@ CONFIG = {
              "RELU(uuidd2b39caab4cb4ac2b6905b18858c0037|2560)AdaptiveAvgPool(2560,1)"
 }
 
-
-
-# def download_pth(param_dir):
-#     import urllib.request
-#     import distutils.dir_util
-#     distutils.dir_util.mkpath(param_dir)
-#     model_url_dict = {
-#         'GENet_large.pth': 'https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/GENet/GENet_large.pth',
-#         'GENet_small.pth': 'https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/GENet/GENet_small.pth',
-#         'GENet_normal.pth': 'https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/GENet/GENet_normal.pth',
-#     }
-#     for pth_fn, url_path in model_url_dict.items():
-#         print('downloadinig {} to {}'.format(url_path, pth_fn))
-#         urllib.request.urlretrieve(url=url_path, filename=os.path.join(param_dir, pth_fn))
-
-
+# 31.07828M
+# Acc@1: 81.300, Acc@1-Error: 18.700, Acc@5: 95.386, Acc@5-Error: 4.614
 @ModelCreator.register_model
 def genet_large(pretrained: bool = False, progress: bool = True, **kwargs):
     plainnet_struct = CONFIG['large']
     model = PlainNet(plainnet_struct=plainnet_struct, **kwargs)
 
-    # if pretrained:
-    #     pth_file = os.path.join(root, 'GENet_large.pth')
-    #     if not os.path.isfile(pth_file):
-    #         if not os.path.isfile(pth_file):
-    #             download_pth(param_dir=root)
-    #
-    #     checkpoint = flow.load(pth_file, map_location='cpu')
-    #     model.load_state_dict(checkpoint['state_dict'], strict=True)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["genet_large"], progress=progress)
+        state_dict = flow.load(model_urls["genet_large"])
+        model.load_state_dict(state_dict)
 
     return model
 
 
+# 21.14292M
+# Acc@1: 79.616, Acc@1-Error: 20.384, Acc@5: 94.512, Acc@5-Error: 5.488
 @ModelCreator.register_model
 def genet_normal(pretrained: bool = False, progress: bool = True, **kwargs):
     plainnet_struct = CONFIG['normal']
     model = PlainNet(plainnet_struct=plainnet_struct, **kwargs)
 
-    # if pretrained:
-    #     pth_file = os.path.join(root, 'GENet_normal.pth')
-    #     if not os.path.isfile(pth_file):
-    #         if not os.path.isfile(pth_file):
-    #             download_pth(param_dir=root)
-    #
-    #     checkpoint = flow.load(pth_file, map_location='cpu')
-    #     model.load_state_dict(checkpoint['state_dict'], strict=True)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["genet_normal"], progress=progress)
+        state_dict = flow.load(model_urls["genet_normal"])
+        model.load_state_dict(state_dict)
 
     return model
 
-
+# 8.173761M
+# Acc@1: 75.342, Acc@1-Error: 24.658, Acc@5: 92.238, Acc@5-Error: 7.762
 @ModelCreator.register_model
 def genet_small(pretrained: bool = False, progress: bool = True, **kwargs):
     plainnet_struct = CONFIG['small']
     model = PlainNet(plainnet_struct=plainnet_struct, **kwargs)
 
-    # if pretrained:
-    #     pth_file = os.path.join(root, 'GENet_small.pth')
-    #     if not os.path.isfile(pth_file):
-    #         download_pth(param_dir=root)
-    #
-    #     checkpoint = flow.load(pth_file, map_location='cpu')
-    #     model.load_state_dict(checkpoint['state_dict'], strict=True)
+    if pretrained:
+        # state_dict = load_state_dict_from_url(model_urls["genet_small"], progress=progress)
+        state_dict = flow.load(model_urls["genet_small"])
+        model.load_state_dict(state_dict)
 
     return model
