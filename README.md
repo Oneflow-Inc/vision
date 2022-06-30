@@ -87,6 +87,7 @@ pip install flowvision==0.1.0
             <li>DeiT-III</li>
             <li>CaiT</li>
             <li>DLA</li>
+            <li>GENet</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>

@@ -11,11 +11,10 @@ import numpy as np
 from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
-
 model_urls = {
-    "genet_small": "/dataset/ldl_home/Model/pretrained/GENet_small",
-    "genet_normal": "/dataset/ldl_home/Model/pretrained/GENet_normal",
-    "genet_large": "/dataset/ldl_home/Model/pretrained/GENet_large"
+    "genet_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/GENet/GENet_small.zip",
+    "genet_normal": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/GENet/GENet_normal.zip",
+    "genet_large": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/GENet/GENet_large.zip"
 }
 
 
@@ -28,11 +27,10 @@ def _fuse_convkx_and_bn_(convkx, bn):
     bn.bias[:] = bn.bias - the_bias_shift
     bn.running_var[:] = 1.0 - bn.eps
     bn.running_mean[:] = 0.0
-    # convkx.register_parameter('bias', bn.bias)
     convkx.bias = nn.Parameter(bn.bias)
 
-def remove_bn_in_superblock(super_block):
 
+def remove_bn_in_superblock(super_block):
     new_shortcut_list = []
     for the_seq_list in super_block.shortcut_list:
         assert isinstance(the_seq_list, nn.Sequential)
@@ -41,7 +39,6 @@ def remove_bn_in_superblock(super_block):
         for block in the_seq_list:
             if isinstance(block, nn.BatchNorm2d):
                 _fuse_convkx_and_bn_(last_block, block)
-                # print('--debug fuse shortcut bn')
             else:
                 new_seq_list.append(block)
             last_block = block
@@ -57,7 +54,6 @@ def remove_bn_in_superblock(super_block):
         for block in the_seq_list:
             if isinstance(block, nn.BatchNorm2d):
                 _fuse_convkx_and_bn_(last_block, block)
-                # print('--debug fuse conv bn')
             else:
                 new_seq_list.append(block)
             last_block = block
@@ -85,12 +81,10 @@ def fuse_bn(model):
         else:
             continue
 
-
     model.block_list = new_block_list
     model.module_list = nn.ModuleList(new_block_list)
 
     return model
-#------------ end of fuse bn --------
 
 
 def _create_netblock_list_from_str_(s, no_create=False):
@@ -108,14 +102,14 @@ def _create_netblock_list_from_str_(s, no_create=False):
                 if len(s) > 0 and s[0] == ';':
                     return block_list, s[1:]
                 break
-            pass  # end if
-        pass  # end for
+            pass
+        pass
         assert is_found_block_class
-    pass  # end while
+    pass
     return block_list, ''
 
+
 def _get_right_parentheses_index_(s):
-    # assert s[0] == '('
     left_paren_count = 0
     for index, x in enumerate(s):
 
@@ -130,10 +124,6 @@ def _get_right_parentheses_index_(s):
     return None
 
 
-
-'''
--------------------- GENet Blocks --------------------
-'''
 class PlainNetBasicBlockClass(nn.Module):
     def __init__(self, in_channels=0, out_channels=0, stride=1, no_create=False, block_name=None, **kwargs):
         super(PlainNetBasicBlockClass, self).__init__(**kwargs)
@@ -166,7 +156,7 @@ class PlainNetBasicBlockClass(nn.Module):
         out_channels = int(param_str_split[1])
         stride = int(param_str_split[2])
         return PlainNetBasicBlockClass(in_channels=in_channels, out_channels=out_channels, stride=stride,
-                               block_name=tmp_block_name, no_create=no_create), s[idx + 1:]
+                                       block_name=tmp_block_name, no_create=no_create), s[idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -188,7 +178,6 @@ class AdaptiveAvgPool(PlainNetBasicBlockClass):
 
     def forward(self, x):
         return self.netblock(x)
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -218,6 +207,7 @@ class AdaptiveAvgPool(PlainNetBasicBlockClass):
         else:
             return False
 
+
 class BN(PlainNetBasicBlockClass):
     def __init__(self, out_channels=None, copy_from=None, no_create=False, block_name=None, **kwargs):
         super(BN, self).__init__(**kwargs)
@@ -239,7 +229,6 @@ class BN(PlainNetBasicBlockClass):
 
     def forward(self, x):
         return self.netblock(x)
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -305,7 +294,6 @@ class ConvDW(PlainNetBasicBlockClass):
         output = self.netblock(x)
         return output
 
-
     @staticmethod
     def create_from_str(s, no_create=False):
         assert ConvDW.is_instance_from_str(s)
@@ -325,7 +313,8 @@ class ConvDW(PlainNetBasicBlockClass):
         kernel_size = int(split_str[1])
         stride = int(split_str[2])
         return ConvDW(out_channels=out_channels,
-                      kernel_size=kernel_size, stride=stride, no_create=no_create, block_name=tmp_block_name), s[idx + 1:]
+                      kernel_size=kernel_size, stride=stride, no_create=no_create, block_name=tmp_block_name), s[
+                                                                                                               idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -375,7 +364,6 @@ class ConvKX(PlainNetBasicBlockClass):
 
         return output
 
-
     @staticmethod
     def create_from_str(s, no_create=False):
         assert ConvKX.is_instance_from_str(s)
@@ -396,7 +384,8 @@ class ConvKX(PlainNetBasicBlockClass):
         kernel_size = int(split_str[2])
         stride = int(split_str[3])
         return ConvKX(in_channels=in_channels, out_channels=out_channels,
-                      kernel_size=kernel_size, stride=stride, no_create=no_create, block_name=tmp_block_name), s[idx + 1:]
+                      kernel_size=kernel_size, stride=stride, no_create=no_create, block_name=tmp_block_name), s[
+                                                                                                               idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -415,7 +404,6 @@ class Flatten(PlainNetBasicBlockClass):
 
     def forward(self, x):
         return flow.flatten(x, 1)
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -470,7 +458,6 @@ class Linear(PlainNetBasicBlockClass):
     def forward(self, x):
         return self.netblock(x)
 
-
     @staticmethod
     def create_from_str(s, no_create=False):
         assert Linear.is_instance_from_str(s)
@@ -491,8 +478,7 @@ class Linear(PlainNetBasicBlockClass):
         bias = int(split_str[2])
 
         return Linear(in_channels=in_channels, out_channels=out_channels, bias=bias == 1,
-            block_name=tmp_block_name, no_create=no_create), s[idx+1 :]
-
+                      block_name=tmp_block_name, no_create=no_create), s[idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -500,6 +486,7 @@ class Linear(PlainNetBasicBlockClass):
             return True
         else:
             return False
+
 
 class MaxPool(PlainNetBasicBlockClass):
     def __init__(self, out_channels, kernel_size, stride, no_create=False, block_name=None, **kwargs):
@@ -515,7 +502,6 @@ class MaxPool(PlainNetBasicBlockClass):
 
     def forward(self, x):
         return self.netblock(x)
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -598,9 +584,10 @@ class MultiSumBlock(PlainNetBasicBlockClass):
         pass  # end while
 
         if len(the_inner_block_list) == 0:
-            return None, s[idx+1:]
+            return None, s[idx + 1:]
 
-        return MultiSumBlock(inner_block_list=the_inner_block_list, block_name=tmp_block_name, no_create=no_create), s[idx+1:]
+        return MultiSumBlock(inner_block_list=the_inner_block_list, block_name=tmp_block_name, no_create=no_create), s[
+                                                                                                                     idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -608,7 +595,6 @@ class MultiSumBlock(PlainNetBasicBlockClass):
             return True
         else:
             return False
-
 
 
 class RELU(PlainNetBasicBlockClass):
@@ -620,7 +606,6 @@ class RELU(PlainNetBasicBlockClass):
 
     def forward(self, x):
         return F.relu(x)
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -637,7 +622,7 @@ class RELU(PlainNetBasicBlockClass):
             param_str = param_str[tmp_idx + 1:]
 
         out_channels = int(param_str)
-        return RELU(out_channels=out_channels, no_create=no_create, block_name=tmp_block_name), s[idx+1:]
+        return RELU(out_channels=out_channels, no_create=no_create, block_name=tmp_block_name), s[idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -646,10 +631,12 @@ class RELU(PlainNetBasicBlockClass):
         else:
             return False
 
+
 class ResBlock(PlainNetBasicBlockClass):
     '''
     ResBlock(in_channles, inner_blocks_str). If in_channels is missing, use inner_block_list[0].in_channels as in_channels
     '''
+
     def __init__(self, inner_block_list, in_channels=None, stride=None, no_create=False, block_name=None, **kwargs):
         super(ResBlock, self).__init__(**kwargs)
         self.block_name = block_name
@@ -671,7 +658,7 @@ class ResBlock(PlainNetBasicBlockClass):
 
     def forward(self, x):
         if self.stride > 1:
-            downsampled_x = F.avg_pool2d(x, kernel_size=self.stride + 1, stride=self.stride, padding=self.stride//2)
+            downsampled_x = F.avg_pool2d(x, kernel_size=self.stride + 1, stride=self.stride, padding=self.stride // 2)
         else:
             downsampled_x = x
 
@@ -684,8 +671,6 @@ class ResBlock(PlainNetBasicBlockClass):
         output = output + downsampled_x
 
         return output
-
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -703,12 +688,13 @@ class ResBlock(PlainNetBasicBlockClass):
             param_str = param_str[tmp_idx + 1:]
 
         first_comma_index = param_str.find(',')
-        if first_comma_index < 0 or not param_str[0:first_comma_index].isdigit():  # cannot parse in_channels, missing, use default
+        if first_comma_index < 0 or not param_str[
+                                        0:first_comma_index].isdigit():  # cannot parse in_channels, missing, use default
             in_channels = None
             the_inner_block_list, remaining_s = _create_netblock_list_from_str_(param_str, no_create=no_create)
         else:
             in_channels = int(param_str[0:first_comma_index])
-            param_str = param_str[first_comma_index+1:]
+            param_str = param_str[first_comma_index + 1:]
             second_comma_index = param_str.find(',')
             if second_comma_index < 0 or not param_str[0:second_comma_index].isdigit():
                 the_inner_block_list, remaining_s = _create_netblock_list_from_str_(param_str, no_create=no_create)
@@ -721,9 +707,9 @@ class ResBlock(PlainNetBasicBlockClass):
 
         assert len(remaining_s) == 0
         if the_inner_block_list is None or len(the_inner_block_list) == 0:
-            return None, s[idx+1:]
+            return None, s[idx + 1:]
         return ResBlock(inner_block_list=the_inner_block_list, in_channels=in_channels,
-                        stride=the_stride, no_create=no_create, block_name=tmp_block_name), s[idx+1:]
+                        stride=the_stride, no_create=no_create, block_name=tmp_block_name), s[idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -757,12 +743,11 @@ class Sequential(PlainNetBasicBlockClass):
 
         return output
 
-
     @staticmethod
     def create_from_str(s, no_create=False):
         assert Sequential.is_instance_from_str(s)
         the_right_paraen_idx = _get_right_parentheses_index_(s)
-        param_str = s[len('Sequential(')+1:the_right_paraen_idx]
+        param_str = s[len('Sequential(') + 1:the_right_paraen_idx]
         # find block_name
         tmp_idx = param_str.find('|')
         if tmp_idx < 0:
@@ -784,10 +769,10 @@ class Sequential(PlainNetBasicBlockClass):
         else:
             return False
 
+
 '''
 Super Blocks
 '''
-
 
 
 class SuperResKXKX(PlainNetBasicBlockClass):
@@ -822,7 +807,7 @@ class SuperResKXKX(PlainNetBasicBlockClass):
 
             the_conv_block = nn.Sequential(
                 nn.Conv2d(current_in_channels, current_expansion_channel, kernel_size=current_kernel_size,
-                          stride=current_stride, padding=(current_kernel_size-1)//2, bias=False),
+                          stride=current_stride, padding=(current_kernel_size - 1) // 2, bias=False),
                 nn.BatchNorm2d(current_expansion_channel),
                 nn.ReLU(),
                 nn.Conv2d(current_expansion_channel, current_out_channels, kernel_size=current_kernel_size,
@@ -835,13 +820,12 @@ class SuperResKXKX(PlainNetBasicBlockClass):
                 shortcut = nn.Sequential()
             else:
                 shortcut = nn.Sequential(
-                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride, padding=0,
+                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride,
+                              padding=0,
                               bias=False),
                     nn.BatchNorm2d(current_out_channels))
             self.shortcut_list.append(shortcut)
         pass  # end for
-
-
 
     def forward(self, x):
         output = x
@@ -850,7 +834,6 @@ class SuperResKXKX(PlainNetBasicBlockClass):
             output = conv_output + shortcut(output)
             output = F.relu(output)
         return output
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -886,7 +869,6 @@ class SuperResKXKX(PlainNetBasicBlockClass):
             return True
         else:
             return False
-
 
 
 class SuperResK1KX(PlainNetBasicBlockClass):
@@ -934,13 +916,12 @@ class SuperResK1KX(PlainNetBasicBlockClass):
                 shortcut = nn.Sequential()
             else:
                 shortcut = nn.Sequential(
-                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride, padding=0,
+                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride,
+                              padding=0,
                               bias=False),
                     nn.BatchNorm2d(current_out_channels))
             self.shortcut_list.append(shortcut)
         pass  # end for
-
-
 
     def forward(self, x):
         output = x
@@ -1036,13 +1017,12 @@ class SuperResK1KXK1(PlainNetBasicBlockClass):
                 shortcut = nn.Sequential()
             else:
                 shortcut = nn.Sequential(
-                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride, padding=0,
+                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride,
+                              padding=0,
                               bias=False),
                     nn.BatchNorm2d(current_out_channels))
             self.shortcut_list.append(shortcut)
         pass  # end for
-
-
 
     def forward(self, x):
         output = x
@@ -1051,7 +1031,6 @@ class SuperResK1KXK1(PlainNetBasicBlockClass):
             output = conv_output + shortcut(output)
             output = F.relu(output)
         return output
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -1077,9 +1056,9 @@ class SuperResK1KXK1(PlainNetBasicBlockClass):
         sublayers = int(param_str_split[5])
 
         return SuperResK1KXK1(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
-                            stride=stride, expansion=expansion, sublayers=sublayers,
-                            block_name=tmp_block_name,
-                            no_create=no_create), s[idx + 1:]
+                              stride=stride, expansion=expansion, sublayers=sublayers,
+                              block_name=tmp_block_name,
+                              no_create=no_create), s[idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -1087,8 +1066,6 @@ class SuperResK1KXK1(PlainNetBasicBlockClass):
             return True
         else:
             return False
-
-
 
 
 class SuperResK1DWK1(PlainNetBasicBlockClass):
@@ -1142,13 +1119,12 @@ class SuperResK1DWK1(PlainNetBasicBlockClass):
                 shortcut = nn.Sequential()
             else:
                 shortcut = nn.Sequential(
-                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride, padding=0,
+                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride,
+                              padding=0,
                               bias=False),
                     nn.BatchNorm2d(current_out_channels))
             self.shortcut_list.append(shortcut)
         pass  # end for
-
-
 
     def forward(self, x):
         output = x
@@ -1157,8 +1133,6 @@ class SuperResK1DWK1(PlainNetBasicBlockClass):
             output = conv_output + shortcut(output)
             output = F.relu(output)
         return output
-
-
 
     @staticmethod
     def create_from_str(s, no_create=False):
@@ -1184,9 +1158,9 @@ class SuperResK1DWK1(PlainNetBasicBlockClass):
         sublayers = int(param_str_split[5])
 
         return SuperResK1DWK1(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
-                            stride=stride, expansion=expansion, sublayers=sublayers,
-                            block_name=tmp_block_name,
-                            no_create=no_create), s[idx + 1:]
+                              stride=stride, expansion=expansion, sublayers=sublayers,
+                              block_name=tmp_block_name,
+                              no_create=no_create), s[idx + 1:]
 
     @staticmethod
     def is_instance_from_str(s):
@@ -1243,13 +1217,12 @@ class SuperResK1DW(PlainNetBasicBlockClass):
                 shortcut = nn.Sequential()
             else:
                 shortcut = nn.Sequential(
-                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride, padding=0,
+                    nn.Conv2d(current_in_channels, current_out_channels, kernel_size=1, stride=current_stride,
+                              padding=0,
                               bias=False),
                     nn.BatchNorm2d(current_out_channels))
             self.shortcut_list.append(shortcut)
         pass  # end for
-
-
 
     def forward(self, x):
         output = x
@@ -1386,45 +1359,92 @@ CONFIG = {
              "RELU(uuidd2b39caab4cb4ac2b6905b18858c0037|2560)AdaptiveAvgPool(2560,1)"
 }
 
-# 31.07828M
-# Acc@1: 81.300, Acc@1-Error: 18.700, Acc@5: 95.386, Acc@5-Error: 4.614
+
 @ModelCreator.register_model
 def genet_large(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs GENet-large 256x256 model pretrained on ImageNet-1k.
+
+    .. note::
+        GENet-large 256x256 model from `"Neural Architecture Design for GPU-Efficient Networks" <https://arxiv.org/pdf/2006.14090>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> genet_large = flowvision.models.genet_large(pretrained=False, progress=True)
+
+    """
     plainnet_struct = CONFIG['large']
     model = PlainNet(plainnet_struct=plainnet_struct, **kwargs)
 
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["genet_large"], progress=progress)
-        state_dict = flow.load(model_urls["genet_large"])
+        state_dict = load_state_dict_from_url(model_urls["genet_large"], progress=progress)
         model.load_state_dict(state_dict)
 
     return model
 
 
-# 21.14292M
-# Acc@1: 79.616, Acc@1-Error: 20.384, Acc@5: 94.512, Acc@5-Error: 5.488
 @ModelCreator.register_model
 def genet_normal(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs GENet-normal 192x192 model pretrained on ImageNet-1k.
+
+    .. note::
+        GENet-normal 192x192 model from `"Neural Architecture Design for GPU-Efficient Networks" <https://arxiv.org/pdf/2006.14090>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> genet_normal = flowvision.models.genet_normal(pretrained=False, progress=True)
+
+    """
     plainnet_struct = CONFIG['normal']
     model = PlainNet(plainnet_struct=plainnet_struct, **kwargs)
 
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["genet_normal"], progress=progress)
-        state_dict = flow.load(model_urls["genet_normal"])
+        state_dict = load_state_dict_from_url(model_urls["genet_normal"], progress=progress)
         model.load_state_dict(state_dict)
 
     return model
 
-# 8.173761M
-# Acc@1: 75.342, Acc@1-Error: 24.658, Acc@5: 92.238, Acc@5-Error: 7.762
+
 @ModelCreator.register_model
 def genet_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs GENet-small 192x192 model pretrained on ImageNet-1k.
+
+    .. note::
+        GENet-small 192x192 model from `"Neural Architecture Design for GPU-Efficient Networks" <https://arxiv.org/pdf/2006.14090>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> genet_small = flowvision.models.genet_small(pretrained=False, progress=True)
+
+    """
     plainnet_struct = CONFIG['small']
     model = PlainNet(plainnet_struct=plainnet_struct, **kwargs)
 
     if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls["genet_small"], progress=progress)
-        state_dict = flow.load(model_urls["genet_small"])
+        state_dict = load_state_dict_from_url(model_urls["genet_small"], progress=progress)
         model.load_state_dict(state_dict)
 
     return model

@@ -47,6 +47,7 @@ architectures for image classification:
 -  `DeiT-III`_
 -  `CaiT`_
 -  `DLA`_
+-  `GENet`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -88,6 +89,7 @@ architectures for image classification:
 .. _DeiT-III: https://arxiv.org/pdf/2204.07118.pdf
 .. _CaiT: https://arxiv.org/pdf/2103.17239.pdf
 .. _DLA: https://arxiv.org/pdf/1707.06484.pdf
+.. _GENet: https://arxiv.org/pdf/2006.14090.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -566,6 +568,15 @@ DLA
         dla102x,
         dla102x2,
         dla169,
+
+
+GENet
+--------
+.. automodule:: flowvision.models
+    :members:
+        genet_small,
+        genet_normal,
+        genet_large
 
 
 Neural Style Transfer
