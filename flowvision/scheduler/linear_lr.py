@@ -12,6 +12,23 @@ from .scheduler import Scheduler
 
 
 class LinearLRScheduler(Scheduler):
+    """
+    Linear warmup and linear decay scheduler
+
+    Inspiration from
+    https://github.com/microsoft/Swin-Transformer/blob/main/lr_scheduler.py
+
+    Args:
+        optimizer: The optimizer will be used for the training process
+        t_initial: The initial number of epochs. Example, 50, 100 etc.
+        t_mul: updates the SGDR schedule annealing.
+        lr_min_rate: The minimum learning rate factor to use during the scheduling. 
+            The learning rate does not ever go below to ``lr * lr_min_rate``.
+        warmup_t: Defines the number of warmup epochs.
+        warmup_lr_init: The initial learning rate during warmup.
+
+    """
+
     def __init__(
         self,
         optimizer: flow.optim.Optimizer,

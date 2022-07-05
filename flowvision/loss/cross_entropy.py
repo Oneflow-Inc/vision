@@ -1,6 +1,5 @@
 import oneflow as flow
 import oneflow.nn as nn
-import oneflow.nn.functional as F
 
 
 class LabelSmoothingCrossEntropy(nn.Module):
@@ -26,6 +25,9 @@ class LabelSmoothingCrossEntropy(nn.Module):
 
 
 class SoftTargetCrossEntropy(nn.Module):
+    """Soft target CrossEntropy loss
+    """
+
     def __init__(self):
         super(SoftTargetCrossEntropy, self).__init__()
 

@@ -1,15 +1,22 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/roi_heads.py
+"""
 from typing import Optional, List, Dict, Tuple
 
 import oneflow as flow
 import oneflow.nn.functional as F
 from oneflow import nn, Tensor
-from flowvision.layers.blocks import boxes as box_ops
+from flowvision.layers import boxes as box_ops, roi_align
 
 from . import det_utils
 
 
-def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
-    # type: (Tensor, Tensor, List[Tensor], List[Tensor]) -> Tuple[Tensor, Tensor]
+def fastrcnn_loss(
+    class_logits: Tensor,
+    box_regression: Tensor,
+    labels: List[Tensor],
+    regression_targets: List[Tensor],
+) -> Tuple[Tensor, Tensor]:
     """
     Computes the loss for Faster R-CNN.
 
@@ -27,9 +34,7 @@ def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
     labels = flow.cat(labels, dim=0)
     regression_targets = flow.cat(regression_targets, dim=0)
 
-    classification_loss = flow._C.cross_entropy(
-        class_logits, labels, ignore_index=-100, reduction="none",
-    )
+    classification_loss = flow._C.cross_entropy(class_logits, labels)
 
     # get indices that correspond to the regression targets for
     # the corresponding ground truth labels, to be used with
@@ -50,6 +55,154 @@ def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
     return classification_loss, box_loss
 
 
+def maskrcnn_inference(x: Tensor, labels: List[Tensor]) -> List[Tensor]:
+    """
+    From the results of the CNN, post process the masks
+    by taking the mask corresponding to the class with max
+    probability (which are of fixed size and directly output
+    by the CNN) and return the masks in the mask field of the BoxList.
+
+    Args:
+        x (Tensor): the mask logits
+        labels (list[BoxList]): bounding boxes that are used as
+            reference, one for ech image
+
+    Returns:
+        results (list[BoxList]): one BoxList for each image, containing
+            the extra field mask
+    """
+    mask_prob = x.sigmoid()
+
+    # select masks corresponding to the predicted classes
+    num_masks = x.shape[0]
+    boxes_per_image = [label.shape[0] for label in labels]
+    labels = flow.cat(labels)
+    index = flow.arange(num_masks, device=labels.device)
+    mask_prob = mask_prob[index, labels][:, None]
+    mask_prob = mask_prob.split(boxes_per_image, dim=0)
+
+    return mask_prob
+
+
+def project_masks_on_boxes(
+    gt_masks: Tensor, boxes: Tensor, matched_idxs: Tensor, M: int
+) -> Tensor:
+    """
+    Given segmentation masks and the bounding boxes corresponding
+    to the location of the masks in the image, this function
+    crops and resizes the masks in the position defined by the
+    boxes. This prepares the masks for them to be fed to the
+    loss computation as the targets.
+    """
+    matched_idxs = matched_idxs.to(boxes)
+    rois = flow.cat([matched_idxs[:, None], boxes], dim=1)
+    gt_masks = gt_masks[:, None].to(rois)
+    return roi_align(gt_masks, rois, (M, M), 1.0)[:, 0]
+
+
+def maskrcnn_loss(
+    mask_logits: Tensor,
+    proposals: List[Tensor],
+    gt_masks: List[Tensor],
+    gt_labels: List[Tensor],
+    mask_matched_idxs: List[Tensor],
+) -> Tensor:
+    """
+    Args:
+        proposals (list[BoxList])
+        mask_logits (Tensor)
+        targets (list[BoxList])
+
+    Return:
+        mask_loss (Tensor): scalar tensor containing the loss
+    """
+
+    discretization_size = mask_logits.shape[-1]
+    labels = [gt_label[idxs] for gt_label, idxs in zip(gt_labels, mask_matched_idxs)]
+    mask_targets = [
+        project_masks_on_boxes(m, p, i, discretization_size)
+        for m, p, i in zip(gt_masks, proposals, mask_matched_idxs)
+    ]
+
+    labels = flow.cat(labels, dim=0)
+    mask_targets = flow.cat(mask_targets, dim=0)
+
+    if mask_targets.numel() == 0:
+        return mask_logits.sum() * 0
+
+    mask_loss = flow._C.binary_cross_entropy_with_logits_loss(
+        mask_logits[flow.arange(labels.shape[0], device=labels.device), labels],
+        mask_targets,
+        reduction="mean",
+    )
+    return mask_loss
+
+
+def expand_boxes(boxes: Tensor, scale: float) -> Tensor:
+    w_half = (boxes[:, 2] - boxes[:, 0]) * 0.5
+    h_half = (boxes[:, 3] - boxes[:, 1]) * 0.5
+    x_c = (boxes[:, 2] + boxes[:, 0]) * 0.5
+    y_c = (boxes[:, 3] + boxes[:, 1]) * 0.5
+
+    w_half *= scale
+    h_half *= scale
+
+    boxes_exp = flow.zeros_like(boxes)
+    boxes_exp[:, 0] = x_c - w_half
+    boxes_exp[:, 2] = x_c + w_half
+    boxes_exp[:, 1] = y_c - h_half
+    boxes_exp[:, 3] = y_c + h_half
+    return boxes_exp
+
+
+def expand_masks(mask: Tensor, padding: int) -> Tuple[Tensor, float]:
+    M = mask.shape[-1]
+    scale = float(M + 2 * padding) / M
+    padded_mask = F.pad(mask, (padding,) * 4)
+    return padded_mask, scale
+
+
+def paste_mask_in_image(mask: Tensor, box: Tensor, im_h: int, im_w: int) -> Tensor:
+    TO_REMOVE = 1
+    w = int(box[2] - box[0] + TO_REMOVE)
+    h = int(box[3] - box[1] + TO_REMOVE)
+    w = max(w, 1)
+    h = max(h, 1)
+
+    # Set shape to [batchxCxHxW]
+    mask = mask.expand((1, 1, -1, -1))
+
+    # Resize mask
+    mask = F.interpolate(mask, size=(h, w), mode="bilinear", align_corners=False)
+    mask = mask[0][0]
+
+    im_mask = flow.zeros((im_h, im_w), dtype=mask.dtype, device=mask.device)
+    x_0 = max(int(box[0]), 0)
+    x_1 = min(int(box[2]) + 1, im_w)
+    y_0 = max(int(box[1]), 0)
+    y_1 = min(int(box[3]) + 1, im_h)
+
+    im_mask[y_0:y_1, x_0:x_1] = mask[
+        (y_0 - box[1]) : (y_1 - box[1]), (x_0 - box[0]) : (x_1 - box[0])
+    ]
+    return im_mask
+
+
+def paste_masks_in_image(
+    masks: Tensor, boxes: Tensor, img_shape: Tuple[int, int], padding: int = 1
+) -> Tensor:
+    masks, scale = expand_masks(masks, padding=padding)
+    boxes = expand_boxes(boxes, scale).to(dtype=flow.int64)
+    im_h, im_w = img_shape
+
+    res = [paste_mask_in_image(m[0], b, im_h, im_w) for m, b in zip(masks, boxes)]
+    if len(res) > 0:
+        ret = flow.stack(res, dim=0)[:, None]
+    else:
+        ret = flow.empty((0, 1, im_h, im_w), dtype=masks.dtype, device=masks.device)
+    return ret
+
+
 class RoIHeads(nn.Module):
     __annotations__ = {
         "box_coder": det_utils.BoxCoder,
@@ -59,26 +212,26 @@ class RoIHeads(nn.Module):
 
     def __init__(
         self,
-        box_roi_pool,
-        box_head,
-        box_predictor,
+        box_roi_pool: nn.Module,
+        box_head: nn.Module,
+        box_predictor: nn.Module,
         # Faster R-CNN training
-        fg_iou_thresh,
-        bg_iou_thresh,
-        batch_size_per_image,
-        positive_fraction,
-        bbox_reg_weights,
+        fg_iou_thresh: float,
+        bg_iou_thresh: float,
+        batch_size_per_image: int,
+        positive_fraction: float,
+        bbox_reg_weights: float,
         # Faster R-CNN inference
-        score_thresh,
-        nms_thresh,
-        detections_per_img,
+        score_thresh: float,
+        nms_thresh: float,
+        detections_per_img: int,
         # Mask
-        mask_roi_pool=None,
-        mask_head=None,
-        mask_predictor=None,
-        keypoint_roi_pool=None,
-        keypoint_head=None,
-        keypoint_predictor=None,
+        mask_roi_pool: Optional[nn.Module] = None,
+        mask_head: Optional[nn.Module] = None,
+        mask_predictor: Optional[nn.Module] = None,
+        keypoint_roi_pool: Optional[nn.Module] = None,
+        keypoint_head: Optional[nn.Module] = None,
+        keypoint_predictor: Optional[nn.Module] = None,
     ):
         super().__init__()
 
@@ -130,8 +283,9 @@ class RoIHeads(nn.Module):
             return False
         return True
 
-    def assign_targets_to_proposals(self, proposals, gt_boxes, gt_labels):
-        # type: (List[Tensor], List[Tensor], List[Tensor]) -> Tuple[List[Tensor], List[Tensor]]
+    def assign_targets_to_proposals(
+        self, proposals: List[Tensor], gt_boxes: List[Tensor], gt_labels: List[Tensor]
+    ) -> Tuple[List[Tensor], List[Tensor]]:
         matched_idxs = []
         labels = []
         for proposals_in_image, gt_boxes_in_image, gt_labels_in_image in zip(
@@ -194,22 +348,23 @@ class RoIHeads(nn.Module):
 
         return proposals
 
-    def check_targets(self, targets):
-        # type: (Optional[List[Dict[str, Tensor]]]) -> None
-        assert targets is not None
-        assert all(["boxes" in t for t in targets])
-        assert all(["labels" in t for t in targets])
+    def check_targets(self, targets: Optional[List[Dict[str, Tensor]]]) -> None:
+        if targets is None:
+            raise ValueError("targets should not be None")
+        if not all(["boxes" in t for t in targets]):
+            raise ValueError("Every element of targets should have a boxes key")
+        if not all(["labels" in t for t in targets]):
+            raise ValueError("Every element of targets should have a labels key")
         if self.has_mask():
-            assert all(["masks" in t for t in targets])
+            if not all(["masks" in t for t in targets]):
+                raise ValueError("Every element of targets should have a masks key")
 
     def select_training_samples(
-        self,
-        proposals,  # type: List[Tensor]
-        targets,  # type: Optional[List[Dict[str, Tensor]]]
-    ):
-        # type: (...) -> Tupel[List[Tensor], List[Tensor], List[Tensor], List[Tensor]]
+        self, proposals: List[Tensor], targets: Optional[List[Dict[str, Tensor]]],
+    ) -> Tuple[List[Tensor], List[Tensor], List[Tensor], List[Tensor]]:
         self.check_targets(targets)
-        assert targets is not None
+        if targets is None:
+            raise ValueError("targets should not be None")
         dtype = proposals[0].dtype
         device = proposals[0].device
 
@@ -220,7 +375,7 @@ class RoIHeads(nn.Module):
         proposals = self.add_gt_proposals(proposals, gt_boxes)
 
         # get matching gt indices for each proposal
-        matched_idxs, labels = self.assign_target_to_proposals(
+        matched_idxs, labels = self.assign_targets_to_proposals(
             proposals, gt_boxes, gt_labels
         )
         # sample a fixed proportion of positive-negative proposals
@@ -243,12 +398,11 @@ class RoIHeads(nn.Module):
 
     def postprocess_detections(
         self,
-        class_logits,  # type: Tensor
-        box_regression,  # type: Tensor
-        proposals,  # type: List[Tensor]
-        image_shapes,  # type: List[Tuple[int, int]]
-    ):
-        # type: (...) -> Tuple[List[Tensor], List[Tensor], List[Tensor]]s
+        class_logits: Tensor,
+        box_regression: Tensor,
+        proposals: List[Tensor],
+        image_shapes: List[Tuple[int, int]],
+    ) -> Tuple[List[Tensor], List[Tensor], List[Tensor]]:
         device = class_logits.device
         num_classes = class_logits.shape[-1]
 
@@ -304,12 +458,11 @@ class RoIHeads(nn.Module):
 
     def forward(
         self,
-        features,  # type: Dict[str, Tensor]
-        proposals,  # type: List[Tensor]
-        image_shapes,  # type: List
-        targets=None,  # type: Optional[List[Dict[str, Tensor]]]
+        features: Dict[str, Tensor],
+        proposals: List[Tensor],
+        image_shapes: List[Tuple[int, int]],
+        targets: Optional[List[Dict[str, Tensor]]] = None,
     ):
-        # type: (...) -> Tuple[List[Dict[str, Tensor]], Dict[str, Tensor]]
         """
         Args:
             features (List[Tensor])
@@ -320,16 +473,19 @@ class RoIHeads(nn.Module):
         if targets is not None:
             for t in targets:
                 floating_point_types = (flow.float, flow.double, flow.half)
-                assert (
-                    t["boxes"].dtype in floating_point_types
-                ), "target boxes must of float type"
-                assert (
-                    t["labels"].dtype == flow.int64
-                ), "target labels must of int64 type"
+                if not t["boxes"].dtype in floating_point_types:
+                    raise TypeError(
+                        f"target boxes must of float type, instead got {t['boxes'].dtype}"
+                    )
+                if not t["labels"].dtype == flow.int64:
+                    raise TypeError(
+                        "target labels must of int64 type, instead got {t['labels'].dtype}"
+                    )
                 if self.has_keypoint():
-                    assert (
-                        t["keypoints"].dtype == flow.float32
-                    ), "target keypoints must of float type"
+                    if not t["keypoints"].dtype == flow.float32:
+                        raise TypeError(
+                            f"target keypoints must of float type, instead got {t['keypoints'].dtype}"
+                        )
 
         if self.training:
             (
@@ -364,5 +520,52 @@ class RoIHeads(nn.Module):
                 result.append(
                     {"boxes": boxes[i], "labels": labels[i], "scores": scores[i],}
                 )
+
+        if self.has_mask():
+            mask_proposals = [p["boxes"] for p in result]
+            if self.training:
+                if matched_idxs is None:
+                    raise ValueError("if in training, matched_idxs should not be None")
+
+                # during training, only focus on positive boxes
+                num_images = len(proposals)
+                mask_proposals = []
+                pos_matched_idxs = []
+                for img_id in range(num_images):
+                    pos = flow.where(labels[img_id] > 0)[0]
+                    mask_proposals.append(proposals[img_id][pos])
+                    pos_matched_idxs.append(matched_idxs[img_id][pos])
+            else:
+                pos_matched_idxs = None
+
+            if self.mask_roi_pool is not None:
+                mask_features = self.mask_roi_pool(
+                    features, mask_proposals, image_shapes
+                )
+                mask_features = self.mask_head(mask_features)
+                mask_logits = self.mask_predictor(mask_features)
+            else:
+                raise Exception("Expected mask_roi_pool to be not None")
+
+            loss_mask = {}
+            if self.training:
+                if targets is None or pos_matched_idxs is None or mask_logits is None:
+                    raise ValueError(
+                        "targets, pos_matched_idxs, mask_logits cannot be None when training"
+                    )
+
+                gt_masks = [t["masks"] for t in targets]
+                gt_labels = [t["labels"] for t in targets]
+                rcnn_loss_mask = maskrcnn_loss(
+                    mask_logits, mask_proposals, gt_masks, gt_labels, pos_matched_idxs
+                )
+                loss_mask = {"loss_mask": rcnn_loss_mask}
+            else:
+                labels = [r["labels"] for r in result]
+                masks_probs = maskrcnn_inference(mask_logits, labels)
+                for mask_prob, r in zip(masks_probs, result):
+                    r["masks"] = mask_prob
+
+            losses.update(loss_mask)
 
         return result, losses

@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/coco.py
 """
 from PIL import Image
 import os

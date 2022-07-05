@@ -1,6 +1,25 @@
-# flowvision
-The flowvision package consists of popular datasets, SOTA computer vision models, layers, utilities, schedulers, advanced data augmentations and common image transformations based on OneFlow.
+<h2 align="center">flowvision</h2>
+<p align="center">
+    <a href="https://pypi.org/project/flowvision/">
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/flowvision">
+    </a>
+    <a href="https://flowvision.readthedocs.io/en/latest/index.html">
+        <img alt="docs" src="https://img.shields.io/badge/docs-latest-blue">
+    </a>
+    <a href="https://github.com/Oneflow-Inc/vision/blob/master/LICENSE">
+        <img alt="GitHub" src="https://img.shields.io/github/license/Oneflow-Inc/vision.svg?color=blue">
+    </a>
+    <a href="https://github.com/Oneflow-Inc/vision/releases">
+        <img alt="GitHub release" src="https://img.shields.io/github/release/Oneflow-Inc/vision.svg">
+    </a>
+    <a href="https://github.com/Oneflow-Inc/vision/issues">
+        <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-pink.svg">
+    </a>
+</p>
 
+
+## Introduction
+The flowvision package consists of popular datasets, SOTA computer vision models, layers, utilities, schedulers, advanced data augmentations and common image transformations based on OneFlow.
 
 ## Installation
 First install OneFlow, please refer to [install-oneflow](https://github.com/Oneflow-Inc/oneflow#install-oneflow) for more details.
@@ -36,6 +55,8 @@ pip install flowvision==0.1.0
             <li>InceptionV3</li>
             <li>ResNet</li>
             <li>ResNeXt</li>
+            <li>ResNeSt</li>
+            <li>SENet</li>
             <li>DenseNet</li>
             <li>ShuffleNetV2</li>  
             <li>MobileNetV2</li>
@@ -44,6 +65,7 @@ pip install flowvision==0.1.0
             <li>Res2Net</li>
             <li>EfficientNet</li>  
             <li>GhostNet</li>
+            <li>RegNet</li> 
             <li>ReXNet</li>
             <li>Vision Transformer</li>
             <li>DeiT</li>
@@ -51,11 +73,20 @@ pip install flowvision==0.1.0
             <li>Swin Transformer</li>
             <li>CSwin Transformer</li>
             <li>CrossFormer</li>
+            <li>PoolFormer</li>
             <li>Mlp Mixer</li>
             <li>ResMLP</li>
             <li>gMLP</li>
             <li>ConvMixer</li>
             <li>ConvNeXt</li>
+            <li>LeViT</li>
+            <li>RegionViT</li>
+            <li>UniFormer</li>
+            <li>VAN</li>
+            <li>MobileViT</li>
+            <li>DeiT-III</li>
+            <li>CaiT</li>
+            <li>DLA</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>
@@ -73,6 +104,10 @@ pip install flowvision==0.1.0
         <ul>
             <li>StyleNet</li>
         </ul>
+        <li><b>Face Recognition</b></li>
+        <ul>
+            <li>IResNet</li>
+        </ul>        
       </ul>
       </td>
       <td>
@@ -143,6 +178,8 @@ pip install flowvision==0.1.0
             <li>RandomVerticalFlip</li>
             <li>RandomHorizontalFlip</li>
             <li>Resize</li>
+            <li>RandomGrayscale</li>
+            <li>GaussianBlur</li>
           </ul>  
         </ul>
         <ul><li><b>Advanced Augmentation</b></li>
@@ -176,7 +213,12 @@ pip install flowvision==0.1.0
 
 
 ## Documentation
-You can find the API documentation on the website: https://flowvision.readthedocs.io/en/latest/index.html
+Please refer to [docs](https://flowvision.readthedocs.io/en/latest/index.html) for full API documentation and tutorials
+
+
+## ChangeLog
+Please refer to [ChangeLog](https://flowvision.readthedocs.io/en/latest/changelog.html) for details and release history
+
 
 ## Model Zoo
 We have conducted all the tests under the same setting, please refer to the model page [here](./results/results_imagenet.md) for more details.
@@ -185,29 +227,29 @@ We have conducted all the tests under the same setting, please refer to the mode
 ### Create a model
 In flowvision we support two ways to create a model.
 
-- First, import the target model from `flowvision.models`, e.g., create `alexnet` from flowvision
+- Import the target model from `flowvision.models`, e.g., create `alexnet` from flowvision
 
 ```python
 from flowvision.models.alexnet import alexnet
 model = alexnet()
+
+# will download the pretrained model
+model = alexnet(pretrained=True)
+
+# customize model to fit different number of classes
+model = alexnet(num_classes=100)
 ```
 
-- Second, create model in an easier way by using `ModelCreator`, e.g., create `alexnet` model by `ModelCreator`
+- Or create model in an easier way by using `ModelCreator`, e.g., create `alexnet` model by `ModelCreator`
 ```python
 from flowvision.models import ModelCreator
 alexnet = ModelCreator.create_model("alexnet")
-```
 
-- To create a pretrained model, simply pass `pretrained=True` into `ModelCreator.create_model` function
-```python
-from flowvision.models import ModelCreator
+# will download the pretrained model
 alexnet = ModelCreator.create_model("alexnet", pretrained=True)
-```
 
-- To create a custom model to fit different number of classes, simply pass `num_classes=<number of class>` into `ModelCreator.create_model` function
-```python
-from flowvision.models import ModelCreator
-model = ModelCreator.create_model("alexnet", num_classes=100)
+# customize model to fit different number of classes
+alexnet = ModelCreator.create_model("alexnet", num_classes=100)
 ```
 
 ### Tabulate all models with pretrained weights

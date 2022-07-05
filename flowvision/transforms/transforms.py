@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/transforms/transforms.py
 """
 import warnings
 import numbers
@@ -770,19 +771,17 @@ class RandomResizedCrop(Module):
         width, height = F._get_image_size(img)
         area = height * width
 
-        log_ratio = flow.log(flow.tensor(ratio))
+        log_ratio = np.log(np.array(ratio))
         for _ in range(10):
-            target_area = area * flow.empty(1).uniform_(scale[0], scale[1]).item()
-            aspect_ratio = flow.exp(
-                flow.empty(1).uniform_(log_ratio[0], log_ratio[1])
-            ).item()
+            target_area = area * np.random.uniform(scale[0], scale[1])
+            aspect_ratio = np.exp(np.random.uniform(log_ratio[0], log_ratio[1]))
 
             w = int(round(math.sqrt(target_area * aspect_ratio)))
             h = int(round(math.sqrt(target_area / aspect_ratio)))
 
             if 0 < w <= width and 0 < h <= height:
-                i = flow._C.randint(0, height - h + 1, size=(1,)).item()
-                j = flow._C.randint(0, width - w + 1, size=(1,)).item()
+                i = np.random.randint(0, height - h + 1)
+                j = np.random.randint(0, width - w + 1)
                 return i, j, h, w
 
         # Fallback to central crop
@@ -936,7 +935,7 @@ class TenCrop(Module):
 
 class ColorJitter(Module):
     """Randomly change the brightness, contrast, saturation and hue of an image.
-    If the image is torch Tensor, it is expected
+    If the image is flow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions.
     If img is PIL Image, mode "1", "L", "I", "F" and modes with transparency (alpha channel) are not supported.
 
@@ -1188,6 +1187,157 @@ class RandomRotation(Module):
             format_string += ", fill={0}".format(self.fill)
         format_string += ")"
         return format_string
+
+
+class RandomGrayscale(Module):
+    """Randomly convert image to grayscale with a probability of p (default 0.1).
+    If the image is flow Tensor, it is expected
+    to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
+
+    Args:
+        p (float): probability that image should be converted to grayscale.
+
+    Returns:
+        PIL Image or Tensor: Grayscale version of the input image with probability p and unchanged
+        with probability (1-p).
+        - If input image is 1 channel: grayscale version is 1 channel
+        - If input image is 3 channel: grayscale version is 3 channel with r == g == b
+
+    """
+
+    def __init__(self, p=0.1):
+        super().__init__()
+
+        assert 0.0 <= p <= 1.0
+
+        self.p = p
+
+    def forward(self, img):
+        """
+        Args:
+            img (PIL Image or Tensor): Image to be converted to grayscale.
+
+        Returns:
+            PIL Image or Tensor: Randomly grayscaled image.
+        """
+        num_output_channels = F._get_image_num_channels(img)
+        if flow.rand(1) < self.p:
+            return F.rgb_to_grayscale(img, num_output_channels=num_output_channels)
+        return img
+
+    def __repr__(self):
+        return self.__class__.__name__ + "(p={0})".format(self.p)
+
+
+class GaussianBlur(Module):
+    """Blurs image with randomly chosen Gaussian blur.
+    If the image is oneflow Tensor, it is expected
+    to have [..., C, H, W] shape, where ... means an arbitrary number of leading dimensions.
+
+    Args:
+        kernel_size (int or sequence): Size of the Gaussian kernel.
+        sigma (float or tuple of float (min, max)): Standard deviation to be used for
+            creating kernel to perform blurring. If float, sigma is fixed. If it is tuple
+            of float (min, max), sigma is chosen uniformly at random to lie in the
+            given range.
+
+    Returns:
+        PIL Image or Tensor: Gaussian blurred version of the input image.
+
+    """
+
+    def __init__(self, kernel_size, sigma=(0.1, 2.0)):
+        super().__init__()
+
+        # TODO: implement the following code with oneflow
+        # _log_api_usage_once(self)
+
+        self.kernel_size = _setup_size(
+            kernel_size, "Kernel size should be a tuple/list of two integers"
+        )
+        for ks in self.kernel_size:
+            if ks <= 0 or ks % 2 == 0:
+                raise ValueError(
+                    "Kernel size value should be an odd and positive number."
+                )
+
+        if isinstance(sigma, numbers.Number):
+            if sigma <= 0:
+                raise ValueError("If sigma is a single number, it must be positive.")
+            sigma = (sigma, sigma)
+        elif isinstance(sigma, Sequence) and len(sigma) == 2:
+            if not 0.0 < sigma[0] <= sigma[1]:
+                raise ValueError(
+                    "sigma values should be positive and of the form (min, max)."
+                )
+        else:
+            raise ValueError(
+                "sigma should be a single number or a list/tuple with length 2."
+            )
+
+        self.sigma = sigma
+
+    @staticmethod
+    def get_params(sigma_min: float, sigma_max: float) -> float:
+        """Choose sigma for random gaussian blurring.
+
+        Args:
+            sigma_min (float): Minimum standard deviation that can be chosen for blurring kernel.
+            sigma_max (float): Maximum standard deviation that can be chosen for blurring kernel.
+
+        Returns:
+            float: Standard deviation to be passed to calculate kernel for gaussian blurring.
+        """
+        return flow.empty(1).uniform_(sigma_min, sigma_max).item()
+
+    def forward(self, img: Tensor) -> Tensor:
+        """
+        Args:
+            img (PIL Image or Tensor): image to be blurred.
+
+        Returns:
+            PIL Image or Tensor: Gaussian blurred image
+        """
+        sigma = self.get_params(self.sigma[0], self.sigma[1])
+        return F.gaussian_blur(img, self.kernel_size, [sigma, sigma])
+
+    def __repr__(self) -> str:
+        s = f"{self.__class__.__name__}(kernel_size={self.kernel_size}, sigma={self.sigma})"
+        return s
+
+
+def _setup_size(size, error_msg):
+    if isinstance(size, numbers.Number):
+        return int(size), int(size)
+
+    if isinstance(size, Sequence) and len(size) == 1:
+        return size[0], size[0]
+
+    if len(size) != 2:
+        raise ValueError(error_msg)
+
+    return size
+
+
+def _check_sequence_input(x, name, req_sizes):
+    msg = (
+        req_sizes[0] if len(req_sizes) < 2 else " or ".join([str(s) for s in req_sizes])
+    )
+    if not isinstance(x, Sequence):
+        raise TypeError(f"{name} should be a sequence of length {msg}.")
+    if len(x) not in req_sizes:
+        raise ValueError(f"{name} should be sequence of length {msg}.")
+
+
+def _setup_angle(x, name, req_sizes=(2,)):
+    if isinstance(x, numbers.Number):
+        if x < 0:
+            raise ValueError(f"If {name} is a single number, it must be positive.")
+        x = [-x, x]
+    else:
+        _check_sequence_input(x, name, req_sizes)
+
+    return [float(d) for d in x]
 
 
 def _setup_size(size, error_msg):

@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/anchor_utils.py
+"""
 import math
 import oneflow as flow
 from oneflow import nn, Tensor
@@ -34,7 +37,7 @@ class AnchorGenerator(nn.Module):
     def __init__(
         self, sizes=((128, 256, 512),), aspect_ratios=((0.5, 1.0, 2.0),),
     ):
-        super(AnchorGenerator, self).__init__()
+        super().__init__()
 
         if not isinstance(sizes[0], (list, tuple)):
             sizes = tuple((s,) for s in sizes)
@@ -87,7 +90,9 @@ class AnchorGenerator(nn.Module):
     ) -> List[Tensor]:
         anchors = []
         cell_anchors = self.cell_anchors
-        assert cell_anchors is not None
+
+        if cell_anchors is None:
+            raise ValueError("cell_anchors should not be None")
 
         if not (len(grid_sizes) == len(strides) == len(cell_anchors)):
             raise ValueError(
@@ -290,16 +295,15 @@ class DefaultBoxGenerator(nn.Module):
         default_boxes = default_boxes.to(device)
 
         dboxes = []
+        x_y_size = flow.tensor([image_size[1], image_size[0]], device=device)
         for _ in image_list.image_sizes:
             dboxes_in_image = default_boxes
             dboxes_in_image = flow.cat(
                 [
-                    dboxes_in_image[:, :2] - 0.5 * dboxes_in_image[:, 2:],
-                    dboxes_in_image[:, :2] + 0.5 * dboxes_in_image[:, 2:],
+                    (dboxes_in_image[:, :2] - 0.5 * dboxes_in_image[:, 2:]) * x_y_size,
+                    (dboxes_in_image[:, :2] + 0.5 * dboxes_in_image[:, 2:]) * x_y_size,
                 ],
                 -1,
             )
-            dboxes_in_image[:, 0::2] *= image_size[1]
-            dboxes_in_image[:, 1::2] *= image_size[0]
             dboxes.append(dboxes_in_image)
         return dboxes

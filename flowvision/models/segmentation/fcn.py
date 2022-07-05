@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/segmentation/fcn.py
+"""
 import oneflow.nn as nn
 from .. import resnet
 from .. import mobilenet_v3
@@ -16,6 +19,7 @@ model_urls = {
 class FCN(_SimpleSegmentationModel):
     """
     Implements a Fully-Convolutional Network for semantic segmentation.
+    
     Args:
         backbone (nn.Module): the network used to compute the features for the model.
             The backbone should return an OrderedDict[Tensor], with the key being
@@ -121,12 +125,21 @@ def fcn_resnet50_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
     """Constructs a Fully-Convolutional Network model with a ResNet-50 backbone.
+    
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC
         progress (bool): If True, displays a progress bar of the download to stderr
         num_classes (int): number of output classes of the model (including the background)
         aux_loss (bool): If True, it uses an auxiliary loss
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deeplabv3_mobilenet_v3_large_coco = flowvision.models.segmentation.fcn_resnet50_coco(pretrained=True, progress=True)
+
     """
     return _load_model(
         "fcn", "resnet50", pretrained, progress, num_classes, aux_loss, **kwargs
@@ -138,12 +151,21 @@ def fcn_resnet101_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
     """Constructs a Fully-Convolutional Network model with a ResNet-101 backbone.
+    
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
             contains the same classes as Pascal VOC
         progress (bool): If True, displays a progress bar of the download to stderr
         num_classes (int): number of output classes of the model (including the background)
         aux_loss (bool): If True, it uses an auxiliary loss
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> deeplabv3_mobilenet_v3_large_coco = flowvision.models.segmentation.fcn_resnet101_coco(pretrained=True, progress=True)
+
     """
     return _load_model(
         "fcn", "resnet101", pretrained, progress, num_classes, aux_loss, **kwargs

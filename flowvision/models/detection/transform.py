@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/transform.py
+"""
 import math
 import oneflow as flow
 import random
@@ -6,6 +9,7 @@ from oneflow import nn, Tensor
 from typing import List, Tuple, Dict, Optional
 
 from .image_list import ImageList
+from .roi_heads import paste_masks_in_image
 
 
 def _resize_image_and_masks(
@@ -41,14 +45,14 @@ def _resize_image_and_masks(
     if target is None:
         return image, target
 
-    if "mask" in target:
+    if "masks" in target:
         mask = target["masks"]
         mask = flow.nn.functional.interpolate(
             mask[:, None].float(),
             size=size,
             scale_factor=scale_factor,
             recompute_scale_factor=recompute_scale_factor,
-        )[:, 0].byte()
+        )[:, 0].to(flow.uint8)
         target["masks"] = mask
     return image, target
 

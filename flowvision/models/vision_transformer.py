@@ -5,7 +5,6 @@ import math
 import logging
 from functools import partial
 from collections import OrderedDict
-from copy import deepcopy
 
 import oneflow as flow
 import oneflow.nn as nn

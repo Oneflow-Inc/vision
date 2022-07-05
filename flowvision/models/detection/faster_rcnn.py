@@ -1,3 +1,8 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/faster_rcnn.py
+"""
+from typing import Any, Optional, Union
+
 import oneflow as flow
 from oneflow import nn
 import oneflow.nn.functional as F
@@ -9,7 +14,7 @@ from .det_utils import overwrite_eps
 from ..utils import load_state_dict_from_url
 from ..registry import ModelCreator
 
-from ..resnet import resnet50
+from ..resnet import resnet50, resnet101
 from ..mobilenet_v3 import mobilenet_v3_large
 from .anchor_utils import AnchorGenerator
 from .generalized_rcnn import GeneralizedRCNN
@@ -23,7 +28,12 @@ from .backbone_utils import (
 )
 
 
-__all__ = ["FasterRCNN", "fasterrcnn_resnet50_fpn"]
+__all__ = [
+    "FasterRCNN",
+    "fasterrcnn_resnet50_fpn",
+    "fasterrcnn_mobilenet_v3_large_320_fpn",
+    "fasterrcnn_mobilenet_v3_large_fpn",
+]
 
 
 model_urls = {
@@ -153,8 +163,14 @@ class FasterRCNN(GeneralizedRCNN):
                 "same for all the levels)"
             )
 
-        assert isinstance(rpn_anchor_generator, (AnchorGenerator, type(None)))
-        assert isinstance(box_roi_pool, (MultiScaleRoIAlign, type(None)))
+        if not isinstance(rpn_anchor_generator, (AnchorGenerator, type(None))):
+            raise TypeError(
+                f"rpn_anchor_generator should be of type AnchorGenerator or None instead of {type(rpn_anchor_generator)}"
+            )
+        if not isinstance(box_roi_pool, (MultiScaleRoIAlign, type(None))):
+            raise TypeError(
+                f"box_roi_pool should be of type MultiScaleRoIAlign or None instead of {type(box_roi_pool)}"
+            )
 
         if num_classes is not None:
             if box_predictor is not None:
@@ -246,7 +262,7 @@ class TwoMLPHead(nn.Module):
         representation_size (int): size of the intermediate representation
     """
 
-    def __init__(self, in_channels, representation_size):
+    def __init__(self, in_channels: int, representation_size: int):
         super().__init__()
 
         self.fc6 = nn.Linear(in_channels, representation_size)
@@ -271,7 +287,7 @@ class FastRCNNPredictor(nn.Module):
         num_classes (int): number of output classes (including background)
     """
 
-    def __init__(self, in_channels, num_classes):
+    def __init__(self, in_channels: int, num_classes: int):
         super().__init__()
         self.cls_score = nn.Linear(in_channels, num_classes)
         self.bbox_pred = nn.Linear(in_channels, num_classes * 4)
@@ -288,11 +304,11 @@ class FastRCNNPredictor(nn.Module):
 
 @ModelCreator.register_model
 def fasterrcnn_resnet50_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     """
@@ -335,6 +351,14 @@ def fasterrcnn_resnet50_fpn(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 5, with 5 meaning all backbone layers are trainable. If ``None`` is
             passed (the default) this value is set to 3.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_resnet50_fpn = flowvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=False, progress=True)
+
     """
     trainable_backbone_layers = _validate_trainable_layers(
         pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
@@ -359,13 +383,56 @@ def fasterrcnn_resnet50_fpn(
     return model
 
 
+@ModelCreator.register_model
+def fasterrcnn_resnet101_fpn(
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
+    **kwargs,
+):
+    """
+    See details in `fasterrcnn_resnet50_fpn`.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_resnet101_fpn = flowvision.models.detection.fasterrcnn_resnet101_fpn(pretrained=False, progress=True)
+
+    """
+    trainable_backbone_layers = _validate_trainable_layers(
+        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 3
+    )
+
+    if pretrained:
+        # no need to download the backbone if pretrained is set
+        pretrained_backbone = False
+    backbone = resnet101(
+        pretrained=pretrained_backbone,
+        progress=progress,
+        norm_layer=misc_nn_ops.FrozenBatchNorm2d,
+    )
+    backbone = _resnet_fpn_extractor(backbone, trainable_backbone_layers)
+    model = FasterRCNN(backbone, num_classes, **kwargs)
+    if pretrained:
+        state_dict = load_state_dict_from_url(
+            model_urls["fasterrcnn_resnet101_fpn_coco"], progress=progress
+        )
+        model.load_state_dict(state_dict)
+        overwrite_eps(model, 0.0)
+    return model
+
+
 def _fasterrcnn_mobilenet_v3_large_fpn(
-    weights_name,
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    weights_name: Optional[str] = None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     trainable_backbone_layers = _validate_trainable_layers(
@@ -403,11 +470,11 @@ def _fasterrcnn_mobilenet_v3_large_fpn(
 
 @ModelCreator.register_model
 def fasterrcnn_mobilenet_v3_large_320_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     """
@@ -424,6 +491,14 @@ def fasterrcnn_mobilenet_v3_large_320_fpn(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 6, with 6 meaning all backbone layers are trainable. If ``None`` is
             passed (the default) this value is set to 3.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_mobilenet_v3_large_320_fpn = flowvision.models.detection.fasterrcnn_mobilenet_v3_large_320_fpn(pretrained=False, progress=True)
+
     """
     weights_name = "fasterrcnn_mobilenet_v3_large_320_fpn_coco"
     defaults = {
@@ -448,11 +523,11 @@ def fasterrcnn_mobilenet_v3_large_320_fpn(
 
 @ModelCreator.register_model
 def fasterrcnn_mobilenet_v3_large_fpn(
-    pretrained=False,
-    progress=True,
-    num_classes=91,
-    pretrained_backbone=True,
-    trainable_backbone_layers=None,
+    pretrained: bool = False,
+    progress: bool = True,
+    num_classes: Optional[int] = 91,
+    pretrained_backbone: bool = True,
+    trainable_backbone_layers: Optional[int] = None,
     **kwargs,
 ):
     """
@@ -469,6 +544,14 @@ def fasterrcnn_mobilenet_v3_large_fpn(
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 6, with 6 meaning all backbone layers are trainable. If ``None`` is
             passed (the default) this value is set to 3.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fasterrcnn_mobilenet_v3_large_fpn = flowvision.models.detection.fasterrcnn_mobilenet_v3_large_fpn(pretrained=False, progress=True)
+
     """
     weights_name = "fasterrcnn_mobilenet_v3_large_fpn_coco"
     defaults = {

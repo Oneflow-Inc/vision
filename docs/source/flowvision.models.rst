@@ -16,6 +16,8 @@ architectures for image classification:
 -  `InceptionV3`_
 -  `ResNet`_
 -  `ResNeXt`_
+-  `ResNeSt`_
+-  `SENet`_
 -  `DenseNet`_
 -  `ShuffleNetV2`_
 -  `MobileNetV2`_
@@ -24,6 +26,7 @@ architectures for image classification:
 -  `GhostNet`_
 -  `Res2Net`_
 -  `EfficientNet`_
+-  `RegNet`_
 -  `ReXNet`_
 -  `ViT`_
 -  `DeiT`_
@@ -31,11 +34,19 @@ architectures for image classification:
 -  `Swin-Transformer`_
 -  `CSwin-Transformer`_
 -  `CrossFormer`_
+-  `PoolFormer`_
 -  `Mlp_Mixer`_
 -  `ResMLP`_
 -  `gMLP`_
 -  `ConvMixer`_
 -  `ConvNeXt`_
+-  `LeViT`_
+-  `RegionViT`_
+-  `VAN`_
+-  `MobileViT`_
+-  `DeiT-III`_
+-  `CaiT`_
+-  `DLA`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -49,6 +60,8 @@ architectures for image classification:
 .. _MobileNetV2: https://arxiv.org/abs/1801.04381
 .. _MobileNetV3: https://arxiv.org/abs/1905.02244
 .. _ResNeXt: https://arxiv.org/abs/1611.05431
+.. _ResNeSt: https://arxiv.org/abs/2004.08955
+.. _SENet: https://arxiv.org/abs/1709.01507
 .. _Res2Net: https://arxiv.org/abs/1904.01169
 .. _ReXNet: https://arxiv.org/abs/2007.00992
 .. _MNASNet: https://arxiv.org/abs/1807.11626
@@ -60,12 +73,21 @@ architectures for image classification:
 .. _Swin-Transformer: https://arxiv.org/abs/2103.14030
 .. _CSwin-Transformer: https://arxiv.org/abs/2107.00652
 .. _CrossFormer: https://arxiv.org/abs/2108.00154
+.. _PoolFormer: https://arxiv.org/abs/2111.11418
 .. _Mlp_Mixer: https://arxiv.org/abs/2105.01601
 .. _ResMLP: https://arxiv.org/abs/2105.03404
 .. _gMLP: https://arxiv.org/abs/2105.08050
 .. _ConvMixer: https://openreview.net/pdf?id=TVHS5Y4dNvM
 .. _EfficientNet: https://arxiv.org/abs/1905.11946
+.. _RegNet: https://arxiv.org/abs/2003.13678
 .. _ConvNeXt: https://arxiv.org/abs/2201.03545
+.. _RegionViT: https://arxiv.org/pdf/2106.02689.pdf
+.. _VAN: https://arxiv.org/pdf/2202.09741.pdf
+.. _LeViT: https://arxiv.org/pdf/2104.01136.pdf
+.. _MobileViT: https://arxiv.org/pdf/2110.02178.pdf
+.. _DeiT-III: https://arxiv.org/pdf/2204.07118.pdf
+.. _CaiT: https://arxiv.org/pdf/2103.17239.pdf
+.. _DLA: https://arxiv.org/pdf/1707.06484.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -124,6 +146,15 @@ ResNet
         resnext101_32x8d,
         wide_resnet50_2,
         wide_resnet101_2,
+
+ResNeSt
+--------
+.. automodule:: flowvision.models
+    :members: 
+        resnest50,
+        resnest101,
+        resnest200,
+        resnest269,
 
 
 DenseNet
@@ -203,6 +234,26 @@ EfficientNet
         efficientnet_b7
 
 
+RegNet
+------------
+.. automodule:: flowvision.models
+    :members:
+        regnet_y_400mf,
+        regnet_y_800mf,
+        regnet_y_1_6gf,
+        regnet_y_3_2gf,
+        regnet_y_8gf,
+        regnet_y_16gf,
+        regnet_y_32gf,
+        regnet_x_400mf,
+        regnet_x_800mf,
+        regnet_x_1_6gf,
+        regnet_x_3_2gf,
+        regnet_x_8gf,
+        regnet_x_16gf,
+        regnet_x_32gf,
+
+
 ReXNet
 ------
 .. automodule:: flowvision.models
@@ -212,10 +263,25 @@ ReXNet
         rexnetv1_1_5,
         rexnetv1_2_0,
         rexnetv1_3_0,
+
+.. automodule:: flowvision.models
+    :members:
         rexnet_lite_1_0,
         rexnet_lite_1_3,
         rexnet_lite_1_5,
         rexnet_lite_2_0,
+
+
+SENet
+--------
+.. automodule:: flowvision.models
+    :members:
+        senet154,
+        se_resnet50,
+        se_resnet101,
+        se_resnet152,
+        se_resnext50_32x4d,
+        se_resnext101_32x4d,
 
 
 ViT
@@ -315,6 +381,27 @@ CrossFormer
         crossformer_large_patch4_group7_224,
 
 
+PoolFormer
+-----------
+.. automodule:: flowvision.models
+    :members:
+        poolformer_s12,
+        poolformer_s24,
+        poolformer_s36,
+        poolformer_m36,
+        poolformer_m48,
+
+
+UniFormer
+-----------
+.. automodule:: flowvision.models
+    :members: 
+        uniformer_small,
+        uniformer_small_plus,
+        uniformer_base,
+        uniformer_base_ls,
+
+
 Mlp-Mixer
 ---------
 .. automodule:: flowvision.models
@@ -350,7 +437,7 @@ ResMLP
 
 
 gMLP
-----
+-----
 .. automodule:: flowvision.models
     :members: 
         gmlp_ti16_224,
@@ -359,7 +446,7 @@ gMLP
 
 
 ConvMixer
----------
+----------
 .. automodule:: flowvision.models
     :members: 
         convmixer_1536_20,
@@ -368,7 +455,7 @@ ConvMixer
 
 
 ConvNeXt
---------
+---------
 .. automodule:: flowvision.models
     :members:
         convnext_tiny_224,
@@ -390,13 +477,171 @@ ConvNeXt
         convnext_iso_base_224,
         convnext_iso_large_224,
 
-
-Neural Style
-============
-
-.. currentmodule:: flowvision.models
+RegionViT
+----------
 .. automodule:: flowvision.models
     :members:
-        neural_style_transfer,
+        regionvit_tiny_224,
+        regionvit_small_224,
+        regionvit_small_w14_224,
+        regionvit_small_w14_peg_224,
+        regionvit_medium_224,
+        regionvit_base_224,
+        regionvit_base_w14_224,
+        regionvit_base_w14_peg_224,
+        
+VAN
+--------
+.. automodule:: flowvision.models
+    :members:
+        van_tiny,
+        van_small,
+        van_base,
+        van_large,
+        
 
+LeViT
+--------
+.. automodule:: flowvision.models
+    :members:
+        levit_128s,
+        levit_128,
+        levit_192,
+        levit_256,
+        levit_384,
+
+
+MobileViT
+--------
+.. automodule:: flowvision.models
+    :members:
+        mobilevit_small,
+        mobilevit_x_small,
+        mobilevit_xx_small,
+
+
+DeiT-III
+--------
+.. automodule:: flowvision.models
+    :members:
+        deit_small_patch16_LS_224,
+        deit_small_patch16_LS_384,
+        deit_small_patch16_LS_224_in21k,
+        deit_small_patch16_LS_384_in21k,
+        deit_base_patch16_LS_224,
+        deit_base_patch16_LS_384,
+        deit_base_patch16_LS_224_in21k,
+        deit_base_patch16_LS_384_in21k,
+        deit_large_patch16_LS_224,
+        deit_large_patch16_LS_384,
+        deit_large_patch16_LS_224_in21k,
+        deit_large_patch16_LS_384_in21k,
+        deit_huge_patch14_LS_224,
+        deit_huge_patch14_LS_224_in21k,
+
+
+CaiT
+--------
+.. automodule:: flowvision.models
+    :members:
+        cait_XS24_384,
+        cait_S24_224,
+        cait_S24_384,
+        cait_S36_384,
+        cait_M36_384,
+        cait_M48_448,
+
+
+DLA
+--------
+.. automodule:: flowvision.models
+    :members:
+        dla34,
+        dla46_c,
+        dla46x_c,
+        dla60x_c,
+        dla60,
+        dla60x,
+        dla102,
+        dla102x,
+        dla102x2,
+        dla169,
+
+
+Neural Style Transfer
+======================
+
+.. currentmodule:: flowvision.models
+
+.. automodule:: flowvision.models.style_transfer
+    :members:
+        fast_neural_style,
+
+
+Face Recognition
+=================
+.. currentmodule:: flowvision.models
+.. automodule:: flowvision.models.face_recognition
+    :members:
+        iresnet50,
+        iresnet101,
+
+
+Semantic Segmentation
+======================
+
+.. currentmodule:: flowvision.models
+
+FCN
+--------
+.. automodule:: flowvision.models.segmentation
+    :members:
+        fcn_resnet50_coco,
+        fcn_resnet101_coco,
+
+DeepLabV3
+----------
+.. automodule:: flowvision.models.segmentation
+    :members:
+        deeplabv3_resnet50_coco,
+        deeplabv3_resnet101_coco,
+        deeplabv3_mobilenet_v3_large_coco,
+
+LRASPP
+--------
+.. automodule:: flowvision.models.segmentation
+    :members:
+        lraspp_mobilenet_v3_large_coco,
+
+
+Object Detection
+=================
+
+.. currentmodule:: flowvision.models
+
+Faster R-CNN
+-------------
+.. automodule:: flowvision.models.detection
+    :members:
+        fasterrcnn_resnet50_fpn,
+        fasterrcnn_mobilenet_v3_large_320_fpn,
+        fasterrcnn_mobilenet_v3_large_fpn,
+
+RetinaNet
+----------
+.. automodule:: flowvision.models.detection
+    :members:
+        retinanet_resnet50_fpn,
+
+SSD
+--------
+.. automodule:: flowvision.models.detection
+    :members:
+        ssd300_vgg16,
+
+SSDLite
+--------
+.. automodule:: flowvision.models.detection
+    :members:
+        ssdlite320_mobilenet_v3_large,
 

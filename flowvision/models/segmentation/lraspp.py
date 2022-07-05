@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/segmentation/lraspp.py
+"""
 from collections import OrderedDict
 
 from oneflow import nn, Tensor
@@ -127,6 +130,14 @@ def lraspp_mobilenet_v3_large_coco(
             contains the same classes as Pascal VOC
         progress (bool): If True, displays a progress bar of the download to stderr
         num_classes (int): number of output classes of the model (including the background)
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> lraspp_mobilenet_v3_large_coco = flowvision.models.segmentation.lraspp_mobilenet_v3_large_coco(pretrained=True, progress=True)
+
     """
     if kwargs.pop("aux_loss", False):
         raise NotImplementedError("This model does not use auxiliary loss")

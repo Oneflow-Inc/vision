@@ -59,11 +59,12 @@ class BalancedPositiveNegativeSampler:
             neg_idx_per_image = negative[perm2]
 
             # create binary mask from indices
-            pos_idx_per_image_mask = flow.zeros_like(
-                matched_idxs_per_image, dtype=flow.uint8
+            pos_idx_per_image_mask = flow.zeros_like(matched_idxs_per_image).to(
+                dtype=flow.uint8
             )
-            neg_idx_per_image_mask = flow.zeros_like(
-                matched_idxs_per_image, dtype=flow.uint8
+
+            neg_idx_per_image_mask = flow.zeros_like(matched_idxs_per_image).to(
+                dtype=flow.uint8
             )
 
             pos_idx_per_image_mask[pos_idx_per_image] = 1
@@ -75,8 +76,7 @@ class BalancedPositiveNegativeSampler:
         return pos_idx, neg_idx
 
 
-def encode_boxes(reference_boxes, proposals, weights):
-    # type: (flow.Tensor, flow.Tensor, flow.Tensor) -> flow.Tensor
+def encode_boxes(reference_boxes: Tensor, proposals: Tensor, weights: Tensor) -> Tensor:
     """
     Encode a set of proposals with respect to some
     reference boxes
@@ -128,8 +128,11 @@ class BoxCoder:
     the representation used for training the regressors.
     """
 
-    def __init__(self, weights, bbox_xform_clip=math.log(1000.0 / 16)):
-        # type: (Tuple[float, float, float, float], float) -> None
+    def __init__(
+        self,
+        weights: Tuple[float, float, float, float],
+        bbox_xform_clip: float = math.log(1000.0 / 16),
+    ) -> None:
         """
         Args:
             weights (4-element tuple)
@@ -147,7 +150,7 @@ class BoxCoder:
         targets = self.encode_single(reference_boxes, proposals)
         return targets.split(boxes_per_image, 0)
 
-    def encode_single(self, reference_boxes, proposals):
+    def encode_single(self, reference_boxes: Tensor, proposals: Tensor) -> Tensor:
         """
         Encode a set of proposals with respect to some
         reference boxes
@@ -164,8 +167,14 @@ class BoxCoder:
         return targets
 
     def decode(self, rel_codes: Tensor, boxes: List[Tensor]) -> Tensor:
-        assert isinstance(boxes, (list, tuple))
-        assert isinstance(rel_codes, flow.Tensor)
+        if not isinstance(boxes, (list, tuple)):
+            raise TypeError(
+                f"This function expects boxes of type list or tuple, instead got {type(boxes)}"
+            )
+        if not isinstance(rel_codes, flow.Tensor):
+            raise TypeError(
+                f"This function expects rel_codes of type torch.Tensor, instead  got {type(rel_codes)}"
+            )
         boxes_per_image = [b.size(0) for b in boxes]
         concat_boxes = flow.cat(boxes, dim=0)
         box_sum = 0
@@ -178,7 +187,7 @@ class BoxCoder:
             pred_boxes = pred_boxes.reshape(box_sum, -1, 4)
         return pred_boxes
 
-    def decode_single(self, rel_codes, boxes):
+    def decode_single(self, rel_codes: Tensor, boxes: Tensor) -> Tensor:
         """
         From a set of original boxes and encoded relative box offsets,
         get the decoded boxes.
@@ -228,6 +237,91 @@ class BoxCoder:
         return pred_boxes
 
 
+class BoxLinearCoder:
+    """
+    The linear box-to-box transform defined in FCOS. The transformation is parameterized
+    by the distance from the center of (square) src box to 4 edges of the target box.
+    """
+
+    def __init__(self, normalize_by_size: bool = True) -> None:
+        """
+        Args:
+            normalize_by_size (bool): normalize deltas by the size of src (anchor) boxes.
+        """
+        self.normalize_by_size = normalize_by_size
+
+    def encode_single(self, reference_boxes: Tensor, proposals: Tensor) -> Tensor:
+        """
+        Encode a set of proposals with respect to some reference boxes
+
+        Args:
+            reference_boxes (Tensor): reference boxes
+            proposals (Tensor): boxes to be encoded
+
+        Returns:
+            Tensor: the encoded relative box offsets that can be used to
+            decode the boxes.
+        """
+        # get the center of reference_boxes
+        reference_boxes_ctr_x = 0.5 * (reference_boxes[:, 0] + reference_boxes[:, 2])
+        reference_boxes_ctr_y = 0.5 * (reference_boxes[:, 1] + reference_boxes[:, 3])
+
+        # get box regression transformation deltas
+        target_l = reference_boxes_ctr_x - proposals[:, 0]
+        target_t = reference_boxes_ctr_y - proposals[:, 1]
+        target_r = proposals[:, 2] - reference_boxes_ctr_x
+        target_b = proposals[:, 3] - reference_boxes_ctr_y
+
+        targets = flow.stack((target_l, target_t, target_r, target_b), dim=1)
+        if self.normalize_by_size:
+            reference_boxes_w = reference_boxes[:, 2] - reference_boxes[:, 0]
+            reference_boxes_h = reference_boxes[:, 3] - reference_boxes[:, 1]
+            reference_boxes_size = flow.stack(
+                (
+                    reference_boxes_w,
+                    reference_boxes_h,
+                    reference_boxes_w,
+                    reference_boxes_h,
+                ),
+                dim=1,
+            )
+            targets = targets / reference_boxes_size
+
+        return targets
+
+    def decode_single(self, rel_codes: Tensor, boxes: Tensor) -> Tensor:
+        """
+        From a set of original boxes and encoded relative box offsets,
+        get the decoded boxes.
+
+        Args:
+            rel_codes (Tensor): encoded boxes
+            boxes (Tensor): reference boxes.
+
+        Returns:
+            Tensor: the predicted boxes with the encoded relative box offsets.
+        """
+
+        boxes = boxes.to(rel_codes.dtype)
+
+        ctr_x = 0.5 * (boxes[:, 0] + boxes[:, 2])
+        ctr_y = 0.5 * (boxes[:, 1] + boxes[:, 3])
+        if self.normalize_by_size:
+            boxes_w = boxes[:, 2] - boxes[:, 0]
+            boxes_h = boxes[:, 3] - boxes[:, 1]
+            boxes_size = flow.stack((boxes_w, boxes_h, boxes_w, boxes_h), dim=1)
+            rel_codes = rel_codes * boxes_size
+
+        pred_boxes1 = ctr_x - rel_codes[:, 0]
+        pred_boxes2 = ctr_y - rel_codes[:, 1]
+        pred_boxes3 = ctr_x + rel_codes[:, 2]
+        pred_boxes4 = ctr_y + rel_codes[:, 3]
+        pred_boxes = flow.stack(
+            (pred_boxes1, pred_boxes2, pred_boxes3, pred_boxes4), dim=1
+        )
+        return pred_boxes
+
+
 class Matcher:
     """
     This class assigns to each predicted "element" (e.g., a box) a ground-truth
@@ -251,7 +345,12 @@ class Matcher:
         "BETWEEN_THRESHOLDS": int,
     }
 
-    def __init__(self, high_threshold, low_threshold, allow_low_quality_matches=False):
+    def __init__(
+        self,
+        high_threshold: float,
+        low_threshold: float,
+        allow_low_quality_matches: bool = False,
+    ) -> None:
         # type: (float, float, bool) -> None
         """
         Args:
@@ -268,12 +367,13 @@ class Matcher:
         """
         self.BELOW_LOW_THRESHOLD = -1
         self.BETWEEN_THRESHOLDS = -2
-        assert low_threshold <= high_threshold
+        if low_threshold > high_threshold:
+            raise ValueError("low_threshold should be <= high_threshold")
         self.high_threshold = high_threshold
         self.low_threshold = low_threshold
         self.allow_low_quality_matches = allow_low_quality_matches
 
-    def __call__(self, match_quality_matrix):
+    def __call__(self, match_quality_matrix: Tensor) -> Tensor:
         """
         Args:
             match_quality_matrix (Tensor[float]): an MxN tensor, containing the
@@ -314,8 +414,9 @@ class Matcher:
         matches[between_threshold] = self.BETWEEN_THRESHOLDS
 
         if self.allow_low_quality_matches:
-            assert all_matches is not None
-            self.set_low_quality_matches_(matches, all_mathces, match_quality_matrix)
+            if all_matches is None:
+                raise ValueError("all_matches should not be None")
+            self.set_low_quality_matches_(matches, all_matches, match_quality_matrix)
 
         return matches
 
@@ -337,10 +438,10 @@ class Matcher:
 
 
 class SSDMatcher(Matcher):
-    def __init__(self, threshold):
+    def __init__(self, threshold: float) -> None:
         super().__init__(threshold, threshold, allow_low_quality_matches=False)
 
-    def __call__(self, match_quality_matrix):
+    def __call__(self, match_quality_matrix: Tensor) -> Tensor:
         matches = super().__call__(match_quality_matrix)
 
         # For each gt, find the prediction with which it has the highset quality

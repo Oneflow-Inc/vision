@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/transforms/functional.py
 """
 import warnings
 import numbers
@@ -155,11 +156,9 @@ def to_tensor(pic):
         if pic.ndim == 2:
             pic = pic[:, :, None]
 
-        img = flow.tensor(
-            np.ascontiguousarray(pic.transpose((2, 0, 1)), dtype=np.float32)
-        )
+        img = flow.tensor(np.ascontiguousarray(pic.transpose((2, 0, 1))))
         # backward compatibility
-        if img.dtype == flow.int:
+        if img.dtype == flow.uint8:
             return flow._C.cast(img, dtype=default_float_dtype).div(255)
         else:
             return img
@@ -171,14 +170,9 @@ def to_tensor(pic):
 
     # handle PIL Image
     mode_to_nptype = {"I": np.int32, "I;16": np.int16, "F": np.float32}
-    if mode_to_nptype.get(pic.mode, np.uint8) == np.uint8:
-        dtype = flow.int32
-    else:
-        dtype = flow.float32
 
-    img = flow.tensor(
-        np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True), dtype=dtype,
-    )
+    np_arr = np.array(pic, mode_to_nptype.get(pic.mode, np.uint8), copy=True)
+    img = flow.from_numpy(np_arr)
 
     if pic.mode == "1":
         img = 255 * img
@@ -186,7 +180,7 @@ def to_tensor(pic):
     img = flow._C.reshape(img, shape=(pic.size[1], pic.size[0], len(pic.getbands())))
     # put it from HWC to CHW format
     res = flow._C.transpose(img, perm=[2, 0, 1])
-    if img.dtype == flow.int:
+    if img.dtype == flow.uint8:
         res = flow._C.cast(res, dtype=default_float_dtype).div(255)
     return res
 
@@ -417,20 +411,23 @@ def normalize(
         tensor = tensor.clone()
 
     dtype = tensor.dtype
-    mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
-    std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
-    if (std == 0).any():
+    # NOTE: np array cannot be used as flow.as_tensor argument because of oneflow bug
+    np_dtype = flow.framework.dtype.convert_oneflow_dtype_to_numpy_dtype(dtype)
+    if (np.array(std, dtype=np_dtype) == 0).any():
         raise ValueError(
             "std evaluated to zero after conversion to {}, leading to division by zero.".format(
                 dtype
             )
         )
+
+    mean = flow.as_tensor(mean, dtype=dtype, device=tensor.device)
+    std = flow.as_tensor(std, dtype=dtype, device=tensor.device)
     if mean.ndim == 1:
         mean = flow._C.reshape(mean, shape=(-1, 1, 1))
     if std.ndim == 1:
         std = flow._C.reshape(std, shape=(-1, 1, 1))
-    # tensor.sub_(mean).div_(std)
-    return flow._C.div(flow._C.sub(tensor, mean), std)
+    tensor.sub_(mean).div_(std)
+    return tensor
 
 
 def resize(
@@ -988,3 +985,109 @@ def rotate(
     return F_t.rotate(
         img, matrix=matrix, interpolation=interpolation.value, expand=expand, fill=fill
     )
+
+
+def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
+    """Convert RGB image to grayscale version of image.
+    If the image is flow Tensor, it is expected
+    to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
+
+    Note:
+        Please, note that this method supports only RGB images as input. For inputs in other color spaces,
+        please, consider using meth:`~flowvision.transforms.functional.to_grayscale` with PIL Image.
+
+    Args:
+        img (PIL Image or Tensor): RGB Image to be converted to grayscale.
+        num_output_channels (int): number of channels of the output image. Value can be 1 or 3. Default, 1.
+
+    Returns:
+        PIL Image or Tensor: Grayscale version of the image.
+
+        - if num_output_channels = 1 : returned image is single channel
+        - if num_output_channels = 3 : returned image is 3 channel with r = g = b
+    """
+    if not isinstance(img, flow.Tensor):
+        return F_pil.to_grayscale(img, num_output_channels)
+
+    return F_t.rgb_to_grayscale(img, num_output_channels)
+
+
+def gaussian_blur(
+    img: Tensor, kernel_size: List[int], sigma: Optional[List[float]] = None
+) -> Tensor:
+    """Performs Gaussian blurring on the image by given kernel.
+    If the image is oneflow Tensor, it is expected
+    to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
+
+    Args:
+        img (PIL Image or Tensor): Image to be blurred
+        kernel_size (sequence of ints or int): Gaussian kernel size. Can be a sequence of integers
+            like ``(kx, ky)`` or a single integer for square kernels.
+
+            .. note::
+                In torchscript mode kernel_size as single int is not supported, use a sequence of
+                length 1: ``[ksize, ]``.
+        sigma (sequence of floats or float, optional): Gaussian kernel standard deviation. Can be a
+            sequence of floats like ``(sigma_x, sigma_y)`` or a single float to define the
+            same sigma in both X/Y directions. If None, then it is computed using
+            ``kernel_size`` as ``sigma = 0.3 * ((kernel_size - 1) * 0.5 - 1) + 0.8``.
+            Default, None.
+
+            .. note::
+                In torchscript mode sigma as single float is
+                not supported, use a sequence of length 1: ``[sigma, ]``.
+
+    Returns:
+        PIL Image or Tensor: Gaussian Blurred version of the image.
+    """
+    # TODO: implement the following code with oneflow
+    # if not flow.jit.is_scripting() and not flow.jit.is_tracing():
+    #     _log_api_usage_once(gaussian_blur)
+
+    if not isinstance(kernel_size, (int, list, tuple)):
+        raise TypeError(
+            f"kernel_size should be int or a sequence of integers. Got {type(kernel_size)}"
+        )
+    if isinstance(kernel_size, int):
+        kernel_size = [kernel_size, kernel_size]
+    if len(kernel_size) != 2:
+        raise ValueError(
+            f"If kernel_size is a sequence its length should be 2. Got {len(kernel_size)}"
+        )
+    for ksize in kernel_size:
+        if ksize % 2 == 0 or ksize < 0:
+            raise ValueError(
+                f"kernel_size should have odd and positive integers. Got {kernel_size}"
+            )
+
+    if sigma is None:
+        sigma = [ksize * 0.15 + 0.35 for ksize in kernel_size]
+
+    if sigma is not None and not isinstance(sigma, (int, float, list, tuple)):
+        raise TypeError(
+            f"sigma should be either float or sequence of floats. Got {type(sigma)}"
+        )
+    if isinstance(sigma, (int, float)):
+        sigma = [float(sigma), float(sigma)]
+    if isinstance(sigma, (list, tuple)) and len(sigma) == 1:
+        sigma = [sigma[0], sigma[0]]
+    if len(sigma) != 2:
+        raise ValueError(
+            f"If sigma is a sequence, its length should be 2. Got {len(sigma)}"
+        )
+    for s in sigma:
+        if s <= 0.0:
+            raise ValueError(f"sigma should have positive values. Got {sigma}")
+
+    t_img = img
+    if not isinstance(img, flow.Tensor):
+        if not F_pil._is_pil_image(img):
+            raise TypeError(f"img should be PIL Image or Tensor. Got {type(img)}")
+
+        t_img = to_tensor(img)
+
+    output = F_t.gaussian_blur(t_img, kernel_size, sigma)
+
+    if not isinstance(img, flow.Tensor):
+        output = to_pil_image(output)
+    return output

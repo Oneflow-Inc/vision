@@ -1,4 +1,5 @@
 """
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/datasets/widerface.py
 """
 import os
 from os.path import abspath, expanduser

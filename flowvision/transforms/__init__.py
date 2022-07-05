@@ -21,11 +21,13 @@ from .transforms import (
     RandomVerticalFlip,
     RandomResizedCrop,
     RandomSizedCrop,
+    RandomGrayscale,
     FiveCrop,
     TenCrop,
     InterpolationMode,
     ToNumpy,
     ColorJitter,
+    GaussianBlur,
 )
 
 
@@ -50,9 +52,11 @@ __all__ = [
     "RandomVerticalFlip",
     "RandomResizedCrop",
     "RandomSizedCrop",
+    "RandomGrayscale",
     "FiveCrop",
     "TenCrop",
     "InterpolationMode",
     "ToNumpy",
     "ColorJitter",
+    "GaussianBlur",
 ]

@@ -132,3 +132,7 @@ dmypy.json
 # checkpoints
 checkpoints
 *.pth
+
+# benchmark
+.benchmarks
+.benchmark-collect

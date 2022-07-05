@@ -54,7 +54,7 @@ def get_args_parser():
         default=26,
         type=int,
         metavar="N",
-        help="number of data loading workers (default: 4)",
+        help="number of total epochs to run",
     )
     parser.add_argument(
         "-j",
@@ -122,6 +122,13 @@ def get_args_parser():
         "--data-augmentation",
         default="hflip",
         help="data augmentation policy (default: hflip)",
+    )
+    parser.add_argument(
+        "--evaluation",
+        type=int,
+        nargs="+",
+        default=None,
+        help="epoch at which to evaluate, None is evaluate after each epoch",
     )
     parser.add_argument(
         "--test-only",
@@ -212,10 +219,9 @@ def main(args):
     model = ModelCreator.create_model(args.model, pretrained=args.pretrained)
     model.to(device)
 
-    model_without_ddp = model
     if args.distributed:
+        model.train()
         model = flow.nn.parallel.DistributedDataParallel(model, broadcast_buffers=False)
-        model_without_ddp = model
 
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = flow.optim.SGD(
@@ -238,8 +244,8 @@ def main(args):
         )
 
     if args.resume:
-        checkpoint = flow.load(args.resume, map_location="cpu")
-        model_without_ddp.load_state_dict(checkpoint["model"])
+        checkpoint = flow.load(args.resume)
+        model.load_state_dict(checkpoint["model"])
         optimizer.load_state_dict(checkpoint["optimizer"])
         lr_scheduler.load_state_dict(checkpoint["lr_scheduler"])
         args.start_epoch = checkpoint["epoch"] + 1
@@ -257,7 +263,7 @@ def main(args):
         lr_scheduler.step()
         if args.output_dir:
             checkpoint = {
-                "model": model_without_ddp.state_dict(),
+                "model": model.state_dict(),
                 "optimizer": optimizer.state_dict(),
                 "lr_scheduler": lr_scheduler.state_dict(),
                 "args": args,
@@ -270,8 +276,11 @@ def main(args):
                 checkpoint, os.path.join(args.output_dir, "checkpoint.pth")
             )
 
-        # evaluate after every epoch
-        evaluate(model, data_loader_test, device=device)
+        if args.evaluation is None:
+            evaluate(model, data_loader_test, device=device)
+        else:
+            if epoch in args.evaluation:
+                evaluate(model, data_loader_test, device=device)
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))

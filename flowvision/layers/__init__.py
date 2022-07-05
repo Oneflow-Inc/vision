@@ -12,6 +12,7 @@ from .attention import (
 from .blocks import (
     nms,
     batched_nms,
+    boxes,
     box_iou,
     ConvBnAct,
     ConvAct,
@@ -27,6 +28,10 @@ from .blocks import (
     LastLevelP6P7,
     LastLevelMaxPool,
     ExtraFPNBlock,
+    sigmoid_focal_loss,
+    generalized_box_iou_loss,
+    misc,
+    roi_align,
 )
 from .regularization import (
     drop_path,
@@ -40,3 +45,4 @@ from .regularization.stochastic_depth import stochastic_depth
 from .weight_init import trunc_normal_, lecun_normal_
 from .activation import hard_sigmoid, hard_swish
 from .helpers import make_divisible
+from .dynamic_conv import Dynamic_conv2d

@@ -1,3 +1,6 @@
+"""
+Modified from https://github.com/pytorch/vision/blob/main/torchvision/models/detection/ssd.py
+"""
 import oneflow as flow
 import oneflow.nn.functional as F
 import warnings
@@ -64,12 +67,10 @@ class SSDScoringHead(nn.Module):
         num_blocks = len(self.module_list)
         if idx < 0:
             idx += num_blocks
-        i = 0
         out = x
-        for module in self.module_list:
+        for i, module in enumerate(self.module_list):
             if i == idx:
                 out = module(x)
-            i += 1
         return out
 
     def forward(self, x: List[Tensor]) -> Tensor:
@@ -353,9 +354,8 @@ class SSD(nn.Module):
             for target_idx, target in enumerate(targets):
                 boxes = target["boxes"]
                 degenerate_boxes = boxes[:, 2:] <= boxes[:, :2]
-                # TODO (shijie wang): Use Tensor.any()
-                if degenerate_boxes.sum() > 0:
-                    bb_idx = flow.where(degenerate_boxes.sum(dim=1))[0][0]
+                if degenerate_boxes.any():
+                    bb_idx = flow.where(degenerate_boxes.any(dim=1))[0][0]
                     degen_bb: List[float] = boxes[bb_idx].tolist()
                     raise ValueError(
                         "All bounding boxes should have positive height and width."
@@ -573,7 +573,9 @@ def _vgg_extractor(
         ).features
 
     # Gather the indices of maxpools. These are the locations of output blocks.
-    stage_indices = [i for i, b in enumerate(backbone) if isinstance(b, nn.MaxPool2d)]
+    stage_indices = [0] + [
+        i for i, b in enumerate(backbone) if isinstance(b, nn.MaxPool2d)
+    ][:-1]
     num_stages = len(stage_indices)
 
     # find the index of the layer from which we wont freeze
@@ -638,12 +640,20 @@ def ssd300_vgg16(
         pretrained_backbone (bool): If True, returns a model with backbone pre-trained on Imagenet
         trainable_backbone_layers (int): number of trainable (not frozen) resnet layers starting from final block.
             Valid values are between 0 and 5, with 5 meaning all backbone layers are trainable.
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> ssd300_vgg16 = flowvision.models.detection.ssd300_vgg16(pretrained=False, progress=True)
+
     """
     if "size" in kwargs:
         warnings.warn("The size of the model is already fixed; ignoring the argument.")
 
     trainable_backbone_layers = _validate_trainable_layers(
-        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 5
+        pretrained or pretrained_backbone, trainable_backbone_layers, 5, 4
     )
 
     if pretrained:

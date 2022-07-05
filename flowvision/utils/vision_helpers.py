@@ -36,9 +36,7 @@ def make_grid(
             images separately rather than the (min, max) over all images. Default: ``False``.
         pad_value (float, optional): Value for the padded pixels. Default: ``0``.
 
-    Example:
-        See this notebook `here <https://gist.github.com/anonymous/bf16430f7750c023141c562f3e9f2a91>`_
-
+    Example: See this notebook `here <https://gist.github.com/anonymous/bf16430f7750c023141c562f3e9f2a91>`_
     """
     if not (
         isinstance(tensor, flow.Tensor)

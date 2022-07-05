@@ -8,7 +8,17 @@ from .scheduler import Scheduler
 
 
 class StepLRScheduler(Scheduler):
-    """
+    """ Step LRScheduler
+    Decays the learning rate of each parameter group by 
+    decay_rate every decay_t steps.
+
+    Args:
+        optimizer: The optimizer will be used for the training process
+        decay_t: Period of learning rate decay.
+        decay_rate: Multiplicative factor of learning rate decay. Default: 1.0.
+        warmup_t: Defines the number of warmup epochs.
+        warmup_lr_init: The initial learning rate during warmup.
+
     """
 
     def __init__(

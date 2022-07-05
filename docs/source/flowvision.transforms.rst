@@ -26,6 +26,8 @@ Utils for Image Transforms
         RandomVerticalFlip,
         RandomResizedCrop,
         RandomSizedCrop,
+        RandomGrayscale,
         FiveCrop,
         TenCrop,
-        InterpolationMode
+        InterpolationMode,
+        GaussianBlur,
