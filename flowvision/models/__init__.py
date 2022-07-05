@@ -35,6 +35,7 @@ from .mobilevit import *
 from .deit_III import *
 from .cait import *
 from .dla import *
+from .xcit import *
 
 from . import style_transfer
 from . import detection
