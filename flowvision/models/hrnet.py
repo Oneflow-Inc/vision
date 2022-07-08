@@ -3,12 +3,12 @@ Modified from https://github.com/rwightman/pytorch-image-models/blob/master/timm
 """
 from typing import Callable, List, Optional
 
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import oneflow as flow
+import oneflow.nn as nn
+import oneflow.nn.functional as F
 
-# from .registry import ModelCreator
-# from .utils import load_state_dict_from_url
+from .registry import ModelCreator
+from .utils import load_state_dict_from_url
 
 _BN_MOMENTUM = 0.1
 
@@ -566,7 +566,7 @@ class HighResolutionModule(nn.Module):
     def get_num_in_chs(self):
         return self.num_in_chs
 
-    def forward(self, x: List[torch.Tensor]):
+    def forward(self, x: List[flow.Tensor]):
         if self.num_branches == 1:
             return [self.branches[0](x[0])]
 
@@ -764,7 +764,6 @@ class HighResolutionNet(nn.Module):
 
         return nn.Sequential(*modules), num_in_chs
 
-    @torch.jit.ignore
     def init_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -774,7 +773,6 @@ class HighResolutionNet(nn.Module):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
 
-    @torch.jit.ignore
     def group_matcher(self, coarse=False):
         matcher = dict(
             stem=r'^conv[12]|bn[12]',
@@ -786,11 +784,9 @@ class HighResolutionNet(nn.Module):
         )
         return matcher
 
-    @torch.jit.ignore
     def set_grad_checkpointing(self, enable=True):
         assert not enable, "gradient checkpointing not supported"
 
-    @torch.jit.ignore
     def get_classifier(self):
         return self.classifier
 
@@ -804,7 +800,7 @@ class HighResolutionNet(nn.Module):
         # self.global_pool, self.classifier = create_classifier(
         #     self.num_features, self.num_classes, pool_type=global_pool)
 
-    def stages(self, x) -> List[torch.Tensor]:
+    def stages(self, x) -> List[flow.Tensor]:
         x = self.layer1(x)
 
         xl = [t(x) for i, t in enumerate(self.transition1)]
@@ -849,164 +845,100 @@ class HighResolutionNet(nn.Module):
         return x
 
 
-# class HighResolutionNetFeatures(HighResolutionNet):
-#     """HighResolutionNet feature extraction
-#     The design of HRNet makes it easy to grab feature maps, this class provides a simple wrapper to do so.
-#     It would be more complicated to use the FeatureNet helpers.
-#     The `feature_location=incre` allows grabbing increased channel count features using part of the
-#     classification head. If `feature_location=''` the default HRNet features are returned. First stem
-#     conv is used for stride 2 features.
-#     """
-#
-#     def __init__(self, cfg, in_chans=3, num_classes=1000, global_pool='avg', drop_rate=0.0,
-#                  feature_location='incre', out_indices=(0, 1, 2, 3, 4)):
-#         assert feature_location in ('incre', '')
-#         super(HighResolutionNetFeatures, self).__init__(
-#             cfg, in_chans=in_chans, num_classes=num_classes, global_pool=global_pool,
-#             drop_rate=drop_rate, head=feature_location)
-#         self.feature_info = FeatureInfo(self.feature_info, out_indices)
-#         self._out_idx = {i for i in out_indices}
-#
-#     def forward_features(self, x):
-#         assert False, 'Not supported'
-#
-#     def forward(self, x) -> List[torch.tensor]:
-#         out = []
-#         x = self.conv1(x)
-#         x = self.bn1(x)
-#         x = self.act1(x)
-#         if 0 in self._out_idx:
-#             out.append(x)
-#         x = self.conv2(x)
-#         x = self.bn2(x)
-#         x = self.act2(x)
-#         x = self.stages(x)
-#         if self.incre_modules is not None:
-#             x = [incre(f) for f, incre in zip(x, self.incre_modules)]
-#         for i, f in enumerate(x):
-#             if i + 1 in self._out_idx:
-#                 out.append(f)
-#         return out
-
-
-# def _create_hrnet(variant, pretrained, **model_kwargs):
-#     model_cls = HighResolutionNet
-#     features_only = False
-#     kwargs_filter = None
-#     if model_kwargs.pop('features_only', False):
-#         model_cls = HighResolutionNetFeatures
-#         kwargs_filter = ('num_classes', 'global_pool')
-#         features_only = True
-#     model = model_cls(**model_kwargs)
-#     # model = build_model_with_cfg(
-#     #     model_cls, variant, pretrained,
-#     #     model_cfg=cfg_cls[variant],
-#     #     pretrained_strict=not features_only,
-#     #     kwargs_filter=kwargs_filter,
-#     #     **model_kwargs)
-#     if features_only:
-#         model.pretrained_cfg = pretrained_cfg_for_features(model.default_cfg)
-#         model.default_cfg = model.pretrained_cfg  # backwards compat
-#     return model
-
-
-
+@ModelCreator.register_model
 def hrnet_w18_small(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w18_small'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w18_small_v2(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w18_small_v2'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w18(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w18'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w30(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w30'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w32(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w32'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w40(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w40'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w44(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w44'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w48(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w48'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-
+@ModelCreator.register_model
 def hrnet_w64(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w64'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = torch.load(model_urls[arch])
+        state_dict = flow.load(model_urls[arch])
         # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
-
-
-import pdb; pdb.set_trace()
