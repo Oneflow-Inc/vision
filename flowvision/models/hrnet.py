@@ -13,15 +13,15 @@ from .utils import load_state_dict_from_url
 _BN_MOMENTUM = 0.1
 
 model_urls = {
-    "hrnet_w18_small": "/dataset/ldl_home/Model/pretrained/hrnet_w18_small_v1-f460c6bc.pth",
-    "hrnet_w18_small_v2": "/dataset/ldl_home/Model/pretrained/hrnet_w18_small_v2-4c50a8cb.pth",
-    "hrnet_w18": "/dataset/ldl_home/Model/pretrained/hrnetv2_w18-8cb57bb9.pth",
-    "hrnet_w30": "/dataset/ldl_home/Model/pretrained/hrnetv2_w30-8d7f8dab.pth",
-    "hrnet_w32": "/dataset/ldl_home/Model/pretrained/hrnetv2_w32-90d8c5fb.pth",
-    "hrnet_w40": "/dataset/ldl_home/Model/pretrained/hrnetv2_w40-7cd397a4.pth",
-    "hrnet_w44": "/dataset/ldl_home/Model/pretrained/hrnetv2_w44-c9ac8c18.pth",
-    "hrnet_w48": "/dataset/ldl_home/Model/pretrained/hrnetv2_w48-abd2e6ab.pth",
-    "hrnet_w64": "/dataset/ldl_home/Model/pretrained/hrnetv2_w64-b47cc881.pth"
+    "hrnet_w18_small": "/dataset/ldl_home/Model/pretrained/hrnet_w18_small_v1-f460c6bc",
+    "hrnet_w18_small_v2": "/dataset/ldl_home/Model/pretrained/hrnet_w18_small_v2-4c50a8cb",
+    "hrnet_w18": "/dataset/ldl_home/Model/pretrained/hrnetv2_w18-8cb57bb9",
+    "hrnet_w30": "/dataset/ldl_home/Model/pretrained/hrnetv2_w30-8d7f8dab",
+    "hrnet_w32": "/dataset/ldl_home/Model/pretrained/hrnetv2_w32-90d8c5fb",
+    "hrnet_w40": "/dataset/ldl_home/Model/pretrained/hrnetv2_w40-7cd397a4",
+    "hrnet_w44": "/dataset/ldl_home/Model/pretrained/hrnetv2_w44-c9ac8c18",
+    "hrnet_w48": "/dataset/ldl_home/Model/pretrained/hrnetv2_w48-abd2e6ab",
+    "hrnet_w64": "/dataset/ldl_home/Model/pretrained/hrnetv2_w64-b47cc881"
 }
 
 
@@ -845,6 +845,8 @@ class HighResolutionNet(nn.Module):
         return x
 
 
+# 13.187464M
+# Acc@1: 72.078, Acc@1-Error: 27.922, Acc@5: 90.470, Acc@5-Error: 9.530
 @ModelCreator.register_model
 def hrnet_w18_small(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w18_small'
@@ -855,7 +857,8 @@ def hrnet_w18_small(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 15.597464M
+# Acc@1: 74.816, Acc@1-Error: 25.184, Acc@5: 92.264, Acc@5-Error: 7.736
 @ModelCreator.register_model
 def hrnet_w18_small_v2(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w18_small_v2'
@@ -866,7 +869,8 @@ def hrnet_w18_small_v2(pretrained: bool = False, progress: bool = True, **kwargs
         model.load_state_dict(state_dict)
     return model
 
-
+# 21.299004M
+# Acc@1: 76.484, Acc@1-Error: 23.516, Acc@5: 93.322, Acc@5-Error: 6.678
 @ModelCreator.register_model
 def hrnet_w18(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w18'
@@ -877,7 +881,8 @@ def hrnet_w18(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 37.71222M
+# Acc@1: 78.074, Acc@1-Error: 21.926, Acc@5: 94.136, Acc@5-Error: 5.864
 @ModelCreator.register_model
 def hrnet_w30(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w30'
@@ -888,7 +893,8 @@ def hrnet_w30(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 41.23268M
+# Acc@1: 78.188, Acc@1-Error: 21.812, Acc@5: 94.034, Acc@5-Error: 5.966
 @ModelCreator.register_model
 def hrnet_w32(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w32'
@@ -899,7 +905,8 @@ def hrnet_w32(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 57.55716M
+# Acc@1: 78.652, Acc@1-Error: 21.348, Acc@5: 94.378, Acc@5-Error: 5.622
 @ModelCreator.register_model
 def hrnet_w40(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w40'
@@ -910,7 +917,8 @@ def hrnet_w40(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 67.064984M
+# Acc@1: 78.646, Acc@1-Error: 21.354, Acc@5: 94.250, Acc@5-Error: 5.750
 @ModelCreator.register_model
 def hrnet_w44(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w44'
@@ -921,7 +929,8 @@ def hrnet_w44(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 77.469864M
+# Acc@1: 78.972, Acc@1-Error: 21.028, Acc@5: 94.344, Acc@5-Error: 5.656
 @ModelCreator.register_model
 def hrnet_w48(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w48'
@@ -932,7 +941,8 @@ def hrnet_w48(pretrained: bool = False, progress: bool = True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
+# 128.059944M
+# Acc@1: 79.210, Acc@1-Error: 20.790, Acc@5: 94.558, Acc@5-Error: 5.442
 @ModelCreator.register_model
 def hrnet_w64(pretrained: bool = False, progress: bool = True, **kwargs):
     arch = 'hrnet_w64'
