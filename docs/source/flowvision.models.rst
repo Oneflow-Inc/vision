@@ -48,6 +48,7 @@ architectures for image classification:
 -  `CaiT`_
 -  `DLA`_
 -  `GENet`_
+-  `HRNet`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -90,6 +91,7 @@ architectures for image classification:
 .. _CaiT: https://arxiv.org/pdf/2103.17239.pdf
 .. _DLA: https://arxiv.org/pdf/1707.06484.pdf
 .. _GENet: https://arxiv.org/pdf/2006.14090.pdf
+.. _HRNet: https://arxiv.org/pdf/1908.07919.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -577,6 +579,20 @@ GENet
         genet_small,
         genet_normal,
         genet_large
+
+HRNet
+--------
+.. automodule:: flowvision.models
+    :members:
+        hrnet_w18_small,
+        hrnet_w18_small_v2,
+        hrnet_w18,
+        hrnet_w30,
+        hrnet_w32,
+        hrnet_w40,
+        hrnet_w44,
+        hrnet_w48,
+        hrnet_w64
 
 
 Neural Style Transfer

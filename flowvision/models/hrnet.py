@@ -13,15 +13,15 @@ from .utils import load_state_dict_from_url
 _BN_MOMENTUM = 0.1
 
 model_urls = {
-    "hrnet_w18_small": "/dataset/ldl_home/Model/pretrained/hrnet_w18_small_v1-f460c6bc",
-    "hrnet_w18_small_v2": "/dataset/ldl_home/Model/pretrained/hrnet_w18_small_v2-4c50a8cb",
-    "hrnet_w18": "/dataset/ldl_home/Model/pretrained/hrnetv2_w18-8cb57bb9",
-    "hrnet_w30": "/dataset/ldl_home/Model/pretrained/hrnetv2_w30-8d7f8dab",
-    "hrnet_w32": "/dataset/ldl_home/Model/pretrained/hrnetv2_w32-90d8c5fb",
-    "hrnet_w40": "/dataset/ldl_home/Model/pretrained/hrnetv2_w40-7cd397a4",
-    "hrnet_w44": "/dataset/ldl_home/Model/pretrained/hrnetv2_w44-c9ac8c18",
-    "hrnet_w48": "/dataset/ldl_home/Model/pretrained/hrnetv2_w48-abd2e6ab",
-    "hrnet_w64": "/dataset/ldl_home/Model/pretrained/hrnetv2_w64-b47cc881"
+    "hrnet_w18_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w18_small_v1.zip",
+    "hrnet_w18_small_v2": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w18_small_v2.zip",
+    "hrnet_w18": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w18.zip",
+    "hrnet_w30": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w30.zip",
+    "hrnet_w32": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w32.zip",
+    "hrnet_w40": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w40.zip",
+    "hrnet_w44": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w44.zip",
+    "hrnet_w48": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w48.zip",
+    "hrnet_w64": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/HRNet/hrnet_w64.zip"
 }
 
 
@@ -646,8 +646,6 @@ class HighResolutionNet(nn.Module):
                 nn.Flatten(1)
             )
             self.classifier = nn.Linear(self.num_features, self.num_classes, bias=True)
-            # self.global_pool, self.classifier = create_classifier(
-            #     self.num_features, self.num_classes, pool_type=global_pool)
         elif head == 'incre':
             self.num_features = 2048
             self.incre_modules, _, _ = self._make_head(pre_stage_channels, True)
@@ -797,8 +795,6 @@ class HighResolutionNet(nn.Module):
             nn.Flatten(1)
         )
         self.classifier = nn.Linear(self.num_features, self.num_classes, bias=True)
-        # self.global_pool, self.classifier = create_classifier(
-        #     self.num_features, self.num_classes, pool_type=global_pool)
 
     def stages(self, x) -> List[flow.Tensor]:
         x = self.layer1(x)
@@ -845,110 +841,253 @@ class HighResolutionNet(nn.Module):
         return x
 
 
-# 13.187464M
-# Acc@1: 72.078, Acc@1-Error: 27.922, Acc@5: 90.470, Acc@5-Error: 9.530
 @ModelCreator.register_model
 def hrnet_w18_small(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w18-small 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w18-small 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w18_small = flowvision.models.hrnet_w18_small(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w18_small'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 15.597464M
-# Acc@1: 74.816, Acc@1-Error: 25.184, Acc@5: 92.264, Acc@5-Error: 7.736
+
 @ModelCreator.register_model
 def hrnet_w18_small_v2(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w18-small-v2 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w18-small-v2 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w18_small_v2 = flowvision.models.hrnet_w18_small_v2(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w18_small_v2'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 21.299004M
-# Acc@1: 76.484, Acc@1-Error: 23.516, Acc@5: 93.322, Acc@5-Error: 6.678
+
 @ModelCreator.register_model
 def hrnet_w18(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w18 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w18 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w18 = flowvision.models.hrnet_w18(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w18'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 37.71222M
-# Acc@1: 78.074, Acc@1-Error: 21.926, Acc@5: 94.136, Acc@5-Error: 5.864
+
 @ModelCreator.register_model
 def hrnet_w30(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w30 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w30 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w30 = flowvision.models.hrnet_w30(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w30'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 41.23268M
-# Acc@1: 78.188, Acc@1-Error: 21.812, Acc@5: 94.034, Acc@5-Error: 5.966
+
 @ModelCreator.register_model
 def hrnet_w32(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w32 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w32 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w32 = flowvision.models.hrnet_w32(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w32'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 57.55716M
-# Acc@1: 78.652, Acc@1-Error: 21.348, Acc@5: 94.378, Acc@5-Error: 5.622
+
 @ModelCreator.register_model
 def hrnet_w40(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w40 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w40 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w40 = flowvision.models.hrnet_w40(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w40'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 67.064984M
-# Acc@1: 78.646, Acc@1-Error: 21.354, Acc@5: 94.250, Acc@5-Error: 5.750
+
 @ModelCreator.register_model
 def hrnet_w44(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w44 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w44 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w44 = flowvision.models.hrnet_w44(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w44'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 77.469864M
-# Acc@1: 78.972, Acc@1-Error: 21.028, Acc@5: 94.344, Acc@5-Error: 5.656
+
 @ModelCreator.register_model
 def hrnet_w48(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w48 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w48 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w48 = flowvision.models.hrnet_w48(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w48'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 128.059944M
-# Acc@1: 79.210, Acc@1-Error: 20.790, Acc@5: 94.558, Acc@5-Error: 5.442
+
 @ModelCreator.register_model
 def hrnet_w64(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs HRNet-w64 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        HRNet-w64 224x224 model from `"Deep High-Resolution Representation Learning for Visual Recognition" <https://arxiv.org/pdf/1908.07919>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> hrnet_w64 = flowvision.models.hrnet_w64(pretrained=False, progress=True)
+
+    """
     arch = 'hrnet_w64'
     model = HighResolutionNet(cfg=cfg_cls[arch], **kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls[arch])
-        # state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
+        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
         model.load_state_dict(state_dict)
     return model
