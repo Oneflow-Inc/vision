@@ -37,6 +37,7 @@ from .cait import *
 from .dla import *
 from .genet import *
 from .hrnet import *
+from .fan import *
 
 from . import style_transfer
 from . import detection
