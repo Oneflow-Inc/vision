@@ -9,67 +9,73 @@ import torch
 import torch.nn as nn
 
 import torch.utils.checkpoint as checkpoint
-
-from timm.data import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from timm.models.vision_transformer import Mlp as MlpOri
-from timm.models.layers import to_2tuple
-from timm.models.cait import ClassAttn
-from collections import OrderedDict
+from typing import Callable
+from .vision_transformer import Mlp as MlpOri
+from itertools import repeat
+from collections import OrderedDict, abc
 import torch.nn.functional as F
+from ..layers import DropPath
 
-from timm.models.helpers import named_apply, build_model_with_cfg
-from timm.models.layers import trunc_normal_, ClassifierHead, SelectAdaptivePool2d, DropPath
+
+# from timm.models.helpers import named_apply, build_model_with_cfg
+# from timm.models.layers import SelectAdaptivePool2d
 
 # from .swin_utils import _create_fan_swin_transformer
 
 
-def _cfg(url='', **kwargs):
-    return {
-        'url': url,
-        'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': None,
-        'crop_pct': 1.0, 'interpolation': 'bicubic', 'fixed_input_size': True,
-        'mean': IMAGENET_DEFAULT_MEAN, 'std': IMAGENET_DEFAULT_STD,
-        'first_conv': 'patch_embed.proj.0.0', 'classifier': 'head',
-        **kwargs
-    }
+# def _cfg(url='', **kwargs):
+#     return {
+#         'url': url,
+#         'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': None,
+#         'crop_pct': 1.0, 'interpolation': 'bicubic', 'fixed_input_size': True,
+#         'mean': IMAGENET_DEFAULT_MEAN, 'std': IMAGENET_DEFAULT_STD,
+#         'first_conv': 'patch_embed.proj.0.0', 'classifier': 'head',
+#         **kwargs
+#     }
 
 
-default_cfgs = {
-    # Patch size 16
-    'fan_tiny_8_p16_224': _cfg(),
-    'fan_small_12_p16_224': _cfg(),
-    'fan_base_18_p16_224': _cfg(),
-    'fan_large_24_p16_224': _cfg(),
-    'fan_xlarge_24_p16_224': _cfg(),
-}
+# default_cfgs = {
+#     # Patch size 16
+#     'fan_tiny_8_p16_224': _cfg(),
+#     'fan_small_12_p16_224': _cfg(),
+#     'fan_base_18_p16_224': _cfg(),
+#     'fan_large_24_p16_224': _cfg(),
+#     'fan_xlarge_24_p16_224': _cfg(),
+# }
 
 
-def _cfg(url='', **kwargs):
-    return {
-        'url': url,
-        'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': (7, 7),
-        'crop_pct': 0.875, 'interpolation': 'bicubic',
-        'mean': IMAGENET_DEFAULT_MEAN, 'std': IMAGENET_DEFAULT_STD,
-        'first_conv': 'stem.0', 'classifier': 'head.fc',
-        **kwargs
-    }
+# def _cfg(url='', **kwargs):
+#     return {
+#         'url': url,
+#         'num_classes': 1000, 'input_size': (3, 224, 224), 'pool_size': (7, 7),
+#         'crop_pct': 0.875, 'interpolation': 'bicubic',
+#         'mean': IMAGENET_DEFAULT_MEAN, 'std': IMAGENET_DEFAULT_STD,
+#         'first_conv': 'stem.0', 'classifier': 'head.fc',
+#         **kwargs
+#     }
 
 
-default_cfgs = dict(
-    convnext_tiny=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224_ema.pth"),
-    convnext_small=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224_ema.pth"),
-    convnext_base=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_base_1k_224_ema.pth"),
-    convnext_large=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_large_1k_224_ema.pth"),
+# default_cfgs = dict(
+#     convnext_tiny=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224_ema.pth"),
+#     convnext_small=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_small_1k_224_ema.pth"),
+#     convnext_base=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_base_1k_224_ema.pth"),
+#     convnext_large=_cfg(url="https://dl.fbaipublicfiles.com/convnext/convnext_large_1k_224_ema.pth"),
+#
+#     convnext_tiny_hnf=_cfg(url=''),
+#
+#     convnext_base_in22k=_cfg(
+#         url="https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_224.pth", num_classes=21841),
+#     convnext_large_in22k=_cfg(
+#         url="https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_224.pth", num_classes=21841),
+#     convnext_xlarge_in22k=_cfg(
+#         url="https://dl.fbaipublicfiles.com/convnext/convnext_xlarge_22k_224.pth", num_classes=21841),
+# )
 
-    convnext_tiny_hnf=_cfg(url=''),
 
-    convnext_base_in22k=_cfg(
-        url="https://dl.fbaipublicfiles.com/convnext/convnext_base_22k_224.pth", num_classes=21841),
-    convnext_large_in22k=_cfg(
-        url="https://dl.fbaipublicfiles.com/convnext/convnext_large_22k_224.pth", num_classes=21841),
-    convnext_xlarge_in22k=_cfg(
-        url="https://dl.fbaipublicfiles.com/convnext/convnext_xlarge_22k_224.pth", num_classes=21841),
-)
+def to_2tuple(x):
+    if isinstance(x, abc.Iterable):
+        return x
+    return tuple(repeat(x, 2))
 
 
 def _is_contiguous(tensor: torch.Tensor) -> bool:
@@ -80,6 +86,121 @@ def _is_contiguous(tensor: torch.Tensor) -> bool:
         return tensor.is_contiguous()
     else:
         return tensor.is_contiguous(memory_format=torch.contiguous_format)
+
+
+def named_apply(fn: Callable, module: nn.Module, name='', depth_first=True, include_root=False) -> nn.Module:
+    if not depth_first and include_root:
+        fn(module=module, name=name)
+    for child_name, child_module in module.named_children():
+        child_name = '.'.join((name, child_name)) if name else child_name
+        named_apply(fn=fn, module=child_module, name=child_name, depth_first=depth_first, include_root=True)
+    if depth_first and include_root:
+        fn(module=module, name=name)
+    return module
+
+
+def trunc_normal_(tensor, mean=0., std=1., a=-2., b=2.):
+    # Cut & paste from PyTorch official master until it's in a few official releases - RW
+    # Method based on https://people.sc.fsu.edu/~jburkardt/presentations/truncated_normal.pdf
+    def norm_cdf(x):
+        # Computes standard normal cumulative distribution function
+        return (1. + math.erf(x / math.sqrt(2.))) / 2.
+
+    if (mean < a - 2 * std) or (mean > b + 2 * std):
+        print("mean is more than 2 std from [a, b] in nn.init.trunc_normal_. "
+              "The distribution of values may be incorrect.")
+
+    with torch.no_grad():
+        # Values are generated by using a truncated uniform distribution and
+        # then using the inverse CDF for the normal distribution.
+        # Get upper and lower cdf values
+        l = norm_cdf((a - mean) / std)
+        u = norm_cdf((b - mean) / std)
+
+        # Uniformly fill tensor with values from [l, u], then translate to
+        # [2l-1, 2u-1].
+        tensor.uniform_(2 * l - 1, 2 * u - 1)
+
+        # Use inverse cdf transform for normal distribution to get truncated
+        # standard normal
+        tensor.erfinv_()
+
+        # Transform to proper mean, std
+        tensor.mul_(std * math.sqrt(2.))
+        tensor.add_(mean)
+
+        # Clamp to ensure it's in the proper range
+        tensor.clamp_(min=a, max=b)
+        return tensor
+
+
+def _create_fc(num_features, num_classes, use_conv=False):
+    if num_classes <= 0:
+        fc = nn.Identity()  # pass-through (no classifier)
+    elif use_conv:
+        fc = nn.Conv2d(num_features, num_classes, 1, bias=True)
+    else:
+        fc = nn.Linear(num_features, num_classes, bias=True)
+    return fc
+
+
+class ClassifierHead(nn.Module):
+    """Classifier head w/ configurable global pooling and dropout."""
+
+    def __init__(self, in_chs, num_classes, pool_type='avg', drop_rate=0., use_conv=False):
+        super(ClassifierHead, self).__init__()
+        self.drop_rate = drop_rate
+        self.global_pool = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(1)
+        )
+        self.fc = _create_fc(in_chs, num_classes, use_conv=use_conv)
+        self.flatten = nn.Flatten(1) if use_conv and pool_type else nn.Identity()
+
+    def forward(self, x, pre_logits: bool = False):
+        x = self.global_pool(x)
+        if self.drop_rate:
+            x = F.dropout(x, p=float(self.drop_rate), training=self.training)
+        if pre_logits:
+            return x.flatten(1)
+        else:
+            x = self.fc(x)
+            return self.flatten(x)
+
+
+class ClassAttn(nn.Module):
+    # taken from https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py
+    # with slight modifications to do CA
+    def __init__(self, dim, num_heads=8, qkv_bias=False, attn_drop=0., proj_drop=0.):
+        super().__init__()
+        self.num_heads = num_heads
+        head_dim = dim // num_heads
+        self.scale = head_dim ** -0.5
+
+        self.q = nn.Linear(dim, dim, bias=qkv_bias)
+        self.k = nn.Linear(dim, dim, bias=qkv_bias)
+        self.v = nn.Linear(dim, dim, bias=qkv_bias)
+        self.attn_drop = nn.Dropout(attn_drop)
+        self.proj = nn.Linear(dim, dim)
+        self.proj_drop = nn.Dropout(proj_drop)
+
+    def forward(self, x):
+        B, N, C = x.shape
+        q = self.q(x[:, 0]).unsqueeze(1).reshape(B, 1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+        k = self.k(x).reshape(B, N, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+
+        q = q * self.scale
+        v = self.v(x).reshape(B, N, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+
+        attn = (q @ k.transpose(-2, -1))
+        attn = attn.softmax(dim=-1)
+        attn = self.attn_drop(attn)
+
+        x_cls = (attn @ v).transpose(1, 2).reshape(B, 1, C)
+        x_cls = self.proj(x_cls)
+        x_cls = self.proj_drop(x_cls)
+
+        return x_cls
 
 
 class ConvMlp(nn.Module):
@@ -268,7 +389,10 @@ class ConvNeXt(nn.Module):
             self.norm_pre = nn.Identity()
             if use_head:
                 self.head = nn.Sequential(OrderedDict([
-                    ('global_pool', SelectAdaptivePool2d(pool_type=global_pool)),
+                    ('global_pool', nn.Sequential(
+                        nn.AdaptiveAvgPool2d(1),
+                        nn.Flatten(1)
+                    )),
                     ('norm', norm_layer(self.num_features)),
                     ('flatten', nn.Flatten(1) if global_pool else nn.Identity()),
                     ('drop', nn.Dropout(self.drop_rate)),
@@ -288,7 +412,10 @@ class ConvNeXt(nn.Module):
         else:
             # pool -> norm -> fc
             self.head = nn.Sequential(OrderedDict([
-                ('global_pool', SelectAdaptivePool2d(pool_type=global_pool)),
+                ('global_pool', nn.Sequential(
+                    nn.AdaptiveAvgPool2d(1),
+                    nn.Flatten(1)
+                )),
                 ('norm', self.head.norm),
                 ('flatten', nn.Flatten(1) if global_pool else nn.Identity()),
                 ('drop', nn.Dropout(self.drop_rate)),
@@ -297,7 +424,6 @@ class ConvNeXt(nn.Module):
 
     def forward_features(self, x):
         x = self.stem(x)
-        # import pdb; pdb.set_trace()
         x = self.stages(x)
         x = self.norm_pre(x)
         return x
@@ -343,14 +469,14 @@ def checkpoint_filter_fn(state_dict, model):
     return out_dict
 
 
-def _create_hybrid_backbone(variant='convnext_base_in22k', pretrained=False, **kwargs):
-    model = build_model_with_cfg(
-        ConvNeXt, variant, pretrained,
-        default_cfg=default_cfgs[variant],
-        pretrained_filter_fn=checkpoint_filter_fn,
-        feature_cfg=dict(out_indices=(0, 1, 2, 3), flatten_sequential=True),
-        **kwargs)
-    return model
+# def _create_hybrid_backbone(variant='convnext_base_in22k', pretrained=False, **kwargs):
+#     model = build_model_with_cfg(
+#         ConvNeXt, variant, pretrained,
+#         default_cfg=default_cfgs[variant],
+#         pretrained_filter_fn=checkpoint_filter_fn,
+#         feature_cfg=dict(out_indices=(0, 1, 2, 3), flatten_sequential=True),
+#         **kwargs)
+#     return model
 
 
 class PositionalEncodingFourier(nn.Module):
@@ -1129,7 +1255,7 @@ def _create_fan(variant, pretrained=False, default_cfg=None, **kwargs):
 
 
 # FAN-ViT Models
-def fan_tiny_12_p16_224(pretrained=False, bn_tf=False, **kwargs):
+def fan_tiny_12_p16_224(pretrained=False, **kwargs):
     depth = 12
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
@@ -1179,73 +1305,73 @@ def fan_large_24_p16_224(pretrained=False, **kwargs):
 # FAN-Hybrid Models
 # CNN backbones are based on ConvNeXt architecture with only first two stages for downsampling purpose
 # This has been verified to be beneficial for downstream tasks
-def fan_tiny_8_p4_hybrid(pretrained=False, **kwargs):
-    depth = 8
-    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2 + 1)
-    model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
-    backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
-    model_kwargs = dict(
-        patch_size=16, embed_dim=192, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
-    model = _create_fan('fan_tiny_8_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
-                        **model_kwargs)
-    return model
+# def fan_tiny_8_p4_hybrid(pretrained=False, **kwargs):
+#     depth = 8
+#     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2 + 1)
+#     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
+#     backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
+#     model_kwargs = dict(
+#         patch_size=16, embed_dim=192, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+#     model = _create_fan('fan_tiny_8_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
+#                         **model_kwargs)
+#     return model
 
 
-def fan_small_12_p4_hybrid(pretrained=False, **kwargs):
-    depth = 10
-    channel_dims = [384] * 10 + [384] * (depth - 10)
-    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
-    model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
-    backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
-    model_kwargs = dict(
-        patch_size=16, embed_dim=384, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
-    model = _create_fan('fan_small_12_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
-                        channel_dims=channel_dims, **model_kwargs)
-    return model
+# def fan_small_12_p4_hybrid(pretrained=False, **kwargs):
+#     depth = 10
+#     channel_dims = [384] * 10 + [384] * (depth - 10)
+#     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
+#     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
+#     backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
+#     model_kwargs = dict(
+#         patch_size=16, embed_dim=384, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+#     model = _create_fan('fan_small_12_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
+#                         channel_dims=channel_dims, **model_kwargs)
+#     return model
 
 
-def fan_base_16_p4_hybrid(pretrained=False, **kwargs):
-    depth = 16
-    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
-    model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
-    backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
-    model_kwargs = dict(
-        patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
-    model = _create_fan('fan_base_18_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
-                        **model_kwargs)
-    return model
+# def fan_base_16_p4_hybrid(pretrained=False, **kwargs):
+#     depth = 16
+#     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
+#     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
+#     backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
+#     model_kwargs = dict(
+#         patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+#     model = _create_fan('fan_base_18_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
+#                         **model_kwargs)
+#     return model
 
 
-def fan_large_16_p4_hybrid(pretrained=False, **kwargs):
-    depth = 22
-    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
-    model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
-    backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
-    model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
-        head_init_scale=0.001, **kwargs)
-    model = _create_fan('fan_large_24_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
-                        **model_kwargs)
-    return model
+# def fan_large_16_p4_hybrid(pretrained=False, **kwargs):
+#     depth = 22
+#     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
+#     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
+#     backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
+#     model_kwargs = dict(
+#         patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
+#         head_init_scale=0.001, **kwargs)
+#     model = _create_fan('fan_large_24_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
+#                         **model_kwargs)
+#     return model
 
 
-def fan_Xlarge_16_p4_hybrid(pretrained=False, **kwargs):
-    """
-    For those who have enough GPUs, could try this....
-    """
-    depth = 23
-    stage_depth = 20
-    channel_dims = [528] * stage_depth + [768] * (depth - stage_depth)
-    num_heads = [11] * stage_depth + [16] * (depth - stage_depth)
-    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2 + 1)
-    model_args = dict(depths=[3, 7], dims=[128, 256, 512, 1024], use_head=False)
-    backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
-    model_kwargs = dict(
-        patch_size=16, embed_dim=channel_dims[0], depth=depth, num_heads=num_heads, eta=1.0, tokens_norm=True,
-        sharpen_attn=False, **kwargs)
-    model = _create_fan('fan_xlarge_24_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
-                        channel_dims=channel_dims, **model_kwargs)
-    return model
+# def fan_Xlarge_16_p4_hybrid(pretrained=False, **kwargs):
+#     """
+#     For those who have enough GPUs, could try this....
+#     """
+#     depth = 23
+#     stage_depth = 20
+#     channel_dims = [528] * stage_depth + [768] * (depth - stage_depth)
+#     num_heads = [11] * stage_depth + [16] * (depth - stage_depth)
+#     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2 + 1)
+#     model_args = dict(depths=[3, 7], dims=[128, 256, 512, 1024], use_head=False)
+#     backbone = _create_hybrid_backbone(pretrained=False, pretrained_strict=False, **model_args)
+#     model_kwargs = dict(
+#         patch_size=16, embed_dim=channel_dims[0], depth=depth, num_heads=num_heads, eta=1.0, tokens_norm=True,
+#         sharpen_attn=False, **kwargs)
+#     model = _create_fan('fan_xlarge_24_p16_224', pretrained=pretrained, sr_ratio=sr_ratio, backbone=backbone,
+#                         channel_dims=channel_dims, **model_kwargs)
+#     return model
 
 
 # @register_model
@@ -1293,6 +1419,6 @@ def fan_Xlarge_16_p4_hybrid(pretrained=False, **kwargs):
 #                                         **model_kwargs)
 
 if __name__ == '__main__':
-    model = fan_tiny_12_p16_224()
+    import pdb;
 
-    import pdb; pdb.set_trace()
+    pdb.set_trace()
