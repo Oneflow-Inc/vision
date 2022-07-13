@@ -70,7 +70,9 @@ def get_grad_norm(parameters, norm_type=2):
 
 def auto_resume_helper(output_dir):
     checkpoints = os.listdir(output_dir)
-    checkpoints = [ckpt for ckpt in checkpoints if os.path.isdir(os.path.join(output_dir,ckpt))]
+    checkpoints = [
+        ckpt for ckpt in checkpoints if os.path.isdir(os.path.join(output_dir, ckpt))
+    ]
     print(f"All checkpoints founded in {output_dir}: {checkpoints}")
     if len(checkpoints) > 0:
         latest_checkpoint = max(
