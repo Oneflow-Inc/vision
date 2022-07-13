@@ -49,6 +49,7 @@ architectures for image classification:
 -  `DLA`_
 -  `GENet`_
 -  `HRNet`_
+-  `FAN`_
 
 
 .. _AlexNet: https://arxiv.org/abs/1404.5997
@@ -92,6 +93,7 @@ architectures for image classification:
 .. _DLA: https://arxiv.org/pdf/1707.06484.pdf
 .. _GENet: https://arxiv.org/pdf/2006.14090.pdf
 .. _HRNet: https://arxiv.org/pdf/1908.07919.pdf
+.. _FAN: https://arxiv.org/pdf/2204.12451.pdf
 
 .. currentmodule:: flowvision.models
 
@@ -593,6 +595,24 @@ HRNet
         hrnet_w44,
         hrnet_w48,
         hrnet_w64
+
+
+FAN
+--------
+.. automodule:: flowvision.models
+    :members:
+        fan_tiny_12_p16_224,
+        fan_small_12_p16_224,
+        fan_base_18_p16_224,
+        fan_large_24_p16_224,
+        fan_tiny_8_p4_hybrid,
+        fan_small_12_p4_hybrid,
+        fan_base_16_p4_hybrid,
+        fan_large_16_p4_hybrid,
+        fan_base_16_p4_hybrid_in22k_1k,
+        fan_base_16_p4_hybrid_in22k_1k_384,
+        fan_large_16_p4_hybrid_in22k_1k,
+        fan_large_16_p4_hybrid_in22k_1k_384
 
 
 Neural Style Transfer

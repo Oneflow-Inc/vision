@@ -88,6 +88,8 @@ pip install flowvision==0.1.0
             <li>CaiT</li>
             <li>DLA</li>
             <li>GENet</li>
+            <li>HRNet</li>
+            <li>FAN</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>

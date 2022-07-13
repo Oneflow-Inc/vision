@@ -16,18 +16,18 @@ from .registry import ModelCreator
 from .utils import load_state_dict_from_url
 
 model_urls = {
-    "fan_vit_tiny": "/dataset/ldl_home/Model/pretrained/fan_vit_tiny",
-    "fan_vit_small": "/dataset/ldl_home/Model/pretrained/fan_vit_small",
-    "fan_vit_base": "/dataset/ldl_home/Model/pretrained/fan_vit_base",
-    "fan_vit_large": "",
-    "fan_hybrid_tiny": "/dataset/ldl_home/Model/pretrained/fan_hybrid_tiny",
-    "fan_hybrid_small": "/dataset/ldl_home/Model/pretrained/fan_hybrid_small",
-    "fan_hybrid_base": "/dataset/ldl_home/Model/pretrained/fan_hybrid_base",
-    "fan_hybrid_large": "",
-    "fan_hybrid_base_in22k_1k": "/dataset/ldl_home/Model/pretrained/fan_hybrid_base_in22k_1k",
-    "fan_hybrid_base_in22k_1k_384": "/dataset/ldl_home/Model/pretrained/fan_hybrid_base_in22k_1k_384",
-    "fan_hybrid_large_in22k_1k": "/dataset/ldl_home/Model/pretrained/fan_hybrid_large_in22k_1k",
-    "fan_hybrid_large_in22k_1k_384": "/dataset/ldl_home/Model/pretrained/fan_hybrid_large_in22k_1k_384",
+    "fan_vit_tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_vit_tiny.zip",
+    "fan_vit_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_vit_small.zip",
+    "fan_vit_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_vit_base.zip",
+    "fan_vit_large": None,
+    "fan_hybrid_tiny": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_tiny.zip",
+    "fan_hybrid_small": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_small.zip",
+    "fan_hybrid_base": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_base.zip",
+    "fan_hybrid_large": None,
+    "fan_hybrid_base_in22k_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_base_in22k_1k.zip",
+    "fan_hybrid_base_in22k_1k_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_base_in22k_1k_384.zip",
+    "fan_hybrid_large_in22k_1k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_large_in22k_1k.zip",
+    "fan_hybrid_large_in22k_1k_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/FAN/fan_hybrid_large_in22k_1k_384.zip",
 }
 
 
@@ -38,9 +38,6 @@ def to_2tuple(x):
 
 
 def _is_contiguous(tensor: flow.Tensor) -> bool:
-    # jit is oh so lovely :/
-    # if flow.jit.is_tracing():
-    #     return True
     return tensor.is_contiguous()
 
 
@@ -103,6 +100,7 @@ def _create_fc(num_features, num_classes, use_conv=False):
 class MlpOri(nn.Module):
     """ MLP as used in Vision Transformer, MLP-Mixer and related networks
     """
+
     def __init__(self, in_features, hidden_features=None, out_features=None, act_layer=nn.GELU, bias=True, drop=0.):
         super().__init__()
         out_features = out_features or in_features
@@ -1190,36 +1188,7 @@ class FAN(nn.Module):
             return attn
 
 
-# def checkpoint_filter_fn(state_dict, model):
-#     if 'model' in state_dict:
-#         state_dict = state_dict['model']
-#     # For consistency with timm's transformer models while being compatible with official weights source we rename
-#     # pos_embeder to pos_embed. Also account for use_pos_embed == False
-#     use_pos_embed = getattr(model, 'pos_embed', None) is not None
-#     pos_embed_keys = [k for k in state_dict if k.startswith('pos_embed')]
-#     for k in pos_embed_keys:
-#         if use_pos_embed:
-#             state_dict[k.replace('pos_embeder.', 'pos_embed.')] = state_dict.pop(k)
-#         else:
-#             del state_dict[k]
-#
-#     if 'cls_attn_blocks.0.attn.qkv.weight' in state_dict and 'cls_attn_blocks.0.attn.q.weight' in model.state_dict():
-#         num_ca_blocks = len(model.cls_attn_blocks)
-#         for i in range(num_ca_blocks):
-#             qkv_weight = state_dict.pop(f'cls_attn_blocks.{i}.attn.qkv.weight')
-#             qkv_weight = qkv_weight.reshape(3, -1, qkv_weight.shape[-1])
-#             for j, subscript in enumerate('qkv'):
-#                 state_dict[f'cls_attn_blocks.{i}.attn.{subscript}.weight'] = qkv_weight[j]
-#             qkv_bias = state_dict.pop(f'cls_attn_blocks.{i}.attn.qkv.bias', None)
-#             if qkv_bias is not None:
-#                 qkv_bias = qkv_bias.reshape(3, -1)
-#                 for j, subscript in enumerate('qkv'):
-#                     state_dict[f'cls_attn_blocks.{i}.attn.{subscript}.bias'] = qkv_bias[j]
-#     return state_dict
-
 # FAN-ViT Models
-# 7.31992M
-# Acc@1: 79.098, Acc@1-Error: 20.902, Acc@5: 94.594, Acc@5-Error: 5.406
 @ModelCreator.register_model
 def fan_tiny_12_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 12
@@ -1228,13 +1197,11 @@ def fan_tiny_12_p16_224(pretrained: bool = False, progress: bool = True, **kwarg
         patch_size=16, embed_dim=192, depth=depth, num_heads=4, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_vit_tiny'])
+        state_dict = load_state_dict_from_url(model_urls["fan_vit_tiny"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-# 28.345336M
-# Acc@1: 82.454, Acc@1-Error: 17.546, Acc@5: 96.220, Acc@5-Error: 3.780
 @ModelCreator.register_model
 def fan_small_12_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 12
@@ -1243,13 +1210,11 @@ def fan_small_12_p16_224(pretrained: bool = False, progress: bool = True, **kwar
         patch_size=16, embed_dim=384, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, **kwargs)
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_vit_small'])
+        state_dict = load_state_dict_from_url(model_urls["fan_vit_small"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-# 54.35032M
-# Acc@1: 83.466, Acc@1-Error: 16.534, Acc@5: 96.516, Acc@5-Error: 3.484
 @ModelCreator.register_model
 def fan_base_18_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 18
@@ -1258,7 +1223,7 @@ def fan_base_18_p16_224(pretrained: bool = False, progress: bool = True, **kwarg
         patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_vit_base'])
+        state_dict = load_state_dict_from_url(model_urls["fan_vit_base"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
@@ -1272,63 +1237,56 @@ def fan_large_24_p16_224(pretrained: bool = False, progress: bool = True, **kwar
         **kwargs)
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_vit_large'])
+        state_dict = load_state_dict_from_url(model_urls["fan_vit_large"], progress=progress)
         model.load_state_dict(state_dict)
     return model
-
 
 
 # FAN-Hybrid Models
 # CNN backbones are based on ConvNeXt architecture with only first two stages for downsampling purpose
 # This has been verified to be beneficial for downstream tasks
-# 7.46724M
-# 80.064, Acc@1-Error: 19.936, Acc@5: 95.042, Acc@5-Error: 4.958
 @ModelCreator.register_model
 def fan_tiny_8_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 8
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2 + 1)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2 + 1)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
         patch_size=16, embed_dim=192, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_tiny'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_tiny"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-# 26.117944M
-# 83.504, Acc@1-Error: 16.496, Acc@5: 96.564, Acc@5-Error: 3.436
 @ModelCreator.register_model
 def fan_small_12_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 10
     channel_dims = [384] * 10 + [384] * (depth - 10)
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
         patch_size=16, embed_dim=384, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, channel_dims=channel_dims, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_small'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_small"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-# 50.475048M
-# Acc@1: 83.828, Acc@1-Error: 16.172, Acc@5: 96.686, Acc@5-Error: 3.314
 @ModelCreator.register_model
 def fan_base_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 16
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
         patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_base'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_base"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
@@ -1336,78 +1294,76 @@ def fan_base_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwa
 @ModelCreator.register_model
 def fan_large_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 22
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False, head_init_scale=0.001, **kwargs)
+        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
+        head_init_scale=0.001, **kwargs)
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_large'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_large"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 50.475048M
-# Acc@1: 85.474, Acc@1-Error: 14.526, Acc@5: 97.524, Acc@5-Error: 2.476
+
 @ModelCreator.register_model
 def fan_base_16_p4_hybrid_in22k_1k(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 16
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
         patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_base_in22k_1k'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_base_in22k_1k"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 50.475048M
-# 85.952, Acc@1-Error: 14.048, Acc@5: 97.790, Acc@5-Error: 2.210
+
 @ModelCreator.register_model
 def fan_base_16_p4_hybrid_in22k_1k_384(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 16
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
         patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
     model = FAN(img_size=384, sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_base_in22k_1k_384'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_base_in22k_1k_384"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
 
-# 76.85514M
-# Acc@1: 86.390, Acc@1-Error: 13.610, Acc@5: 97.942, Acc@5-Error: 2.058
 @ModelCreator.register_model
 def fan_large_16_p4_hybrid_in22k_1k(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 22
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False, head_init_scale=0.001, **kwargs)
+        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
+        head_init_scale=0.001, **kwargs)
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_large_in22k_1k'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_large_in22k_1k"], progress=progress)
         model.load_state_dict(state_dict)
     return model
 
-# 76.85514M
-# Acc@1: 86.718, Acc@1-Error: 13.282, Acc@5: 98.040, Acc@5-Error: 1.960
+
 @ModelCreator.register_model
 def fan_large_16_p4_hybrid_in22k_1k_384(pretrained: bool = False, progress: bool = True, **kwargs):
     depth = 22
-    sr_ratio = [1] * (depth//2) + [1] * (depth//2)
+    sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False, head_init_scale=0.001, **kwargs)
+        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
+        head_init_scale=0.001, **kwargs)
     model = FAN(img_size=384, sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = flow.load(model_urls['fan_hybrid_large_in22k_1k_384'])
+        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_large_in22k_1k_384"], progress=progress)
         model.load_state_dict(state_dict)
     return model
