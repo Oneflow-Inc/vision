@@ -1616,6 +1616,24 @@ class FAN(nn.Module):
 # FAN-ViT Models
 @ModelCreator.register_model
 def fan_tiny_12_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-ViT-tiny 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-ViT-tiny 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_tiny_12_p16_224 = flowvision.models.fan_tiny_12_p16_224(pretrained=False, progress=True)
+
+    """
     depth = 12
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
@@ -1639,6 +1657,24 @@ def fan_tiny_12_p16_224(pretrained: bool = False, progress: bool = True, **kwarg
 
 @ModelCreator.register_model
 def fan_small_12_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-ViT-small 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-ViT-small 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_small_12_p16_224 = flowvision.models.fan_small_12_p16_224(pretrained=False, progress=True)
+
+    """
     depth = 12
     sr_ratio = [1] * depth
     model_kwargs = dict(
@@ -1661,6 +1697,24 @@ def fan_small_12_p16_224(pretrained: bool = False, progress: bool = True, **kwar
 
 @ModelCreator.register_model
 def fan_base_18_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-ViT-base 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-ViT-base 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_base_18_p16_224 = flowvision.models.fan_base_18_p16_224(pretrained=False, progress=True)
+
+    """
     depth = 18
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
@@ -1684,6 +1738,24 @@ def fan_base_18_p16_224(pretrained: bool = False, progress: bool = True, **kwarg
 
 @ModelCreator.register_model
 def fan_large_24_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-ViT-large 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-ViT-large 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_large_24_p16_224 = flowvision.models.fan_large_24_p16_224(pretrained=False, progress=True)
+
+    """
     depth = 24
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
@@ -1710,6 +1782,24 @@ def fan_large_24_p16_224(pretrained: bool = False, progress: bool = True, **kwar
 # This has been verified to be beneficial for downstream tasks
 @ModelCreator.register_model
 def fan_tiny_8_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-Hybrid-tiny 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-Hybrid-tiny 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_tiny_8_p4_hybrid = flowvision.models.fan_tiny_8_p4_hybrid(pretrained=False, progress=True)
+
+    """
     depth = 8
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2 + 1)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
@@ -1735,6 +1825,24 @@ def fan_tiny_8_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwar
 
 @ModelCreator.register_model
 def fan_small_12_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-Hybrid-small 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-Hybrid-small 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_small_12_p4_hybrid = flowvision.models.fan_small_12_p4_hybrid(pretrained=False, progress=True)
+
+    """
     depth = 10
     channel_dims = [384] * 10 + [384] * (depth - 10)
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
@@ -1763,6 +1871,24 @@ def fan_small_12_p4_hybrid(pretrained: bool = False, progress: bool = True, **kw
 
 @ModelCreator.register_model
 def fan_base_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-Hybrid-base 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-Hybrid-base 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_base_16_p4_hybrid = flowvision.models.fan_base_16_p4_hybrid(pretrained=False, progress=True)
+
+    """
     depth = 16
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
@@ -1788,6 +1914,24 @@ def fan_base_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwa
 
 @ModelCreator.register_model
 def fan_large_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwargs):
+    """
+    Constructs FAN-Hybrid-large 224x224 model pretrained on ImageNet-1k.
+
+    .. note::
+        FAN-Hybrid-large 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_large_16_p4_hybrid = flowvision.models.fan_large_16_p4_hybrid(pretrained=False, progress=True)
+
+    """
     depth = 22
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
@@ -1816,6 +1960,24 @@ def fan_large_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kw
 def fan_base_16_p4_hybrid_in22k_1k(
     pretrained: bool = False, progress: bool = True, **kwargs
 ):
+    """
+    Constructs FAN-Hybrid-base 224x224 model pretrained on ImageNet-21k.
+
+    .. note::
+        FAN-Hybrid-base 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_base_16_p4_hybrid_in22k_1k = flowvision.models.fan_base_16_p4_hybrid_in22k_1k(pretrained=False, progress=True)
+
+    """
     depth = 16
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
@@ -1843,6 +2005,24 @@ def fan_base_16_p4_hybrid_in22k_1k(
 def fan_base_16_p4_hybrid_in22k_1k_384(
     pretrained: bool = False, progress: bool = True, **kwargs
 ):
+    """
+    Constructs FAN-Hybrid-base 384x384 model pretrained on ImageNet-21k.
+
+    .. note::
+        FAN-Hybrid-base 384x384 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_base_16_p4_hybrid_in22k_1k_384 = flowvision.models.fan_base_16_p4_hybrid_in22k_1k_384(pretrained=False, progress=True)
+
+    """
     depth = 16
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
@@ -1870,6 +2050,24 @@ def fan_base_16_p4_hybrid_in22k_1k_384(
 def fan_large_16_p4_hybrid_in22k_1k(
     pretrained: bool = False, progress: bool = True, **kwargs
 ):
+    """
+    Constructs FAN-Hybrid-large 224x224 model pretrained on ImageNet-21k.
+
+    .. note::
+        FAN-Hybrid-large 224x224 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_large_16_p4_hybrid_in22k_1k = flowvision.models.fan_large_16_p4_hybrid_in22k_1k(pretrained=False, progress=True)
+
+    """
     depth = 22
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
@@ -1898,6 +2096,24 @@ def fan_large_16_p4_hybrid_in22k_1k(
 def fan_large_16_p4_hybrid_in22k_1k_384(
     pretrained: bool = False, progress: bool = True, **kwargs
 ):
+    """
+    Constructs FAN-Hybrid-large 384x384 model pretrained on ImageNet-21k.
+
+    .. note::
+        FAN-Hybrid-large 384x384 model from `"Understanding The Robustness in Vision Transformers" <https://arxiv.org/pdf/2204.12451>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> fan_large_16_p4_hybrid_in22k_1k_384 = flowvision.models.fan_large_16_p4_hybrid_in22k_1k_384(pretrained=False, progress=True)
+
+    """
     depth = 22
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
