@@ -1613,7 +1613,6 @@ class FAN(nn.Module):
             return attn
 
 
-
 # FAN-ViT Models
 @ModelCreator.register_model
 def fan_tiny_12_p16_224(pretrained: bool = False, progress: bool = True, **kwargs):
@@ -1638,10 +1637,20 @@ def fan_tiny_12_p16_224(pretrained: bool = False, progress: bool = True, **kwarg
     depth = 12
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
-        patch_size=16, embed_dim=192, depth=depth, num_heads=4, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+        patch_size=16,
+        embed_dim=192,
+        depth=depth,
+        num_heads=4,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_vit_tiny"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_vit_tiny"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1669,10 +1678,19 @@ def fan_small_12_p16_224(pretrained: bool = False, progress: bool = True, **kwar
     depth = 12
     sr_ratio = [1] * depth
     model_kwargs = dict(
-        patch_size=16, embed_dim=384, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, **kwargs)
+        patch_size=16,
+        embed_dim=384,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_vit_small"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_vit_small"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1700,10 +1718,20 @@ def fan_base_18_p16_224(pretrained: bool = False, progress: bool = True, **kwarg
     depth = 18
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
-        patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+        patch_size=16,
+        embed_dim=448,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_vit_base"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_vit_base"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1731,11 +1759,20 @@ def fan_large_24_p16_224(pretrained: bool = False, progress: bool = True, **kwar
     depth = 24
     sr_ratio = [1] * (depth // 2) + [1] * (depth // 2)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
-        **kwargs)
+        patch_size=16,
+        embed_dim=480,
+        depth=depth,
+        num_heads=10,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_vit_large"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_vit_large"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1768,10 +1805,20 @@ def fan_tiny_8_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwar
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=192, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+        patch_size=16,
+        embed_dim=192,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_tiny"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_tiny"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1802,10 +1849,22 @@ def fan_small_12_p4_hybrid(pretrained: bool = False, progress: bool = True, **kw
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=384, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
-    model = FAN(sr_ratio=sr_ratio, backbone=backbone, channel_dims=channel_dims, **model_kwargs)
+        patch_size=16,
+        embed_dim=384,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
+    model = FAN(
+        sr_ratio=sr_ratio, backbone=backbone, channel_dims=channel_dims, **model_kwargs
+    )
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_small"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_small"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1835,10 +1894,20 @@ def fan_base_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kwa
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+        patch_size=16,
+        embed_dim=448,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_base"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_base"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
@@ -1868,17 +1937,29 @@ def fan_large_16_p4_hybrid(pretrained: bool = False, progress: bool = True, **kw
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
-        head_init_scale=0.001, **kwargs)
+        patch_size=16,
+        embed_dim=480,
+        depth=depth,
+        num_heads=10,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        head_init_scale=0.001,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_large"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_large"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
 
 @ModelCreator.register_model
-def fan_base_16_p4_hybrid_in22k_1k(pretrained: bool = False, progress: bool = True, **kwargs):
+def fan_base_16_p4_hybrid_in22k_1k(
+    pretrained: bool = False, progress: bool = True, **kwargs
+):
     """
     Constructs FAN-Hybrid-base 224x224 model pretrained on ImageNet-21k.
 
@@ -1902,16 +1983,28 @@ def fan_base_16_p4_hybrid_in22k_1k(pretrained: bool = False, progress: bool = Tr
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+        patch_size=16,
+        embed_dim=448,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_base_in22k_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_base_in22k_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
 
 @ModelCreator.register_model
-def fan_base_16_p4_hybrid_in22k_1k_384(pretrained: bool = False, progress: bool = True, **kwargs):
+def fan_base_16_p4_hybrid_in22k_1k_384(
+    pretrained: bool = False, progress: bool = True, **kwargs
+):
     """
     Constructs FAN-Hybrid-base 384x384 model pretrained on ImageNet-21k.
 
@@ -1935,16 +2028,28 @@ def fan_base_16_p4_hybrid_in22k_1k_384(pretrained: bool = False, progress: bool 
     model_args = dict(depths=[3, 3], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=448, depth=depth, num_heads=8, eta=1.0, tokens_norm=True, sharpen_attn=False, **kwargs)
+        patch_size=16,
+        embed_dim=448,
+        depth=depth,
+        num_heads=8,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        **kwargs,
+    )
     model = FAN(img_size=384, sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_base_in22k_1k_384"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_base_in22k_1k_384"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
 
 @ModelCreator.register_model
-def fan_large_16_p4_hybrid_in22k_1k(pretrained: bool = False, progress: bool = True, **kwargs):
+def fan_large_16_p4_hybrid_in22k_1k(
+    pretrained: bool = False, progress: bool = True, **kwargs
+):
     """
     Constructs FAN-Hybrid-large 224x224 model pretrained on ImageNet-21k.
 
@@ -1968,17 +2073,29 @@ def fan_large_16_p4_hybrid_in22k_1k(pretrained: bool = False, progress: bool = T
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
-        head_init_scale=0.001, **kwargs)
+        patch_size=16,
+        embed_dim=480,
+        depth=depth,
+        num_heads=10,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        head_init_scale=0.001,
+        **kwargs,
+    )
     model = FAN(sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_large_in22k_1k"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_large_in22k_1k"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
 
 
 @ModelCreator.register_model
-def fan_large_16_p4_hybrid_in22k_1k_384(pretrained: bool = False, progress: bool = True, **kwargs):
+def fan_large_16_p4_hybrid_in22k_1k_384(
+    pretrained: bool = False, progress: bool = True, **kwargs
+):
     """
     Constructs FAN-Hybrid-large 384x384 model pretrained on ImageNet-21k.
 
@@ -2002,10 +2119,20 @@ def fan_large_16_p4_hybrid_in22k_1k_384(pretrained: bool = False, progress: bool
     model_args = dict(depths=[3, 5], dims=[128, 256, 512, 1024], use_head=False)
     backbone = _create_hybrid_backbone(**model_args)
     model_kwargs = dict(
-        patch_size=16, embed_dim=480, depth=depth, num_heads=10, eta=1.0, tokens_norm=True, sharpen_attn=False,
-        head_init_scale=0.001, **kwargs)
+        patch_size=16,
+        embed_dim=480,
+        depth=depth,
+        num_heads=10,
+        eta=1.0,
+        tokens_norm=True,
+        sharpen_attn=False,
+        head_init_scale=0.001,
+        **kwargs,
+    )
     model = FAN(img_size=384, sr_ratio=sr_ratio, backbone=backbone, **model_kwargs)
     if pretrained:
-        state_dict = load_state_dict_from_url(model_urls["fan_hybrid_large_in22k_1k_384"], progress=progress)
+        state_dict = load_state_dict_from_url(
+            model_urls["fan_hybrid_large_in22k_1k_384"], progress=progress
+        )
         model.load_state_dict(state_dict)
     return model
