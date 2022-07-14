@@ -25,6 +25,9 @@
 - Support [DeiT III](https://arxiv.org/abs/2204.07118) model and pretrained weight [#239](https://github.com/Oneflow-Inc/vision/pull/239)
 - Support [CaiT](https://arxiv.org/abs/2103.17239) model and pretrained weight [#239](https://github.com/Oneflow-Inc/vision/pull/239)
 - Support [DLA](https://arxiv.org/abs/1707.06484) model and pretrained weight [#239](https://github.com/Oneflow-Inc/vision/pull/239)
+- Support [GENet](https://arxiv.org/abs/2006.14090) model and pretrained weight [#250](https://github.com/Oneflow-Inc/vision/pull/250)
+- Support [HRNet](https://arxiv.org/abs/1908.07919) model and pretrained weight [#250](https://github.com/Oneflow-Inc/vision/pull/250)
+- Support [FAN](https://arxiv.org/abs/2204.12451) model and pretrained weight [#250](https://github.com/Oneflow-Inc/vision/pull/250)
 
 **Bug Fixes**
 - Fix benchmark normalize mode error [#146](https://github.com/Oneflow-Inc/vision/pull/146)
