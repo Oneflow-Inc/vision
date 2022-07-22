@@ -1,7 +1,7 @@
 
 ## Steps for Build Docs
 
-Before generating the doc, you need to install flowvision by:
+Before generating the doc, you need to install FlowVision by:
 
 ```bash
 cd ${flow-vision-path}

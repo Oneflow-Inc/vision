@@ -64,7 +64,7 @@ class Compose:
 
 
 class ToTensor:
-    r"""Convert a ``PIL Image`` or ``numpy.ndarray`` to tensor.
+    r"""Converts a ``PIL Image`` or ``numpy.ndarray`` to tensor.
 
     Converts a PIL Image or numpy.ndarray (H x W x C) in the range
     [0, 255] to a flow.FloatTensor of shape (C x H x W) in the range [0.0, 1.0]
@@ -92,7 +92,7 @@ class ToTensor:
 
 
 class PILToTensor:
-    """Convert a ``PIL Image`` to a tensor of the same type
+    """Converts a ``PIL Image`` to a tensor of the same type
 
     Converts a PIL Image (H x W x C) to a Tensor of shape (C x H x W).
     """
@@ -112,7 +112,7 @@ class PILToTensor:
 
 
 class ConvertImageDtype(Module):
-    """Convert a tensor image to the given ``dtype`` and scale the values accordingly
+    """Converts a tensor image to the given ``dtype`` and scale the values accordingly
     This function does not support PIL Image.
 
     Args:
@@ -139,7 +139,7 @@ class ConvertImageDtype(Module):
 
 
 class ToPILImage:
-    """Convert a tensor or an ndarray to PIL Image.
+    """Converts a tensor or an ndarray to PIL Image.
 
     Converts a flow.Tensor of shape C x H x W or a numpy ndarray of shape
     H x W x C to a PIL Image while preserving the value range.
@@ -179,7 +179,7 @@ class ToPILImage:
 
 
 class Normalize(Module):
-    r"""Normalize a tensor image with mean and standard deviation.
+    r"""Normalizes a tensor image with mean and standard deviation.
     This transform does not support PIL Image.
     Given mean: ``(mean[1],...,mean[n])`` and std: ``(std[1],..,std[n])`` for ``n``
     channels, this transform will normalize each channel of the input
@@ -217,7 +217,7 @@ class Normalize(Module):
 
 
 class Resize(Module):
-    r"""Resize the input image to the given size.
+    r"""Resizes the input image to the given size.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions
 
@@ -316,7 +316,7 @@ class CenterCrop(Module):
 
 
 class Pad(Module):
-    r"""Pad the given image on all sides with the given "pad" value.
+    r"""Pads the given image on all sides with the given "pad" value.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means at most 2 leading dimensions for mode reflect and symmetric,
     at most 3 leading dimensions for mode edge,
@@ -393,7 +393,7 @@ class Pad(Module):
 
 
 class Lambda:
-    r"""Apply a user-defined lambda as a transform.
+    r"""Applies a user-defined lambda as a transform.
 
     Args:
         lambd (function): Lambda/function to be used for transform.
@@ -429,7 +429,7 @@ def _setup_size(size, error_msg):
 
 
 class RandomTransforms:
-    r"""Base class for a list of transformations with randomness
+    r"""Bases class for a list of transformations with randomness
 
     Args:
         transforms (sequence): list of transformations
@@ -453,7 +453,7 @@ class RandomTransforms:
 
 
 class RandomApply(Module):
-    """Apply randomly a list of transformations with a given probability.
+    """Applies randomly a list of transformations with a given probability.
 
     .. note::
         In order to script the transformation, please use ``flow.nn.ModuleList`` as input instead of list/tuple of
@@ -496,7 +496,7 @@ class RandomApply(Module):
 
 
 class RandomOrder(RandomTransforms):
-    """Apply a list of transformations in a random order.
+    """Applies a list of transformations in a random order.
     """
 
     def __call__(self, img):
@@ -508,7 +508,7 @@ class RandomOrder(RandomTransforms):
 
 
 class RandomChoice(RandomTransforms):
-    """Apply single transformation randomly picked from a list.
+    """Applies a single transformation randomly picked from a list.
     """
 
     def __call__(self, img):
@@ -517,7 +517,7 @@ class RandomChoice(RandomTransforms):
 
 
 class RandomCrop(Module):
-    """Crop the given image at a random location.
+    """Crops the given image at a random location.
     If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions,
     but if non-constant padding is used, the input is expected to have at most 2 leading dimensions
@@ -561,7 +561,7 @@ class RandomCrop(Module):
     def get_params(
         img: Tensor, output_size: Tuple[int, int]
     ) -> Tuple[int, int, int, int]:
-        """Get parameters for ``crop`` for a random crop.
+        """Gets parameters for ``crop`` for a random crop.
 
         Args:
             img (PIL Image or Tensor): Image to be cropped.
@@ -635,8 +635,8 @@ class RandomCrop(Module):
 
 
 class RandomHorizontalFlip(Module):
-    """Horizontally flip the given image randomly with a given probability.
-    If the image is flow Tensor, it is expected
+    """Horizontally flips the given image randomly with a given probability.
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -666,8 +666,8 @@ class RandomHorizontalFlip(Module):
 
 
 class RandomVerticalFlip(Module):
-    """Vertically flip the given image randomly with a given probability.
-    If the image is flow Tensor, it is expected
+    """Vertically flips the given image randomly with a given probability.
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -697,9 +697,9 @@ class RandomVerticalFlip(Module):
 
 
 class RandomResizedCrop(Module):
-    """Crop a random portion of image and resize it to a given size.
+    """Crops a random portion of image and resize it to a given size.
 
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions
 
     A crop of the original image is made: the crop has a random area (H * W)
@@ -757,7 +757,7 @@ class RandomResizedCrop(Module):
     def get_params(
         img: Tensor, scale: List[float], ratio: List[float]
     ) -> Tuple[int, int, int, int]:
-        """Get parameters for ``crop`` for a random sized crop.
+        """Gets parameters for ``crop`` for a random sized crop.
 
         Args:
             img (PIL Image or Tensor): Input image.
@@ -833,8 +833,8 @@ class RandomSizedCrop(RandomResizedCrop):
 
 
 class FiveCrop(Module):
-    """Crop the given image into four corners and the central crop.
-    If the image is flow Tensor, it is expected
+    """Crops the given image into four corners and the central crop.
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -881,9 +881,9 @@ class FiveCrop(Module):
 
 
 class TenCrop(Module):
-    """Crop the given image into four corners and the central crop plus the flipped version of
+    """Crops the given image into four corners and the central crop plus the flipped version of
     these (horizontal flipping is used by default).
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading
     dimensions
 
@@ -935,7 +935,7 @@ class TenCrop(Module):
 
 class ColorJitter(Module):
     """Randomly change the brightness, contrast, saturation and hue of an image.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions.
     If img is PIL Image, mode "1", "L", "I", "F" and modes with transparency (alpha channel) are not supported.
 
@@ -1079,7 +1079,7 @@ class ColorJitter(Module):
 
 class RandomRotation(Module):
     """Rotate the image by angle.
-    If the image is flow Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
 
     Args:
@@ -1148,7 +1148,7 @@ class RandomRotation(Module):
 
     @staticmethod
     def get_params(degrees: List[float]) -> float:
-        """Get parameters for ``rotate`` for a random rotation.
+        """Gets parameters for ``rotate`` for a random rotation.
 
         Returns:
             float: angle parameter to be passed to ``rotate`` for random rotation.
@@ -1190,8 +1190,8 @@ class RandomRotation(Module):
 
 
 class RandomGrayscale(Module):
-    """Randomly convert image to grayscale with a probability of p (default 0.1).
-    If the image is flow Tensor, it is expected
+    """Randomly converts image to grayscale with a probability of p (default 0.1).
+    If the image is oneflow Tensor, it is expected
     to have [..., 3, H, W] shape, where ... means an arbitrary number of leading dimensions
 
     Args:
@@ -1279,14 +1279,14 @@ class GaussianBlur(Module):
 
     @staticmethod
     def get_params(sigma_min: float, sigma_max: float) -> float:
-        """Choose sigma for random gaussian blurring.
+        """Choose sigma for random Gaussian blurring.
 
         Args:
             sigma_min (float): Minimum standard deviation that can be chosen for blurring kernel.
             sigma_max (float): Maximum standard deviation that can be chosen for blurring kernel.
 
         Returns:
-            float: Standard deviation to be passed to calculate kernel for gaussian blurring.
+            float: Standard deviation to be passed to calculate kernel for Gaussian blurring.
         """
         return flow.empty(1).uniform_(sigma_min, sigma_max).item()
 

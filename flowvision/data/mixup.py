@@ -39,7 +39,7 @@ def mixup_target(target, num_classes, lam=1.0, smoothing=0.0, device="cuda"):
 
 def rand_bbox(img_shape, lam, margin=0.0, count=None):
     """ Standard CutMix bounding-box
-    Generates a random square bbox based on lambda value. This impl includes
+    Generates a random square bbox based on lambda value. This implementation includes
     support for enforcing a border margin as percent of bbox dimensions.
     
     Args:
@@ -90,7 +90,7 @@ def rand_bbox_minmax(img_shape, minmax, count=None):
 def cutmix_bbox_and_lam(
     img_shape, lam, ratio_minmax=None, correct_lam=True, count=None
 ):
-    """ Generate bbox and apply lambda correction.
+    """ Generates bbox and apply lambda correction.
     """
     if ratio_minmax is not None:
         yl, yu, xl, xu = rand_bbox_minmax(img_shape, ratio_minmax, count=count)

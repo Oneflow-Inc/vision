@@ -26,7 +26,7 @@ class RandomErasing:
     or single image tensor after it has been normalized by dataset mean and std.
     
     Args:
-        probability: Probability that the Random Erasing operation will be performed
+        probability: Probability that the RandomErasing operation will be performed
         min_area: Minimum percentage of erased area wrt input image area
         max_area: Maximum percentage of erased area wrt input image area
         min_aspect: Minimum aspect ratio of erased area
@@ -36,7 +36,7 @@ class RandomErasing:
             * 'rand'  - erase block is same per-channel random (normal) color
             * 'pixel' - erase block is per-pixel random (normal) color
         
-        max_count: Maximum number of erasing blocks per image, area per box is scaled by count.
+        max_count: Maximum number of erasing blocks per image, and area per box is scaled by count.
             per-image count is randomly chosen between 1 and this value
     """
 

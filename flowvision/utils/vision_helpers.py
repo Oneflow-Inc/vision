@@ -19,7 +19,7 @@ def make_grid(
     scale_each: bool = False,
     pad_value: int = 0,
 ) -> flow.Tensor:
-    """Make a grid of images.
+    """Makes grid of images.
 
     Args:
         tensor (Tensor or list): 4D mini-batch Tensor of shape (B x C x H x W)
@@ -126,7 +126,7 @@ def save_image(
     pad_value: int = 0,
     format: Optional[str] = None,
 ) -> None:
-    """Save a given Tensor into an image file.
+    """Saves a given Tensor into an image file.
 
     Args:
         tensor (Tensor or list): Image to be saved. If given a mini-batch tensor,
