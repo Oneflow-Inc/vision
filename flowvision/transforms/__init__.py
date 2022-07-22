@@ -22,12 +22,14 @@ from .transforms import (
     RandomResizedCrop,
     RandomSizedCrop,
     RandomGrayscale,
+    Grayscale,
     FiveCrop,
     TenCrop,
     InterpolationMode,
     ToNumpy,
     ColorJitter,
     GaussianBlur,
+    Solarization,
 )
 
 
@@ -53,10 +55,12 @@ __all__ = [
     "RandomResizedCrop",
     "RandomSizedCrop",
     "RandomGrayscale",
+    "Grayscale",
     "FiveCrop",
     "TenCrop",
     "InterpolationMode",
     "ToNumpy",
     "ColorJitter",
     "GaussianBlur",
+    "Solarization",
 ]
