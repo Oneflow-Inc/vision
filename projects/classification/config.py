@@ -20,7 +20,7 @@ _C.DATA.BATCH_SIZE = 128
 # Path to dataset, could be overwritten by command line argument
 _C.DATA.DATA_PATH = ""
 # Dataset name
-_C.DATA.DATASET = "cifar100"
+_C.DATA.DATASET = "imagenet"
 # Input image size
 _C.DATA.IMG_SIZE = 224
 # Interpolation to resize image (random, bilinear, bicubic)
@@ -40,7 +40,7 @@ _C.DATA.NUM_WORKERS = 8
 # -----------------------------------------------------------------------------
 _C.MODEL = CN()
 # Model arch
-_C.MODEL.ARCH = "swin_tiny_patch4_window7_224"
+_C.MODEL.ARCH = "resnet50"
 # Pretrained weight from checkpoint
 _C.MODEL.PRETRAINED = False
 # Path to a specific weights to load, e.g., "./checkpoints/swin_tiny_pretrained_model"
@@ -90,13 +90,15 @@ _C.TRAIN.LR_SCHEDULER.DECAY_RATE = 0.1
 
 # Optimizer
 _C.TRAIN.OPTIMIZER = CN()
-_C.TRAIN.OPTIMIZER.NAME = "adamw"
-# Optimizer Epsilon
-_C.TRAIN.OPTIMIZER.EPS = 1e-8
-# Optimizer Betas
-_C.TRAIN.OPTIMIZER.BETAS = (0.9, 0.999)
+_C.TRAIN.OPTIMIZER.NAME = "sgd"
+# # Optimizer Epsilon
+# _C.TRAIN.OPTIMIZER.EPS = 1e-8
+# # Optimizer Betas
+# _C.TRAIN.OPTIMIZER.BETAS = (0.9, 0.999)
 # SGD momentum
 _C.TRAIN.OPTIMIZER.MOMENTUM = 0.9
+# # NESTEROV
+_C.TRAIN.OPTIMIZER.NESTEROV = True
 
 # -----------------------------------------------------------------------------
 # Augmentation settings
@@ -110,12 +112,22 @@ _C.AUG.AUTO_AUGMENT = "rand-m9-mstd0.5-inc1"
 _C.AUG.REPROB = 0.25
 # Random erase mode
 _C.AUG.REMODE = "pixel"
+# Scale
+_C.AUG.SCALE = [0.08, 1.0]
+# Ratio
+_C.RATIO = [0.75, 1.0+1/3]
+# Hflip
+_C.HFLIP = 0.5
+# Vflip
+_C.VFLIP = 0.0
+# Interpolation
+_C.INTERPLOATION = 'random'
 # Random erase count
 _C.AUG.RECOUNT = 1
 # Mixup alpha, mixup enabled if > 0
-_C.AUG.MIXUP = 0.8
+_C.AUG.MIXUP = 0.0
 # Cutmix alpha, cutmix enabled if > 0
-_C.AUG.CUTMIX = 1.0
+_C.AUG.CUTMIX = 0.0
 # Cutmix min/max ratio, overrides alpha and enables cutmix if set
 _C.AUG.CUTMIX_MINMAX = None
 # Probability of performing mixup or cutmix when either/both is enabled
