@@ -332,7 +332,7 @@ def _hsv2rgb(img: Tensor) -> Tensor:
     a3 = flow.stack((p, p, t, v, v, q), dim=-3)
     a4 = flow.stack((a1, a2, a3), dim=-4)
 
-    return flow.sum(mask.to(dtype=img.dtype).unsqueeze(0) * a4, dim=1)
+    return flow.einsum("...ijk, ...xijk -> ...xjk", mask.to(dtype=img.dtype), a4)
 
 
 def _pad_symmetric(img: Tensor, padding: List[int]) -> Tensor:
