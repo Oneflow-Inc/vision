@@ -14,12 +14,10 @@ from .utils import load_state_dict_from_url
 model_urls = {
     "beit_base_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_base_patch16_224.zip",
     "beit_base_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_base_patch16_384.zip",
-    "beit_base_patch16_224_in22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_base_patch16_224_in22k.zip",
     "beit_large_patch16_224": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_large_patch16_224.zip",
     "beit_large_patch16_384": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_large_patch16_384.zip",
     "beit_large_patch16_512": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_large_patch16_512.zip",
-    "beit_large_patch16_224_in22k": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/Beit/beit_large_patch16_224_in22k.zip",
-}
+    }
 
 
 def gen_relative_position_index(window_size: Tuple[int, int]) -> flow.Tensor:
@@ -443,32 +441,6 @@ def beit_base_patch16_384(pretrained=False, progress=True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
-@ModelCreator.register_model
-def beit_base_patch16_224_in22k(pretrained=False, progress=True, **kwargs):
-    model_kwargs = dict(
-        num_classes=21841,
-        patch_size=16,
-        embed_dim=768,
-        depth=12,
-        num_heads=12,
-        mlp_ratio=4,
-        use_abs_pos_emb=False,
-        use_rel_pos_bias=True,
-        init_values=0.1,
-        **kwargs
-    )
-    model = Beit(**model_kwargs)
-    if pretrained:
-        state_dict = load_state_dict_from_url(
-            model_urls["beit_base_patch16_224_in22k"],
-            model_dir="./checkpoints",
-            progress=progress,
-        )
-        model.load_state_dict(state_dict)
-    return model
-
-
 @ModelCreator.register_model
 def beit_large_patch16_224(pretrained=False, progress=True, **kwargs):
     model_kwargs = dict(
@@ -545,28 +517,3 @@ def beit_large_patch16_512(pretrained=False, progress=True, **kwargs):
         model.load_state_dict(state_dict)
     return model
 
-
-@ModelCreator.register_model
-def beit_large_patch16_224_in22k(pretrained=False, progress=True, **kwargs):
-    model_kwargs = dict(
-        num_classes=21841,
-        patch_size=16,
-        embed_dim=1024,
-        depth=24,
-        num_heads=16,
-        mlp_ratio=4,
-        qkv_bias=True,
-        use_abs_pos_emb=False,
-        use_rel_pos_bias=True,
-        init_values=1e-5,
-        **kwargs
-    )
-    model = Beit(**model_kwargs)
-    if pretrained:
-        state_dict = load_state_dict_from_url(
-            model_urls["beit_large_patch16_224_in22k"],
-            model_dir="./checkpoints",
-            progress=progress,
-        )
-        model.load_state_dict(state_dict)
-    return model
