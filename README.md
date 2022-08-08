@@ -26,7 +26,7 @@ First install OneFlow, please refer to [install-oneflow](https://github.com/Onef
 
 Then install the latest stable release of `flowvision`
 ```bash
-pip install flowvision==0.1.0
+pip install flowvision==0.2.0
 ```
 
 ## Overview of flowvision structure
@@ -87,6 +87,9 @@ pip install flowvision==0.1.0
             <li>DeiT-III</li>
             <li>CaiT</li>
             <li>DLA</li>
+            <li>GENet</li>
+            <li>HRNet</li>
+            <li>FAN</li>
         </ul>
         <li><b>Detection</b></li>
         <ul>
@@ -358,4 +361,4 @@ You can get the results like:
 ## Disclaimer on Datasets
 This is a utility library that downloads and prepares public datasets. We do not host or distribute these datasets, vouch for their quality or fairness, or claim that you have license to use the dataset. It is your responsibility to determine whether you have permission to use the dataset under the dataset's license.
 
-If you're a dataset owner and wish to update any part of it (description, citation, etc.), or do not want your dataset to be included in this library, please get in touch through a GitHub issue. Thanks for your contribution to the ML community!
+If you're a dataset owner and wish to update any part of it (description, citation, etc.), or do not want your dataset to be included in this library, please get in touch through a GitHub issue. Thanks for your contribution to the ML community! 

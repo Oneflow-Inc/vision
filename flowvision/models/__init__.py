@@ -35,7 +35,11 @@ from .mobilevit import *
 from .deit_III import *
 from .cait import *
 from .dla import *
+from .genet import *
+from .hrnet import *
+from .fan import *
 from .beit import *
+
 
 from . import style_transfer
 from . import detection
