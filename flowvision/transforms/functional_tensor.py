@@ -280,8 +280,12 @@ def _rgb2hsv(img: Tensor) -> Tensor:
 
     # Implementation is based on https://github.com/python-pillow/Pillow/blob/4174d4267616897df3746d315d5a2d0f82c656ee/
     # src/libImaging/Convert.c#L330
-    maxc = flow.max(img, dim=-3).values
-    minc = flow.min(img, dim=-3).values
+
+    # TODO: tensor.values api not support yet
+    # maxc = flow.max(img, dim=-3).values
+    # minc = flow.min(img, dim=-3).values
+    maxc = flow.max(img, dim=-3)[0]
+    minc = flow.min(img, dim=-3)[0]
 
     # The algorithm erases S and H channel where `maxc = minc`. This avoids NaN
     # from happening in the results, because
