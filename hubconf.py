@@ -3,7 +3,12 @@
 dependencies = ["oneflow"]
 
 from flowvision.models.alexnet import alexnet
-from flowvision.models.densenet import densenet121, densenet161, densenet169, densenet201
+from flowvision.models.densenet import (
+    densenet121,
+    densenet161,
+    densenet169,
+    densenet201,
+)
 from flowvision.models.efficientnet import (
     efficientnet_b0,
     efficientnet_b1,
@@ -12,7 +17,7 @@ from flowvision.models.efficientnet import (
     efficientnet_b4,
     efficientnet_b5,
     efficientnet_b6,
-    efficientnet_b7
+    efficientnet_b7,
 )
 from flowvision.models.googlenet import googlenet
 from flowvision.models.inception_v3 import inception_v3
@@ -54,4 +59,13 @@ from flowvision.models.shufflenet_v2 import (
     shufflenet_v2_x2_0,
 )
 from flowvision.models.squeezenet import squeezenet1_0, squeezenet1_1
-from flowvision.models.vgg import vgg11, vgg11_bn, vgg13, vgg13_bn, vgg16, vgg16_bn, vgg19, vgg19_bn
+from flowvision.models.vgg import (
+    vgg11,
+    vgg11_bn,
+    vgg13,
+    vgg13_bn,
+    vgg16,
+    vgg16_bn,
+    vgg19,
+    vgg19_bn,
+)

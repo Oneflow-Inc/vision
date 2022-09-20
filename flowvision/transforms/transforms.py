@@ -1218,7 +1218,9 @@ class Grayscale(Module):
         return F.rgb_to_grayscale(img, num_output_channels=self.num_output_channels)
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(num_output_channels={self.num_output_channels})"
+        return (
+            f"{self.__class__.__name__}(num_output_channels={self.num_output_channels})"
+        )
 
 
 class RandomGrayscale(Module):
@@ -1345,14 +1347,13 @@ class Solarization(Module):
     Args:
         p (float): probability that image should be applied with solarization operation.
     """
+
     def __init__(self, p=0.1):
         super().__init__()
         self.p = p
         if p > 1:
-            warnings.warn(
-                "Probability is larger than 1, return the original image."
-            )
-    
+            warnings.warn("Probability is larger than 1, return the original image.")
+
     def forward(self, img):
         """
         Args:
@@ -1362,13 +1363,14 @@ class Solarization(Module):
             PIL Image or Tensor: selorization image.
         """
         if flow.rand(1) < self.p:
-            return  ImageOps.solarize(img)
+            return ImageOps.solarize(img)
         else:
             return img
 
     def __repr__(self) -> str:
         s = f"{self.__class__.__name__}(p={self.p})"
         return s
+
 
 def _setup_size(size, error_msg):
     if isinstance(size, numbers.Number):
