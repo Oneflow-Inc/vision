@@ -19,6 +19,7 @@ __all__ = [
     "resnet152",
     "resnext50_32x4d",
     "resnext101_32x8d",
+    "resnext101_64x4d",
     "wide_resnet50_2",
     "wide_resnet101_2",
 ]
@@ -483,6 +484,35 @@ def resnext101_32x8d(
     kwargs["width_per_group"] = 8
     return _resnet(
         "resnext101_32x8d", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
+    )
+
+
+@ModelCreator.register_model
+def resnext101_64x4d(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> ResNet:
+    """
+    Constructs the ResNeXt-101 64x4d model.
+
+    .. note::
+        `Aggregated Residual Transformation for Deep Neural Networks <https://arxiv.org/pdf/1611.05431.pdf>`_.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> resnext101_64x4d = flowvision.models.resnext101_64x4d(pretrained=False, progress=True)
+
+    """
+    kwargs["groups"] = 64
+    kwargs["width_per_group"] = 4
+    return _resnet(
+        "resnext101_64x4d", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs
     )
 
 
