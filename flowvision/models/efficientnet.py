@@ -26,6 +26,9 @@ __all__ = [
     "efficientnet_b5",
     "efficientnet_b6",
     "efficientnet_b7",
+    "efficientnet_v2_s",
+    "efficientnet_v2_m",
+    "efficientnet_v2_l",
 ]
 
 
@@ -208,17 +211,19 @@ class EfficientNet(nn.Module):
         num_classes: int = 1000,
         block: Optional[Callable[..., nn.Module]] = None,
         norm_layer: Optional[Callable[..., nn.Module]] = None,
+        last_channel: Optional[int] = None,
         **kwargs: Any,
     ) -> None:
         """
         EfficientNet main class
         Args:
             inverted_residual_setting (List[MBConvConfig]): Network structure
-            dropout (float): The droupout probability
+            dropout (float): The dropout probability
             stochastic_depth_prob (float): The stochastic depth probability
             num_classes (int): Number of classes
             block (Optional[Callable[..., nn.Module]]): Module specifying inverted residual building block for mobilenet
             norm_layer (Optional[Callable[..., nn.Module]]): Module specifying the normalization layer to use
+            last_channel (int): The number of channels on the penultimate layer
         """
         super().__init__()
 
@@ -280,7 +285,7 @@ class EfficientNet(nn.Module):
 
         # building last several layers
         lastconv_input_channels = inverted_residual_setting[-1].out_channels
-        lastconv_output_channels = 4 * lastconv_input_channels
+        lastconv_output_channels = last_channel if last_channel is not None else 4 * lastconv_input_channels
         layers.append(
             ConvBnAct(
                 lastconv_input_channels,
@@ -334,17 +339,54 @@ def _efficientnet(
     progress: bool,
     **kwargs: Any,
 ) -> EfficientNet:
-    bneck_conf = partial(MBConvConfig, width_mult=width_mult, depth_mult=depth_mult)
-    inverted_residual_setting = [
-        bneck_conf(1, 3, 1, 32, 16, 1),
-        bneck_conf(6, 3, 2, 16, 24, 2),
-        bneck_conf(6, 5, 2, 24, 40, 2),
-        bneck_conf(6, 3, 2, 40, 80, 3),
-        bneck_conf(6, 5, 1, 80, 112, 3),
-        bneck_conf(6, 5, 2, 112, 192, 4),
-        bneck_conf(6, 3, 1, 192, 320, 1),
-    ]
-    model = EfficientNet(inverted_residual_setting, dropout, **kwargs)
+    if arch.startswith("efficientnet_b"):
+        bneck_conf = partial(MBConvConfig, width_mult=kwargs.pop("width_mult"), depth_mult=kwargs.pop("depth_mult"))
+        inverted_residual_setting = [
+            bneck_conf(1, 3, 1, 32, 16, 1),
+            bneck_conf(6, 3, 2, 16, 24, 2),
+            bneck_conf(6, 5, 2, 24, 40, 2),
+            bneck_conf(6, 3, 2, 40, 80, 3),
+            bneck_conf(6, 5, 1, 80, 112, 3),
+            bneck_conf(6, 5, 2, 112, 192, 4),
+            bneck_conf(6, 3, 1, 192, 320, 1),
+        ]
+        last_channel = None
+    elif arch.startswith("efficientnet_v2_s"):
+        inverted_residual_setting = [
+            FusedMBConvConfig(1, 3, 1, 24, 24, 2),
+            FusedMBConvConfig(4, 3, 2, 24, 48, 4),
+            FusedMBConvConfig(4, 3, 2, 48, 64, 4),
+            MBConvConfig(4, 3, 2, 64, 128, 6),
+            MBConvConfig(6, 3, 1, 128, 160, 9),
+            MBConvConfig(6, 3, 2, 160, 256, 15),
+        ]
+        last_channel = 1280
+    elif arch.startswith("efficientnet_v2_m"):
+        inverted_residual_setting = [
+            FusedMBConvConfig(1, 3, 1, 24, 24, 3),
+            FusedMBConvConfig(4, 3, 2, 24, 48, 5),
+            FusedMBConvConfig(4, 3, 2, 48, 80, 5),
+            MBConvConfig(4, 3, 2, 80, 160, 7),
+            MBConvConfig(6, 3, 1, 160, 176, 14),
+            MBConvConfig(6, 3, 2, 176, 304, 18),
+            MBConvConfig(6, 3, 1, 304, 512, 5),
+        ]
+        last_channel = 1280
+    elif arch.startswith("efficientnet_v2_l"):
+        inverted_residual_setting = [
+            FusedMBConvConfig(1, 3, 1, 32, 32, 4),
+            FusedMBConvConfig(4, 3, 2, 32, 64, 7),
+            FusedMBConvConfig(4, 3, 2, 64, 96, 7),
+            MBConvConfig(4, 3, 2, 96, 192, 10),
+            MBConvConfig(6, 3, 1, 192, 224, 19),
+            MBConvConfig(6, 3, 2, 224, 384, 25),
+            MBConvConfig(6, 3, 1, 384, 640, 7),
+        ]
+        last_channel = 1280
+    else:
+        raise ValueError(f"Unsupported model type {arch}")
+
+    model = EfficientNet(inverted_residual_setting, dropout, last_channel=last_channel, **kwargs)
     if pretrained:
         if model_urls.get(arch, None) is None:
             raise ValueError(f"No checkpoint is available for model type {arch}")
@@ -595,4 +637,91 @@ def efficientnet_b7(
         progress,
         norm_layer=partial(nn.BatchNorm2d, eps=0.001, momentum=0.01),
         **kwargs,
+    )
+
+
+@ModelCreator.register_model
+def efficientnet_v2_s(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
+    """
+    Constructs an EfficientNetV2-S model.
+    
+    .. note::
+        EfficientNetV2-S model architecture from `EfficientNetV2: Smaller Models and Faster Training <https://arxiv.org/abs/2104.00298>`_.
+        Note that the (resize-size, crop-size) should be (256, 240) for efficientnet-b1 model when training and testing.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> efficientnet_v2_s = flowvision.models.efficientnet_v2_s(pretrained=False, progress=True)
+
+    """
+    return _efficientnet(
+        "efficientnet_v2_s", 
+        dropout=0.2,
+    )
+
+
+@ModelCreator.register_model
+def efficientnet_v2_m(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
+    """
+    Constructs an EfficientNetV2-M model.
+    
+    .. note::
+        EfficientNetV2-M model architecture from `EfficientNetV2: Smaller Models and Faster Training <https://arxiv.org/abs/2104.00298>`_.
+        Note that the (resize-size, crop-size) should be (256, 240) for efficientnet-b1 model when training and testing.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> efficientnet_v2_m = flowvision.models.efficientnet_v2_m(pretrained=False, progress=True)
+
+    """
+    return _efficientnet(
+        "efficientnet_v2_m", 
+        dropout=0.2,
+    )
+
+
+@ModelCreator.register_model
+def efficientnet_v2_l(
+    pretrained: bool = False, progress: bool = True, **kwargs: Any
+) -> EfficientNet:
+    """
+    Constructs an EfficientNetV2-L model.
+    
+    .. note::
+        EfficientNetV2-L model architecture from `EfficientNetV2: Smaller Models and Faster Training <https://arxiv.org/abs/2104.00298>`_.
+        Note that the (resize-size, crop-size) should be (256, 240) for efficientnet-b1 model when training and testing.
+
+    Args:
+        pretrained (bool): Whether to download the pre-trained model on ImageNet. Default: ``False``
+        progress (bool): If True, displays a progress bar of the download to stderr. Default: ``True``
+
+    For example:
+
+    .. code-block:: python
+
+        >>> import flowvision
+        >>> efficientnet_v2_l = flowvision.models.efficientnet_v2_l(pretrained=False, progress=True)
+
+    """
+    return _efficientnet(
+        "efficientnet_v2_l", 
+        dropout=0.2,
     )
