@@ -854,7 +854,7 @@ class RandomAffine(Module):
             a x-axis shear in (shear[0], shear[1]) and y-axis shear in (shear[2], shear[3]) will be applied.
             Will not apply shear by default.
         interpolation (InterpolationMode): Desired interpolation enum defined by
-            :class:`torchvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
             If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` are supported.
             For backward compatibility integer values (e.g. ``PIL.Image[.Resampling].NEAREST``) are still accepted,
             but deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
