@@ -835,7 +835,7 @@ class RandomSizedCrop(RandomResizedCrop):
 
 class RandomAffine(Module):
     """Random affine transformation of the image keeping center invariant.
-    If the image is torch Tensor, it is expected
+    If the image is oneflow Tensor, it is expected
     to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
     Args:
         degrees (sequence or number): Range of degrees to select from.
