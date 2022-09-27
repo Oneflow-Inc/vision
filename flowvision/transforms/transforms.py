@@ -954,7 +954,9 @@ class RandomAffine(Module):
         Returns:
             params to be passed to the affine transformation
         """
-        angle = float(flow.empty(1).uniform_(float(degrees[0]), float(degrees[1])).item())
+        angle = float(
+            flow.empty(1).uniform_(float(degrees[0]), float(degrees[1])).item()
+        )
         if translate is not None:
             max_dx = float(translate[0] * img_size[0])
             max_dy = float(translate[1] * img_size[1])
@@ -965,7 +967,9 @@ class RandomAffine(Module):
             translations = (0, 0)
 
         if scale_ranges is not None:
-            scale = float(flow.empty(1).uniform_(scale_ranges[0], scale_ranges[1]).item())
+            scale = float(
+                flow.empty(1).uniform_(scale_ranges[0], scale_ranges[1]).item()
+            )
         else:
             scale = 1.0
 
@@ -995,21 +999,31 @@ class RandomAffine(Module):
 
         img_size = [width, height]  # flip for keeping BC on get_params call
 
-        ret = self.get_params(self.degrees, self.translate, self.scale, self.shear, img_size)
+        ret = self.get_params(
+            self.degrees, self.translate, self.scale, self.shear, img_size
+        )
 
-        return F.affine(img, *ret, interpolation=self.interpolation, fill=fill, center=self.center)
+        return F.affine(
+            img, *ret, interpolation=self.interpolation, fill=fill, center=self.center
+        )
 
     def __repr__(self) -> str:
         s = f"{self.__class__.__name__}(degrees={self.degrees}"
         s += f", translate={self.translate}" if self.translate is not None else ""
         s += f", scale={self.scale}" if self.scale is not None else ""
         s += f", shear={self.shear}" if self.shear is not None else ""
-        s += f", interpolation={self.interpolation.value}" if self.interpolation != InterpolationMode.NEAREST else ""
+        s += (
+            f", interpolation={self.interpolation.value}"
+            if self.interpolation != InterpolationMode.NEAREST
+            else ""
+        )
         s += f", fill={self.fill}" if self.fill != 0 else ""
         s += f", center={self.center}" if self.center is not None else ""
         s += ")"
 
         return s
+
+
 class FiveCrop(Module):
     """Crop the given image into four corners and the central crop.
     If the image is flow Tensor, it is expected
