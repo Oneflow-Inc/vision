@@ -1,7 +1,28 @@
 ## Changelog
 - [Changelog](#changelog)
-  - [V0.2.0](#v020)
+  - [V0.3.0](#v030)
+  - [V0.2.0 (22/07/2022)](#v020-22072022)
   - [v0.1.0 (10/02/2022)](#v010-10022022)
+
+
+### V0.3.0
+
+**New Features**
+- Support ``transforms.Grayscale`` and ``transforms.Solarization`` transforms [#220](https://github.com/Oneflow-Inc/vision/pull/220)
+- Support TorchHub functionality [#258](https://github.com/Oneflow-Inc/vision/pull/258)
+- Support ``transforms.RandomAffine`` method [#259](https://github.com/Oneflow-Inc/vision/pull/259)
+- Support ``transforms.RandomRotation`` method [#261](https://github.com/Oneflow-Inc/vision/pull/261)
+
+**Bug Fixes**
+- fix hsv2rgb bug [#256](https://github.com/Oneflow-Inc/vision/pull/256)
+- fix rgb2hsv bug [#257](https://github.com/Oneflow-Inc/vision/pull/257)
+
+**Improvements**
+
+**Docs Update**
+
+**Contributors**
+A total of x developers contributed to this release. Thanks @BBuf, @rentainhe, @Flowingsun007
 
 
 ### V0.2.0 
@@ -19,7 +40,6 @@
 - Support [RegNet](https://arxiv.org/abs/2003.13678) model and pretrained weight [#166](https://github.com/Oneflow-Inc/vision/pull/166)
 - Support [LeViT](https://arxiv.org/abs/2104.01136) model and pretrained weight [#177](https://github.com/Oneflow-Inc/vision/pull/177)
 - Support ``transforms.GaussianBlur`` method [#188](https://github.com/Oneflow-Inc/vision/pull/188)
-- Support ``Grayscale`` and ``Solarization`` transform method [#220](https://github.com/Oneflow-Inc/vision/pull/220)
 - Support ```SUN397```,```Country211```, dataset [#215](https://github.com/Oneflow-Inc/vision/pull/215)
 - Support ```Flowers102```,```FGVCAircraft```,```OxfordIIITPet```,```DTD```,```Food101```,```RenderedSST2```,```StanfordCars```,```PCAM```,```EuroSAT```,```GTSRB```,```CLEVR```,```FER2013``` dataset [#217](https://github.com/Oneflow-Inc/vision/pull/217)
 - Support [MobileViT](https://arxiv.org/abs/2110.02178) model and pretrained weight [#231](https://github.com/Oneflow-Inc/vision/pull/231)
