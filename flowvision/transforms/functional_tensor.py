@@ -604,7 +604,10 @@ def _gen_affine_grid(
     base_grid = flow.empty(1, oh, ow, 3, dtype=theta.dtype, device=theta.device)
     x_grid = flow.linspace(-ow * 0.5 + d, ow * 0.5 + d - 1, steps=ow, device=theta.device)
     base_grid[..., 0].copy_(x_grid)
-    y_grid = flow.linspace(-oh * 0.5 + d, oh * 0.5 + d - 1, steps=oh, device=theta.device).unsqueeze_(-1)
+    # y_grid = flow.linspace(-oh * 0.5 + d, oh * 0.5 + d - 1, steps=oh, device=theta.device).unsqueeze_(-1)
+    # TODO:(oneflow) support api tensor.unsqueeze_
+    y_grid = flow.linspace(-oh * 0.5 + d, oh * 0.5 + d - 1, steps=oh, device=theta.device)
+    y_grid = flow.unsqueeze(y_grid,-1)
     base_grid[..., 1].copy_(y_grid)
     base_grid[..., 2].fill_(1)
 
