@@ -99,6 +99,21 @@ def str_to_interp_mode(mode_str):
         return _str_to_pil_interpolation[mode_str]
 
 
+def get_dimensions(img: Tensor) -> List[int]:
+    """Returns the dimensions of an image as [channels, height, width].
+
+    Args:
+        img (PIL Image or Tensor): The image to be checked.
+
+    Returns:
+        List[int]: The image dimensions.
+    """
+    if isinstance(img, flow.Tensor):
+        return F_t.get_dimensions(img)
+
+    return F_pil.get_dimensions(img)
+
+
 def _get_image_size(img: Tensor) -> List[int]:
     """Returns image size as [w, h]
     """
@@ -981,10 +996,114 @@ def rotate(
     # due to current incoherence of rotation angle direction between affine and rotate implementations
     # we need to set -angle.
     matrix = _get_inverse_affine_matrix(center_f, -angle, [0.0, 0.0], 1.0, [0.0, 0.0])
-    raise NotImplementedError("Tensor rotate is not implemented yet!")
     return F_t.rotate(
         img, matrix=matrix, interpolation=interpolation.value, expand=expand, fill=fill
     )
+
+
+def affine(
+    img: Tensor,
+    angle: float,
+    translate: List[int],
+    scale: float,
+    shear: List[float],
+    interpolation: InterpolationMode = InterpolationMode.NEAREST,
+    fill: Optional[List[float]] = None,
+    center: Optional[List[int]] = None,
+) -> Tensor:
+    """Apply affine transformation on the image keeping image center invariant.
+    If the image is flow Tensor, it is expected
+    to have [..., H, W] shape, where ... means an arbitrary number of leading dimensions.
+
+    Args:
+        img (PIL Image or Tensor): image to transform.
+        angle (number): rotation angle in degrees between -180 and 180, clockwise direction.
+        translate (sequence of integers): horizontal and vertical translations (post-rotation translation)
+        scale (float): overall scale
+        shear (float or sequence): shear angle value in degrees between -180 to 180, clockwise direction.
+            If a sequence is specified, the first value corresponds to a shear parallel to the x axis, while
+            the second value corresponds to a shear parallel to the y axis.
+        interpolation (InterpolationMode): Desired interpolation enum defined by
+            :class:`flowvision.transforms.InterpolationMode`. Default is ``InterpolationMode.NEAREST``.
+            If input is Tensor, only ``InterpolationMode.NEAREST``, ``InterpolationMode.BILINEAR`` are supported.
+            For backward compatibility integer values (e.g. ``PIL.Image[.Resampling].NEAREST``) are still accepted,
+            but deprecated since 0.13 and will be removed in 0.15. Please use InterpolationMode enum.
+        fill (sequence or number, optional): Pixel fill value for the area outside the transformed
+            image. If given a number, the value is used for all bands respectively.
+
+        center (sequence, optional): Optional center of rotation. Origin is the upper left corner.
+            Default is the center of the image.
+
+    Returns:
+        PIL Image or Tensor: Transformed image.
+    """
+    # Backward compatibility with integer value
+    if isinstance(interpolation, int):
+        warnings.warn(
+            "Argument 'interpolation' of type int is deprecated since 0.13 and will be removed in 0.15. "
+            "Please use InterpolationMode enum."
+        )
+        interpolation = _interpolation_modes_from_int(interpolation)
+
+    if not isinstance(angle, (int, float)):
+        raise TypeError("Argument angle should be int or float")
+
+    if not isinstance(translate, (list, tuple)):
+        raise TypeError("Argument translate should be a sequence")
+
+    if len(translate) != 2:
+        raise ValueError("Argument translate should be a sequence of length 2")
+
+    if scale <= 0.0:
+        raise ValueError("Argument scale should be positive")
+
+    if not isinstance(shear, (numbers.Number, (list, tuple))):
+        raise TypeError("Shear should be either a single value or a sequence of two values")
+
+    if not isinstance(interpolation, InterpolationMode):
+        raise TypeError("Argument interpolation should be a InterpolationMode")
+
+    if isinstance(angle, int):
+        angle = float(angle)
+
+    if isinstance(translate, tuple):
+        translate = list(translate)
+
+    if isinstance(shear, numbers.Number):
+        shear = [shear, 0.0]
+
+    if isinstance(shear, tuple):
+        shear = list(shear)
+
+    if len(shear) == 1:
+        shear = [shear[0], shear[0]]
+
+    if len(shear) != 2:
+        raise ValueError(f"Shear should be a sequence containing two values. Got {shear}")
+
+    if center is not None and not isinstance(center, (list, tuple)):
+        raise TypeError("Argument center should be a sequence")
+
+    _, height, width = get_dimensions(img)
+    if not isinstance(img, flow.Tensor):
+        # center = (width * 0.5 + 0.5, height * 0.5 + 0.5)
+        # it is visually better to estimate the center without 0.5 offset
+        # otherwise image rotated by 90 degrees is shifted vs output image of torch.rot90 or F_t.affine
+        if center is None:
+            center = [width * 0.5, height * 0.5]
+        matrix = _get_inverse_affine_matrix(center, angle, translate, scale, shear)
+        pil_interpolation = pil_modes_mapping[interpolation]
+        return F_pil.affine(img, matrix=matrix, interpolation=pil_interpolation, fill=fill)
+
+    center_f = [0.0, 0.0]
+    if center is not None:
+        _, height, width = get_dimensions(img)
+        # Center values should be in pixel coordinates but translated such that (0, 0) corresponds to image center.
+        center_f = [1.0 * (c - s * 0.5) for c, s in zip(center, [width, height])]
+
+    translate_f = [1.0 * t for t in translate]
+    matrix = _get_inverse_affine_matrix(center_f, angle, translate_f, scale, shear)
+    return F_t.affine(img, matrix=matrix, interpolation=interpolation.value, fill=fill)
 
 
 def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:

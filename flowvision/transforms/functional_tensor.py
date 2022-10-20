@@ -2,7 +2,7 @@
 Modified from https://github.com/pytorch/vision/blob/main/torchvision/transforms/functional_tensor.py
 """
 import warnings
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Union
 
 from oneflow.framework.tensor import Tensor
 import oneflow as flow
@@ -92,6 +92,13 @@ def _cast_squeeze_out(
             img = flow.round(img)
         img = flow._C.cast(img, out_dtype)
     return img
+
+
+def get_dimensions(img: Tensor) -> List[int]:
+    _assert_image_tensor(img)
+    channels = 1 if img.ndim == 2 else img.shape[-3]
+    height, width = img.shape[-2:]
+    return [channels, height, width]
 
 
 def convert_image_dtype(
@@ -546,6 +553,131 @@ def _assert_grid_transform_inputs(
                 interpolation
             )
         )
+
+
+def _apply_grid_transform(
+    img: Tensor, grid: Tensor, mode: str, fill: Optional[Union[int, float, List[float]]]
+) -> Tensor:
+
+    img, need_cast, need_squeeze, out_dtype = _cast_squeeze_in(img, [grid.dtype])
+
+    if img.shape[0] > 1:
+        # Apply same grid to a batch of images
+        grid = grid.expand(img.shape[0], grid.shape[1], grid.shape[2], grid.shape[3])
+
+    # Append a dummy mask for customized fill colors, should be faster than grid_sample() twice
+    if fill is not None:
+        mask = flow.ones((img.shape[0], 1, img.shape[2], img.shape[3]), dtype=img.dtype, device=img.device)
+        img = flow.cat((img, mask), dim=1)
+
+    img = grid_sample(img, grid, mode=mode, padding_mode="zeros", align_corners=False)
+
+    # Fill with required color
+    if fill is not None:
+        mask = img[:, -1:, :, :]  # N * 1 * H * W
+        img = img[:, :-1, :, :]  # N * C * H * W
+        mask = mask.expand_as(img)
+        fill_list, len_fill = (fill, len(fill)) if isinstance(fill, (tuple, list)) else ([float(fill)], 1)
+        fill_img = flow.tensor(fill_list, dtype=img.dtype, device=img.device).view(1, len_fill, 1, 1).expand_as(img)
+        if mode == "nearest":
+            mask = mask < 0.5
+            img[mask] = fill_img[mask]
+        else:  # 'bilinear'
+            img = img * mask + (1.0 - mask) * fill_img
+
+    img = _cast_squeeze_out(img, need_cast, need_squeeze, out_dtype)
+    return img
+
+
+def _gen_affine_grid(
+    theta: Tensor,
+    w: int,
+    h: int,
+    ow: int,
+    oh: int,
+) -> Tensor:
+    # Difference with AffineGridGenerator is that:
+    # 1) we normalize grid values after applying theta
+    # 2) we can normalize by other image size, such that it covers "extend" option like in PIL.Image.rotate
+
+    d = 0.5
+    base_grid = flow.empty(1, oh, ow, 3, dtype=theta.dtype, device=theta.device)
+    x_grid = flow.linspace(-ow * 0.5 + d, ow * 0.5 + d - 1, steps=ow, device=theta.device)
+    base_grid[..., 0].copy_(x_grid)
+    y_grid = flow.linspace(-oh * 0.5 + d, oh * 0.5 + d - 1, steps=oh, device=theta.device).unsqueeze_(-1)
+    base_grid[..., 1].copy_(y_grid)
+    base_grid[..., 2].fill_(1)
+
+    rescaled_theta = theta.transpose(1, 2) / flow.tensor([0.5 * w, 0.5 * h], dtype=theta.dtype, device=theta.device)
+    output_grid = base_grid.view(1, oh * ow, 3).bmm(rescaled_theta)
+    return output_grid.view(1, oh, ow, 2)
+
+
+def affine(
+    img: Tensor,
+    matrix: List[float],
+    interpolation: str = "nearest",
+    fill: Optional[Union[int, float, List[float]]] = None,
+) -> Tensor:
+    _assert_grid_transform_inputs(img, matrix, interpolation, fill, ["nearest", "bilinear"])
+
+    dtype = img.dtype if flow.is_floating_point(img) else flow.float32
+    theta = flow.tensor(matrix, dtype=dtype, device=img.device).reshape(1, 2, 3)
+    shape = img.shape
+    # grid will be generated on the same device as theta and img
+    grid = _gen_affine_grid(theta, w=shape[-1], h=shape[-2], ow=shape[-1], oh=shape[-2])
+    return _apply_grid_transform(img, grid, interpolation, fill=fill)
+
+
+def _compute_affine_output_size(matrix: List[float], w: int, h: int) -> Tuple[int, int]:
+
+    # Inspired of PIL implementation:
+    # https://github.com/python-pillow/Pillow/blob/11de3318867e4398057373ee9f12dcb33db7335c/src/PIL/Image.py#L2054
+
+    # pts are Top-Left, Top-Right, Bottom-Left, Bottom-Right points.
+    # Points are shifted due to affine matrix torch convention about
+    # the center point. Center is (0, 0) for image center pivot point (w * 0.5, h * 0.5)
+    pts = flow.tensor(
+        [
+            [-0.5 * w, -0.5 * h, 1.0],
+            [-0.5 * w, 0.5 * h, 1.0],
+            [0.5 * w, 0.5 * h, 1.0],
+            [0.5 * w, -0.5 * h, 1.0],
+        ]
+    )
+    theta = flow.tensor(matrix, dtype=flow.float).view(2, 3)
+    new_pts = flow.matmul(pts, theta.T)
+    min_vals, _ = new_pts.min(dim=0)
+    max_vals, _ = new_pts.max(dim=0)
+
+    # shift points to [0, w] and [0, h] interval to match PIL results
+    min_vals += flow.tensor((w * 0.5, h * 0.5))
+    max_vals += flow.tensor((w * 0.5, h * 0.5))
+
+    # Truncate precision to 1e-4 to avoid ceil of Xe-15 to 1.0
+    tol = 1e-4
+    cmax = flow.ceil((max_vals / tol).trunc_() * tol)
+    cmin = flow.floor((min_vals / tol).trunc_() * tol)
+    size = cmax - cmin
+    return int(size[0]), int(size[1])  # w, h
+
+
+def rotate(
+    img: Tensor,
+    matrix: List[float],
+    interpolation: str = "nearest",
+    expand: bool = False,
+    fill: Optional[Union[int, float, List[float]]] = None,
+) -> Tensor:
+    _assert_grid_transform_inputs(img, matrix, interpolation, fill, ["nearest", "bilinear"])
+    w, h = img.shape[-1], img.shape[-2]
+    ow, oh = _compute_affine_output_size(matrix, w, h) if expand else (w, h)
+    dtype = img.dtype if flow.is_floating_point(img) else flow.float32
+    theta = flow.tensor(matrix, dtype=dtype, device=img.device).reshape(1, 2, 3)
+    # grid will be generated on the same device as theta and img
+    grid = _gen_affine_grid(theta, w=w, h=h, ow=ow, oh=oh)
+
+    return _apply_grid_transform(img, grid, interpolation, fill=fill)
 
 
 def _get_gaussian_kernel1d(kernel_size: int, sigma: float) -> Tensor:
