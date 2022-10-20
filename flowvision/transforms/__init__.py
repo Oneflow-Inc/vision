@@ -58,6 +58,7 @@ __all__ = [
     "RandomSizedCrop",
     "RandomAffine",
     "RandomGrayscale",
+    "RandomRotation",
     "Grayscale",
     "FiveCrop",
     "TenCrop",
