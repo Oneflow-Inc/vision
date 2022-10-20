@@ -1058,7 +1058,9 @@ def affine(
         raise ValueError("Argument scale should be positive")
 
     if not isinstance(shear, (numbers.Number, (list, tuple))):
-        raise TypeError("Shear should be either a single value or a sequence of two values")
+        raise TypeError(
+            "Shear should be either a single value or a sequence of two values"
+        )
 
     if not isinstance(interpolation, InterpolationMode):
         raise TypeError("Argument interpolation should be a InterpolationMode")
@@ -1079,7 +1081,9 @@ def affine(
         shear = [shear[0], shear[0]]
 
     if len(shear) != 2:
-        raise ValueError(f"Shear should be a sequence containing two values. Got {shear}")
+        raise ValueError(
+            f"Shear should be a sequence containing two values. Got {shear}"
+        )
 
     if center is not None and not isinstance(center, (list, tuple)):
         raise TypeError("Argument center should be a sequence")
@@ -1093,7 +1097,9 @@ def affine(
             center = [width * 0.5, height * 0.5]
         matrix = _get_inverse_affine_matrix(center, angle, translate, scale, shear)
         pil_interpolation = pil_modes_mapping[interpolation]
-        return F_pil.affine(img, matrix=matrix, interpolation=pil_interpolation, fill=fill)
+        return F_pil.affine(
+            img, matrix=matrix, interpolation=pil_interpolation, fill=fill
+        )
 
     center_f = [0.0, 0.0]
     if center is not None:

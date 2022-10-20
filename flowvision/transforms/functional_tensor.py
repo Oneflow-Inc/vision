@@ -567,7 +567,11 @@ def _apply_grid_transform(
 
     # Append a dummy mask for customized fill colors, should be faster than grid_sample() twice
     if fill is not None:
-        mask = flow.ones((img.shape[0], 1, img.shape[2], img.shape[3]), dtype=img.dtype, device=img.device)
+        mask = flow.ones(
+            (img.shape[0], 1, img.shape[2], img.shape[3]),
+            dtype=img.dtype,
+            device=img.device,
+        )
         img = flow.cat((img, mask), dim=1)
 
     img = grid_sample(img, grid, mode=mode, padding_mode="zeros", align_corners=False)
@@ -577,8 +581,14 @@ def _apply_grid_transform(
         mask = img[:, -1:, :, :]  # N * 1 * H * W
         img = img[:, :-1, :, :]  # N * C * H * W
         mask = mask.expand_as(img)
-        fill_list, len_fill = (fill, len(fill)) if isinstance(fill, (tuple, list)) else ([float(fill)], 1)
-        fill_img = flow.tensor(fill_list, dtype=img.dtype, device=img.device).view(1, len_fill, 1, 1).expand_as(img)
+        fill_list, len_fill = (
+            (fill, len(fill)) if isinstance(fill, (tuple, list)) else ([float(fill)], 1)
+        )
+        fill_img = (
+            flow.tensor(fill_list, dtype=img.dtype, device=img.device)
+            .view(1, len_fill, 1, 1)
+            .expand_as(img)
+        )
         if mode == "nearest":
             mask = mask < 0.5
             img[mask] = fill_img[mask]
@@ -589,20 +599,16 @@ def _apply_grid_transform(
     return img
 
 
-def _gen_affine_grid(
-    theta: Tensor,
-    w: int,
-    h: int,
-    ow: int,
-    oh: int,
-) -> Tensor:
+def _gen_affine_grid(theta: Tensor, w: int, h: int, ow: int, oh: int,) -> Tensor:
     # Difference with AffineGridGenerator is that:
     # 1) we normalize grid values after applying theta
     # 2) we can normalize by other image size, such that it covers "extend" option like in PIL.Image.rotate
 
     d = 0.5
     base_grid = flow.empty(1, oh, ow, 3, dtype=theta.dtype, device=theta.device)
-    x_grid = flow.linspace(-ow * 0.5 + d, ow * 0.5 + d - 1, steps=ow, device=theta.device)
+    x_grid = flow.linspace(
+        -ow * 0.5 + d, ow * 0.5 + d - 1, steps=ow, device=theta.device
+    )
     base_grid[..., 0].copy_(x_grid)
     # y_grid = flow.linspace(-oh * 0.5 + d, oh * 0.5 + d - 1, steps=oh, device=theta.device).unsqueeze_(-1)
     # TODO:(oneflow) support api tensor.unsqueeze_
@@ -611,7 +617,9 @@ def _gen_affine_grid(
     base_grid[..., 1].copy_(y_grid)
     base_grid[..., 2].fill_(1)
 
-    rescaled_theta = theta.transpose(1, 2) / flow.tensor([0.5 * w, 0.5 * h], dtype=theta.dtype, device=theta.device)
+    rescaled_theta = theta.transpose(1, 2) / flow.tensor(
+        [0.5 * w, 0.5 * h], dtype=theta.dtype, device=theta.device
+    )
     output_grid = base_grid.view(1, oh * ow, 3).bmm(rescaled_theta)
     return output_grid.view(1, oh, ow, 2)
 
@@ -622,7 +630,9 @@ def affine(
     interpolation: str = "nearest",
     fill: Optional[Union[int, float, List[float]]] = None,
 ) -> Tensor:
-    _assert_grid_transform_inputs(img, matrix, interpolation, fill, ["nearest", "bilinear"])
+    _assert_grid_transform_inputs(
+        img, matrix, interpolation, fill, ["nearest", "bilinear"]
+    )
 
     dtype = img.dtype if flow.is_floating_point(img) else flow.float32
     theta = flow.tensor(matrix, dtype=dtype, device=img.device).reshape(1, 2, 3)
@@ -672,7 +682,9 @@ def rotate(
     expand: bool = False,
     fill: Optional[Union[int, float, List[float]]] = None,
 ) -> Tensor:
-    _assert_grid_transform_inputs(img, matrix, interpolation, fill, ["nearest", "bilinear"])
+    _assert_grid_transform_inputs(
+        img, matrix, interpolation, fill, ["nearest", "bilinear"]
+    )
     w, h = img.shape[-1], img.shape[-2]
     ow, oh = _compute_affine_output_size(matrix, w, h) if expand else (w, h)
     dtype = img.dtype if flow.is_floating_point(img) else flow.float32
