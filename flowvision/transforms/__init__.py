@@ -23,6 +23,7 @@ from .transforms import (
     RandomSizedCrop,
     RandomAffine,
     RandomGrayscale,
+    RandomRotation,
     Grayscale,
     FiveCrop,
     TenCrop,
