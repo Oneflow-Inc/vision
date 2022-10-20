@@ -1445,7 +1445,7 @@ class RandomGrayscale(Module):
         Returns:
             PIL Image or Tensor: Randomly grayscaled image.
         """
-        num_output_channels = F._get_image_num_channels(img)
+        num_output_channels, _, _ = F.get_dimensions(img)
         if flow.rand(1) < self.p:
             return F.rgb_to_grayscale(img, num_output_channels=num_output_channels)
         return img
