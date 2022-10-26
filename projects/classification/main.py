@@ -124,7 +124,7 @@ def main(config):
     logger.info(str(model))
 
     optimizer = build_optimizer(config, model)
-    model = flow.nn.parallel.DistributedDataParallel(model, broadcast_buffers=False)
+    # model = flow.nn.parallel.DistributedDataParallel(model, broadcast_buffers=False)
     # FIXME: model with DDP wrapper doesn't have model.module
     model_without_ddp = model
 
@@ -178,7 +178,7 @@ def main(config):
     logger.info("Start training")
     start_time = time.time()
     for epoch in range(config.TRAIN.START_EPOCH, config.TRAIN.EPOCHS):
-        data_loader_train.sampler.set_epoch(epoch)
+        # data_loader_train.sampler.set_epoch(epoch)
 
         train_one_epoch(
             config,

@@ -43,6 +43,7 @@ def build_loader(config):
         sampler_train = flow.utils.data.DistributedSampler(
             dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
         )
+    sampler_train = None
 
     indices = np.arange(
         flow.env.get_rank(), len(dataset_val), flow.env.get_world_size()
