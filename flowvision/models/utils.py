@@ -56,7 +56,26 @@ def _legacy_tar_load(filename, model_dir, map_location, delete_tar_file=True):
         extracted_file = os.path.join(model_dir, extracted_name)
         if not os.path.exists(model_dir):
             os.mkdir(model_dir)
-        f.extractall(model_dir)
+        def is_within_directory(directory, target):
+            
+            abs_directory = os.path.abspath(directory)
+            abs_target = os.path.abspath(target)
+        
+            prefix = os.path.commonprefix([abs_directory, abs_target])
+            
+            return prefix == abs_directory
+        
+        def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+        
+            for member in tar.getmembers():
+                member_path = os.path.join(path, member.name)
+                if not is_within_directory(path, member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+        
+            tar.extractall(path, members, numeric_owner=numeric_owner) 
+            
+        
+        safe_extract(f, model_dir)
     if delete_tar_file:
         os.remove(filename)
     return flow.load(extracted_file)
