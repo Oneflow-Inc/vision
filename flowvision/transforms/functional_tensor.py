@@ -231,7 +231,9 @@ def adjust_contrast(img: Tensor, contrast_factor: float) -> Tensor:
 
     dtype = img.dtype if flow.is_floating_point(img) else flow.float32
     if c == 3:
-        mean = flow.mean(rgb_to_grayscale(img).to(dtype), dim=(-3, -2, -1), keepdim=True)
+        mean = flow.mean(
+            rgb_to_grayscale(img).to(dtype), dim=(-3, -2, -1), keepdim=True
+        )
     else:
         mean = flow.mean(img.to(dtype), dim=(-3, -2, -1), keepdim=True)
 
