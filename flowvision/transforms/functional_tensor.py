@@ -193,14 +193,14 @@ def rgb_to_grayscale(img: Tensor, num_output_channels: int = 1) -> Tensor:
     if num_output_channels not in (1, 3):
         raise ValueError("num_output_channels should be either 1 or 3")
 
-    # TODO: replace split with unbind
-    r, g, b = img.split([1, 1, 1], -3)
+    r, g, b = img.unbind(dim=-3)
 
     # This implementation closely follows the TF one:
     # https://github.com/tensorflow/tensorflow/blob/v2.3.0/tensorflow/python/ops/image_ops_impl.py#L2105-L2138
     l_img = (0.2989 * r + 0.587 * g + 0.114 * b).to(img.dtype)
+    l_img = l_img.unsqueeze(dim=-3)
     if num_output_channels == 3:
-        return l_img.expand(*img.shape)
+        return l_img.expand(img.shape)
 
     return l_img
 
@@ -226,10 +226,14 @@ def adjust_contrast(img: Tensor, contrast_factor: float) -> Tensor:
 
     _assert_image_tensor(img)
 
-    _assert_channels(img, [3])
+    _assert_channels(img, [3, 1])
+    c = get_dimensions(img)[0]
 
     dtype = img.dtype if flow.is_floating_point(img) else flow.float32
-    mean = flow.mean(rgb_to_grayscale(img).to(dtype), dim=(-3, -2, -1), keepdim=True)
+    if c == 3:
+        mean = flow.mean(rgb_to_grayscale(img).to(dtype), dim=(-3, -2, -1), keepdim=True)
+    else:
+        mean = flow.mean(img.to(dtype), dim=(-3, -2, -1), keepdim=True)
 
     return _blend(img, mean, contrast_factor)
 
@@ -271,7 +275,10 @@ def adjust_saturation(img: Tensor, saturation_factor: float) -> Tensor:
 
     _assert_image_tensor(img)
 
-    _assert_channels(img, [3])
+    _assert_channels(img, [1, 3])
+
+    if get_dimensions(img)[0] == 1:  # Match PIL behaviour
+        return img
 
     return _blend(img, rgb_to_grayscale(img), saturation_factor)
 

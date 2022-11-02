@@ -1209,26 +1209,10 @@ class ColorJitter(Module):
         """
         fn_idx = flow.randperm(4)
 
-        b = (
-            None
-            if brightness is None
-            else float(flow.empty(1).uniform_(brightness[0], brightness[1]).item())
-        )
-        c = (
-            None
-            if contrast is None
-            else float(flow.empty(1).uniform_(contrast[0], contrast[1]).item())
-        )
-        s = (
-            None
-            if saturation is None
-            else float(flow.empty(1).uniform_(saturation[0], saturation[1]).item())
-        )
-        h = (
-            None
-            if hue is None
-            else float(flow.empty(1).uniform_(hue[0], hue[1]).item())
-        )
+        b = None if brightness is None else float(flow.empty(1).uniform_(brightness[0], brightness[1]))
+        c = None if contrast is None else float(flow.empty(1).uniform_(contrast[0], contrast[1]))
+        s = None if saturation is None else float(flow.empty(1).uniform_(saturation[0], saturation[1]))
+        h = None if hue is None else float(flow.empty(1).uniform_(hue[0], hue[1]))
 
         return fn_idx, b, c, s, h
 
