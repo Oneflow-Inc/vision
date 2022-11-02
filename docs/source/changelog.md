@@ -18,6 +18,7 @@
 - fix rgb2hsv bug [#257](https://github.com/Oneflow-Inc/vision/pull/257)
 
 **Improvements**
+- refine TODO items and align transforms.ColorJitter to torchvision(0.13.1):[#264](https://github.com/Oneflow-Inc/vision/pull/264)
 
 **Docs Update**
 
