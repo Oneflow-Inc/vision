@@ -479,8 +479,7 @@ class RandomApply(Module):
         self.p = p
 
     def forward(self, img):
-        # TODO:replace with flow.rand(1)
-        if self.p < np.random.rand(1):
+        if self.p < flow.rand(1):
             return img
         for t in self.transforms:
             img = t(img)
@@ -657,8 +656,7 @@ class RandomHorizontalFlip(Module):
         Returns:
             PIL Image or Tensor: Randomly flipped image.
         """
-        # TODO: replace with flow.rand(1):
-        if np.random.rand(1) < self.p:
+        if flow.rand(1) < self.p:
             return F.hflip(img)
         return img
 
@@ -688,8 +686,7 @@ class RandomVerticalFlip(Module):
         Returns:
             PIL Image or Tensor: Randomly flipped image.
         """
-        # TODO:replace with flow.rand(1)
-        if np.random.rand(1) < self.p:
+        if flow.rand(1) < self.p:
             return F.vflip(img)
         return img
 
