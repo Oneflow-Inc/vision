@@ -479,8 +479,7 @@ class RandomApply(Module):
         self.p = p
 
     def forward(self, img):
-        # TODO:replace with flow.rand(1)
-        if self.p < np.random.rand(1):
+        if self.p < flow.rand(1):
             return img
         for t in self.transforms:
             img = t(img)
@@ -657,8 +656,7 @@ class RandomHorizontalFlip(Module):
         Returns:
             PIL Image or Tensor: Randomly flipped image.
         """
-        # TODO: replace with flow.rand(1):
-        if np.random.rand(1) < self.p:
+        if flow.rand(1) < self.p:
             return F.hflip(img)
         return img
 
@@ -688,8 +686,7 @@ class RandomVerticalFlip(Module):
         Returns:
             PIL Image or Tensor: Randomly flipped image.
         """
-        # TODO:replace with flow.rand(1)
-        if np.random.rand(1) < self.p:
+        if flow.rand(1) < self.p:
             return F.vflip(img)
         return img
 
@@ -1212,23 +1209,19 @@ class ColorJitter(Module):
         b = (
             None
             if brightness is None
-            else float(flow.empty(1).uniform_(brightness[0], brightness[1]).item())
+            else float(flow.empty(1).uniform_(brightness[0], brightness[1]))
         )
         c = (
             None
             if contrast is None
-            else float(flow.empty(1).uniform_(contrast[0], contrast[1]).item())
+            else float(flow.empty(1).uniform_(contrast[0], contrast[1]))
         )
         s = (
             None
             if saturation is None
-            else float(flow.empty(1).uniform_(saturation[0], saturation[1]).item())
+            else float(flow.empty(1).uniform_(saturation[0], saturation[1]))
         )
-        h = (
-            None
-            if hue is None
-            else float(flow.empty(1).uniform_(hue[0], hue[1]).item())
-        )
+        h = None if hue is None else float(flow.empty(1).uniform_(hue[0], hue[1]))
 
         return fn_idx, b, c, s, h
 
