@@ -53,6 +53,7 @@ def build_loader(config):
         sampler=sampler_train,
         batch_size=config.DATA.BATCH_SIZE,
         num_workers=config.DATA.NUM_WORKERS,
+        persistent_workers=True,
         drop_last=True,
     )
 
@@ -62,6 +63,7 @@ def build_loader(config):
         batch_size=config.DATA.BATCH_SIZE,
         shuffle=False,
         num_workers=config.DATA.NUM_WORKERS,
+        persistent_workers=True,
         drop_last=False,
     )
 
@@ -110,7 +112,7 @@ def build_dataset(is_train, config):
             root=config.DATA.DATA_PATH,
             train=is_train,
             transform=transform,
-            download=True,
+            download=False,
         )
         nb_classes = 100
     else:

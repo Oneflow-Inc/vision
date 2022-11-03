@@ -1,7 +1,7 @@
 DATA:
-  BATCH_SIZE: 16
+  BATCH_SIZE: 128
   DATASET: imagenet
-  DATA_PATH: /DATA/disk1/ImageNet/extract
+  DATA_PATH: /home/dataset/ImageNet/extract
   IMG_SIZE: 224
   INTERPOLATION: bicubic
   ZIP_MODE: False
@@ -19,25 +19,24 @@ TRAIN:
   EPOCHS: 300
   WARMUP_EPOCHS: 20
   WEIGHT_DECAY: 5e-4
-  BASE_LR: 0.01
-  CLIP_GRAD: None
-  AUTO_RESUME: True
+  BASE_LR: 0.384
+  CLIP_GRAD: 5.0
+  AUTO_RESUME: False
   ACCUMULATION_STEPS: 0
   
   LR_SCHEDULER:
-    NAME: multi_step
-    MILESTONES: [150, 225]
+    NAME: cosine
 
   OPTIMIZER:
-    NAME: sgd
+    NAME: adamw
     MOMENTUM: 0.9
   
 AUG:
-  COLOR_JITTER: 0.
+  COLOR_JITTER: 0.4
   AUTO_AUGMENT: rand-m9-mstd0.5-inc1
-  REPROB: 0.
-  MIXUP: 0.
-  CUTMIX: 0.
+  REPROB: 0.25
+  MIXUP: 0.8
+  CUTMIX: 1.0
   CUTMIX_MINMAX: None
 
 TEST:
@@ -46,7 +45,7 @@ TEST:
 
 TAG: default
 SAVE_FREQ: 1
-PRINT_FREQ: 10
+PRINT_FREQ: 100
 SEED: 42
 EVAL_MODE: False
 THROUGHPUT_MODE: False

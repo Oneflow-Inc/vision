@@ -54,7 +54,7 @@ def parse_option():
 
     # easy config modification
     parser.add_argument(
-        "--batch-size", type=int, default=8, help="batch size for single GPU"
+        "--batch-size", type=int, default=128, help="batch size for single GPU"
     )
     parser.add_argument("--data-path", type=str, help="path to dataset")
     parser.add_argument(
