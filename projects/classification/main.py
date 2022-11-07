@@ -265,18 +265,23 @@ def train_one_epoch(
             optimizer.step()
             lr_scheduler.step_update(epoch * num_steps + idx)
 
+        flow.cuda.synchronize()
+        batch_time.update(time.time() - end)
         loss_meter.update(loss.item(), targets.size(0))
         norm_meter.update(grad_norm)
-        batch_time.update(time.time() - end)
+        
         end = time.time()
 
         if idx % config.PRINT_FREQ == 0:
             lr = optimizer.param_groups[0]["lr"]
             etas = batch_time.avg * (num_steps - idx)
+            throughput=samples.size(0) * flow.env.get_world_size() / batch_time.val,
+            throughput_avg=samples.size(0) * flow.env.get_world_size() / batch_time.avg,
             logger.info(
                 f"Train: [{epoch}/{config.TRAIN.EPOCHS}][{idx}/{num_steps}]\t"
                 f"eta {datetime.timedelta(seconds=int(etas))} lr {lr:.6f}\t"
-                f"time {batch_time.val:.4f} ({batch_time.avg:.4f})\t"
+                f"time {batch_time.val:.4f}s ({batch_time.avg:.4f}s)\t"
+                f"rate {throughput:.4f}/s ({throughput_avg:.4f}/s)\t"
                 f"loss {loss_meter.val:.4f} ({loss_meter.avg:.4f})\t"
                 f"grad_norm {norm_meter.val:.4f} ({norm_meter.avg:.4f})\t"
             )
