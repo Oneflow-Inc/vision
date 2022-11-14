@@ -168,8 +168,13 @@ def main(config):
         logger.info(
             f"Accuracy of the network on the {len(dataset_val)} test images: {acc1:.1f}%"
         )
-        if config.EVAL_MODE:
-            return
+        
+    if config.EVAL_MODE:
+        acc1, acc5, loss = validate(config, data_loader_val, model)
+        logger.info(
+            f"Accuracy of the network on the {len(dataset_val)} test images: {acc1:.1f}%"
+        )
+        return
 
     if config.THROUGHPUT_MODE:
         throughput(data_loader_val, model, logger)
@@ -322,10 +327,13 @@ def validate(config, data_loader, model):
         end = time.time()
 
         if idx % config.PRINT_FREQ == 0:
+            throughput=images.size(0) * flow.env.get_world_size() / batch_time.val
+            throughput_avg=images.size(0) * flow.env.get_world_size() / batch_time.avg
             logger.info(
                 f"Test: [{idx}/{len(data_loader)}]\t"
                 f"Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t"
                 f"Loss {loss_meter.val:.4f} ({loss_meter.avg:.4f})\t"
+                f"rate {throughput:.4f}/s ({throughput_avg:.4f}/s)\t"
                 f"Acc@1 {acc1_meter.val:.3f} ({acc1_meter.avg:.3f})\t"
                 f"Acc@5 {acc5_meter.val:.3f} ({acc5_meter.avg:.3f})\t"
             )
