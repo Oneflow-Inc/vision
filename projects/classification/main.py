@@ -179,7 +179,6 @@ def main(config):
     start_time = time.time()
     for epoch in range(config.TRAIN.START_EPOCH, config.TRAIN.EPOCHS):
         data_loader_train.sampler.set_epoch(epoch)
-
         train_one_epoch(
             config,
             model,
@@ -221,12 +220,10 @@ def train_one_epoch(
 ):
     model.train()
     optimizer.zero_grad()
-
     num_steps = len(data_loader)
     batch_time = AverageMeter()
     loss_meter = AverageMeter()
     norm_meter = AverageMeter()
-
     start = time.time()
     end = time.time()
     for idx, (samples, targets) in enumerate(data_loader):
@@ -264,7 +261,7 @@ def train_one_epoch(
                 grad_norm = get_grad_norm(model.parameters())
             optimizer.step()
             lr_scheduler.step_update(epoch * num_steps + idx)
-
+        
         flow.cuda.synchronize()
         batch_time.update(time.time() - end)
         loss_meter.update(loss.item(), targets.size(0))
@@ -275,15 +272,14 @@ def train_one_epoch(
         if idx % config.PRINT_FREQ == 0:
             lr = optimizer.param_groups[0]["lr"]
             etas = batch_time.avg * (num_steps - idx)
-            throughput=samples.size(0) * flow.env.get_world_size() / batch_time.val,
-            throughput_avg=samples.size(0) * flow.env.get_world_size() / batch_time.avg,
+            throughput=samples.size(0) * flow.env.get_world_size() / batch_time.val
+            throughput_avg=samples.size(0) * flow.env.get_world_size() / batch_time.avg
             logger.info(
                 f"Train: [{epoch}/{config.TRAIN.EPOCHS}][{idx}/{num_steps}]\t"
                 f"eta {datetime.timedelta(seconds=int(etas))} lr {lr:.6f}\t"
                 f"time {batch_time.val:.4f}s ({batch_time.avg:.4f}s)\t"
                 f"rate {throughput:.4f}/s ({throughput_avg:.4f}/s)\t"
                 f"loss {loss_meter.val:.4f} ({loss_meter.avg:.4f})\t"
-                f"grad_norm {norm_meter.val:.4f} ({norm_meter.avg:.4f})\t"
             )
     epoch_time = time.time() - start
     logger.info(

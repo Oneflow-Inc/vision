@@ -1,7 +1,7 @@
 export PYTHONPATH=$PWD:$PYTHONPATH
 set -aux
 
-GPU_NUMS=4
+GPU_NUMS=1
 PORT=12346
 MODEL_ARCH="resnet50"  # "swin_tiny_patch4_window7_224"
 
