@@ -138,9 +138,10 @@ def reduce_dict(input_dict, average=True):
 
 
 class MetricLogger:
-    def __init__(self, delimiter="\t"):
+    def __init__(self, global_batch=1, delimiter="\t"):
         self.meters = defaultdict(SmoothedValue)
         self.delimiter = delimiter
+        self.global_batch = global_batch
 
     def update(self, **kwargs):
         for k, v in kwargs.items():
@@ -186,7 +187,7 @@ class MetricLogger:
                 "[{0" + space_fmt + "}/{1}]",
                 "eta: {eta}",
                 "{meters}",
-                "time: {time}",
+                "rate: {rate}",
                 "data: {data}",
             ]
         )
@@ -204,7 +205,7 @@ class MetricLogger:
                         len(iterable),
                         eta=eta_string,
                         meters=str(self),
-                        time=str(iter_time),
+                        rate=str(self.global_batch / iter_time.global_avg),
                         data=str(data_time),
                     )
                 )
