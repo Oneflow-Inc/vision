@@ -1,11 +1,11 @@
 ## Changelog
 - [Changelog](#changelog)
-  - [V0.3.0](#v030)
+  - [V0.2.1 (29/11/2022)](#v021-29112022)
   - [V0.2.0 (22/07/2022)](#v020-22072022)
   - [v0.1.0 (10/02/2022)](#v010-10022022)
 
 
-### V0.3.0
+### V0.2.1
 
 **New Features**
 - Support ``transforms.Grayscale`` and ``transforms.Solarization`` transforms [#220](https://github.com/Oneflow-Inc/vision/pull/220)
@@ -23,7 +23,7 @@
 **Docs Update**
 
 **Contributors**
-A total of x developers contributed to this release. Thanks @BBuf, @rentainhe, @Flowingsun007
+A total of 3 developers contributed to this release. Thanks @BBuf, @rentainhe, @Flowingsun007
 
 
 ### V0.2.0 
