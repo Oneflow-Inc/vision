@@ -13,13 +13,14 @@ __all__ = [
 ]
 
 
-
 @flow.no_grad()
 def draw_bounding_boxes(
     image: flow.Tensor,
     boxes: flow.Tensor,
     labels: Optional[List[str]] = None,
-    colors: Optional[Union[List[Union[str, Tuple[int, int, int]]], str, Tuple[int, int, int]]] = None,
+    colors: Optional[
+        Union[List[Union[str, Tuple[int, int, int]]], str, Tuple[int, int, int]]
+    ] = None,
     fill: Optional[bool] = False,
     width: int = 1,
     font: Optional[str] = None,
@@ -82,15 +83,22 @@ def draw_bounding_boxes(
         colors = _generate_color_palette(num_boxes)
     elif isinstance(colors, list):
         if len(colors) < num_boxes:
-            raise ValueError(f"Number of colors ({len(colors)}) is less than number of boxes ({num_boxes}). ")
+            raise ValueError(
+                f"Number of colors ({len(colors)}) is less than number of boxes ({num_boxes}). "
+            )
     else:  # colors specifies a single color for all boxes
         colors = [colors] * num_boxes
 
-    colors = [(ImageColor.getrgb(color) if isinstance(color, str) else color) for color in colors]
+    colors = [
+        (ImageColor.getrgb(color) if isinstance(color, str) else color)
+        for color in colors
+    ]
 
     if font is None:
         if font_size is not None:
-            warnings.warn("Argument 'font_size' will be ignored since 'font' is not set.")
+            warnings.warn(
+                "Argument 'font_size' will be ignored since 'font' is not set."
+            )
         txt_font = ImageFont.load_default()
     else:
         txt_font = ImageFont.truetype(font=font, size=font_size or 10)
@@ -117,13 +125,13 @@ def draw_bounding_boxes(
 
         if label is not None:
             margin = width + 1
-            draw.text((bbox[0] + margin, bbox[1] + margin), label, fill=color, font=txt_font)
+            draw.text(
+                (bbox[0] + margin, bbox[1] + margin), label, fill=color, font=txt_font
+            )
 
     return flow.from_numpy(np.array(img_to_draw)).permute(2, 0, 1).to(dtype=flow.uint8)
 
 
-
 def _generate_color_palette(num_objects: int):
-    palette = flow.tensor([2**25 - 1, 2**15 - 1, 2**21 - 1])
+    palette = flow.tensor([2 ** 25 - 1, 2 ** 15 - 1, 2 ** 21 - 1])
     return [tuple((i * palette) % 255) for i in range(num_objects)]
-
