@@ -285,12 +285,15 @@ class VisionTransformer(nn.Module):
         cls_token = self.cls_token.expand(
             x.shape[0], -1, -1
         )  # stole cls_tokens impl from Phil Wang, thanks
+        if x.is_global:
+            cls_token = cls_token.to_global(sbp=x.sbp)
         if self.dist_token is None:
             x = flow.cat((cls_token, x), dim=1)
         else:
-            x = flow.cat(
-                (cls_token, self.dist_token.expand(x.shape[0], -1, -1), x), dim=1
-            )
+            dist_token = self.dist_token.expand(x.shape[0], -1, -1)
+            if x.is_global:
+                dist_token = dist_token.to_global(sbp=x.sbp)
+            x = flow.cat((cls_token, dist_token, x), dim=1)
         x = self.pos_drop(x + self.pos_embed)
         # transformer encoder
         x = self.blocks(x)
