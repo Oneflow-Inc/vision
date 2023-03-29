@@ -270,4 +270,4 @@ def to_grayscale(img: Image.Image, num_output_channels: int) -> Image.Image:
     else:
         raise ValueError("num_output_channels should be either 1 or 3")
 
-    return
+    return img
