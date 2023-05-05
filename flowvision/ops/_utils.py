@@ -29,12 +29,17 @@ def check_roi_boxes_shape(boxes: Union[Tensor, List[Tensor]]):
     if isinstance(boxes, (list, tuple)):
         for _tensor in boxes:
             torch._assert(
-                _tensor.size(1) == 4, "The shape of the tensor in the boxes list is not correct as List[Tensor[L, 4]]"
+                _tensor.size(1) == 4,
+                "The shape of the tensor in the boxes list is not correct as List[Tensor[L, 4]]",
             )
     elif isinstance(boxes, torch.Tensor):
-        torch._assert(boxes.size(1) == 5, "The boxes tensor shape is not correct as Tensor[K, 5]")
+        torch._assert(
+            boxes.size(1) == 5, "The boxes tensor shape is not correct as Tensor[K, 5]"
+        )
     else:
-        torch._assert(False, "boxes is expected to be a Tensor[L, 5] or a List[Tensor[K, 4]]")
+        torch._assert(
+            False, "boxes is expected to be a Tensor[L, 5] or a List[Tensor[K, 4]]"
+        )
     return
 
 
@@ -60,7 +65,9 @@ def split_normalization_params(
     other_params = []
     for module in model.modules():
         if next(module.children(), None):
-            other_params.extend(p for p in module.parameters(recurse=False) if p.requires_grad)
+            other_params.extend(
+                p for p in module.parameters(recurse=False) if p.requires_grad
+            )
         elif isinstance(module, classes):
             norm_params.extend(p for p in module.parameters() if p.requires_grad)
         else:
@@ -84,8 +91,7 @@ def _upcast_non_float(t: Tensor) -> Tensor:
 
 
 def _loss_inter_union(
-    boxes1: torch.Tensor,
-    boxes2: torch.Tensor,
+    boxes1: torch.Tensor, boxes2: torch.Tensor,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
 
     x1, y1, x2, y2 = boxes1.unbind(dim=-1)

@@ -4,7 +4,12 @@ import oneflow as torch
 from oneflow import Tensor
 
 # from ..utils import _log_api_usage_once
-from ._box_convert import _box_cxcywh_to_xyxy, _box_xywh_to_xyxy, _box_xyxy_to_cxcywh, _box_xyxy_to_xywh
+from ._box_convert import (
+    _box_cxcywh_to_xyxy,
+    _box_xywh_to_xyxy,
+    _box_xyxy_to_cxcywh,
+    _box_xyxy_to_xywh,
+)
 from ._utils import _upcast
 
 
@@ -37,10 +42,7 @@ def nms(boxes: Tensor, scores: Tensor, iou_threshold: float) -> Tensor:
 
 
 def batched_nms(
-    boxes: Tensor,
-    scores: Tensor,
-    idxs: Tensor,
-    iou_threshold: float,
+    boxes: Tensor, scores: Tensor, idxs: Tensor, iou_threshold: float,
 ) -> Tensor:
     """
     Performs non-maximum suppression in a batched fashion.
@@ -70,10 +72,7 @@ def batched_nms(
 
 @torch.jit._script_if_tracing
 def _batched_nms_coordinate_trick(
-    boxes: Tensor,
-    scores: Tensor,
-    idxs: Tensor,
-    iou_threshold: float,
+    boxes: Tensor, scores: Tensor, idxs: Tensor, iou_threshold: float,
 ) -> Tensor:
     # strategy: in order to perform NMS independently per class,
     # we add an offset to all the boxes. The offset is dependent
@@ -90,16 +89,15 @@ def _batched_nms_coordinate_trick(
 
 @torch.jit._script_if_tracing
 def _batched_nms_vanilla(
-    boxes: Tensor,
-    scores: Tensor,
-    idxs: Tensor,
-    iou_threshold: float,
+    boxes: Tensor, scores: Tensor, idxs: Tensor, iou_threshold: float,
 ) -> Tensor:
     # Based on Detectron2 implementation, just manually call nms() on each class independently
     keep_mask = torch.zeros_like(scores, dtype=torch.bool)
     for class_id in torch.unique(idxs):
         curr_indices = torch.where(idxs == class_id)[0]
-        curr_keep_indices = nms(boxes[curr_indices], scores[curr_indices], iou_threshold)
+        curr_keep_indices = nms(
+            boxes[curr_indices], scores[curr_indices], iou_threshold
+        )
         keep_mask[curr_indices[curr_keep_indices]] = True
     keep_indices = torch.where(keep_mask)[0]
     return keep_indices[scores[keep_indices].sort(descending=True)[1]]
@@ -171,7 +169,9 @@ def box_convert(boxes: Tensor, in_fmt: str, out_fmt: str) -> Tensor:
     """
     allowed_fmts = ("xyxy", "xywh", "cxcywh")
     if in_fmt not in allowed_fmts or out_fmt not in allowed_fmts:
-        raise ValueError("Unsupported Bounding Box Conversions for given in_fmt and out_fmt")
+        raise ValueError(
+            "Unsupported Bounding Box Conversions for given in_fmt and out_fmt"
+        )
 
     if in_fmt == out_fmt:
         return boxes.clone()
@@ -304,7 +304,9 @@ def complete_box_iou(boxes1: Tensor, boxes2: Tensor, eps: float = 1e-7) -> Tenso
     w_gt = boxes2[:, 2] - boxes2[:, 0]
     h_gt = boxes2[:, 3] - boxes2[:, 1]
 
-    v = (4 / (torch.pi**2)) * torch.pow(torch.atan(w_pred / h_pred) - torch.atan(w_gt / h_gt), 2)
+    v = (4 / (torch.pi ** 2)) * torch.pow(
+        torch.atan(w_pred / h_pred) - torch.atan(w_gt / h_gt), 2
+    )
     with torch.no_grad():
         alpha = v / (1 - iou + v + eps)
     return diou - alpha * v
@@ -333,7 +335,9 @@ def distance_box_iou(boxes1: Tensor, boxes2: Tensor, eps: float = 1e-7) -> Tenso
     return diou
 
 
-def _box_diou_iou(boxes1: Tensor, boxes2: Tensor, eps: float = 1e-7) -> Tuple[Tensor, Tensor]:
+def _box_diou_iou(
+    boxes1: Tensor, boxes2: Tensor, eps: float = 1e-7
+) -> Tuple[Tensor, Tensor]:
 
     iou = box_iou(boxes1, boxes2)
     lti = torch.min(boxes1[:, None, :2], boxes2[:, :2])
