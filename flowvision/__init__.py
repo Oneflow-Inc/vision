@@ -5,6 +5,7 @@ from flowvision import transforms
 from flowvision import loss
 from flowvision import scheduler
 from flowvision import data
+from flowvision import ops
 
 try:
     from .version import __version__  # noqa: F401
