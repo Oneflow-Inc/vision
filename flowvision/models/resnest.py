@@ -355,7 +355,7 @@ class ResNest(nn.Module):
                 m.weight.data.normal_(0, math.sqrt(2.0 / n))
             elif isinstance(m, norm_layer):
                 m.weight.data.fill_(1)
-                m.bias.data.zeros_()
+                m.bias.data.zero_()
 
     def _make_layer(
         self,
