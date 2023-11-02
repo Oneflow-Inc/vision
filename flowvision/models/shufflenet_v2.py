@@ -22,8 +22,8 @@ __all__ = [
 model_urls = {
     "shufflenet_v2_x0_5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ShuffleNetV2/shufflenet_v2_x0_5.zip",
     "shufflenet_v2_x1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ShuffleNetV2/shufflenet_v2_x1_0.zip",
-    "shufflenet_v2_x1_5": None,
-    "shufflenet_v2_x2_0": None,
+    "shufflenet_v2_x1_5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ShuffleNetV2/shufflenet_v2_x1_5.zip",
+    "shufflenet_v2_x2_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/ShuffleNetV2/shufflenet_v2_x2_0.zip",
 }
 
 

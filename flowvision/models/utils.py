@@ -73,8 +73,6 @@ def _legacy_zip_load(filename, model_dir, map_location, delete_zip_file=True):
         members = f.infolist()
         extracted_name = members[0].filename
         extracted_file = os.path.join(model_dir, extracted_name)
-        if not os.path.exists(extracted_file):
-            os.mkdir(extracted_file)
         f.extractall(model_dir)
     if delete_zip_file and os.path.exists(filename):
         os.remove(filename)
