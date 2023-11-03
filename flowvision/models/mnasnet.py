@@ -14,9 +14,9 @@ __all__ = ["MNASNet", "mnasnet0_5", "mnasnet0_75", "mnasnet1_0", "mnasnet1_3"]
 
 model_urls = {
     "mnasnet0_5": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MNASNet/mnasnet0_5.zip",
-    "mnasnet0_75": None,
+    "mnasnet0_75": "http://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MNASNet/mnasnet0_75.zip",
     "mnasnet1_0": "https://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MNASNet/mnasnet1_0.zip",
-    "mnasnet1_3": None,
+    "mnasnet1_3": "http://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/flowvision/classification/MNASNet/mnasnet1_3.zip",
 }
 
 _BN_MOMENTUM = 1 - 0.9997
