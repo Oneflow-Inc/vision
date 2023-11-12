@@ -124,7 +124,7 @@ def _load_weights(model, arch_type, backbone, progress):
 def fcn_resnet50_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
-    """Constructs a Fully-Convolutional Network model with a ResNet-50 backbone.
+    """Constructs the Fully-Convolutional Network model with a ResNet-50 backbone.
     
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which
@@ -150,7 +150,7 @@ def fcn_resnet50_coco(
 def fcn_resnet101_coco(
     pretrained=False, progress=True, num_classes=21, aux_loss=None, **kwargs
 ):
-    """Constructs a Fully-Convolutional Network model with a ResNet-101 backbone.
+    """Constructs the Fully-Convolutional Network model with a ResNet-101 backbone.
     
     Args:
         pretrained (bool): If True, returns a model pre-trained on COCO train2017 which

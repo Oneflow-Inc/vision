@@ -281,7 +281,7 @@ class RetinaNet(nn.Module):
     The input to the model is expected to be a list of tensors, each of shape [C, H, W], one for each
     image, and should be in 0-1 range. Different images can have different sizes.
 
-    The behavior of the model changes depending if it is in training or evaluation mode.
+    The behavior of the model changes depending on if it is in training or evaluation mode.
 
     During training, the model expects both the input tensors, as well as a targets (list of dictionary),
     containing:
@@ -666,14 +666,14 @@ def retinanet_resnet50_fpn(
     **kwargs,
 ):
     """
-    Constructs a RetinaNet model with a ResNet-50-FPN backbone.
+    Constructs the RetinaNet model with a ResNet-50-FPN backbone.
 
     Reference: `"Focal Loss for Dense Object Detection" <https://arxiv.org/abs/1708.02002>`_.
 
     The input to the model is expected to be a list of tensors, each of shape ``[C, H, W]``, one for each
     image, and should be in ``0-1`` range. Different images can have different sizes.
 
-    The behavior of the model changes depending if it is in training or evaluation mode.
+    The behavior of the model changes depending on if it is in training or evaluation mode.
 
     During training, the model expects both the input tensors, as well as a targets (list of dictionary),
     containing:

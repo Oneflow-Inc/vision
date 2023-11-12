@@ -32,7 +32,7 @@ def batched_nms(
     """
     Performs non-maximum suppression in a batched fashion.
 
-    Each index value correspond to a category, and NMS
+    Each index value corresponds to a category, and NMS
     will not be applied between elements of different categories.
 
     Args:
@@ -151,7 +151,7 @@ def _box_inter_union(boxes1: Tensor, boxes2: Tensor) -> Tuple[Tensor, Tensor]:
 
 def box_iou(boxes1: Tensor, boxes2: Tensor) -> Tensor:
     """
-    Return intersection-over-union (Jaccard index) between two sets of boxes.
+    Returns intersection-over-union (Jaccard index) between two sets of boxes.
 
     Both sets of boxes are expected to be in ``(x1, y1, x2, y2)`` format with
     ``0 <= x1 < x2`` and ``0 <= y1 < y2``.

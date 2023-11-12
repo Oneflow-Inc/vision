@@ -240,7 +240,7 @@ def ssdlite320_mobilenet_v3_large(
     norm_layer: Optional[Callable[..., nn.Module]] = None,
     **kwargs: Any
 ):
-    """Constructs an SSDlite model with input size 320x320 and a MobileNetV3 Large backbone, as described at
+    """Constructs the SSDlite model with input size 320x320 and a MobileNetV3 Large backbone, as described at
     `"Searching for MobileNetV3"
     <https://arxiv.org/abs/1905.02244>`_ and
     `"MobileNetV2: Inverted Residuals and Linear Bottlenecks"

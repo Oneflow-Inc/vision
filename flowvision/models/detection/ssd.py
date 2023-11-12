@@ -120,7 +120,7 @@ class SSD(nn.Module):
     image, and should be in 0-1 range. Different images can have different sizes but they will be resized
     to a fixed size before passing it to the backbone.
 
-    The behavior of the model changes depending if it is in training or evaluation mode.
+    The behavior of the model changes depending on if it is in training or evaluation mode.
 
     During training, the model expects both the input tensors, as well as a targets (list of dictionary),
     containing:
@@ -602,15 +602,15 @@ def ssd300_vgg16(
     trainable_backbone_layers: Optional[int] = None,
     **kwargs: Any
 ):
-    """Constructs an SSD model with input size 300x300 and a VGG16 backbone.
+    """Constructs the SSD model with input size 300x300 and a VGG16 backbone.
 
     Reference: `"SSD: Single Shot MultiBox Detector" <https://arxiv.org/abs/1512.02325>`_.
 
     The input to the model is expected to be a list of tensors, each of shape [C, H, W], one for each
-    image, and should be in 0-1 range. Different images can have different sizes but they will be resized
+    image, and should be in 0-1 range. Different images can have different sizes, but they will be resized
     to a fixed size before passing it to the backbone.
 
-    The behavior of the model changes depending if it is in training or evaluation mode.
+    The behavior of the model changes depending on if it is in training or evaluation mode.
 
     During training, the model expects both the input tensors, as well as a targets (list of dictionary),
     containing:
