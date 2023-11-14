@@ -66,7 +66,7 @@ class CocoEvaluator:
     def prepare_for_coco_detection(self, predictions):
         coco_results = []
         for original_id, prediction in predictions.items():
-            if len(prediction) == 0:
+            if len(prediction) == 0 or len(prediction['boxes'])==0:
                 continue
 
             boxes = prediction["boxes"]

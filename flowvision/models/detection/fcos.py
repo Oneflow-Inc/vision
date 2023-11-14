@@ -14,6 +14,8 @@ from flowvision.layers import sigmoid_focal_loss, generalized_box_iou_loss
 from flowvision.layers import boxes as box_ops
 from flowvision.layers import misc as misc_nn_ops
 from flowvision.layers import LastLevelP6P7
+from ..utils import load_state_dict_from_url
+from .transform import _resize_boxes,paste_masks_in_image,_resize_keypoints
 from . import det_utils
 from .anchor_utils import AnchorGenerator
 from .backbone_utils import resnet_fpn_backbone, _validate_trainable_layers
@@ -21,10 +23,13 @@ from .transform import GeneralizedRCNNTransform
 from ..registry import ModelCreator
 
 
+model_urls={
+    "fcos_resnet50_fpn_coco":"http://oneflow-public.oss-cn-beijing.aliyuncs.com/model_zoo/fcos_resnet50_fpn/model.pth"
+}
+
 class FCOSHead(nn.Module):
     """
     A regression and classification head for use in FCOS.
-
     Args:
         in_channels (int): number of channels of the input feature
         num_anchors (int): number of anchors to be predicted
@@ -153,7 +158,6 @@ class FCOSHead(nn.Module):
 class FCOSClassificationHead(nn.Module):
     """
     A classification head for use in FCOS.
-
     Args:
         in_channels (int): number of channels of the input feature.
         num_anchors (int): number of anchors to be predicted.
@@ -225,7 +229,6 @@ class FCOSClassificationHead(nn.Module):
 class FCOSRegressionHead(nn.Module):
     """
     A regression head for use in FCOS.
-
     Args:
         in_channels (int): number of channels of the input feature
         num_anchors (int): number of anchors to be predicted
@@ -297,21 +300,16 @@ class FCOSRegressionHead(nn.Module):
 class FCOS(nn.Module):
     """
     Implements FCOS.
-
     The input to the model is expected to be a list of tensors, each of shape [C, H, W], one for each
     image, and should be in 0-1 range. Different images can have different sizes.
-
     The behavior of the model changes depending if it is in training or evaluation mode.
-
     During training, the model expects both the input tensors, as well as a targets (list of dictionary),
     containing:
         - boxes (``FloatTensor[N, 4]``): the ground-truth boxes in ``[x1, y1, x2, y2]`` format, with
           ``0 <= x1 < x2 <= W`` and ``0 <= y1 < y2 <= H``.
         - labels (Int64Tensor[N]): the class label for each ground-truth box
-
     The model returns a Dict[Tensor] during training, containing the classification, regression
     and centerness losses.
-
     During inference, the model requires only the input tensors, and returns the post-processed
     predictions as a List[Dict[Tensor]], one for each input image. The fields of the Dict are as
     follows:
@@ -319,7 +317,6 @@ class FCOS(nn.Module):
           ``0 <= x1 < x2 <= W`` and ``0 <= y1 < y2 <= H``.
         - labels (Int64Tensor[N]): the predicted labels for each image
         - scores (Tensor[N]): the scores for each prediction
-
     Args:
         backbone (nn.Module): the network used to compute the features for the model.
             It should contain an out_channels attribute, which indicates the number of output
@@ -534,6 +531,8 @@ class FCOS(nn.Module):
 
                 # keep only topk scoring predictions
                 num_topk = min(self.topk_candidates, topk_idxs.size(0))
+                if num_topk <= 0:
+                    continue
                 scores_per_level, idxs = scores_per_level.topk(num_topk)
                 topk_idxs = topk_idxs[idxs]
 
@@ -542,7 +541,7 @@ class FCOS(nn.Module):
 
                 boxes_per_level = self.box_coder.decode_single(
                     box_regression_per_level[anchor_idxs],
-                    anchors_per_level[anchors_idxs],
+                    anchors_per_level[anchor_idxs],
                 )
                 boxes_per_level = box_ops.clip_boxes_to_image(
                     boxes_per_level, image_shape
@@ -551,6 +550,16 @@ class FCOS(nn.Module):
                 image_boxes.append(boxes_per_level)
                 image_scores.append(scores_per_level)
                 image_labels.append(labels_per_level)
+
+            if len(image_boxes) <= 0:
+                detections.append(
+                   {
+                    "boxes": flow.tensor(image_boxes),
+                    "scores": flow.tensor(image_scores),
+                    "labels": flow.tensor(image_labels),
+                   }
+                )
+                continue
 
             image_boxes = flow.cat(image_boxes, dim=0)
             image_scores = flow.cat(image_scores, dim=0)
@@ -572,6 +581,28 @@ class FCOS(nn.Module):
 
         return detections
 
+    def postprocess_bbox(self,result,image_shapes,original_image_sizes):
+        if self.training:
+            return result
+        for i, (pred, im_s, o_im_s) in enumerate(
+            zip(result, image_shapes, original_image_sizes)
+        ):
+            boxes = pred["boxes"]
+            if len(boxes) <= 0:
+                result[i]["boxes"] = boxes
+                continue
+            boxes = _resize_boxes(boxes, im_s, o_im_s)
+            result[i]["boxes"] = boxes
+            if "masks" in pred:
+                masks = pred["masks"]
+                masks = paste_masks_in_image(masks, boxes, o_im_s)
+                result[i]["masks"] = masks
+            if "keypoints" in pred:
+                keypoints = pred["keypoints"]
+                keypoints = _resize_keypoints(keypoints, im_s, o_im_s)
+                result[i]["keypoints"] = keypoints
+        return result  
+
     def forward(
         self, images: List[Tensor], targets: Optional[List[Dict[str, Tensor]]] = None,
     ) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]:
@@ -579,7 +610,6 @@ class FCOS(nn.Module):
         Args:
             images (list[Tensor]): images to be processed
             targets (list[Dict[Tensor]]): ground-truth boxes present in the image (optional)
-
         Returns:
             result (list[BoxList] or dict[Tensor]): the output from the model.
                 During training, it returns a dict[Tensor] which contains the losses.
@@ -668,9 +698,9 @@ class FCOS(nn.Module):
 
             # compute the detections
             detections = self.postprocess_detections(
-                split_head_outputs, split_anchors, images.image_size
+                split_head_outputs, split_anchors, images.image_sizes
             )
-            detections = self.transform.postprocess(
+            detections = self.postprocess_bbox(
                 detections, images.image_sizes, original_image_sizes
             )
 
@@ -710,7 +740,7 @@ def _fcos_resnet_fpn(
         state_dict = load_state_dict_from_url(
             model_urls[weights_name], progress=progress
         )
-        model.load_state_dict(state_dict)
+        model.load_state_dict(state_dict['model'])
         det_utils.overwrite_eps(model, 0.0)
     return model
 
