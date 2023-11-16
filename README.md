@@ -26,7 +26,7 @@ First install OneFlow, please refer to [install-oneflow](https://github.com/Onef
 
 Then install the latest stable release of `flowvision`
 ```bash
-pip install flowvision==0.2.1
+pip install flowvision==0.2.2
 ```
 
 ## Overview of flowvision structure
