@@ -8,7 +8,7 @@ on:
 jobs:
   API_Document_Release:
     name: API Document Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - name: Syncing the webhook
       env:
